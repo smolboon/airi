@@ -17,22 +17,22 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 
 | Area | Score | Evidence |
 | --- | --- | --- |
-| Product scope and feature parity | 4 | Run 38282943123 finished a voice turn. The user line is Hello papa. The reply is Hello. I am here. The app still has a persona, memory notes, a greeting, and a CC0 humanoid. Tool rounds, plugins, Live2D, vision, and games are absent. |
+| Product scope and feature parity | 4 | Run 38290795770 finished a voice turn. The user line is Hello papa. The reply is Mock reply from CI. Tool rounds, plugins, Live2D, vision, and games are absent. |
 | Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. `AoriCore` and `AoriProviders` do not import AppKit. `RoutingChatClient` picks the local template or the remote client. GPUI is still a second binary. The Linux job wrote its lit raster. |
-| Platform integration | 4 | Run 38282943123 built `AoriAppKit.xcodeproj` with `xcodebuild`. The log says `aori_keychain=roundtrip` and `aori_mic=started`. Speech authorization stayed unknown. The interactive GPUI window was not opened. |
-| User interface and interaction | 4 | Run 38282943123 captured the chat window and the companion window. The chat shows the greeting, Hello papa, and Hello. I am here. Search, Listen, Speak, and Send are visible. The log says `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. A click was not posted through the window. |
-| Graphics and character rendering | 4 | The raster skins normals and applies a Lambert shade. A test keeps bind-pose normals and darkens a back face. The framebuffer and the GPUI PNG show a checker head, two eyes, and two arm bars. The left side is darker than the right. There is no Live2D view. The interactive GPUI window was not opened. |
-| Audio, speech input, and speech output | 4 | Run 38282943123 started the microphone and the speech engine. The WAV RMS is 0.1532. whisper.cpp v1.7.6 with `ggml-base.en.bin` printed Hello papa. The spoken line was Hello papa. Speech authorization stayed unknown. Visemes still come from a word list. |
-| Networking and model providers | 4 | The log says `aori_llm=local`. The reply is the on-device template. `OpenAICompatibleClient` remains the provider when a key is set. This run made no hosted call. Linux `URLSession` still buffers the body. |
+| Platform integration | 4 | Run 38290795770 built the Xcode project and opened the GPUI window. The log says `aori_keychain=roundtrip` and `aori_mic=started`. Speech authorization stayed unknown. |
+| User interface and interaction | 4 | Run 38290795770 captured the chat and the companion. The chat shows the greeting, Hello papa, and Mock reply from CI. The log says `aori_click_through=delivered` and `aori_click_hits=1`. |
+| Graphics and character rendering | 4 | Run 38290795770 opened the GPUI window. The capture shows a checker head, two eyes, and two arm bars. The left side is darker than the right. There is no Live2D view. |
+| Audio, speech input, and speech output | 4 | Run 38290795770 logged `aori_mic_engine=running` and `aori_mic_utterance=silence`. The WAV RMS is 0.1532. whisper.cpp printed Hello papa. Speech authorization stayed unknown. Visemes still come from a word list. |
+| Networking and model providers | 4 | Run 38290795770 logged `aori_llm=sent` and `aori_llm_reply=Mock reply from CI.`. The server is OpenAI-compatible and runs on the runner. Other chat protocols are absent. |
 | Security, secrets, and privacy | 4 | The log says `aori_keychain=roundtrip` for account `aori-keychain-probe`. That account is not the provider key. Key order is unchanged. `SecretRedaction` still strips a key from error text. The app is not sandboxed. |
 | Data persistence | 4 | `chat.json` stores the transcript. `settings.json` stores the base URL and the model. `locale.json` stores the locale id. `companion.json` stores the persona and memory notes. `TranscriptSearch` matches every query word in a chat line and in a memory note. This is not embeddings or pgvector. |
 | Error handling and recovery | 4 | A failed stream retries once before any text. The status says "Trying again." A delta blocks the retry. `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover both paths. This run did not hit a provider error. |
-| Testing | 4 | `swift test` on Linux Swift 6.0.3 passed 47 tests with 0 failures. `cargo test -p aori-face` passed 11 tests with 0 failures. Run 38282943123 recorded the WAV, the viseme set, the line Hello papa, the click-through log, and the chat window. The Linux job recorded the GPUI PNG. |
-| Continuous integration and build | 4 | The macOS job runs `xcodebuild`, `scripts/fetch-whisper.sh`, and the screenshot script. The Linux job writes the GPUI raster. Run 38282943123 passed both jobs. The i18n locale check passed. This is not CI for the whole AIRI product. |
-| Documentation | 4 | `docs/AORI_PRODUCT.md`, `docs/AORI_ARCHITECTURE.md`, `docs/APPKIT_PORT.md`, and this file match the tree. They name the base whisper model, the click-through flag, and the GPUI raster path. |
-| Accessibility | 4 | The log line `aori_accessibility` lists the chat labels, the character, and both windows. Reduced motion holds the neck clip and the blink. VoiceOver was not run. |
-| Internationalization | 4 | Run 38282943123 printed `aori_locale=ja`, `aori_locale_menu=loaded`, and `aori_locale_proof=設定…`. A Linux test reads `showCompanion` and `clickThrough` in en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The i18n locale check passed. The rest of the product is not translated. |
-| Performance and operability | 4 | A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms. The test fails when the median is 33 ms or more. Run 38282943123 printed `{"event":"frame","ms":18.98}`. There is no broader telemetry product. |
+| Testing | 4 | The Linux job in run 38290795770 passed 49 tests with 0 failures. `cargo test -p aori-face` passed 11 tests. The macOS job recorded the WAV, the visemes, Hello papa, the delivered click, and the chat window. |
+| Continuous integration and build | 4 | Run 38290795770 passed the Linux job and the macOS job. The macOS job saved the GPUI window and logged `aori_voiceover=running`. This is not CI for the whole AIRI product. |
+| Documentation | 4 | `docs/AORI_PRODUCT.md`, `docs/AORI_ARCHITECTURE.md`, `docs/APPKIT_PORT.md`, and this file match run 38290795770. They do not cover the whole AIRI product. |
+| Accessibility | 4 | Run 38290795770 logged the live labels and `aori_ax_press=Send message`. The VoiceOver process was running. The log has no spoken captions. |
+| Internationalization | 4 | Run 38290795770 printed `aori_locale=ja`, `aori_locale_menu=loaded`, and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The rest of the product is not translated. |
+| Performance and operability | 4 | Run 38290795770 printed `{"event":"frame","ms":9.34}`. An earlier debug bench at 280 by 380 had a median of 3.30 ms. There is no broader telemetry product. |
 
 ## What works in code
 
@@ -49,9 +49,9 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 - An original CC0 VRM 0 humanoid. Bones include hips, spine, neck, head, both eyes, and both arms. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
 - Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel.
 - A hands-free turn. Voice activity ends an utterance. The next step sends that text. The reply is spoken. A Speak press is not part of that path.
-- An on-device transcript from whisper.cpp when Speech permission is missing. Run 38282943123 logged `aori_stt=Hello papa`.
-- Click-through on clear pixels. The same run logged `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. A click was not posted through the window.
-- A local template reply when the API key is empty. The same run logged `aori_llm=local` and spoke the reply.
+- An on-device transcript from whisper.cpp when Speech permission is missing. Run 38290795770 logged `aori_stt=Hello papa`.
+- Click-through on clear pixels. The same run logged `aori_click_through=delivered` and `aori_click_hits=1`. The window behind the companion received the click.
+- A mock provider reply when the key and model are set. The same run logged `aori_llm=sent` and `aori_llm_reply=Mock reply from CI.`.
 - One retry before the first text delta. The status line says "Trying again."
 - Word search over saved chat and memory notes.
 - A JSON log line for frame time.
@@ -66,24 +66,22 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
 - Tool calls, plugins, and the integrations.
 - Embedding search. Word search is in the chat panel. pgvector stays on the server.
-- A click posted through the companion window onto an app behind it.
-- The interactive GPUI window. The Linux job wrote the lit PNG. That window did not open.
+- A spoken microphone utterance. Run 38290795770 logged `aori_mic_utterance=silence`.
+- VoiceOver captions. The process was running. The log has no spoken line.
 - Cloud key sync and a sandbox.
 
 ## What this session ran
 
-Command: `swift test` in `apps/aori-appkit`.
+The Linux job in run 38290795770 passed 49 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests. The Linux job printed `aori_gpui_clear=1 aori_gpui_lit=1` for a 280 by 380 PNG.
 
-Result: 47 tests passed, 0 failures, Swift 6.0.3 on `x86_64-unknown-linux-gnu`.
+`eslint .` exited 0 with 0 warnings and 0 errors.
 
-This session ran `cargo test -p aori-face` with Rust 1.99.0. The face crate ran 11 tests. The lit frame median was 3.30 ms. The max was 3.56 ms. `AORI_GPUI_PNG` wrote a 280 by 380 PNG on this machine. `pnpm lint` exited 0 with 656 warnings and 0 errors.
+Run 38290795770 launched `AoriApp` on `macos-latest`. `xcodebuild` passed. The log says `aori_click_through=delivered`, `aori_click_hits=1`, `aori_llm=sent`, and `aori_llm_reply=Mock reply from CI.`. It also says `aori_mic_engine=running`, `aori_mic_utterance=silence`, `aori_stt=Hello papa`, `aori_ax_press=Send message`, and `aori_voiceover=running`.
 
-Run 38282943123 launched `AoriApp` on `macos-latest`. `xcodebuild` passed. The Linux job wrote the GPUI PNG. The log says `aori_mic=started`, `aori_keychain=roundtrip`, `aori_locale=ja`, `aori_locale_menu=loaded`, `aori_stt_engine=whisper`, `aori_stt=Hello papa`, and `aori_llm=local`. It also says `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`.
+The frame line is `{"event":"frame","ms":9.34}`. The phoneme line is `HH,EH,L,OW,P,AA,P,AH`. The WAV RMS is 0.1532. The chat window shows the greeting, Hello papa, and Mock reply from CI. The GPUI capture is a window with traffic lights and the checker head. This session did not launch the app on this Linux machine.
 
-The frame line is `{"event":"frame","ms":18.98}`. The phoneme line is `HH,EH,L,OW,P,AA,P,AH`. The WAV RMS is 0.1532. The chat window shows the greeting, Hello papa, and Hello. I am here. This session did not launch the app on this Linux machine. VoiceOver was not run.
-
-No hosted model call was made. A click was not posted through the window.
+The microphone mark is silence, not speech. VoiceOver was running. The log has no spoken caption. Speech authorization stayed unknown.
 
 ## Next milestones
 
-The plan is in `docs/APPKIT_PORT.md`. Milestone 2 follow-up is a posted click through the window and a live microphone on a machine that has one. Milestone 3 is richer memory. Milestone 4 is Live2D. Milestone 5 is a native plugin host.
+The plan is in `docs/APPKIT_PORT.md`. A spoken microphone utterance and VoiceOver captions remain open. Milestone 3 is richer memory. Milestone 4 is Live2D. Milestone 5 is a native plugin host.

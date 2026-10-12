@@ -130,7 +130,7 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. Run 38282943123 uploaded that PNG from Linux. This checkout did not open the interactive window.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The Linux job in run 38290795770 checked that PNG. The macOS job opened the window and saved `aori-gpui-window.png`.
 
 `AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key, or the model name local, uses a local template and logs `aori_llm=local`. A key with any other model calls the provider and logs `aori_llm=sent` and `aori_llm_reply`.
 
@@ -140,13 +140,15 @@ The screenshot path posts one click through the companion window. A window title
 
 The same path reads live accessibility labels and logs `aori_ax`. It presses the Send message control and logs `aori_ax_press`. After the captures, the script tries to start VoiceOver and logs running or unavailable.
 
-Run 38282943123 did the earlier capture on `macos-latest`. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The spoken line was Hello papa. The local reply was Hello. I am here. That run did not post a click, open the GPUI window, start VoiceOver, or call the mock server.
+Run 38282943123 was the earlier capture. It used the local reply Hello. I am here. It did not post a click, open the GPUI window, start VoiceOver, or call the mock server.
 
-The log says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The frame line is `{"event":"frame","ms":18.98}`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
+Run 38290795770 is the capture for this round. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The chat reply is Mock reply from CI. The log says `aori_llm=sent` and `aori_click_through=delivered`. The hit count is 1. The microphone mark is `silence`. The VoiceOver process was running. The GPUI window capture shows the checker head.
+
+The frame line is `{"event":"frame","ms":9.34}`. The log also says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
 
 ### Milestone 2 follow-up
 
-Read the next macOS log for a delivered click, the GPUI window capture, the VoiceOver line, and the microphone mark.
+A spoken microphone utterance and VoiceOver captions are still open. Live2D and the sandbox stay in later milestones.
 
 ### Milestone 3, memory that lasts
 
@@ -168,6 +170,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 The work ran on Linux. `swift test` passed 49 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
 
-`AORI_GPUI_PNG` wrote a lit PNG on this machine. This checkout did not launch the Mac app. Speech playback, Keychain, and the interactive GPUI window were not executed here. Run 38282943123 launched `AoriApp` on `macos-latest` and saved the window captures. The Linux job in that run saved the GPUI PNG.
+`AORI_GPUI_PNG` wrote a lit PNG on this machine in an earlier session. This checkout did not launch the Mac app. Run 38290795770 launched `AoriApp` on `macos-latest`, posted the click, called the mock, and opened the GPUI window. The Linux job in that run passed 49 tests and saved the GPUI PNG.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.
