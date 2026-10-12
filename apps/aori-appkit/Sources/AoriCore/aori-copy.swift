@@ -26,6 +26,7 @@ public enum AoriCopy {
     public static var showCompanion: String { text("menu.showCompanion", fallback: "Show Companion") }
     public static var hideCompanion: String { text("menu.hideCompanion", fallback: "Hide Companion") }
     public static var alwaysOnTop: String { text("menu.alwaysOnTop", fallback: "Companion Always on Top") }
+    public static var clickThrough: String { text("menu.clickThrough", fallback: "Click Through") }
     public static var language: String { text("menu.language", fallback: "Language") }
     public static var statusItem: String { text("menu.statusItem", fallback: "Aori") }
 

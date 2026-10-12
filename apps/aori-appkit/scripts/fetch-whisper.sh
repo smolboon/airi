@@ -3,7 +3,7 @@ set -eu
 cd "$(dirname "$0")/.."
 # whisper.cpp v1.7.6, commit a8d002cfd879315632a579e73f0148d06959de36
 dest="${AORI_WHISPER_SRC:-$PWD/build/whisper.cpp}"
-model="$dest/ggml-tiny.en.bin"
+model="$dest/ggml-base.en.bin"
 if [ ! -d "$dest/.git" ]; then
     git clone --depth 1 --branch v1.7.6 https://github.com/ggml-org/whisper.cpp.git "$dest"
 fi
@@ -12,7 +12,7 @@ if [ ! -x "$dest/build/bin/whisper-cli" ]; then
     cmake --build "$dest/build" --target whisper-cli -j"$(sysctl -n hw.ncpu 2>/dev/null || nproc)"
 fi
 if [ ! -f "$model" ]; then
-    curl -L --fail -o "$model" "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en.bin"
+    curl -L --fail -o "$model" "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin"
 fi
 mkdir -p build
 cat > build/whisper.env <<EOF

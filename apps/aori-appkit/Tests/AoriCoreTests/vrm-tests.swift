@@ -171,6 +171,16 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(style.borderless)
         XCTAssertTrue(style.joinsAllSpaces)
         XCTAssertTrue(style.movableByBackground)
+        XCTAssertTrue(CompanionWindowPolicy.standard.clickThrough)
+        XCTAssertTrue(ClickThrough.ignores(alpha: 0, enabled: true))
+        XCTAssertFalse(ClickThrough.ignores(alpha: 255, enabled: true))
+        XCTAssertFalse(ClickThrough.ignores(alpha: 1, enabled: true))
+        XCTAssertFalse(ClickThrough.ignores(alpha: 0, enabled: false))
+        XCTAssertEqual(ClickThrough.rasterY(viewY: 0, height: 380), 379)
+        XCTAssertEqual(ClickThrough.rasterY(viewY: 379, height: 380), 0)
+        XCTAssertEqual(ClickThrough.decision(pass: true), "pass")
+        XCTAssertEqual(ClickThrough.decision(pass: false), "keep")
+        XCTAssertEqual(AoriCopy.clickThrough, "Click Through")
     }
 }
 

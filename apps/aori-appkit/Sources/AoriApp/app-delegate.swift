@@ -37,6 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let transcriber = AppleSpeechTranscriber()
     private var companionPolicy = CompanionWindowPolicy.standard
     private var alwaysOnTopItem: NSMenuItem?
+    private var clickThroughItem: NSMenuItem?
     private var statusItem: StatusItemController?
     private var listening = false
     private var launchStatus: String?
@@ -62,6 +63,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = MenuBuilder.install(target: self, localeID: localeID)
         alwaysOnTopItem = menu.alwaysOnTopItem
         alwaysOnTopItem?.state = companionPolicy.alwaysOnTop ? .on : .off
+        clickThroughItem = menu.clickThroughItem
+        clickThroughItem?.state = companionPolicy.clickThrough ? .on : .off
     }
 
     private func launch() {
@@ -157,6 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companionWindow?.window?.orderFrontRegardless()
         NSApp.activate()
         writeFramebuffer()
+        logClickThrough()
         Task {
             logLine("aori_accessibility=\(AccessibilityCopy.proof)")
             logLine(KeychainProbe.line(store: self.secrets))
@@ -338,6 +342,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companionPolicy.alwaysOnTop.toggle()
         alwaysOnTopItem?.state = companionPolicy.alwaysOnTop ? .on : .off
         companionWindow?.apply(policy: companionPolicy)
+    }
+
+    @objc func toggleClickThrough(_ sender: Any?) {
+        companionPolicy.clickThrough.toggle()
+        clickThroughItem?.state = companionPolicy.clickThrough ? .on : .off
+        companionWindow?.apply(policy: companionPolicy)
+    }
+
+    private func logClickThrough() {
+        logLine("aori_click_through=\(companionPolicy.clickThrough ? "on" : "off")")
+        guard let sample = companionWindow?.clickThroughSample() else {
+            return
+        }
+        logLine("aori_hit_corner=\(sample.corner)")
+        logLine("aori_hit_body=\(sample.body)")
+        logLine("aori_ignores_mouse=\(sample.ignoresMouse)")
     }
 
     private func sendDraft() {

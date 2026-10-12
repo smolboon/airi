@@ -6,7 +6,7 @@ Aori splits the native app into three Swift modules and two Rust crates. `AoriCo
 
 `AoriCore` owns chat state, the persona, memory notes, WAV helpers, the locale catalog, and the local reply. `AoriProviders` owns the OpenAI-compatible stream. `AoriApp` owns AppKit windows, Speech, AVFoundation, and the Keychain. `RoutingChatClient` picks the local reply when the key is empty or the model is `local`. A key sends the same messages to the remote provider.
 
-`aori-face` reads the sample glTF, skins positions and normals, and rasterizes RGBA. A Lambert term uses one fixed light plus ambient. `aori-gpui` is a separate window. It still paints flat triangles. It does not use the raster.
+`aori-face` reads the sample glTF, skins positions and normals, and rasterizes RGBA. A Lambert term uses one fixed light plus ambient. `aori-gpui` is a separate binary. `AORI_GPUI_PNG` makes that binary write one lit raster and exit. The interactive window paints that same raster. This checkout did not open that window.
 
 ## Voice turn
 
@@ -24,4 +24,6 @@ A non-empty line becomes the user message. The local template answers when no ke
 
 ## Build
 
-`scripts/build-app.sh` builds `aori-face`, then the Swift executable `AoriApp`. `AoriAppKit.xcodeproj` builds the same sources with `xcodebuild`. The product name there is `Aori`. `scripts/fetch-whisper.sh` clones whisper.cpp v1.7.6 and downloads `ggml-tiny.en.bin` into `build/`. That directory is gitignored.
+`scripts/build-app.sh` builds `aori-face`, then the Swift executable `AoriApp`. `AoriAppKit.xcodeproj` builds the same sources with `xcodebuild`. The product name there is `Aori`. `scripts/fetch-whisper.sh` clones whisper.cpp v1.7.6 and downloads `ggml-base.en.bin` into `build/`. That directory is gitignored.
+
+The companion window can pass clicks through clear pixels. The default is on. An opaque pixel keeps the click. The caption keeps the click. AppKit sets `ignoresMouseEvents` from the pointer position.

@@ -9,5 +9,6 @@ menu:
   showCompanion: 컴패니언 표시
   hideCompanion: 컴패니언 숨기기
   alwaysOnTop: 컴패니언을 항상 위에
+  clickThrough: 클릭 통과
   language: 언어
   statusItem: Aori

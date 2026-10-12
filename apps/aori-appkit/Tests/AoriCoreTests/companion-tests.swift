@@ -103,6 +103,8 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(AoriCopy.showCompanion, "Show Companion")
         XCTAssertEqual(AoriCopy.settings, "Settings…")
         XCTAssertEqual(AoriCopy.language, "Language")
+        XCTAssertEqual(table.values["menu.clickThrough"], "Click Through")
+        XCTAssertEqual(AoriCopy.clickThrough, "Click Through")
     }
 
     func testSearchNotesAndChat() {
@@ -150,6 +152,7 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertTrue(loaded.allSatisfy { !$0.proof.isEmpty })
         let japanese = try XCTUnwrap(loaded.first { $0.id == "ja" })
         XCTAssertEqual(LocaleTable.parse(japanese.menuText ?? "").values["menu.showCompanion"], "コンパニオンを表示")
+        XCTAssertEqual(LocaleTable.parse(japanese.menuText ?? "").values["menu.clickThrough"], "クリックを透過")
         XCTAssertTrue(japanese.proof.contains("設定"))
         for item in loaded where item.id != "en" {
             let value = LocaleTable.parse(item.menuText ?? "").values["menu.showCompanion"]

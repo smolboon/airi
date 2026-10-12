@@ -80,6 +80,7 @@ version = "0.1.0"
 dependencies = [
  "aori-face",
  "gpui",
+ "image",
 ]
 
 [[package]]

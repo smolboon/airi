@@ -3,6 +3,7 @@ import AoriCore
 
 struct InstalledMenu {
     var alwaysOnTopItem: NSMenuItem
+    var clickThroughItem: NSMenuItem
 }
 
 @MainActor
@@ -53,6 +54,12 @@ enum MenuBuilder {
             keyEquivalent: "t"
         )
         bind(alwaysOnTop, target: target)
+        let clickThrough = viewMenu.addItem(
+            withTitle: AoriCopy.clickThrough,
+            action: #selector(AppDelegate.toggleClickThrough(_:)),
+            keyEquivalent: ""
+        )
+        bind(clickThrough, target: target)
         let languageMenu = NSMenu(title: AoriCopy.language)
         for id in LocaleCatalog.ids {
             let item = languageMenu.addItem(
@@ -81,7 +88,7 @@ enum MenuBuilder {
 
         NSApp.mainMenu = main
         NSApp.windowsMenu = windowMenu
-        return InstalledMenu(alwaysOnTopItem: alwaysOnTop)
+        return InstalledMenu(alwaysOnTopItem: alwaysOnTop, clickThroughItem: clickThrough)
     }
 
     private static func bind(_ item: NSMenuItem, target: AnyObject) {

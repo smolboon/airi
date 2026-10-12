@@ -4,7 +4,7 @@ mod raster;
 mod skin;
 
 pub use glb::{read_glb, FaceError};
-pub use raster::{render_frame, RenderPose};
+pub use raster::{encode_png, render_frame, RenderPose};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Vec3 {
@@ -552,6 +552,29 @@ mod tests {
     println!("aori_face_render_median_ms={median:.2}");
     println!("aori_face_render_max_ms={max:.2}");
     assert!(median < 33.0, "median render took {median:.2} ms");
+  }
+
+  #[test]
+  fn encode_png_keeps_a_clear_corner_and_a_lit_pixel() {
+    let scene = sample();
+    let pixels = render_frame(
+      &scene,
+      &RenderPose {
+        mouth: 0.65,
+        viseme: 0,
+        time: 1.6,
+        ..RenderPose::default()
+      },
+      280,
+      380,
+    );
+    assert_eq!(pixels[3], 0, "the top-left pixel is clear");
+    assert!(pixels.chunks(4).any(|pixel| pixel[3] == 255));
+    assert!(pixels.chunks(4).any(|pixel| {
+      pixel[0] > 80 && pixel[1] < pixel[0] && pixel[3] == 255
+    }));
+    let png = encode_png(&pixels, 280, 380).expect("png");
+    assert_eq!(&png[..8], b"\x89PNG\r\n\x1a\n");
   }
 
   #[test]

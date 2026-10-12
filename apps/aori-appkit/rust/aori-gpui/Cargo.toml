@@ -12,3 +12,4 @@ path = "src/main.rs"
 [dependencies]
 aori-face = { path = "../aori-face" }
 gpui = "=0.2.2"
+image = "0.25.10"

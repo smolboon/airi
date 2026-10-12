@@ -9,5 +9,6 @@ menu:
   showCompanion: 顯示同伴
   hideCompanion: 隱藏同伴
   alwaysOnTop: 同伴永遠置頂
+  clickThrough: 點擊穿透
   language: 語言
   statusItem: Aori

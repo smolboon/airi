@@ -9,5 +9,6 @@ menu:
   showCompanion: Afficher le compagnon
   hideCompanion: Masquer le compagnon
   alwaysOnTop: Compagnon toujours au premier plan
+  clickThrough: Clic traversant
   language: Langue
   statusItem: Aori

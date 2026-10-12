@@ -1,6 +1,12 @@
 import AppKit
 import AoriCore
 
+struct ClickThroughSample {
+    var corner: String
+    var body: String
+    var ignoresMouse: Bool
+}
+
 @MainActor
 final class CompanionWindowController: NSWindowController {
     private let model: ChatViewModel
@@ -54,6 +60,14 @@ final class CompanionWindowController: NSWindowController {
         window.hasShadow = !style.transparent
         characterView.clearsBackground = style.transparent
         characterView.dragsWindow = style.movableByBackground
+        characterView.clickThrough = policy.clickThrough
+        if !policy.clickThrough {
+            window.ignoresMouseEvents = false
+        }
+    }
+
+    func clickThroughSample() -> ClickThroughSample {
+        characterView.sampleClickThrough()
     }
 
     func refresh() {

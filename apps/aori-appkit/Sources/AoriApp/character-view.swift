@@ -4,6 +4,7 @@ import AoriCore
 @MainActor
 final class CharacterView: NSView {
     var dragsWindow = false
+    var clickThrough = false
     var clearsBackground = false {
         didSet { applyBackground() }
     }
@@ -26,6 +27,9 @@ final class CharacterView: NSView {
     private var weights: [MorphWeight] = []
     private var loadedVertexCount = -1
     private var loadedBytes: Data?
+    private var latestPixels: [UInt8] = []
+    private var latestWidth = 0
+    private var latestHeight = 0
     private nonisolated(unsafe) var faceScene: OpaquePointer?
     private var started = Date()
 
@@ -102,10 +106,38 @@ final class CharacterView: NSView {
         let width = Int(bounds.width.rounded())
         let height = Int(bounds.height.rounded())
         if let pixels = rasterPixels(time: poseTime, blink: blink, width: width, height: height) {
+            latestPixels = pixels
+            latestWidth = width
+            latestHeight = height
             FaceRaster.draw(pixels: pixels, width: width, height: height, in: bounds)
             return
         }
+        latestPixels = []
         FaceDraw.paint(meshes: meshes, weights: weights, sway: sway, bounds: bounds)
+    }
+
+    func sampleClickThrough() -> ClickThroughSample {
+        let width = bounds.width >= 2 ? Int(bounds.width.rounded()) : 280
+        let height = bounds.height >= 2 ? Int(bounds.height.rounded()) : 380
+        let pixels = rasterPixels(time: poseTime, blink: blink, width: width, height: height) ?? []
+        let cornerAlpha: UInt8 = pixels.count >= 4 ? pixels[3] : 0
+        let cornerPass = ClickThrough.ignores(alpha: cornerAlpha, enabled: clickThrough)
+        var opaque = false
+        var index = 3
+        while index < pixels.count {
+            if pixels[index] > 0 {
+                opaque = true
+                break
+            }
+            index += 4
+        }
+        let ignores = cornerPass
+        window?.ignoresMouseEvents = ignores
+        return ClickThroughSample(
+            corner: ClickThrough.decision(pass: cornerPass),
+            body: ClickThrough.decision(pass: !opaque),
+            ignoresMouse: ignores
+        )
     }
 
     private func buildChrome() {
@@ -179,7 +211,49 @@ final class CharacterView: NSView {
             viseme: viseme
         )
         sway = self.reduceMotion ? 0 : pose.sway
+        updateMousePass()
         needsDisplay = true
+    }
+
+    private func updateMousePass() {
+        guard let window else {
+            return
+        }
+        guard clickThrough else {
+            window.ignoresMouseEvents = false
+            return
+        }
+        let mouse = NSEvent.mouseLocation
+        if !window.frame.contains(mouse) {
+            window.ignoresMouseEvents = true
+            return
+        }
+        let point = convert(window.convertPoint(fromScreen: mouse), from: nil)
+        if let hit = hitTest(point), hit !== self {
+            window.ignoresMouseEvents = false
+            return
+        }
+        window.ignoresMouseEvents = ClickThrough.ignores(alpha: alpha(at: point), enabled: true)
+    }
+
+    private func alpha(at point: NSPoint) -> UInt8 {
+        guard latestWidth > 1, latestHeight > 1, !latestPixels.isEmpty else {
+            return 255
+        }
+        let x = Int(point.x.rounded(.down))
+        let y = Int(point.y.rounded(.down))
+        guard x >= 0, y >= 0, x < latestWidth, y < latestHeight else {
+            return 0
+        }
+        let rasterY = ClickThrough.rasterY(viewY: y, height: latestHeight)
+        guard rasterY >= 0, rasterY < latestHeight else {
+            return 0
+        }
+        let offset = (rasterY * latestWidth + x) * 4 + 3
+        guard offset < latestPixels.count else {
+            return 0
+        }
+        return latestPixels[offset]
     }
 
     private func loadModel(_ bytes: Data?) {

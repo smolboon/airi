@@ -1,14 +1,19 @@
-use aori_face::{add_morph, project, read_glb, FaceMesh, Vec3};
+use std::{path::Path, sync::Arc};
+
+use aori_face::{encode_png, read_glb, render_frame, FaceScene, RenderPose};
 use gpui::{
-  canvas, div, point, prelude::*, px, rgb, size, App, Application, Bounds, Context, PathBuilder,
-  Pixels, TitlebarOptions, Window, WindowBackgroundAppearance, WindowBounds, WindowKind,
+  canvas, div, prelude::*, px, size, App, Application, Bounds, Context, Corners, Pixels,
+  RenderImage, TitlebarOptions, Window, WindowBackgroundAppearance, WindowBounds, WindowKind,
   WindowOptions,
 };
+use image::{Frame, ImageBuffer, Rgba};
 
 const SAMPLE: &[u8] = include_bytes!("../../../Sources/AoriApp/Resources/aori-sample.vrm");
+const FRAME_WIDTH: u32 = 280;
+const FRAME_HEIGHT: u32 = 380;
 
 struct FaceWindow {
-  meshes: Vec<FaceMesh>,
+  image: Arc<RenderImage>,
 }
 
 impl Render for FaceWindow {
@@ -17,7 +22,7 @@ impl Render for FaceWindow {
     _window: &mut Window,
     _cx: &mut Context<Self>,
   ) -> impl IntoElement {
-    let meshes = self.meshes.clone();
+    let image = Arc::clone(&self.image);
     div()
       .size_full()
       .bg(gpui::transparent_black())
@@ -25,7 +30,8 @@ impl Render for FaceWindow {
         canvas(
           |_, _, _| {},
           move |bounds, _, window, _| {
-            paint_meshes(&meshes, bounds, window);
+            let corners: Corners<Pixels> = Corners::default();
+            let _ = window.paint_image(bounds, corners, Arc::clone(&image), 0, false);
           },
         )
         .size_full(),
@@ -33,82 +39,49 @@ impl Render for FaceWindow {
   }
 }
 
-fn paint_meshes(
-  meshes: &[FaceMesh],
-  bounds: Bounds<Pixels>,
-  window: &mut Window,
-) {
-  let width = f32::from(bounds.size.width);
-  let height = f32::from(bounds.size.height);
-  let scale = width.min(height) * 0.9;
-  let origin_x = f32::from(bounds.origin.x) + width * 0.5;
-  // GPUI y grows downward. AppKit y grows upward, so this window flips y.
-  let center_y = f32::from(bounds.origin.y) + height * 0.5;
-  for mesh in meshes {
-    let mut positions = mesh.positions.clone();
-    if let Some(mouth) = mesh
-      .morphs
-      .iter()
-      .find(|morph| morph.name == "aa")
-    {
-      add_morph(&mut positions, &mouth.deltas, 0.65);
-    }
-    let mut triangles = Vec::new();
-    let mut index = 0;
-    while index + 2 < mesh.indices.len() {
-      let first = mesh.indices[index] as usize;
-      let second = mesh.indices[index + 1] as usize;
-      let third = mesh.indices[index + 2] as usize;
-      index += 3;
-      if first >= positions.len() || second >= positions.len() || third >= positions.len() {
-        continue;
-      }
-      let z = (positions[first].z + positions[second].z + positions[third].z) / 3.0;
-      triangles.push((z, first, second, third));
-    }
-    triangles.sort_by(|left, right| {
-      left
-        .0
-        .partial_cmp(&right.0)
-        .unwrap_or(std::cmp::Ordering::Equal)
-    });
-    let mut color = rgb(pack(mesh.color));
-    color.a = mesh.color[3];
-    for (_, first, second, third) in triangles {
-      let mut builder = PathBuilder::fill();
-      let start = pixel(positions[first], origin_x, center_y, scale);
-      builder.move_to(start);
-      builder.line_to(pixel(positions[second], origin_x, center_y, scale));
-      builder.line_to(pixel(positions[third], origin_x, center_y, scale));
-      builder.close();
-      if let Ok(path) = builder.build() {
-        window.paint_path(path, color);
-      }
-    }
+fn portrait_pose() -> RenderPose {
+  RenderPose {
+    mouth: 0.65,
+    viseme: 0,
+    time: 1.6,
+    ..RenderPose::default()
   }
 }
 
-fn pixel(
-  position: Vec3,
-  origin_x: f32,
-  center_y: f32,
-  scale: f32,
-) -> gpui::Point<Pixels> {
-  let (x, y_up) = project(position, 0.0, origin_x, 0.0, scale);
-  let y = center_y - (y_up - 0.2 * scale);
-  point(px(x), px(y))
+fn rgba_frame(scene: &FaceScene) -> Vec<u8> {
+  render_frame(scene, &portrait_pose(), FRAME_WIDTH, FRAME_HEIGHT)
 }
 
-fn pack(color: [f32; 4]) -> u32 {
-  let channel = |value: f32| (value.clamp(0.0, 1.0) * 255.0) as u32;
-  (channel(color[0]) << 16) | (channel(color[1]) << 8) | channel(color[2])
+fn write_png(
+  scene: &FaceScene,
+  path: &Path,
+) {
+  let pixels = rgba_frame(scene);
+  let png = encode_png(&pixels, FRAME_WIDTH, FRAME_HEIGHT).expect("The raster encodes as PNG.");
+  std::fs::write(path, png).expect("The PNG file was written.");
+}
+
+fn lit_image(scene: &FaceScene) -> RenderImage {
+  let mut pixels = rgba_frame(scene);
+  let mut index = 0;
+  while index + 3 < pixels.len() {
+    pixels.swap(index, index + 2);
+    index += 4;
+  }
+  let buffer = ImageBuffer::<Rgba<u8>, Vec<u8>>::from_raw(FRAME_WIDTH, FRAME_HEIGHT, pixels)
+    .expect("The raster size matches the buffer.");
+  RenderImage::new(vec![Frame::new(buffer)])
 }
 
 fn main() {
   let scene = read_glb(SAMPLE).expect("The bundled sample VRM parses.");
+  if let Some(path) = std::env::var_os("AORI_GPUI_PNG") {
+    write_png(&scene, Path::new(&path));
+    return;
+  }
+  let image = Arc::new(lit_image(&scene));
   Application::new().run(move |cx: &mut App| {
     let bounds = Bounds::centered(None, size(px(420.), px(640.)), cx);
-    let meshes = scene.meshes.clone();
     cx.open_window(
       WindowOptions {
         window_bounds: Some(WindowBounds::Windowed(bounds)),
@@ -122,7 +95,7 @@ fn main() {
         window_background: WindowBackgroundAppearance::Transparent,
         ..Default::default()
       },
-      move |_window, cx| cx.new(move |_| FaceWindow { meshes }),
+      move |_window, cx| cx.new(move |_| FaceWindow { image: Arc::clone(&image) }),
     )
     .expect("The GPUI window opens.");
     cx.activate(true);

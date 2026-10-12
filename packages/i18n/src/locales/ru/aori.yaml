@@ -9,5 +9,6 @@ menu:
   showCompanion: Показать спутника
   hideCompanion: Скрыть спутника
   alwaysOnTop: Спутник всегда сверху
+  clickThrough: Сквозной щелчок
   language: Язык
   statusItem: Aori

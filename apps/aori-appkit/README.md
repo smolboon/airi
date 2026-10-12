@@ -10,7 +10,7 @@ Settings stores a name and a personality. Say "remember that" in chat to store a
 
 Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
-You can open another `.vrm` file. A separate GPUI window paints the same sample with flat triangles. That window is not the AppKit app.
+You can open another `.vrm` file. A separate GPUI window paints the lit sample raster. That window is not the AppKit app. Clear pixels on the companion window pass clicks through. Opaque pixels and the caption keep the click.
 
 ## How to use it
 
@@ -21,7 +21,7 @@ On macOS:
 3. Run `./scripts/assemble-app.sh`. The script builds the Rust library, then the app.
 4. Open `build/Aori.app`.
 
-The GPUI window is separate. From `rust`, run `cargo run -p aori-gpui`. It paints the sample head with a fixed mouth weight. It does not join the AppKit chat.
+The GPUI window is separate. From `rust`, run `cargo run -p aori-gpui`. It paints the lit sample raster. Before that command, set `AORI_GPUI_PNG` to a PNG path. The command writes the raster and exits. It does not join the AppKit chat.
 
 In Xcode, open `Package.swift` and run the AoriApp scheme. You can also open `AoriAppKit.xcodeproj` and run the Aori scheme. The script bundle is `Aori.app`. Its executable is `AoriApp`. The Xcode product name is `Aori`.
 
@@ -82,4 +82,8 @@ The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./script
 
 ## Limits
 
-This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer. The GPUI window does not use the depth buffer. It does not hear speech. Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.
+This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
+
+The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
+
+Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.

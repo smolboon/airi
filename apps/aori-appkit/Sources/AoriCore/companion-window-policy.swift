@@ -6,19 +6,22 @@ public struct CompanionWindowPolicy: Equatable, Sendable {
     public var visibleOnAllSpaces: Bool
     public var movableByBackground: Bool
     public var hidesTitlebar: Bool
+    public var clickThrough: Bool
 
     public init(
         transparent: Bool,
         alwaysOnTop: Bool,
         visibleOnAllSpaces: Bool,
         movableByBackground: Bool,
-        hidesTitlebar: Bool
+        hidesTitlebar: Bool,
+        clickThrough: Bool
     ) {
         self.transparent = transparent
         self.alwaysOnTop = alwaysOnTop
         self.visibleOnAllSpaces = visibleOnAllSpaces
         self.movableByBackground = movableByBackground
         self.hidesTitlebar = hidesTitlebar
+        self.clickThrough = clickThrough
     }
 
     public static let standard = CompanionWindowPolicy(
@@ -26,7 +29,8 @@ public struct CompanionWindowPolicy: Equatable, Sendable {
         alwaysOnTop: true,
         visibleOnAllSpaces: true,
         movableByBackground: true,
-        hidesTitlebar: true
+        hidesTitlebar: true,
+        clickThrough: true
     )
 }
 

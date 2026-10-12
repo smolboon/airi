@@ -35,7 +35,7 @@ jobs:
         with:
           toolchain: "1.99.0"
       - name: Install GPUI system libraries
-        run: sudo apt-get update && sudo apt-get install -y pkg-config libwayland-dev libxkbcommon-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
+        run: sudo apt-get update && sudo apt-get install -y g++ pkg-config libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
       - name: Test
         run: swift test
       - name: Test the face library
@@ -44,6 +44,20 @@ jobs:
       - name: Check the GPUI window
         working-directory: apps/aori-appkit/rust
         run: cargo check -p aori-gpui
+      - name: Write the GPUI raster
+        working-directory: apps/aori-appkit/rust
+        run: |
+          mkdir -p ../build
+          export LIBRARY_PATH="$(dirname "$(g++ -print-file-name=libstdc++.so)")${LIBRARY_PATH:+:$LIBRARY_PATH}"
+          AORI_GPUI_PNG="$PWD/../build/aori-gpui-frame.png" cargo run -q -p aori-gpui
+          python3 ../scripts/check-gpui-png.py ../build/aori-gpui-frame.png
+      - name: Upload the GPUI raster
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aori-gpui-frame
+          if-no-files-found: warn
+          path: apps/aori-appkit/build/aori-gpui-frame.png
 
   build-and-test-macos:
     name: Build the AppKit target and test on macOS

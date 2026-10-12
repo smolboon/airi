@@ -9,5 +9,6 @@ menu:
   showCompanion: Show Companion
   hideCompanion: Hide Companion
   alwaysOnTop: Companion Always on Top
+  clickThrough: Click Through
   language: Language
   statusItem: Aori
