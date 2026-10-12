@@ -1,6 +1,8 @@
+use std::io::Cursor;
+
 use serde_json::Value;
 
-use crate::{FaceMesh, FaceMorph, FaceScene, Vec3};
+use crate::{FaceAnimation, FaceJoint, FaceMesh, FaceMorph, FaceScene, RgbaImage, Vec3};
 
 #[derive(Debug, PartialEq)]
 pub enum FaceError {
@@ -30,8 +32,15 @@ impl std::fmt::Display for FaceError {
 
 pub fn read_glb(bytes: &[u8]) -> Result<FaceScene, FaceError> {
   let (json, bin) = read_chunks(bytes)?;
+  let (joints, inverse_binds, node_to_joint) = read_skin(&json, &bin)?;
   let meshes = read_meshes(&json, &bin)?;
-  Ok(FaceScene { meshes })
+  let animation = read_animation(&json, &bin, &node_to_joint)?;
+  Ok(FaceScene {
+    meshes,
+    joints,
+    inverse_binds,
+    animation,
+  })
 }
 
 fn read_chunks(bytes: &[u8]) -> Result<(Value, Vec<u8>), FaceError> {
@@ -132,15 +141,240 @@ fn read_meshes(
       .and_then(Value::as_str)
       .map(str::to_string)
       .unwrap_or_else(|| format!("mesh{index}"));
+    let uvs = match attributes
+      .and_then(|item| item.get("TEXCOORD_0"))
+      .and_then(json_usize)
+    {
+      Some(accessor) => read_vec2(json, bin, accessor).unwrap_or_default(),
+      None => Vec::new(),
+    };
+    let joints = match attributes
+      .and_then(|item| item.get("JOINTS_0"))
+      .and_then(json_usize)
+    {
+      Some(accessor) => read_joints(json, bin, accessor).unwrap_or_default(),
+      None => Vec::new(),
+    };
+    let weights = match attributes
+      .and_then(|item| item.get("WEIGHTS_0"))
+      .and_then(json_usize)
+    {
+      Some(accessor) => read_weights(json, bin, accessor).unwrap_or_default(),
+      None => Vec::new(),
+    };
+    let texture = texture_of(json, bin, material);
     result.push(FaceMesh {
       name,
       positions,
       indices,
       color,
       morphs,
+      uvs,
+      joints,
+      weights,
+      texture,
     });
   }
   Ok(result)
+}
+
+fn read_skin(
+  json: &Value,
+  bin: &[u8],
+) -> Result<(Vec<FaceJoint>, Vec<[f32; 16]>, Vec<Option<usize>>), FaceError> {
+  let nodes = json.get("nodes").and_then(Value::as_array);
+  let Some(skin) = json
+    .get("skins")
+    .and_then(Value::as_array)
+    .and_then(|items| items.first())
+  else {
+    return Ok((Vec::new(), Vec::new(), Vec::new()));
+  };
+  let joint_nodes = skin
+    .get("joints")
+    .and_then(Value::as_array)
+    .map(|items| items.iter().filter_map(json_usize).collect::<Vec<_>>())
+    .unwrap_or_default();
+  let mut node_to_joint = vec![None; nodes.map(|items| items.len()).unwrap_or(0)];
+  for (joint_index, node_index) in joint_nodes.iter().copied().enumerate() {
+    if node_index < node_to_joint.len() {
+      node_to_joint[node_index] = Some(joint_index);
+    }
+  }
+  let parents = node_parents(nodes);
+  let mut joints = Vec::new();
+  for node_index in &joint_nodes {
+    let node = nodes.and_then(|items| items.get(*node_index));
+    let translation = node
+      .and_then(|item| item.get("translation"))
+      .and_then(Value::as_array);
+    let component = |index: usize| {
+      translation
+        .and_then(|items| items.get(index))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0) as f32
+    };
+    let parent = parents
+      .get(*node_index)
+      .copied()
+      .flatten()
+      .and_then(|parent| node_to_joint.get(parent).copied().flatten());
+    let name = node
+      .and_then(|item| item.get("name"))
+      .and_then(Value::as_str)
+      .unwrap_or("joint")
+      .to_string();
+    joints.push(FaceJoint {
+      name,
+      parent,
+      translation: Vec3 {
+        x: component(0),
+        y: component(1),
+        z: component(2),
+      },
+    });
+  }
+  let inverse_binds = match skin.get("inverseBindMatrices").and_then(json_usize) {
+    Some(accessor) => read_matrices(json, bin, accessor)?,
+    None => Vec::new(),
+  };
+  Ok((joints, inverse_binds, node_to_joint))
+}
+
+fn read_animation(
+  json: &Value,
+  bin: &[u8],
+  node_to_joint: &[Option<usize>],
+) -> Result<Option<FaceAnimation>, FaceError> {
+  let Some(animation) = json
+    .get("animations")
+    .and_then(Value::as_array)
+    .and_then(|items| items.first())
+  else {
+    return Ok(None);
+  };
+  let channel = animation
+    .get("channels")
+    .and_then(Value::as_array)
+    .and_then(|items| items.first());
+  let path = channel
+    .and_then(|item| item.pointer("/target/path"))
+    .and_then(Value::as_str)
+    .unwrap_or("");
+  if path != "rotation" {
+    return Ok(None);
+  }
+  let node = channel
+    .and_then(|item| item.pointer("/target/node"))
+    .and_then(json_usize)
+    .unwrap_or(usize::MAX);
+  let Some(joint) = node_to_joint.get(node).copied().flatten() else {
+    return Ok(None);
+  };
+  let sampler_index = channel
+    .and_then(|item| item.get("sampler"))
+    .and_then(json_usize)
+    .unwrap_or(0);
+  let sampler = animation
+    .get("samplers")
+    .and_then(Value::as_array)
+    .and_then(|items| items.get(sampler_index));
+  let Some(input) = sampler.and_then(|item| item.get("input")).and_then(json_usize) else {
+    return Ok(None);
+  };
+  let Some(output) = sampler.and_then(|item| item.get("output")).and_then(json_usize) else {
+    return Ok(None);
+  };
+  let times = read_floats(json, bin, input, 1)?;
+  let values = read_floats(json, bin, output, 4)?;
+  let mut rotations = Vec::new();
+  let mut index = 0;
+  while index + 3 < values.len() {
+    rotations.push([
+      values[index],
+      values[index + 1],
+      values[index + 2],
+      values[index + 3],
+    ]);
+    index += 4;
+  }
+  let name = animation
+    .get("name")
+    .and_then(Value::as_str)
+    .unwrap_or("animation")
+    .to_string();
+  Ok(Some(FaceAnimation {
+    name,
+    joint,
+    times,
+    rotations,
+  }))
+}
+
+fn node_parents(nodes: Option<&Vec<Value>>) -> Vec<Option<usize>> {
+  let Some(nodes) = nodes else {
+    return Vec::new();
+  };
+  let mut parents = vec![None; nodes.len()];
+  for (index, node) in nodes.iter().enumerate() {
+    let Some(children) = node.get("children").and_then(Value::as_array) else {
+      continue;
+    };
+    for child in children {
+      let Some(child_index) = json_usize(child) else {
+        continue;
+      };
+      if child_index < parents.len() {
+        parents[child_index] = Some(index);
+      }
+    }
+  }
+  parents
+}
+
+fn texture_of(
+  json: &Value,
+  bin: &[u8],
+  material: Option<&Value>,
+) -> Option<RgbaImage> {
+  let texture_index = material
+    .and_then(|item| item.pointer("/pbrMetallicRoughness/baseColorTexture/index"))
+    .and_then(json_usize)?;
+  let source = json
+    .pointer(&format!("/textures/{texture_index}/source"))
+    .and_then(json_usize)?;
+  let view_index = json
+    .pointer(&format!("/images/{source}/bufferView"))
+    .and_then(json_usize)?;
+  let view = json
+    .pointer(&format!("/bufferViews/{view_index}"))?;
+  let offset = view.get("byteOffset").and_then(json_usize).unwrap_or(0);
+  let length = view.get("byteLength").and_then(json_usize).unwrap_or(0);
+  if offset + length > bin.len() || length < 8 {
+    return None;
+  }
+  decode_png(&bin[offset..offset + length])
+}
+
+fn decode_png(bytes: &[u8]) -> Option<RgbaImage> {
+  let decoder = png::Decoder::new(Cursor::new(bytes));
+  let mut reader = decoder.read_info().ok()?;
+  let mut buffer = vec![0; reader.output_buffer_size()];
+  let info = reader.next_frame(&mut buffer).ok()?;
+  let filled = &buffer[..info.buffer_size()];
+  let pixels = match info.color_type {
+    png::ColorType::Rgba => filled.to_vec(),
+    png::ColorType::Rgb => filled
+      .chunks(3)
+      .flat_map(|pixel| [pixel[0], pixel[1], pixel[2], 255])
+      .collect(),
+    _ => return None,
+  };
+  Some(RgbaImage {
+    width: info.width,
+    height: info.height,
+    pixels,
+  })
 }
 
 fn color_of(material: Option<&Value>) -> [f32; 4] {
@@ -166,6 +400,87 @@ fn color_of(material: Option<&Value>) -> [f32; 4] {
     channel(2, 1.0),
     channel(3, 1.0),
   ]
+}
+
+fn read_vec2(
+  json: &Value,
+  bin: &[u8],
+  accessor: usize,
+) -> Result<Vec<[f32; 2]>, FaceError> {
+  let floats = read_floats(json, bin, accessor, 2)?;
+  let mut vectors = Vec::with_capacity(floats.len() / 2);
+  let mut index = 0;
+  while index + 1 < floats.len() {
+    vectors.push([floats[index], floats[index + 1]]);
+    index += 2;
+  }
+  Ok(vectors)
+}
+
+fn read_weights(
+  json: &Value,
+  bin: &[u8],
+  accessor: usize,
+) -> Result<Vec<[f32; 4]>, FaceError> {
+  let floats = read_floats(json, bin, accessor, 4)?;
+  let mut vectors = Vec::with_capacity(floats.len() / 4);
+  let mut index = 0;
+  while index + 3 < floats.len() {
+    vectors.push([
+      floats[index],
+      floats[index + 1],
+      floats[index + 2],
+      floats[index + 3],
+    ]);
+    index += 4;
+  }
+  Ok(vectors)
+}
+
+fn read_joints(
+  json: &Value,
+  bin: &[u8],
+  accessor: usize,
+) -> Result<Vec<[u16; 4]>, FaceError> {
+  let info = accessor_info(json, accessor)?;
+  if info.component_type != 5123 {
+    return Err(FaceError::BadAccessor(format!(
+      "Joint accessor {accessor} is not an unsigned short buffer."
+    )));
+  }
+  let mut values = Vec::with_capacity(info.count);
+  for item in 0..info.count {
+    let start = info.offset + item * info.stride;
+    let mut joint = [0_u16; 4];
+    for component in 0..4 {
+      let byte = start + component * 2;
+      if byte + 2 > bin.len() {
+        return Err(FaceError::BadAccessor(format!(
+          "Joint accessor {accessor} is past the binary chunk."
+        )));
+      }
+      joint[component] = u16::from(bin[byte]) | (u16::from(bin[byte + 1]) << 8);
+    }
+    values.push(joint);
+  }
+  Ok(values)
+}
+
+fn read_matrices(
+  json: &Value,
+  bin: &[u8],
+  accessor: usize,
+) -> Result<Vec<[f32; 16]>, FaceError> {
+  let floats = read_floats(json, bin, accessor, 16)?;
+  let mut matrices = Vec::with_capacity(floats.len() / 16);
+  let mut index = 0;
+  while index + 15 < floats.len() {
+    let mut matrix = [0.0; 16];
+    matrix.copy_from_slice(&floats[index..index + 16]);
+    matrices.push(matrix);
+    index += 16;
+  }
+  Ok(matrices)
 }
 
 fn read_vec3(
@@ -319,6 +634,7 @@ fn component_count(value_type: &str) -> usize {
     "VEC2" => 2,
     "VEC3" => 3,
     "VEC4" => 4,
+    "MAT4" => 16,
     _ => 1,
   }
 }

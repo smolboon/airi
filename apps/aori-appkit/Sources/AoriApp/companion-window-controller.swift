@@ -60,7 +60,12 @@ final class CompanionWindowController: NSWindowController {
             presentation: model.presentation,
             speaking: model.isSpeaking,
             mouthLevel: model.mouthLevel,
-            scene: model.vrmScene
+            scene: model.vrmScene,
+            bytes: model.modelBytes
         )
+    }
+
+    func renderedPNG(time: Double) -> Data? {
+        characterView.renderedPNG(time: time)
     }
 }

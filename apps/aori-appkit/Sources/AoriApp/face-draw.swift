@@ -9,6 +9,26 @@ func aoriFaceAddMorph(
     _ count: UInt
 ) -> Int32
 
+@_silgen_name("aori_face_load")
+func aoriFaceLoad(_ bytes: UnsafePointer<UInt8>, _ length: UInt) -> OpaquePointer?
+
+@_silgen_name("aori_face_free")
+func aoriFaceFree(_ scene: OpaquePointer?)
+
+@_silgen_name("aori_face_render")
+func aoriFaceRender(
+    _ scene: OpaquePointer?,
+    _ mouth: Float,
+    _ blink: Float,
+    _ happy: Float,
+    _ sad: Float,
+    _ surprised: Float,
+    _ time: Float,
+    _ width: UInt32,
+    _ height: UInt32,
+    _ outRGBA: UnsafeMutablePointer<UInt8>
+) -> Int32
+
 @_silgen_name("aori_face_project")
 func aoriFaceProject(
     _ positions: UnsafePointer<Float>,
@@ -19,6 +39,96 @@ func aoriFaceProject(
     _ scale: Float,
     _ outXY: UnsafeMutablePointer<Float>
 ) -> Int32
+
+enum FaceRaster {
+    static func load(_ bytes: Data) -> OpaquePointer? {
+        bytes.withUnsafeBytes { raw in
+            guard let base = raw.baseAddress?.assumingMemoryBound(to: UInt8.self), raw.count > 0 else {
+                return nil
+            }
+            return aoriFaceLoad(base, UInt(raw.count))
+        }
+    }
+
+    static func render(
+        scene: OpaquePointer,
+        mouth: Float,
+        blink: Float,
+        happy: Float,
+        sad: Float,
+        surprised: Float,
+        time: Float,
+        width: Int,
+        height: Int
+    ) -> [UInt8]? {
+        guard width > 0, height > 0, width <= 1280, height <= 1280 else {
+            return nil
+        }
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        let code = pixels.withUnsafeMutableBufferPointer { buffer in
+            guard let base = buffer.baseAddress else {
+                return Int32(-1)
+            }
+            return aoriFaceRender(
+                scene,
+                mouth,
+                blink,
+                happy,
+                sad,
+                surprised,
+                time,
+                UInt32(width),
+                UInt32(height),
+                base
+            )
+        }
+        return code == 0 ? pixels : nil
+    }
+
+    static func image(pixels: [UInt8], width: Int, height: Int) -> CGImage? {
+        guard pixels.count == width * height * 4 else {
+            return nil
+        }
+        let data = Data(pixels)
+        guard let provider = CGDataProvider(data: data as CFData) else {
+            return nil
+        }
+        return CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bitsPerPixel: 32,
+            bytesPerRow: width * 4,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+        )
+    }
+
+    static func png(pixels: [UInt8], width: Int, height: Int) -> Data? {
+        guard let image = image(pixels: pixels, width: width, height: height) else {
+            return nil
+        }
+        return NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])
+    }
+
+    static func draw(pixels: [UInt8], width: Int, height: Int, in bounds: NSRect) {
+        guard let image = image(pixels: pixels, width: width, height: height) else {
+            return
+        }
+        guard let context = NSGraphicsContext.current?.cgContext else {
+            return
+        }
+        context.saveGState()
+        context.translateBy(x: bounds.minX, y: bounds.maxY)
+        context.scaleBy(x: bounds.width / CGFloat(width), y: -bounds.height / CGFloat(height))
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        context.restoreGState()
+    }
+}
 
 enum FaceDraw {
     static func paint(

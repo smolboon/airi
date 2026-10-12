@@ -106,6 +106,19 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertFalse(presentation.usesPlaceholderMesh)
         XCTAssertEqual(SpeechLevel.mouthOpen(samples: [Float](repeating: 0, count: 8)), 0)
         XCTAssertGreaterThan(SpeechLevel.mouthOpen(samples: [Float](repeating: 0.25, count: 8)), 0.5)
+        let bytes = try Data(contentsOf: url)
+        let text = String(decoding: bytes, as: UTF8.self)
+        XCTAssertTrue(text.contains("inverseBindMatrices"))
+        XCTAssertTrue(text.contains("baseColorTexture"))
+        XCTAssertTrue(text.contains("JOINTS_0"))
+        XCTAssertTrue(text.contains("\"name\":\"idle\""))
+        XCTAssertEqual(ScreenshotPose.mouthOpen, 1)
+        XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: false), 1)
+        XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: true), 0)
+        XCTAssertEqual(MotionPolicy.idleTime(time: ScreenshotPose.time, reduceMotion: true), 0)
+        XCTAssertEqual(MotionPolicy.idleTime(time: ScreenshotPose.time, reduceMotion: false), ScreenshotPose.time)
+        XCTAssertEqual(AoriCopy.showCompanion, "Show Companion")
+        XCTAssertFalse(AoriCopy.statusItem.isEmpty)
     }
 
     func testStandardCompanionStyle() {

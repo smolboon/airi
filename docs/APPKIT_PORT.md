@@ -56,33 +56,33 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Persona | stage prompts | Name and personality in Settings | Richer character cards later |
 | Long-term memory | stage pages, Telegram, pgvector | Local notes from "remember that" | Topic recall and companion-written notes later |
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
-| Idle motion | character modules | Blink and sway on the placeholder | Idle clips on a real mesh later |
-| Emotion | VRM expressions | glad, sorry, and wow change the placeholder face | Blend shapes later |
+| Idle motion | character modules | Blink, plus a neck clip on the CC0 head | More bones than the neck later |
+| Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
 | Lip-sync | audio weights on VRM mouths | RMS of TTS PCM buffers on the A blend shape | Phoneme visemes come later |
-| VRM mesh | `stage-ui-three` | CC0 head, AppKit triangles, Rust deform | Bone animation and textures come later |
+| VRM mesh | `stage-ui-three` | CC0 head with a neck bone, texture, and depth buffer | Phoneme visemes come later |
 | Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
 | Integrations | `integrations/` | Absent | Port one host at a time |
-| Companion window | Electron | Transparent, draggable, and always on top | Click-through comes later |
+| Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
 | Vision and games | stage modules, integrations | Absent | After the companion can stay and speak |
 
 ## Native mapping
 
 Use these Apple APIs for the port:
 
-- AppKit windows, menus, and views for the shell.
-- Keychain Services for the API key.
+- AppKit windows, menus, a status item, and views for the shell.
+- Keychain Services for the API key. A locked prompt fails the read.
 - `URLSession` for provider HTTP.
 - `AVSpeechSynthesizer` for speech output.
 - Speech framework and `AVAudioEngine` for speech input.
-- Rust `aori-face` for mesh deform and the flat projection.
+- Rust `aori-face` for skinning, morphs, and a depth-buffer image.
 - GPUI 0.2.2 for a separate character window. The crate is Apache-2.0.
-- A small glTF header reader for VRM names. The reader is pure Swift. The Rust crate reads the same sample file for the GPUI window.
+- A small glTF header reader for VRM names. The reader is pure Swift. The Rust crate reads the same sample file.
 
 Do not use SwiftUI for the window shell. A later control can be SwiftUI only when AppKit cannot express it.
 
-Do not use SceneKit. The AppKit view fills projected triangles.
+Do not use SceneKit. AppKit blits the raster from `aori-face`.
 
 Zig is not a dependency. The mesh routine is small, so it lives in Rust. Add Zig when a routine is smaller there than in Rust.
 
@@ -100,8 +100,8 @@ RealityKit loads USDZ and Reality files. It does not load VRM. A USDZ conversion
 apps/aori-appkit/
 ├── Sources/AoriCore/        # Messages, session, SSE, secrets, VRM bytes
 ├── Sources/AoriProviders/   # OpenAI-compatible client
-├── Sources/AoriApp/         # AppKit shell, speech, triangle view
-├── rust/aori-face/          # Deform, project, and the sample glTF read
+├── Sources/AoriApp/         # AppKit shell, speech, raster blit
+├── rust/aori-face/          # Skin, depth raster, and the sample glTF read
 ├── rust/aori-gpui/          # Separate GPUI window for the same head
 └── Tests/                   # XCTest for the core modules
 ```
@@ -116,15 +116,21 @@ The companion window is transparent, draggable, and able to stay above other app
 
 ### Milestone 2, this change
 
-`VRMSceneReader` reads positions, normals, indices, and morph targets from a binary VRM file. The AppKit view fills the projected triangles. `aori-face` applies the morph deltas. The bundled file is `Sources/AoriApp/Resources/aori-sample.vrm`. It is an original low-poly head. The license is CC0. See `Resources/LICENSE.txt`.
+The sample file is an original CC0 head. It has a neck bone, skin weights, UVs, a PNG texture, and an idle rotation clip. See `Resources/LICENSE.txt`.
 
-`AVSpeechSynthesizer.write` returns PCM buffers. The A blend shape uses the root-mean-square of each buffer. Joy, sorrow, surprised, and blink follow the emotion and the idle blink. The mesh stays in the bind pose. Bone animation is not applied. The material is a flat color. This is not a phoneme viseme map.
+`aori-face` applies morphs, skins the neck, and fills a depth buffer. AppKit blits that image into the companion window. The window stays transparent and above other apps.
 
-The `aori-gpui` binary reads the same sample file and paints it with GPUI. That window uses a fixed mouth weight of 0.65. It does not hear the TTS buffers. This checkout did not open that window.
+`AVSpeechSynthesizer.write` returns PCM buffers. The mouth weight is the root-mean-square of each buffer. The same weight drives the raster. Joy, sorrow, surprised, and blink still follow the face driver. This is not a phoneme viseme map.
+
+A status item lists the companion, the main window, Settings, and Quit. Those titles live in `AoriCopy`.
+
+The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
+
+`AORI_SCREENSHOT=1` feeds a synthetic PCM buffer through `SpeechLevel`, writes a framebuffer PNG, and leaves the window up. The macOS job then captures that window. This checkout did not run that job.
 
 ### Milestone 2 follow-up
 
-Skin the mesh with bones. Add textures. Map speech to phoneme visemes. Keep a voice turn going without a separate Speak press.
+Map speech to phoneme visemes. Keep a voice turn going without a separate Speak press. Add bones beyond the neck.
 
 ### Milestone 3, memory that lasts
 
@@ -144,6 +150,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. `cargo test -p aori-face` passed 4 tests with Rust 1.99.0. `cargo check -p aori-gpui` passed on Linux. Run 38265960268 then passed the same checks on `macos-latest` and compiled `AoriApp`. The windows were not opened. Speech, Keychain, and the GPUI window were not executed.
+The work ran on Linux. `swift test` passed 33 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 9 tests with Rust 1.99.0. A debug build rendered the 280 by 380 frame in 2.75 ms. `cargo check -p aori-gpui` passed. This checkout did not launch the app. Speech playback, Keychain, and the GPUI window were not executed.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.

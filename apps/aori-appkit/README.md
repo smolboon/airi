@@ -4,7 +4,13 @@ Aori is the native macOS companion. It is based on Project AIRI. The windows are
 
 ## What it does
 
-The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A few words change blend shapes. Speak uses `AVSpeechSynthesizer`. The mouth blend shape uses the level of the spoken audio. Listen uses the Speech framework. The bundled character is a CC0 VRM head. AppKit fills its projected triangles. A Rust library moves the vertices. You can open another `.vrm` file. The mesh stays in the bind pose. A separate GPUI window can paint the same sample head. That window is not the AppKit app.
+The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. A status item lists the companion, the chat, and Settings.
+
+Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A neck bone plays a short idle clip. A few words change blend shapes.
+
+Speak uses `AVSpeechSynthesizer`. The mouth blend shape uses the level of the spoken audio. Listen uses the Speech framework. The bundled character is a CC0 VRM head with a texture. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image.
+
+You can open another `.vrm` file. A separate GPUI window paints the same sample with flat triangles. That window is not the AppKit app.
 
 ## How to use it
 
@@ -43,8 +49,8 @@ apps/aori-appkit/
 ├── AoriAppKit.xcodeproj
 ├── Sources/AoriCore/         # Chat, secrets, VRM bytes, window policy
 ├── Sources/AoriProviders/    # OpenAI-compatible streaming client
-├── Sources/AoriApp/          # AppKit, speech, triangle view (macOS only)
-├── rust/aori-face/           # Deform, project, sample glTF read
+├── Sources/AoriApp/          # AppKit, speech, raster blit (macOS only)
+├── rust/aori-face/           # Skin, depth raster, sample glTF read
 ├── rust/aori-gpui/           # Separate GPUI window
 └── Tests/
 ```
@@ -72,8 +78,8 @@ cargo test -p aori-face
 cargo check -p aori-gpui
 ```
 
-The macOS CI job also runs `./scripts/assemble-app.sh`.
+The macOS CI job also runs `./scripts/assemble-app.sh` and `./scripts/screenshot-app.sh`. The screenshot script sets `AORI_SCREENSHOT=1`. The app writes `build/aori-framebuffer.png` and stays open so `screencapture` can grab the window.
 
 ## Limits
 
-This tree does not run Live2D. It does not play bone animation. The sample head uses a flat color. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Lip-sync uses audio level, not phoneme visemes.
+This tree does not run Live2D. The sample rig is one neck bone. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Lip-sync uses audio level, not phoneme visemes. The GPUI window does not use the depth buffer.

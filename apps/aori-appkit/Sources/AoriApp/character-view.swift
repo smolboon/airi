@@ -17,10 +17,14 @@ final class CharacterView: NSView {
     private var emotion = CompanionEmotion.neutral
     private var mouthLevel = 0.0
     private var sway = 0.0
+    private var poseTime = 0.0
+    private var blink = 0.0
     private var meshes: [VRMMesh] = []
     private var blendShapes: [VRMBlendShape] = []
     private var weights: [MorphWeight] = []
     private var loadedVertexCount = -1
+    private var loadedBytes: Data?
+    private nonisolated(unsafe) var faceScene: OpaquePointer?
     private var started = Date()
 
     override init(frame frameRect: NSRect) {
@@ -38,9 +42,18 @@ final class CharacterView: NSView {
 
     deinit {
         timer?.invalidate()
+        if let faceScene {
+            aoriFaceFree(faceScene)
+        }
     }
 
-    func apply(presentation: CharacterPresentation, speaking: Bool, mouthLevel: Double, scene: VRMScene?) {
+    func apply(
+        presentation: CharacterPresentation,
+        speaking: Bool,
+        mouthLevel: Double,
+        scene: VRMScene?,
+        bytes: Data?
+    ) {
         titleLabel.stringValue = presentation.title
         subtitleLabel.stringValue = presentation.subtitle
         self.speaking = speaking
@@ -51,7 +64,18 @@ final class CharacterView: NSView {
             blendShapes = scene.blendShapes
             loadedVertexCount = scene.vertexCount
         }
+        loadModel(bytes)
         tick()
+    }
+
+    func renderedPNG(time: Double) -> Data? {
+        let width = bounds.width >= 2 ? Int(bounds.width.rounded()) : 280
+        let height = bounds.height >= 2 ? Int(bounds.height.rounded()) : 380
+        let frameBlink = MotionPolicy.blink(time: time, reduceMotion: false)
+        guard let pixels = rasterPixels(time: time, blink: frameBlink, width: width, height: height) else {
+            return nil
+        }
+        return FaceRaster.png(pixels: pixels, width: width, height: height)
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -67,6 +91,12 @@ final class CharacterView: NSView {
         if !clearsBackground {
             NSColor.windowBackgroundColor.setFill()
             bounds.fill()
+        }
+        let width = Int(bounds.width.rounded())
+        let height = Int(bounds.height.rounded())
+        if let pixels = rasterPixels(time: poseTime, blink: blink, width: width, height: height) {
+            FaceRaster.draw(pixels: pixels, width: width, height: height, in: bounds)
+            return
         }
         FaceDraw.paint(meshes: meshes, weights: weights, sway: sway, bounds: bounds)
     }
@@ -129,8 +159,10 @@ final class CharacterView: NSView {
 
     private func tick() {
         let time = Date().timeIntervalSince(started)
-        let pose = CharacterMotion.pose(time: time, speaking: speaking, emotion: emotion)
-        let blink = abs(time.truncatingRemainder(dividingBy: 3.2) - 0.1) < 0.08 ? 1.0 : 0.0
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        poseTime = MotionPolicy.idleTime(time: time, reduceMotion: reduceMotion)
+        blink = MotionPolicy.blink(time: time, reduceMotion: reduceMotion)
+        let pose = CharacterMotion.pose(time: poseTime, speaking: speaking, emotion: emotion)
         let mouth = speaking ? mouthLevel : 0
         weights = FaceDriver.morphWeights(
             blendShapes: blendShapes,
@@ -138,7 +170,51 @@ final class CharacterView: NSView {
             mouthOpen: mouth,
             blink: blink
         )
-        sway = pose.sway
+        sway = reduceMotion ? 0 : pose.sway
         needsDisplay = true
+    }
+
+    private func loadModel(_ bytes: Data?) {
+        guard let bytes, bytes != loadedBytes else {
+            return
+        }
+        if let faceScene {
+            aoriFaceFree(faceScene)
+            self.faceScene = nil
+        }
+        loadedBytes = bytes
+        faceScene = FaceRaster.load(bytes)
+    }
+
+    private func rasterPixels(time: Double, blink: Double, width: Int, height: Int) -> [UInt8]? {
+        guard let faceScene, width > 1, height > 1 else {
+            return nil
+        }
+        let feelings = feelingWeights(emotion)
+        let mouth = speaking ? Float(mouthLevel) : 0
+        return FaceRaster.render(
+            scene: faceScene,
+            mouth: mouth,
+            blink: Float(blink),
+            happy: feelings.happy,
+            sad: feelings.sad,
+            surprised: feelings.surprised,
+            time: Float(time),
+            width: width,
+            height: height
+        )
+    }
+
+    private func feelingWeights(_ emotion: CompanionEmotion) -> (happy: Float, sad: Float, surprised: Float) {
+        switch emotion {
+        case .happy:
+            return (1, 0, 0)
+        case .sad:
+            return (0, 1, 0)
+        case .surprised:
+            return (0, 0, 1)
+        case .neutral:
+            return (0, 0, 0)
+        }
     }
 }

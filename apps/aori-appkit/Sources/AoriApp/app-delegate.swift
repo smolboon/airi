@@ -35,6 +35,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let transcriber = AppleSpeechTranscriber()
     private var companionPolicy = CompanionWindowPolicy.standard
     private var alwaysOnTopItem: NSMenuItem?
+    private var statusItem: StatusItemController?
     private var listening = false
     private var launchStatus: String?
 
@@ -57,6 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func launch() {
+        statusItem = StatusItemController(target: self)
         let configuration = loadConfiguration()
         let profile = loadProfile()
         let model = ChatViewModel(
@@ -116,8 +118,45 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model.greetIfNeeded()
         mainWindow.refresh()
         companionWindow.refresh()
+        if screenshotMode {
+            presentScreenshot()
+            return
+        }
         speakReply()
         NSApp.activate()
+    }
+
+    private var screenshotMode: Bool {
+        ProcessInfo.processInfo.environment["AORI_SCREENSHOT"] == "1"
+    }
+
+    private func presentScreenshot() {
+        let level = ScreenshotPose.mouthOpen
+        model?.setSpeaking(true)
+        model?.setMouthLevel(level)
+        mainWindow?.refresh()
+        companionWindow?.refresh()
+        companionWindow?.window?.orderFrontRegardless()
+        NSApp.activate()
+        writeFramebuffer()
+        Timer.scheduledTimer(withTimeInterval: 25, repeats: false) { _ in
+            Task { @MainActor in
+                NSApp.terminate(nil)
+            }
+        }
+    }
+
+    private func writeFramebuffer() {
+        guard let png = companionWindow?.renderedPNG(time: ScreenshotPose.time) else {
+            model?.setStatus("The screenshot frame was not rendered.")
+            return
+        }
+        let path = ProcessInfo.processInfo.environment["AORI_FRAMEBUFFER_PATH"] ?? "/tmp/aori-framebuffer.png"
+        do {
+            try png.write(to: URL(fileURLWithPath: path))
+        } catch {
+            model?.setStatus("The screenshot frame was not written. \(String(describing: error))")
+        }
     }
 
     private func loadSampleModel(into model: ChatViewModel) {
@@ -126,7 +165,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         do {
-            model.apply(scene: try VRMSceneReader.read(data))
+            model.apply(scene: try VRMSceneReader.read(data), bytes: data)
         } catch {
             model.setStatus(String(describing: error))
         }
@@ -176,7 +215,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Aori"
-        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a VRM mesh drawn in AppKit. A Rust library moves the vertices. Speech levels move the mouth. Feelings move blend shapes."
+        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a rigged VRM head. A Rust library skins the mesh and fills a depth buffer. Speech levels move the mouth."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
@@ -208,7 +247,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             let data = try Data(contentsOf: url)
             let scene = try VRMSceneReader.read(data)
-            model?.apply(scene: scene)
+            model?.apply(scene: scene, bytes: data)
             let title = scene.document.title ?? url.lastPathComponent
             model?.setStatus("Loaded \(title). \(scene.vertexCount) vertices.")
         } catch {

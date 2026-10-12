@@ -1,4 +1,5 @@
 import AppKit
+import AoriCore
 
 struct InstalledMenu {
     var alwaysOnTopItem: NSMenuItem
@@ -9,20 +10,20 @@ enum MenuBuilder {
     static func install(target: AnyObject) -> InstalledMenu {
         let main = NSMenu()
 
-        let appMenu = NSMenu(title: "Aori")
-        bind(appMenu.addItem(withTitle: "About Aori", action: #selector(AppDelegate.showAbout(_:)), keyEquivalent: ""), target: target)
+        let appMenu = NSMenu(title: AoriCopy.appName)
+        bind(appMenu.addItem(withTitle: AoriCopy.about, action: #selector(AppDelegate.showAbout(_:)), keyEquivalent: ""), target: target)
         appMenu.addItem(.separator())
-        bind(appMenu.addItem(withTitle: "Settings…", action: #selector(AppDelegate.showSettings(_:)), keyEquivalent: ","), target: target)
+        bind(appMenu.addItem(withTitle: AoriCopy.settings, action: #selector(AppDelegate.showSettings(_:)), keyEquivalent: ","), target: target)
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Quit Aori", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appMenu.addItem(withTitle: AoriCopy.quit, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         let appItem = NSMenuItem()
-        appItem.title = "Aori"
+        appItem.title = AoriCopy.appName
         appItem.submenu = appMenu
         main.addItem(appItem)
 
         let fileMenu = NSMenu(title: "File")
-        bind(fileMenu.addItem(withTitle: "New Chat", action: #selector(AppDelegate.newChat(_:)), keyEquivalent: "n"), target: target)
-        bind(fileMenu.addItem(withTitle: "Open VRM…", action: #selector(AppDelegate.openVRM(_:)), keyEquivalent: "o"), target: target)
+        bind(fileMenu.addItem(withTitle: AoriCopy.newChat, action: #selector(AppDelegate.newChat(_:)), keyEquivalent: "n"), target: target)
+        bind(fileMenu.addItem(withTitle: AoriCopy.openVRM, action: #selector(AppDelegate.openVRM(_:)), keyEquivalent: "o"), target: target)
         fileMenu.addItem(.separator())
         fileMenu.addItem(withTitle: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
         let fileItem = NSMenuItem()
@@ -43,11 +44,11 @@ enum MenuBuilder {
         main.addItem(editItem)
 
         let viewMenu = NSMenu(title: "View")
-        bind(viewMenu.addItem(withTitle: "Show Main Window", action: #selector(AppDelegate.showMainWindow(_:)), keyEquivalent: "1"), target: target)
-        bind(viewMenu.addItem(withTitle: "Show Companion", action: #selector(AppDelegate.showCompanion(_:)), keyEquivalent: "2"), target: target)
-        bind(viewMenu.addItem(withTitle: "Hide Companion", action: #selector(AppDelegate.hideCompanion(_:)), keyEquivalent: "3"), target: target)
+        bind(viewMenu.addItem(withTitle: AoriCopy.showMainWindow, action: #selector(AppDelegate.showMainWindow(_:)), keyEquivalent: "1"), target: target)
+        bind(viewMenu.addItem(withTitle: AoriCopy.showCompanion, action: #selector(AppDelegate.showCompanion(_:)), keyEquivalent: "2"), target: target)
+        bind(viewMenu.addItem(withTitle: AoriCopy.hideCompanion, action: #selector(AppDelegate.hideCompanion(_:)), keyEquivalent: "3"), target: target)
         let alwaysOnTop = viewMenu.addItem(
-            withTitle: "Companion Always on Top",
+            withTitle: AoriCopy.alwaysOnTop,
             action: #selector(AppDelegate.toggleAlwaysOnTop(_:)),
             keyEquivalent: "t"
         )

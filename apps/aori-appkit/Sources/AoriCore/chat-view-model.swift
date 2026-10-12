@@ -30,6 +30,7 @@ public final class ChatViewModel {
     public private(set) var persona: CompanionPersona
     public private(set) var memory: UserMemory
     public private(set) var vrmScene: VRMScene?
+    public private(set) var modelBytes: Data?
     public private(set) var mouthLevel: Double = 0
     public var onChange: (@MainActor () -> Void)?
     public var onProfileChange: (@MainActor () -> Void)?
@@ -134,6 +135,11 @@ public final class ChatViewModel {
         presentation = presentation.applying(scene)
         showsModelTitle = scene.document.title != nil
         publish()
+    }
+
+    public func apply(scene: VRMScene, bytes: Data) {
+        modelBytes = bytes
+        apply(scene: scene)
     }
 
     public func send() async {
