@@ -59,6 +59,12 @@ From `apps/aori-appkit`:
 swift test
 ```
 
+On macOS, build the face library before that test. `swift test` links the app.
+
+```sh
+(cd rust && cargo build -p aori-face)
+```
+
 From `rust`:
 
 ```sh
