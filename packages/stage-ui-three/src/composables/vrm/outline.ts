@@ -433,25 +433,13 @@ function resolveBuiltInOutlineMeshTarget(mesh: Mesh): VrmOutlineMeshTarget | und
 }
 
 // Runtime target scan
-function getVrmOutlineRuntimeState(vrm: VRM) {
-  return vrmOutlineRuntimeRegistry.get(vrm)
-}
-
-function setVrmOutlineRuntimeState(vrm: VRM, state: VrmOutlineRuntimeState) {
-  vrmOutlineRuntimeRegistry.set(vrm, state)
-}
-
-function clearVrmOutlineRuntime(vrm: VRM) {
-  vrmOutlineRuntimeRegistry.delete(vrm)
-}
-
 function findVrmOutlineMeshTarget({
   material,
   materialIndex,
   mesh,
   vrm,
 }: Pick<VrmMaterialHookContext, 'material' | 'materialIndex' | 'mesh' | 'vrm'>) {
-  const runtimeState = getVrmOutlineRuntimeState(vrm)
+  const runtimeState = vrmOutlineRuntimeRegistry.get(vrm)
   if (!runtimeState)
     return undefined
 
@@ -479,14 +467,14 @@ export function prepareVrmOutlineRuntime(vrm: VRM) {
     meshTargets.push(meshTarget)
   })
 
-  setVrmOutlineRuntimeState(vrm, { meshes: meshTargets })
+  vrmOutlineRuntimeRegistry.set(vrm, { meshes: meshTargets })
 }
 
 export function disposeVrmOutlineRuntime(vrm?: VRM) {
   if (!vrm)
     return
 
-  clearVrmOutlineRuntime(vrm)
+  vrmOutlineRuntimeRegistry.delete(vrm)
 }
 
 export function createVrmOutlineHook(): VrmHook {

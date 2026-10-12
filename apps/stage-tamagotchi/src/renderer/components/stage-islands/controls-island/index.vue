@@ -265,10 +265,6 @@ const panelPositionClasses = computed(() => {
  */
 const startDraggingWindow = !isLinux() ? defineInvoke(context.value, electronStartDraggingWindow) : undefined
 
-function refreshWindow() {
-  window.location.reload()
-}
-
 /**
  * Requests the main process to move the AIRI desktop window back to screen center.
  */
@@ -377,7 +373,7 @@ function resetMainWindowPosition() {
                       v-track-button="{ name: 'controls_island_action', action: 'refresh_window' }"
                       :button-style="adjustStyleClasses.button"
                       :aria-label="t('tamagotchi.stage.controls-island.refresh')"
-                      @click="refreshWindow"
+                      @click="window.location.reload()"
                     >
                       <div i-solar:refresh-linear :class="adjustStyleClasses.icon" text="neutral-800 dark:neutral-300" />
                     </ControlButton>

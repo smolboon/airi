@@ -5,7 +5,6 @@ import type {
   OnboardingStep,
   OnboardingStepGuard,
   OnboardingStepNextHandler,
-  OnboardingStepPrevHandler,
   ProviderConfigData,
 } from './types'
 
@@ -73,10 +72,6 @@ const selectedProviderType = computed<ProviderMode>(() => {
 // Reset validation state when provider changes
 function selectProvider(provider: ProviderMetadata) {
   selectedProviderId.value = provider.id
-}
-
-const requestPreviousStep: OnboardingStepPrevHandler = () => {
-  return navigatePrevious()
 }
 
 const requestNextStep: OnboardingStepNextHandler = async (configData?: ProviderConfigData) => {
@@ -233,7 +228,7 @@ onMounted(() => {
         class="flex flex-1 flex-col"
         v-bind="currentStepProps"
         :on-next="requestNextStep"
-        :on-previous="requestPreviousStep"
+        :on-previous="navigatePrevious"
       />
     </Transition>
   </div>

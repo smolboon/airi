@@ -3,7 +3,7 @@ import type { Context } from '../browser/context'
 
 import { TWITTER_BASE_URL, TWITTER_HOME_URL, TWITTER_SEARCH_URL } from '../../constants'
 import { SELECTORS } from '../../parsers/selectors'
-import { TweetParser } from '../../parsers/tweet-parser'
+import { extractTweetData, parseTimelineTweets } from '../../parsers/tweet-parser'
 import { errorToMessage } from '../../utils/error'
 import { scrollToLoadMoreTweets } from '../utils/scroll-helper'
 
@@ -88,7 +88,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
       await page.waitForSelector(SELECTORS.TIMELINE.TWEET)
 
       // Use the TweetParser to extract tweets
-      let tweets = await TweetParser.parseTimelineTweets(page)
+      let tweets = await parseTimelineTweets(page)
 
       // Limit tweets to count if specified
       if (options.count && options.count > 0) {
@@ -280,7 +280,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
       }
 
       // Use the TweetParser to extract the main tweet data
-      const mainTweet = await TweetParser.extractTweetData(page, tweetElement)
+      const mainTweet = await extractTweetData(page, tweetElement)
       if (!mainTweet) {
         throw new Error('Failed to extract tweet data')
       }
@@ -289,7 +289,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
       let quotedTweet: Tweet | undefined
       const quotedTweetElement = await page.$('[data-testid="quotedTweet"]')
       if (quotedTweetElement) {
-        const extractedQuotedTweet = await TweetParser.extractTweetData(page, quotedTweetElement)
+        const extractedQuotedTweet = await extractTweetData(page, quotedTweetElement)
         if (extractedQuotedTweet) {
           quotedTweet = extractedQuotedTweet
         }
@@ -306,7 +306,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
 
       const replies: Tweet[] = []
       for (const replyElement of replyElements) {
-        const extractedReply = await TweetParser.extractTweetData(page, replyElement)
+        const extractedReply = await extractTweetData(page, replyElement)
         if (extractedReply) {
           replies.push(extractedReply)
         }

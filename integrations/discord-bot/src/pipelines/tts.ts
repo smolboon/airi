@@ -12,18 +12,16 @@ import { toWav } from '@proj-airi/audio'
 import { createOpenAI } from '@xsai-ext/providers/create'
 import { generateTranscription } from '@xsai/generate-transcription'
 
-export class WhisperLargeV3Pipeline {
-  static task: PipelineType = 'automatic-speech-recognition'
-  static model = 'Xenova/whisper-medium.en'
-  static instance = null
+const whisperTask: PipelineType = 'automatic-speech-recognition'
+const whisperModel = 'Xenova/whisper-medium.en'
+let whisperInstance: Awaited<ReturnType<typeof pipeline>> | null = null
 
-  static async getInstance(progress_callback = null) {
-    if (this.instance === null) {
-      this.instance = await pipeline(this.task, this.model, { progress_callback })
-    }
-
-    return this.instance
+async function loadWhisperLargeV3(progress_callback = null) {
+  if (whisperInstance === null) {
+    whisperInstance = await pipeline(whisperTask, whisperModel, { progress_callback })
   }
+
+  return whisperInstance
 }
 
 export function textFromResult(result: Array<{ text: string }> | { text: string }) {
@@ -51,7 +49,7 @@ export async function transcribe(pcmBuffer: Buffer) {
   const pcmConvertedWav = toWav(pcmBuffer.buffer, 48000, 2)
   log.withFields({ from: pcmBuffer.byteLength, to: pcmConvertedWav.byteLength }).log('Audio data received')
 
-  const transcriber = await WhisperLargeV3Pipeline.getInstance() as (audio: Float32Array | Float64Array) => Promise<Array<{ text: string }> | { text: string }>
+  const transcriber = await loadWhisperLargeV3() as (audio: Float32Array | Float64Array) => Promise<Array<{ text: string }> | { text: string }>
   log.log('Transcribing audio')
 
   const wav = new wavefile.WaveFile(new Uint8Array(pcmConvertedWav))
