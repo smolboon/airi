@@ -24,6 +24,8 @@ Menu strings exist for en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The API
 
 The app reads an AIRI Manifest v2 file named `extension.airi.json`. The host grant is `aori.companion.*` with the snapshot action. A JSON command list asks for capabilities. The sample plugin `aori-greeting` receives the greeting text. A request for `aori.files.read` is denied. The host does not run JavaScript, and the process is not in the macOS App Sandbox.
 
+Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
+
 ## Not in this app
 
 Cubism moc3, JavaScript plugins, vision, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.

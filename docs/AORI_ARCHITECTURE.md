@@ -12,7 +12,7 @@ Aori splits the native app into three Swift modules and two Rust crates. `AoriCo
 
 `PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting and for `aori.files.read`. The greeting returns `Plugin greeting.`. The file call is denied.
 
-This host does not run JavaScript. The macOS App Sandbox stays off.
+This host does not run JavaScript. The macOS App Sandbox stays off. Run 38298286037 logged `aori_plugin_result=Plugin greeting.` and `aori_plugin_denied=aori.files.read`.
 
 ## Voice turn
 

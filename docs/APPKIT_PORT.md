@@ -169,13 +169,15 @@ The native host reads `extension.airi.json`. Unknown fields fail. The id, the ve
 
 The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory. A `.js`, `.mjs`, or `.cjs` file is rejected, and the host does not embed Electron. This grant is not the macOS App Sandbox. The process stays unsandboxed.
 
+Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
+
 ### Milestone 6, the rest of AIRI
 
 Add vision, games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 49 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+The work ran on Linux. `swift test` passed 59 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
 
 `AORI_GPUI_PNG` wrote a lit PNG on this machine in an earlier session. This checkout did not launch the Mac app. Run 38290795770 launched `AoriApp` on `macos-latest`, posted the click, called the mock, and opened the GPUI window. The Linux job in that run passed 49 tests and saved the GPUI PNG.
 
