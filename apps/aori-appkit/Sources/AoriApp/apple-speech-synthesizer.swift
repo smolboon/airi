@@ -183,7 +183,7 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         }
         let engine = engineFailed ? "failed" : (engineReady ? "started" : "idle")
         logLine("aori_speech_engine=\(engine)")
-        logLine(AoriLog.event("speech", ["engine": engine]))
+        logLine(AoriLog.event("speech", fields: ["engine": engine]))
     }
 
     private func logLine(_ line: String) {

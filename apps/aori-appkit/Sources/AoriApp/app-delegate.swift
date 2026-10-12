@@ -430,7 +430,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if !heard.isEmpty {
             var fixture = VoiceTurn()
             if case .send(let line) = fixture.hear(utterance: heard) {
-                logLine(AoriLog.event("turn", ["step": "send", "text": line]))
+                logLine(AoriLog.event("turn", fields: ["step": "send", "text": line]))
             }
         }
         if model?.configuration.apiKey.isEmpty != false {
@@ -493,7 +493,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if heardSamples.count > cap {
             heardSamples.removeFirst(heardSamples.count - cap)
         }
-        guard voiceActivity.endpoint(samples: heardSamples) else {
+        guard voiceActivity.endpoint(heardSamples) else {
             return
         }
         let text = heardText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -514,7 +514,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             startHandsFree()
             return
         }
-        logLine(AoriLog.event("turn", ["step": "send"]))
+        logLine(AoriLog.event("turn", fields: ["step": "send"]))
         model?.setDraft(spoken)
         mainWindow?.setDraft("")
         Task {
