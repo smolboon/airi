@@ -47,11 +47,16 @@ pub struct FaceJoint {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct FaceAnimation {
-  pub name: String,
+pub struct FaceChannel {
   pub joint: usize,
   pub times: Vec<f32>,
   pub rotations: Vec<[f32; 4]>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct FaceAnimation {
+  pub name: String,
+  pub channels: Vec<FaceChannel>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -59,7 +64,7 @@ pub struct FaceScene {
   pub meshes: Vec<FaceMesh>,
   pub joints: Vec<FaceJoint>,
   pub inverse_binds: Vec<[f32; 16]>,
-  pub animation: Option<FaceAnimation>,
+  pub animations: Vec<FaceAnimation>,
 }
 
 /// Adds `weight * delta` onto each position. Extra deltas are ignored.
@@ -194,6 +199,7 @@ pub unsafe extern "C" fn aori_face_render(
   happy: f32,
   sad: f32,
   surprised: f32,
+  viseme: i32,
   time: f32,
   width: u32,
   height: u32,
@@ -214,6 +220,7 @@ pub unsafe extern "C" fn aori_face_render(
       happy,
       sad,
       surprised,
+      viseme,
       time,
       reduce_motion: false,
     },
@@ -285,6 +292,7 @@ mod tests {
       .map(|mesh| mesh.positions.len())
       .sum();
     assert!(count > 20);
+    assert!(scene.joints.iter().any(|joint| joint.name == "leftEye"));
     let head = &scene.meshes[0];
     let mouth = head
       .morphs
@@ -303,8 +311,14 @@ mod tests {
   #[test]
   fn bind_pose_keeps_vertices_and_the_idle_clip_moves_them() {
     let scene = sample();
-    assert_eq!(scene.joints.len(), 2);
-    assert_eq!(scene.animation.as_ref().map(|clip| clip.name.as_str()), Some("idle"));
+    assert_eq!(scene.joints.len(), 6);
+    let names: Vec<&str> = scene.joints.iter().map(|joint| joint.name.as_str()).collect();
+    assert!(names.contains(&"hips"));
+    assert!(names.contains(&"head"));
+    assert!(names.contains(&"leftEye"));
+    assert!(names.contains(&"rightEye"));
+    assert!(scene.animations.iter().any(|clip| clip.name == "idle"));
+    assert!(scene.animations.iter().any(|clip| clip.name == "blink"));
     let rest = raster::deformed_meshes(&scene, &RenderPose::default());
     for (mesh, posed) in scene.meshes.iter().zip(rest.iter()) {
       for (base, next) in mesh.positions.iter().zip(posed.iter()) {
@@ -335,6 +349,65 @@ mod tests {
       },
     );
     assert!((held[0][0].x - rest[0][0].x).abs() < 1.0e-3);
+    let idle = scene
+      .animations
+      .iter()
+      .find(|clip| clip.name == "idle")
+      .expect("idle");
+    let eye = idle
+      .channels
+      .iter()
+      .find(|channel| scene.joints[channel.joint].name == "leftEye")
+      .expect("eye channel");
+    let look = skin::sample_rotation(eye, 1.6);
+    assert!((look[3] - 1.0).abs() > 1.0e-3 || look[1].abs() > 1.0e-3);
+    let looked = raster::deformed_meshes(
+      &scene,
+      &RenderPose {
+        time: 1.6,
+        ..RenderPose::default()
+      },
+    );
+    let eye_moved = scene.meshes[1]
+      .positions
+      .iter()
+      .zip(looked[1].iter())
+      .any(|(base, next)| (base.x - next.x).abs() > 0.01);
+    assert!(eye_moved);
+    let shut = raster::deformed_meshes(
+      &scene,
+      &RenderPose {
+        blink: 1.0,
+        ..RenderPose::default()
+      },
+    );
+    let bone_blink = scene.meshes[1]
+      .positions
+      .iter()
+      .zip(shut[1].iter())
+      .any(|(base, next)| (base.z - next.z).abs() > 0.005);
+    assert!(bone_blink, "an eye bone rotation moves z, the blink morph does not");
+    let vowel_i = raster::deformed_meshes(
+      &scene,
+      &RenderPose {
+        mouth: 1.0,
+        viseme: 1,
+        ..RenderPose::default()
+      },
+    );
+    let vowel_a = raster::deformed_meshes(
+      &scene,
+      &RenderPose {
+        mouth: 1.0,
+        viseme: 0,
+        ..RenderPose::default()
+      },
+    );
+    let viseme_differs = vowel_a[0]
+      .iter()
+      .zip(vowel_i[0].iter())
+      .any(|(left, right)| (left.y - right.y).abs() > 0.005 || (left.z - right.z).abs() > 0.005);
+    assert!(viseme_differs);
   }
 
   #[test]
@@ -381,22 +454,33 @@ mod tests {
 
   #[test]
   fn render_stays_inside_the_frame_budget() {
+    let started_load = std::time::Instant::now();
     let scene = sample();
-    let started = std::time::Instant::now();
-    let image = render_frame(
-      &scene,
-      &RenderPose {
-        mouth: 0.6,
-        time: 1.6,
-        ..RenderPose::default()
-      },
-      280,
-      380,
-    );
-    let elapsed = started.elapsed();
-    println!("aori_face_render_ms={:.2}", elapsed.as_secs_f64() * 1000.0);
-    assert!(image.iter().any(|byte| *byte > 0));
-    assert!(elapsed.as_millis() < 200, "render took {elapsed:?}");
+    let load_ms = started_load.elapsed().as_secs_f64() * 1000.0;
+    println!("aori_face_load_ms={load_ms:.2}");
+    let mut times = Vec::new();
+    for frame in 0..20 {
+      let started = std::time::Instant::now();
+      let image = render_frame(
+        &scene,
+        &RenderPose {
+          mouth: 0.6,
+          viseme: frame % 5,
+          time: frame as f32 * 0.16,
+          ..RenderPose::default()
+        },
+        280,
+        380,
+      );
+      times.push(started.elapsed().as_secs_f64() * 1000.0);
+      assert!(image.iter().any(|byte| *byte > 0));
+    }
+    times.sort_by(|left, right| left.partial_cmp(right).unwrap());
+    let median = times[times.len() / 2];
+    let max = times[times.len() - 1];
+    println!("aori_face_render_median_ms={median:.2}");
+    println!("aori_face_render_max_ms={max:.2}");
+    assert!(median < 33.0, "median render took {median:.2} ms");
   }
 
   #[test]
@@ -406,11 +490,11 @@ mod tests {
     assert!(!scene.is_null());
     let mut image = vec![0_u8; 32 * 32 * 4];
     let code = unsafe {
-      aori_face_render(scene, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 32, 32, image.as_mut_ptr())
+      aori_face_render(scene, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 32, 32, image.as_mut_ptr())
     };
     assert_eq!(code, 0);
     assert!(image.iter().any(|byte| *byte > 0));
-    let bad = unsafe { aori_face_render(std::ptr::null(), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 32, 32, image.as_mut_ptr()) };
+    let bad = unsafe { aori_face_render(std::ptr::null(), 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 32, 32, image.as_mut_ptr()) };
     assert_eq!(bad, -1);
     unsafe { aori_face_free(scene) };
     assert!(unsafe { aori_face_load(std::ptr::null(), 4) }.is_null());
@@ -444,7 +528,7 @@ mod tests {
       ],
       joints: Vec::new(),
       inverse_binds: Vec::new(),
-      animation: None,
+      animations: Vec::new(),
     }
   }
 

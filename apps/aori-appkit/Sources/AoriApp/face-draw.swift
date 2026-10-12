@@ -23,6 +23,7 @@ func aoriFaceRender(
     _ happy: Float,
     _ sad: Float,
     _ surprised: Float,
+    _ viseme: Int32,
     _ time: Float,
     _ width: UInt32,
     _ height: UInt32,
@@ -57,6 +58,7 @@ enum FaceRaster {
         happy: Float,
         sad: Float,
         surprised: Float,
+        viseme: Int32,
         time: Float,
         width: Int,
         height: Int
@@ -76,6 +78,7 @@ enum FaceRaster {
                 happy,
                 sad,
                 surprised,
+                viseme,
                 time,
                 UInt32(width),
                 UInt32(height),

@@ -13,5 +13,7 @@ for bundle in "$bin_dir"/*.bundle; do
         cp -R "$bundle" "$app_dir/Contents/MacOS/"
     fi
 done
+mkdir -p "$app_dir/Contents/Resources"
+cp -L "../../packages/i18n/src/locales/en/aori.yaml" "$app_dir/Contents/Resources/aori.yaml"
 chmod +x "$app_dir/Contents/MacOS/AoriApp"
 printf 'Assembled %s\n' "$app_dir"

@@ -16,6 +16,7 @@ final class CharacterView: NSView {
     private var speaking = false
     private var emotion = CompanionEmotion.neutral
     private var mouthLevel = 0.0
+    private var viseme = "a"
     private var sway = 0.0
     private var poseTime = 0.0
     private var blink = 0.0
@@ -51,6 +52,7 @@ final class CharacterView: NSView {
         presentation: CharacterPresentation,
         speaking: Bool,
         mouthLevel: Double,
+        viseme: String,
         scene: VRMScene?,
         bytes: Data?
     ) {
@@ -59,6 +61,7 @@ final class CharacterView: NSView {
         self.speaking = speaking
         emotion = presentation.emotion
         self.mouthLevel = mouthLevel
+        self.viseme = viseme
         if let scene, scene.vertexCount != loadedVertexCount {
             meshes = scene.meshes
             blendShapes = scene.blendShapes
@@ -168,7 +171,8 @@ final class CharacterView: NSView {
             blendShapes: blendShapes,
             emotion: emotion,
             mouthOpen: mouth,
-            blink: blink
+            blink: blink,
+            viseme: viseme
         )
         sway = reduceMotion ? 0 : pose.sway
         needsDisplay = true
@@ -199,6 +203,7 @@ final class CharacterView: NSView {
             happy: feelings.happy,
             sad: feelings.sad,
             surprised: feelings.surprised,
+            viseme: Viseme(rawValue: viseme)?.code ?? Viseme.sil.code,
             time: Float(time),
             width: width,
             height: height

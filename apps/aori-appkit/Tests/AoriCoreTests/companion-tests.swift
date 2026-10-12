@@ -58,4 +58,49 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(try store.load(), profile)
         try FileManager.default.removeItem(at: directory)
     }
+
+    func testChatAndSettingsRoundTrip() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("aori-files-\(UUID().uuidString)", isDirectory: true)
+        let transcript = FileChatTranscriptStore(fileURL: directory.appendingPathComponent("chat.json"))
+        XCTAssertTrue(try transcript.load().isEmpty)
+        let message = ChatMessage(
+            id: UUID(uuidString: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee") ?? UUID(),
+            role: .user,
+            content: "Hello",
+            createdAt: Date(timeIntervalSince1970: 10)
+        )
+        try transcript.save([message])
+        XCTAssertEqual(try transcript.load(), [message])
+
+        let settings = FileProviderSettingsStore(fileURL: directory.appendingPathComponent("settings.json"))
+        XCTAssertNil(try settings.load())
+        let stored = ProviderSettings(baseURL: "https://example.test/v1", model: "demo")
+        try settings.save(stored)
+        XCTAssertEqual(try settings.load(), stored)
+        try FileManager.default.removeItem(at: directory)
+    }
+
+    func testEnglishMenuComesFromPackagesI18n() throws {
+        let source = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("packages/i18n/src/locales/en/aori.yaml")
+        let linked = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Sources/AoriCore/Resources/aori.yaml")
+        let text = try String(contentsOf: source, encoding: .utf8)
+        let copied = try String(contentsOf: linked, encoding: .utf8)
+        XCTAssertEqual(copied, text)
+        let table = LocaleTable.parse(text)
+        XCTAssertEqual(table.values["menu.showCompanion"], "Show Companion")
+        AoriCopy.load(text)
+        XCTAssertEqual(AoriCopy.showCompanion, "Show Companion")
+        XCTAssertEqual(AoriCopy.settings, "Settings…")
+    }
 }

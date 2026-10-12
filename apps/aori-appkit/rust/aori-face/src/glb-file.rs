@@ -2,7 +2,7 @@ use std::io::Cursor;
 
 use serde_json::Value;
 
-use crate::{FaceAnimation, FaceJoint, FaceMesh, FaceMorph, FaceScene, RgbaImage, Vec3};
+use crate::{FaceAnimation, FaceChannel, FaceJoint, FaceMesh, FaceMorph, FaceScene, RgbaImage, Vec3};
 
 #[derive(Debug, PartialEq)]
 pub enum FaceError {
@@ -34,12 +34,12 @@ pub fn read_glb(bytes: &[u8]) -> Result<FaceScene, FaceError> {
   let (json, bin) = read_chunks(bytes)?;
   let (joints, inverse_binds, node_to_joint) = read_skin(&json, &bin)?;
   let meshes = read_meshes(&json, &bin)?;
-  let animation = read_animation(&json, &bin, &node_to_joint)?;
+  let animations = read_animations(&json, &bin, &node_to_joint)?;
   Ok(FaceScene {
     meshes,
     joints,
     inverse_binds,
-    animation,
+    animations,
   })
 }
 
@@ -241,74 +241,76 @@ fn read_skin(
   Ok((joints, inverse_binds, node_to_joint))
 }
 
-fn read_animation(
+fn read_animations(
   json: &Value,
   bin: &[u8],
   node_to_joint: &[Option<usize>],
-) -> Result<Option<FaceAnimation>, FaceError> {
-  let Some(animation) = json
-    .get("animations")
-    .and_then(Value::as_array)
-    .and_then(|items| items.first())
-  else {
-    return Ok(None);
+) -> Result<Vec<FaceAnimation>, FaceError> {
+  let Some(animations) = json.get("animations").and_then(Value::as_array) else {
+    return Ok(Vec::new());
   };
-  let channel = animation
-    .get("channels")
-    .and_then(Value::as_array)
-    .and_then(|items| items.first());
-  let path = channel
-    .and_then(|item| item.pointer("/target/path"))
-    .and_then(Value::as_str)
-    .unwrap_or("");
-  if path != "rotation" {
-    return Ok(None);
+  let mut clips = Vec::new();
+  for animation in animations {
+    let mut channels = Vec::new();
+    let Some(items) = animation.get("channels").and_then(Value::as_array) else {
+      continue;
+    };
+    for channel in items {
+      let path = channel
+        .pointer("/target/path")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+      if path != "rotation" {
+        continue;
+      }
+      let node = channel
+        .pointer("/target/node")
+        .and_then(json_usize)
+        .unwrap_or(usize::MAX);
+      let Some(joint) = node_to_joint.get(node).copied().flatten() else {
+        continue;
+      };
+      let sampler_index = channel.get("sampler").and_then(json_usize).unwrap_or(0);
+      let sampler = animation
+        .get("samplers")
+        .and_then(Value::as_array)
+        .and_then(|samplers| samplers.get(sampler_index));
+      let Some(input) = sampler.and_then(|item| item.get("input")).and_then(json_usize) else {
+        continue;
+      };
+      let Some(output) = sampler.and_then(|item| item.get("output")).and_then(json_usize) else {
+        continue;
+      };
+      let times = read_floats(json, bin, input, 1)?;
+      let values = read_floats(json, bin, output, 4)?;
+      let mut rotations = Vec::new();
+      let mut index = 0;
+      while index + 3 < values.len() {
+        rotations.push([
+          values[index],
+          values[index + 1],
+          values[index + 2],
+          values[index + 3],
+        ]);
+        index += 4;
+      }
+      channels.push(FaceChannel {
+        joint,
+        times,
+        rotations,
+      });
+    }
+    if channels.is_empty() {
+      continue;
+    }
+    let name = animation
+      .get("name")
+      .and_then(Value::as_str)
+      .unwrap_or("animation")
+      .to_string();
+    clips.push(FaceAnimation { name, channels });
   }
-  let node = channel
-    .and_then(|item| item.pointer("/target/node"))
-    .and_then(json_usize)
-    .unwrap_or(usize::MAX);
-  let Some(joint) = node_to_joint.get(node).copied().flatten() else {
-    return Ok(None);
-  };
-  let sampler_index = channel
-    .and_then(|item| item.get("sampler"))
-    .and_then(json_usize)
-    .unwrap_or(0);
-  let sampler = animation
-    .get("samplers")
-    .and_then(Value::as_array)
-    .and_then(|items| items.get(sampler_index));
-  let Some(input) = sampler.and_then(|item| item.get("input")).and_then(json_usize) else {
-    return Ok(None);
-  };
-  let Some(output) = sampler.and_then(|item| item.get("output")).and_then(json_usize) else {
-    return Ok(None);
-  };
-  let times = read_floats(json, bin, input, 1)?;
-  let values = read_floats(json, bin, output, 4)?;
-  let mut rotations = Vec::new();
-  let mut index = 0;
-  while index + 3 < values.len() {
-    rotations.push([
-      values[index],
-      values[index + 1],
-      values[index + 2],
-      values[index + 3],
-    ]);
-    index += 4;
-  }
-  let name = animation
-    .get("name")
-    .and_then(Value::as_str)
-    .unwrap_or("animation")
-    .to_string();
-  Ok(Some(FaceAnimation {
-    name,
-    joint,
-    times,
-    rotations,
-  }))
+  Ok(clips)
 }
 
 fn node_parents(nodes: Option<&Vec<Value>>) -> Vec<Option<usize>> {
@@ -443,23 +445,31 @@ fn read_joints(
   accessor: usize,
 ) -> Result<Vec<[u16; 4]>, FaceError> {
   let info = accessor_info(json, accessor)?;
-  if info.component_type != 5123 {
-    return Err(FaceError::BadAccessor(format!(
-      "Joint accessor {accessor} is not an unsigned short buffer."
-    )));
-  }
+  let width = match info.component_type {
+    5121 => 1,
+    5123 => 2,
+    _ => {
+      return Err(FaceError::BadAccessor(format!(
+        "Joint accessor {accessor} is not an unsigned byte or short buffer."
+      )));
+    },
+  };
   let mut values = Vec::with_capacity(info.count);
   for item in 0..info.count {
     let start = info.offset + item * info.stride;
     let mut joint = [0_u16; 4];
     for component in 0..4 {
-      let byte = start + component * 2;
-      if byte + 2 > bin.len() {
+      let byte = start + component * width;
+      if byte + width > bin.len() {
         return Err(FaceError::BadAccessor(format!(
           "Joint accessor {accessor} is past the binary chunk."
         )));
       }
-      joint[component] = u16::from(bin[byte]) | (u16::from(bin[byte + 1]) << 8);
+      joint[component] = if width == 1 {
+        u16::from(bin[byte])
+      } else {
+        u16::from(bin[byte]) | (u16::from(bin[byte + 1]) << 8)
+      };
     }
     values.push(joint);
   }
@@ -597,10 +607,10 @@ fn accessor_info(
     .get("count")
     .and_then(json_usize)
     .unwrap_or(0);
-  let component_size = if component_type == 5123 {
-    2
-  } else {
-    4
+  let component_size = match component_type {
+    5120 | 5121 => 1,
+    5122 | 5123 => 2,
+    _ => 4,
   };
   let components = component_count(
     item

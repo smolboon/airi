@@ -7,6 +7,7 @@ on:
       - ".github/workflows/aori-appkit.yml"
       - "docs/APPKIT_PORT.md"
       - "docs/AUDIT.md"
+      - "packages/i18n/src/locales/en/aori.yaml"
   push:
     branches:
       - main
@@ -15,6 +16,7 @@ on:
       - ".github/workflows/aori-appkit.yml"
       - "docs/APPKIT_PORT.md"
       - "docs/AUDIT.md"
+      - "packages/i18n/src/locales/en/aori.yaml"
   workflow_dispatch:
 
 jobs:
@@ -81,3 +83,5 @@ jobs:
             apps/aori-appkit/build/aori-framebuffer.png
             apps/aori-appkit/build/aori-window.png
             apps/aori-appkit/build/aori-launch.log
+            apps/aori-appkit/build/aori-speech.wav
+            apps/aori-appkit/build/aori-visemes.log

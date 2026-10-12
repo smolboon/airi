@@ -1,5 +1,6 @@
-Aori Sample is an original low-poly VRM head made for this app.
-The neck bone, the idle clip, the UVs, and the checker texture are part of that same model.
+Aori Sample is an original low-poly VRM humanoid made for this app.
+It is not a downloaded character. The hips, spine, neck, head, and eye bones are part of that model.
+The idle clip, the blink clip, the UVs, and the checker texture are part of the same model.
 
 The model and this file are dedicated to the public domain under the CC0 1.0 Universal license.
 https://creativecommons.org/publicdomain/zero/1.0/

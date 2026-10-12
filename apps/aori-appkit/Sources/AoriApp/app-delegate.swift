@@ -27,6 +27,8 @@ enum AoriMain {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let secrets = KeychainSecretStore(service: AoriSecrets.keychainService)
     private let profileStore = FileCompanionProfileStore(fileURL: AoriFiles.profileURL())
+    private let transcriptStore = FileChatTranscriptStore(fileURL: AoriFiles.chatURL())
+    private let settingsStore = FileProviderSettingsStore(fileURL: AoriFiles.settingsURL())
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
     private var companionWindow: CompanionWindowController?
@@ -40,6 +42,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var launchStatus: String?
 
     func applicationWillFinishLaunching(_ notification: Notification) {
+        if let text = LocaleFile.englishMenu() {
+            AoriCopy.load(text)
+            logLine("aori_i18n=loaded")
+        } else {
+            logLine("aori_i18n=fallback")
+        }
         installMenu()
     }
 
@@ -86,7 +94,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let settingsWindow = SettingsWindowController(
             secrets: secrets,
             configuration: configuration,
-            persona: profile.persona
+            persona: profile.persona,
+            settingsFileURL: AoriFiles.settingsURL()
         )
         settingsWindow.onSave = { [weak self] configuration in
             self?.model?.updateConfiguration(configuration)
@@ -105,13 +114,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model.onProfileChange = { [weak self] in
             self?.saveProfile()
         }
+        model.onTranscriptChange = { [weak self] in
+            self?.saveTranscript()
+        }
         synthesizer.onSpeakingChanged = { [weak self] speaking in
             self?.model?.setSpeaking(speaking)
         }
         synthesizer.onMouthLevel = { [weak self] level in
             self?.model?.setMouthLevel(level)
         }
+        synthesizer.onViseme = { [weak self] name in
+            self?.model?.setViseme(name)
+        }
         loadSampleModel(into: model)
+        if let saved = try? transcriptStore.load(), !saved.isEmpty {
+            model.replaceMessages(saved)
+        }
 
         mainWindow.showWindow(nil)
         companionWindow.showWindow(nil)
@@ -131,15 +149,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func presentScreenshot() {
-        let level = ScreenshotPose.mouthOpen
         model?.setSpeaking(true)
-        model?.setMouthLevel(level)
+        model?.setMouthLevel(ScreenshotPose.mouthOpen)
+        model?.setViseme("a")
         mainWindow?.refresh()
         companionWindow?.refresh()
         companionWindow?.window?.orderFrontRegardless()
         NSApp.activate()
         writeFramebuffer()
-        Timer.scheduledTimer(withTimeInterval: 25, repeats: false) { _ in
+        Task {
+            await synthesizer.speak("Hello papa")
+        }
+        Timer.scheduledTimer(withTimeInterval: 40, repeats: false) { _ in
             Task { @MainActor in
                 NSApp.terminate(nil)
             }
@@ -147,10 +168,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func writeFramebuffer() {
+        let started = Date()
         guard let png = companionWindow?.renderedPNG(time: ScreenshotPose.time) else {
             model?.setStatus("The screenshot frame was not rendered.")
             return
         }
+        let milliseconds = Date().timeIntervalSince(started) * 1000
+        logLine(String(format: "aori_frame_ms=%.2f", milliseconds))
         let path = ProcessInfo.processInfo.environment["AORI_FRAMEBUFFER_PATH"] ?? "/tmp/aori-framebuffer.png"
         do {
             try png.write(to: URL(fileURLWithPath: path))
@@ -160,12 +184,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func loadSampleModel(into model: ChatViewModel) {
-        guard let data = SampleModel.data() else {
+        let data: Data
+        if let path = ProcessInfo.processInfo.environment["AORI_VRM_PATH"], !path.isEmpty {
+            do {
+                data = try Data(contentsOf: URL(fileURLWithPath: path))
+            } catch {
+                model.setStatus(String(describing: error))
+                return
+            }
+            logLine("aori_vrm_path=\(path)")
+        } else if let bundled = SampleModel.data() {
+            data = bundled
+        } else {
             model.setStatus("The sample VRM is not in the app bundle.")
             return
         }
         do {
-            model.apply(scene: try VRMSceneReader.read(data), bytes: data)
+            let scene = try VRMSceneReader.read(data)
+            model.apply(scene: scene, bytes: data)
+            let bones = (try? VRMHumanoidReader.bones(in: data)) ?? []
+            if !bones.isEmpty {
+                logLine("aori_vrm_bones=\(bones.map(\.name).joined(separator: ","))")
+            }
         } catch {
             model.setStatus(String(describing: error))
         }
@@ -192,12 +232,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func saveTranscript() {
+        guard let model else {
+            return
+        }
+        do {
+            try transcriptStore.save(model.messages)
+        } catch {
+            model.setStatus("The chat history was not saved. \(String(describing: error))")
+        }
+    }
+
     private func loadConfiguration() -> ProviderConfiguration {
+        let stored = try? settingsStore.load()
         let resolver = ProviderConfigurationResolver(
             environment: ProcessInfo.processInfo.environment,
             secretStore: secrets,
-            storedBaseURL: UserDefaults.standard.string(forKey: AoriPreferences.baseURLKey),
-            storedModel: UserDefaults.standard.string(forKey: AoriPreferences.modelKey)
+            storedBaseURL: nonBlank(stored?.baseURL) ?? UserDefaults.standard.string(forKey: AoriPreferences.baseURLKey),
+            storedModel: nonBlank(stored?.model) ?? UserDefaults.standard.string(forKey: AoriPreferences.modelKey)
         )
         do {
             return try resolver.resolve()
@@ -215,7 +267,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Aori"
-        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a rigged VRM head. A Rust library skins the mesh and fills a depth buffer. Speech levels move the mouth."
+        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a rigged VRM humanoid. A Rust library skins the mesh and fills a depth buffer. Speech visemes move the mouth."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
@@ -335,9 +387,36 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 private enum AoriFiles {
-    static func profileURL() -> URL {
-        let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    static func directory() -> URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Aori", isDirectory: true)
-        return directory.appendingPathComponent("companion.json")
     }
+
+    static func profileURL() -> URL {
+        directory().appendingPathComponent("companion.json")
+    }
+
+    static func chatURL() -> URL {
+        directory().appendingPathComponent("chat.json")
+    }
+
+    static func settingsURL() -> URL {
+        directory().appendingPathComponent("settings.json")
+    }
+}
+
+private func nonBlank(_ text: String?) -> String? {
+    guard let text else {
+        return nil
+    }
+    let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
+}
+
+private func logLine(_ line: String) {
+    guard let data = (line + "\n").data(using: .utf8) else {
+        return
+    }
+    FileHandle.standardOutput.write(data)
+    try? FileHandle.standardOutput.synchronize()
 }

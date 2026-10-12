@@ -72,6 +72,15 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(emotion, .happy)
     }
 
+    func testSavedTranscriptSkipsTheGreeting() async {
+        let model = await ChatViewModel(client: ScriptedChatClient(events: []), configuration: testConfiguration())
+        let saved = ChatMessage(role: .user, content: "saved line")
+        await model.replaceMessages([saved])
+        await model.greetIfNeeded()
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["saved line"])
+    }
+
     func testRememberThatStoresAFactInThePrompt() async {
         let client = ScriptedChatClient(events: [.delta("I am glad to keep that."), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

@@ -1,0 +1,12 @@
+menu:
+  appName: Aori
+  about: About Aori
+  settings: Settings…
+  quit: Quit Aori
+  newChat: New Chat
+  openVRM: Open VRM…
+  showMainWindow: Show Main Window
+  showCompanion: Show Companion
+  hideCompanion: Hide Companion
+  alwaysOnTop: Companion Always on Top
+  statusItem: Aori

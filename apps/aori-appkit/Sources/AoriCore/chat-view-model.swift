@@ -32,8 +32,10 @@ public final class ChatViewModel {
     public private(set) var vrmScene: VRMScene?
     public private(set) var modelBytes: Data?
     public private(set) var mouthLevel: Double = 0
+    public private(set) var viseme = "a"
     public var onChange: (@MainActor () -> Void)?
     public var onProfileChange: (@MainActor () -> Void)?
+    public var onTranscriptChange: (@MainActor () -> Void)?
 
     private let client: any ChatCompletionClient
     private var showsModelTitle = false
@@ -73,6 +75,12 @@ public final class ChatViewModel {
         statusText = ""
         isSpeaking = false
         presentation.emotion = .neutral
+        publishMessages()
+    }
+
+    /// Replaces the transcript from disk. This does not write the file again.
+    public func replaceMessages(_ messages: [ChatMessage]) {
+        self.messages = messages
         publish()
     }
 
@@ -97,7 +105,7 @@ public final class ChatViewModel {
         let text = CompanionGreeting.opening(persona: persona, memory: memory)
         messages.append(ChatMessage(role: .assistant, content: text))
         presentation.emotion = .happy
-        publish()
+        publishMessages()
     }
 
     public func applyTranscript(_ text: String) {
@@ -115,12 +123,19 @@ public final class ChatViewModel {
         isSpeaking = speaking
         if !speaking {
             mouthLevel = 0
+            viseme = "sil"
         }
         publish()
     }
 
     public func setMouthLevel(_ level: Double) {
         mouthLevel = min(1, max(0, level))
+        publish()
+    }
+
+    public func setViseme(_ viseme: String) {
+        let next = viseme.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.viseme = next.isEmpty ? "sil" : next
         publish()
     }
 
@@ -160,7 +175,7 @@ public final class ChatViewModel {
         messages.append(assistant)
         phase = .streaming
         statusText = "Aori is writing."
-        publish()
+        publishMessages()
 
         do {
             let stream = try await client.streamChat(
@@ -176,7 +191,7 @@ public final class ChatViewModel {
                     assistant.content += piece
                     messages[messages.count - 1] = assistant
                     presentation.emotion = CompanionEmotion.infer(from: assistant.content)
-                    publish()
+                    publishMessages()
                 case .finished:
                     break
                 }
@@ -202,6 +217,11 @@ public final class ChatViewModel {
         let history = messages.dropLast()
         items.append(contentsOf: history)
         return items
+    }
+
+    private func publishMessages() {
+        onTranscriptChange?()
+        publish()
     }
 
     private func publish() {

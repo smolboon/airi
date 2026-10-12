@@ -155,11 +155,12 @@ public enum FaceDriver {
         blendShapes: [VRMBlendShape],
         emotion: CompanionEmotion,
         mouthOpen: Double,
-        blink: Double
+        blink: Double,
+        viseme: String = "a"
     ) -> [MorphWeight] {
         var weights: [MorphWeight] = []
         for shape in blendShapes {
-            let amount = amount(for: shape, emotion: emotion, mouthOpen: mouthOpen, blink: blink)
+            let amount = amount(for: shape, emotion: emotion, mouthOpen: mouthOpen, blink: blink, viseme: viseme)
             guard amount > 0 else {
                 continue
             }
@@ -175,10 +176,14 @@ public enum FaceDriver {
         for shape: VRMBlendShape,
         emotion: CompanionEmotion,
         mouthOpen: Double,
-        blink: Double
+        blink: Double,
+        viseme: String
     ) -> Double {
         let names = [shape.preset.lowercased(), shape.name.lowercased()]
-        if names.contains(where: isMouthName) {
+        if names.contains(where: { isVisemeName($0, viseme: viseme) }) {
+            if viseme.lowercased() == "pp" {
+                return 1
+            }
             return min(1, max(0, mouthOpen))
         }
         if names.contains(where: isBlinkName) {
@@ -196,8 +201,23 @@ public enum FaceDriver {
         }
     }
 
-    private static func isMouthName(_ name: String) -> Bool {
-        name == "a" || name == "aa" || name == "ah"
+    private static func isVisemeName(_ name: String, viseme: String) -> Bool {
+        switch viseme.lowercased() {
+        case "a", "aa", "ah":
+            return name == "a" || name == "aa" || name == "ah"
+        case "i", "ih":
+            return name == "i" || name == "ih"
+        case "u", "ou":
+            return name == "u" || name == "ou"
+        case "e", "ee":
+            return name == "e" || name == "ee"
+        case "o", "oh":
+            return name == "o" || name == "oh"
+        case "pp":
+            return name == "pp"
+        default:
+            return false
+        }
     }
 
     private static func isBlinkName(_ name: String) -> Bool {

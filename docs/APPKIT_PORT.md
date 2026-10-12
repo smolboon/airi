@@ -56,10 +56,10 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Persona | stage prompts | Name and personality in Settings | Richer character cards later |
 | Long-term memory | stage pages, Telegram, pgvector | Local notes from "remember that" | Topic recall and companion-written notes later |
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
-| Idle motion | character modules | Blink, plus a neck clip on the CC0 head | More bones than the neck later |
+| Idle motion | character modules | Blink, neck sway, head sway, and eye look | Richer clips later |
 | Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
-| Lip-sync | audio weights on VRM mouths | RMS of TTS PCM buffers on the A blend shape | Phoneme visemes come later |
-| VRM mesh | `stage-ui-three` | CC0 head with a neck bone, texture, and depth buffer | Phoneme visemes come later |
+| Lip-sync | audio weights on VRM mouths | Letter visemes on real TTS PCM, scaled by RMS | A phoneme recognizer comes later |
+| VRM mesh | `stage-ui-three` | Original CC0 VRM 0 humanoid, loaded from a file | Downloaded characters stay out |
 | Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
@@ -116,21 +116,27 @@ The companion window is transparent, draggable, and able to stay above other app
 
 ### Milestone 2, this change
 
-The sample file is an original CC0 head. It has a neck bone, skin weights, UVs, a PNG texture, and an idle rotation clip. See `Resources/LICENSE.txt`.
+The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded character. Bones are hips, spine, neck, head, leftEye, and rightEye. Skin weights use unsigned bytes. The idle clip sways the neck and the head, and it turns the eyes. A blink clip targets the eye bones. See `Resources/LICENSE.txt`.
 
-`aori-face` applies morphs, skins the neck, and fills a depth buffer. AppKit blits that image into the companion window. The window stays transparent and above other apps.
+`aori-face` applies morphs, skins those bones, and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
 
-`AVSpeechSynthesizer.write` returns PCM buffers. The mouth weight is the root-mean-square of each buffer. The same weight drives the raster. Joy, sorrow, surprised, and blink still follow the face driver. This is not a phoneme viseme map.
+Letters map to VRM presets a, i, u, e, and o. The letters m, b, and p close the mouth. Playback time advances the preset at about 12 characters per second. `willSpeakRangeOfSpeechString` wins when it fires. RMS still scales the open vowel. This is not a phoneme recognizer.
 
-A status item lists the companion, the main window, Settings, and Quit. Those titles live in `AoriCopy`.
+`AORI_SPEECH_WAV` stores the PCM that `AVSpeechSynthesizer.write` returned. The macOS job checks that the WAV is not silent and that the viseme log has more than one preset. This checkout did not play that audio.
+
+Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. English menu strings come from `packages/i18n/src/locales/en/aori.yaml`. Other locales are not loaded.
+
+A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more.
+
+A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` feeds a synthetic PCM buffer through `SpeechLevel`, writes a framebuffer PNG, and leaves the window up. The macOS job then captures that window. Run 38269452282 did that on `macos-latest`. The framebuffer corners are clear. The center pixel is the textured blush. The window capture shows the caption "Aori Sample".
+`AORI_SCREENSHOT=1` still writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. Run 38269452282 captured the earlier window. The new WAV check does not have a run id yet.
 
 ### Milestone 2 follow-up
 
-Map speech to phoneme visemes. Keep a voice turn going without a separate Speak press. Add bones beyond the neck.
+Keep a voice turn going without a separate Speak press. Add click-through on the companion window.
 
 ### Milestone 3, memory that lasts
 

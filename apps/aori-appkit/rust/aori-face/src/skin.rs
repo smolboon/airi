@@ -1,15 +1,15 @@
-use crate::{FaceAnimation, FaceScene, Vec3};
+use crate::{FaceChannel, FaceScene, Vec3};
 
 pub const IDENTITY: [f32; 16] = [
   1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 ];
 
 pub fn sample_rotation(
-  animation: &FaceAnimation,
+  channel: &FaceChannel,
   time: f32,
 ) -> [f32; 4] {
-  let times = &animation.times;
-  let rotations = &animation.rotations;
+  let times = &channel.times;
+  let rotations = &channel.rotations;
   if times.is_empty() || rotations.is_empty() {
     return [0.0, 0.0, 0.0, 1.0];
   }
@@ -37,8 +37,7 @@ pub fn sample_rotation(
 
 pub fn joint_globals(
   scene: &FaceScene,
-  rotation: [f32; 4],
-  joint: Option<usize>,
+  spins: &[[f32; 4]],
 ) -> Vec<[f32; 16]> {
   let count = scene.joints.len();
   let mut globals = vec![IDENTITY; count];
@@ -54,14 +53,10 @@ pub fn joint_globals(
           continue;
         }
       }
-      let spin = if joint == Some(index) {
-        quat_to_matrix(rotation)
-      } else {
-        IDENTITY
-      };
+      let spin = spins.get(index).copied().unwrap_or([0.0, 0.0, 0.0, 1.0]);
       let local = mul(
         &translation(scene.joints[index].translation),
-        &spin,
+        &quat_to_matrix(spin),
       );
       globals[index] = match parent {
         Some(parent) => mul(&globals[parent], &local),
@@ -118,6 +113,29 @@ pub fn skin_positions(
       *position = acc;
     }
   }
+}
+
+pub fn with_blink(spin: [f32; 4]) -> [f32; 4] {
+  mul_quat(spin, quat_x(0.8))
+}
+
+fn quat_x(angle: f32) -> [f32; 4] {
+  let half = angle * 0.5;
+  [half.sin(), 0.0, 0.0, half.cos()]
+}
+
+fn mul_quat(
+  left: [f32; 4],
+  right: [f32; 4],
+) -> [f32; 4] {
+  let (ax, ay, az, aw) = (left[0], left[1], left[2], left[3]);
+  let (bx, by, bz, bw) = (right[0], right[1], right[2], right[3]);
+  [
+    aw * bx + ax * bw + ay * bz - az * by,
+    aw * by - ax * bz + ay * bw + az * bx,
+    aw * bz + ax * by - ay * bx + az * bw,
+    aw * bw - ax * bx - ay * by - az * bz,
+  ]
 }
 
 fn nlerp(

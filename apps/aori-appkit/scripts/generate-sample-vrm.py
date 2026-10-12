@@ -75,9 +75,19 @@ def pad(data, byte):
     return bytes(data)
 
 
-def quat_z(angle):
+def quat_axis(x, y, z, angle):
     half = angle * 0.5
-    return (0.0, 0.0, math.sin(half), math.cos(half))
+    scale = math.sin(half)
+    return (x * scale, y * scale, z * scale, math.cos(half))
+
+
+def inverse_translation(x, y, z):
+    return (
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        -x, -y, -z, 1.0,
+    )
 
 
 class Bin:
@@ -118,8 +128,13 @@ class Bin:
         return self.accessor(self.view(blob, 8), len(vectors), 5126, "VEC2")
 
     def joints(self, values):
-        blob = b"".join(struct.pack("<HHHH", *value) for value in values)
-        return self.accessor(self.view(blob), len(values), 5123, "VEC4")
+        # Real VRM files store JOINTS_0 as unsigned bytes.
+        blob = b"".join(struct.pack("<BBBB", *value) for value in values)
+        return self.accessor(self.view(blob), len(values), 5121, "VEC4")
+
+    def rotations(self, quats):
+        blob = b"".join(struct.pack("<ffff", *quat) for quat in quats)
+        return self.accessor(self.view(blob, 16), len(quats), 5126, "VEC4")
 
     def weights(self, values):
         blob = b"".join(struct.pack("<ffff", *value) for value in values)
@@ -138,9 +153,17 @@ class Bin:
         return self.accessor(self.view(blob), len(values), 5126, value_type)
 
 
-def skin_weights(count):
-    # Joint 1 is the neck. Every vertex of this sample follows that bone.
-    return [(0, 1, 0, 0)] * count, [(0.0, 1.0, 0.0, 0.0)] * count
+def head_skin(count):
+    # Joint 3 is the head. Neck and head clips move the head through that bone.
+    return [(3, 0, 0, 0)] * count, [(1.0, 0.0, 0.0, 0.0)] * count
+
+
+def eye_skin(positions, left_count):
+    joints = []
+    for index in range(len(positions)):
+        joint = 4 if index < left_count else 5
+        joints.append((joint, 0, 0, 0))
+    return joints, [(1.0, 0.0, 0.0, 0.0)] * len(positions)
 
 
 def main():
@@ -168,6 +191,16 @@ def main():
             return (x * 0.08, 0.03, 0.0)
         if kind == "blink" and 0.24 < y < 0.34 and z > 0.12:
             return (0.0, -0.03, 0.0)
+        if kind == "ih" and 0.08 < y < 0.2 and z > 0.1:
+            return (0.012, -0.02, 0.03)
+        if kind == "ou" and y < 0.16 and z > 0.08:
+            return (0.0, -0.03, 0.05)
+        if kind == "ee" and y < 0.18 and z > 0.1:
+            return (0.03, -0.01, 0.0)
+        if kind == "oh" and y < 0.16 and z > 0.1:
+            return (0.0, -0.04, 0.012)
+        if kind == "pp" and y < 0.14 and z > 0.12:
+            return (0.0, 0.012, -0.01)
         return (0.0, 0.0, 0.0)
 
     def eye_delta(kind, position):
@@ -176,29 +209,24 @@ def main():
         center_y = left_center[1] if position[0] < 0 else right_center[1]
         return (0.0, (center_y - position[1]) * 0.85, 0.0)
 
-    morph_names = ["aa", "joy", "sorrow", "surprised", "blink"]
+    morph_names = ["aa", "joy", "sorrow", "surprised", "blink", "ih", "ou", "ee", "oh", "pp"]
     head_morphs = [[head_delta(name, position) for position in head_positions] for name in morph_names]
     eye_blink = [eye_delta("blink", position) for position in eye_positions]
     head_uvs = [uv_of(position, head_center) for position in head_positions]
     eye_uvs = [uv_of(position, left_center if position[0] < 0 else right_center) for position in eye_positions]
-    head_joints, head_weights = skin_weights(len(head_positions))
-    eye_joints, eye_weights = skin_weights(len(eye_positions))
-
-    identity = (
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
-    )
-    # Inverse of the neck translation (0, 0.05, 0). Bind pose stays put.
-    neck_inverse = (
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, -0.05, 0.0, 1.0,
-    )
+    head_joints, head_weights = head_skin(len(head_positions))
+    eye_joints, eye_weights = eye_skin(eye_positions, len(left_positions))
     texture = checker(64, 64, 8)
-    turn = quat_z(0.18)
+    rest = (0.0, 0.0, 0.0, 1.0)
+    # World positions: hips 0, spine 0.02, neck 0.05, head 0.17, eyes at the eye centers.
+    binds = [
+        inverse_translation(0.0, 0.0, 0.0),
+        inverse_translation(0.0, 0.02, 0.0),
+        inverse_translation(0.0, 0.05, 0.0),
+        inverse_translation(0.0, 0.17, 0.0),
+        inverse_translation(-0.09, 0.26, 0.30),
+        inverse_translation(0.09, 0.26, 0.30),
+    ]
 
     binary = Bin()
     head_position = binary.vec3(head_positions)
@@ -215,12 +243,22 @@ def main():
     eye_weight = binary.weights(eye_weights)
     eye_index = binary.scalar(eye_indices)
     eye_blink_accessor = binary.vec3(eye_blink)
-    inverse_bind = binary.mat4([identity, neck_inverse])
-    time_accessor = binary.floats([0.0, 1.6, 3.2], "SCALAR")
-    rotation_blob = b"".join(
-        struct.pack("<ffff", *quat) for quat in ((0.0, 0.0, 0.0, 1.0), turn, (0.0, 0.0, 0.0, 1.0))
-    )
-    rotation_accessor = binary.accessor(binary.view(rotation_blob, 16), 3, 5126, "VEC4")
+    inverse_bind = binary.mat4(binds)
+    idle_time = binary.floats([0.0, 1.6, 3.2], "SCALAR")
+    blink_time = binary.floats([0.0, 0.12, 0.24], "SCALAR")
+    idle_keys = [
+        (rest, quat_axis(0, 0, 1, 0.18), rest),
+        (rest, quat_axis(0, 1, 0, 0.22), rest),
+        (rest, quat_axis(0, 1, 0, 0.40), rest),
+        (rest, quat_axis(0, 1, 0, -0.25), rest),
+    ]
+    blink_turn = quat_axis(1, 0, 0, 0.8)
+    blink_keys = [
+        (rest, blink_turn, rest),
+        (rest, blink_turn, rest),
+    ]
+    idle_rotations = [binary.rotations(keys) for keys in idle_keys]
+    blink_rotations = [binary.rotations(keys) for keys in blink_keys]
     image_view = binary.view(texture)
 
     document = {
@@ -286,26 +324,47 @@ def main():
             },
         ],
         "nodes": [
-            {"name": "root", "translation": [0, 0, 0], "children": [1]},
-            {"name": "neck", "translation": [0, 0.05, 0]},
-            {"name": "head", "mesh": 0, "skin": 0},
-            {"name": "eyes", "mesh": 1, "skin": 0},
+            {"name": "hips", "translation": [0, 0, 0], "children": [1]},
+            {"name": "spine", "translation": [0, 0.02, 0], "children": [2]},
+            {"name": "neck", "translation": [0, 0.03, 0], "children": [3]},
+            {"name": "head", "translation": [0, 0.12, 0], "children": [4, 5]},
+            {"name": "leftEye", "translation": [-0.09, 0.09, 0.30]},
+            {"name": "rightEye", "translation": [0.09, 0.09, 0.30]},
+            {"name": "headMesh", "mesh": 0, "skin": 0},
+            {"name": "eyesMesh", "mesh": 1, "skin": 0},
         ],
         "skins": [{
             "name": "armature",
-            "joints": [0, 1],
+            "joints": [0, 1, 2, 3, 4, 5],
             "inverseBindMatrices": inverse_bind,
         }],
-        "animations": [{
-            "name": "idle",
-            "channels": [{"sampler": 0, "target": {"node": 1, "path": "rotation"}}],
-            "samplers": [{
-                "input": time_accessor,
-                "output": rotation_accessor,
-                "interpolation": "LINEAR",
-            }],
-        }],
-        "scenes": [{"nodes": [0, 2, 3]}],
+        "animations": [
+            {
+                "name": "idle",
+                "channels": [
+                    {"sampler": 0, "target": {"node": 2, "path": "rotation"}},
+                    {"sampler": 1, "target": {"node": 3, "path": "rotation"}},
+                    {"sampler": 2, "target": {"node": 4, "path": "rotation"}},
+                    {"sampler": 3, "target": {"node": 5, "path": "rotation"}},
+                ],
+                "samplers": [
+                    {"input": idle_time, "output": accessor, "interpolation": "LINEAR"}
+                    for accessor in idle_rotations
+                ],
+            },
+            {
+                "name": "blink",
+                "channels": [
+                    {"sampler": 0, "target": {"node": 4, "path": "rotation"}},
+                    {"sampler": 1, "target": {"node": 5, "path": "rotation"}},
+                ],
+                "samplers": [
+                    {"input": blink_time, "output": accessor, "interpolation": "LINEAR"}
+                    for accessor in blink_rotations
+                ],
+            },
+        ],
+        "scenes": [{"nodes": [0, 6, 7]}],
         "scene": 0,
         "extensions": {
             "VRM": {
@@ -322,6 +381,21 @@ def main():
                         {"name": "Sorrow", "presetName": "sorrow", "binds": [{"mesh": 0, "index": 2, "weight": 100}]},
                         {"name": "Surprised", "presetName": "surprised", "binds": [{"mesh": 0, "index": 3, "weight": 100}]},
                         {"name": "Blink", "presetName": "blink", "binds": [{"mesh": 0, "index": 4, "weight": 100}]},
+                        {"name": "I", "presetName": "i", "binds": [{"mesh": 0, "index": 5, "weight": 100}]},
+                        {"name": "U", "presetName": "u", "binds": [{"mesh": 0, "index": 6, "weight": 100}]},
+                        {"name": "E", "presetName": "e", "binds": [{"mesh": 0, "index": 7, "weight": 100}]},
+                        {"name": "O", "presetName": "o", "binds": [{"mesh": 0, "index": 8, "weight": 100}]},
+                        {"name": "PP", "presetName": "pp", "binds": [{"mesh": 0, "index": 9, "weight": 100}]},
+                    ]
+                },
+                "humanoid": {
+                    "humanBones": [
+                        {"bone": "hips", "node": 0, "useDefaultValues": True},
+                        {"bone": "spine", "node": 1, "useDefaultValues": True},
+                        {"bone": "neck", "node": 2, "useDefaultValues": True},
+                        {"bone": "head", "node": 3, "useDefaultValues": True},
+                        {"bone": "leftEye", "node": 4, "useDefaultValues": True},
+                        {"bone": "rightEye", "node": 5, "useDefaultValues": True},
                     ]
                 },
             }

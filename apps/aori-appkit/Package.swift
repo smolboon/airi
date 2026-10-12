@@ -9,7 +9,12 @@ var products: [Product] = [
 ]
 
 var targets: [Target] = [
-    .target(name: "AoriCore"),
+    .target(
+        name: "AoriCore",
+        resources: [
+            .copy("Resources/aori.yaml"),
+        ]
+    ),
     .target(name: "AoriProviders", dependencies: ["AoriCore"]),
     .testTarget(name: "AoriCoreTests", dependencies: ["AoriCore"]),
     .testTarget(name: "AoriProvidersTests", dependencies: ["AoriProviders"]),

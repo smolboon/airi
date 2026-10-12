@@ -6,9 +6,9 @@ Aori is the native macOS companion. It is based on Project AIRI. The windows are
 
 The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. A status item lists the companion, the chat, and Settings.
 
-Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A neck bone plays a short idle clip. A few words change blend shapes.
+Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
-Speak uses `AVSpeechSynthesizer`. The mouth blend shape uses the level of the spoken audio. Listen uses the Speech framework. The bundled character is a CC0 VRM head with a texture. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image.
+Speak uses `AVSpeechSynthesizer`. Letters pick a viseme. The audio level scales that shape. Listen uses the Speech framework. The bundled character is an original CC0 VRM humanoid with a texture. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image. Chat history and provider settings are saved next to the persona file. English menu strings come from `packages/i18n`.
 
 You can open another `.vrm` file. A separate GPUI window paints the same sample with flat triangles. That window is not the AppKit app.
 
@@ -78,8 +78,8 @@ cargo test -p aori-face
 cargo check -p aori-gpui
 ```
 
-The macOS CI job also runs `./scripts/assemble-app.sh` and `./scripts/screenshot-app.sh`. The screenshot script sets `AORI_SCREENSHOT=1`. The app writes `build/aori-framebuffer.png` and stays open so `screencapture` can grab the window.
+The macOS CI job also runs `./scripts/assemble-app.sh` and `./scripts/screenshot-app.sh`. The screenshot script sets `AORI_SCREENSHOT=1`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it.
 
 ## Limits
 
-This tree does not run Live2D. The sample rig is one neck bone. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Lip-sync uses audio level, not phoneme visemes. The GPUI window does not use the depth buffer.
+This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Visemes follow letters in the spoken line. They are not a phoneme recognizer. The GPUI window does not use the depth buffer. Other locales are not loaded.

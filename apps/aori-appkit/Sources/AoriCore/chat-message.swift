@@ -6,7 +6,7 @@ public enum ChatRole: String, Codable, Sendable, Equatable {
     case assistant
 }
 
-public struct ChatMessage: Identifiable, Equatable, Sendable {
+public struct ChatMessage: Identifiable, Equatable, Sendable, Codable {
     public var id: UUID
     public var role: ChatRole
     public var content: String

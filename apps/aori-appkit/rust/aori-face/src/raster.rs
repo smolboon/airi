@@ -1,6 +1,6 @@
 use crate::{
   add_morph, skin::{
-    joint_globals, sample_rotation, skin_positions,
+    joint_globals, sample_rotation, skin_positions, with_blink,
   }, FaceScene, RgbaImage, Vec3,
 };
 
@@ -11,6 +11,7 @@ pub struct RenderPose {
   pub happy: f32,
   pub sad: f32,
   pub surprised: f32,
+  pub viseme: i32,
   pub time: f32,
   pub reduce_motion: bool,
 }
@@ -23,6 +24,7 @@ impl Default for RenderPose {
       happy: 0.0,
       sad: 0.0,
       surprised: 0.0,
+      viseme: 0,
       time: 0.0,
       reduce_motion: false,
     }
@@ -80,19 +82,30 @@ pub fn deformed_meshes(
   scene: &FaceScene,
   pose: &RenderPose,
 ) -> Vec<Vec<Vec3>> {
-  let rotation = if pose.reduce_motion {
-    [0.0, 0.0, 0.0, 1.0]
-  } else if let Some(animation) = &scene.animation {
-    sample_rotation(animation, pose.time)
-  } else {
-    [0.0, 0.0, 0.0, 1.0]
-  };
-  let joint = if pose.reduce_motion {
-    None
-  } else {
-    scene.animation.as_ref().map(|animation| animation.joint)
-  };
-  let globals = joint_globals(scene, rotation, joint);
+  let mut spins = vec![[0.0, 0.0, 0.0, 1.0]; scene.joints.len()];
+  if !pose.reduce_motion {
+    if let Some(idle) = scene
+      .animations
+      .iter()
+      .find(|clip| clip.name == "idle")
+      .or(scene.animations.first())
+    {
+      for channel in &idle.channels {
+        if channel.joint < spins.len() {
+          spins[channel.joint] = sample_rotation(channel, pose.time);
+        }
+      }
+    }
+    if pose.blink > 0.5 {
+      for (index, joint) in scene.joints.iter().enumerate() {
+        let name = joint.name.to_ascii_lowercase();
+        if name == "lefteye" || name == "righteye" {
+          spins[index] = with_blink(spins[index]);
+        }
+      }
+    }
+  }
+  let globals = joint_globals(scene, &spins);
   scene
     .meshes
     .iter()
@@ -115,8 +128,23 @@ fn morph_weight(
   name: &str,
   pose: &RenderPose,
 ) -> f32 {
-  match name.to_ascii_lowercase().as_str() {
-    "a" | "aa" | "ah" => pose.mouth,
+  let lower = name.to_ascii_lowercase();
+  let vowel = match lower.as_str() {
+    "a" | "aa" | "ah" => Some(0),
+    "i" | "ih" => Some(1),
+    "u" | "ou" => Some(2),
+    "e" | "ee" => Some(3),
+    "o" | "oh" => Some(4),
+    "pp" => Some(5),
+    _ => None,
+  };
+  if let Some(code) = vowel {
+    if code == 5 {
+      return if pose.viseme == 5 { 1.0 } else { 0.0 };
+    }
+    return if pose.viseme == code { pose.mouth } else { 0.0 };
+  }
+  match lower.as_str() {
     "blink" | "blink_l" | "blink_r" => pose.blink,
     "joy" | "happy" | "fun" => pose.happy,
     "sorrow" | "sad" => pose.sad,

@@ -55,6 +55,7 @@ final class MainWindowController: NSWindowController {
             presentation: model.presentation,
             speaking: model.isSpeaking,
             mouthLevel: model.mouthLevel,
+            viseme: model.viseme,
             scene: model.vrmScene,
             bytes: model.modelBytes
         )

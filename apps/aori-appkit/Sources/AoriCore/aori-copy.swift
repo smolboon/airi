@@ -1,18 +1,39 @@
 import Foundation
 
-/// English UI copy for the native shell. Other locales are not in this table.
+/// English UI copy for the native shell. `load` reads `packages/i18n` before the menu is built.
 public enum AoriCopy {
-    public static let appName = "Aori"
-    public static let about = "About Aori"
-    public static let settings = "Settings…"
-    public static let quit = "Quit Aori"
-    public static let newChat = "New Chat"
-    public static let openVRM = "Open VRM…"
-    public static let showMainWindow = "Show Main Window"
-    public static let showCompanion = "Show Companion"
-    public static let hideCompanion = "Hide Companion"
-    public static let alwaysOnTop = "Companion Always on Top"
-    public static let statusItem = "Aori"
+    private static let storage = CopyStorage()
+
+    public static func load(_ text: String) {
+        let parsed = LocaleTable.parse(text).values
+        storage.lock.lock()
+        storage.values = parsed
+        storage.lock.unlock()
+    }
+
+    public static var appName: String { text("menu.appName", fallback: "Aori") }
+    public static var about: String { text("menu.about", fallback: "About Aori") }
+    public static var settings: String { text("menu.settings", fallback: "Settings…") }
+    public static var quit: String { text("menu.quit", fallback: "Quit Aori") }
+    public static var newChat: String { text("menu.newChat", fallback: "New Chat") }
+    public static var openVRM: String { text("menu.openVRM", fallback: "Open VRM…") }
+    public static var showMainWindow: String { text("menu.showMainWindow", fallback: "Show Main Window") }
+    public static var showCompanion: String { text("menu.showCompanion", fallback: "Show Companion") }
+    public static var hideCompanion: String { text("menu.hideCompanion", fallback: "Hide Companion") }
+    public static var alwaysOnTop: String { text("menu.alwaysOnTop", fallback: "Companion Always on Top") }
+    public static var statusItem: String { text("menu.statusItem", fallback: "Aori") }
+
+    private static func text(_ key: String, fallback: String) -> String {
+        storage.lock.lock()
+        let value = storage.values[key]
+        storage.lock.unlock()
+        return value ?? fallback
+    }
+}
+
+private final class CopyStorage: @unchecked Sendable {
+    let lock = NSLock()
+    var values: [String: String] = [:]
 }
 
 public enum MotionPolicy {

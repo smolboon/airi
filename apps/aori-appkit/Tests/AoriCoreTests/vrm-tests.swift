@@ -102,6 +102,15 @@ final class CharacterAndWindowTests: XCTestCase {
         )
         XCTAssertTrue(happy.contains(where: { $0.morph == 1 && $0.weight == 1 }))
         XCTAssertTrue(happy.contains(where: { $0.morph == 0 && abs($0.weight - 0.5) < 0.001 }))
+        let vowelI = FaceDriver.morphWeights(
+            blendShapes: scene.blendShapes,
+            emotion: .neutral,
+            mouthOpen: 0.5,
+            blink: 0,
+            viseme: "i"
+        )
+        XCTAssertFalse(vowelI.contains(where: { $0.morph == 0 }))
+        XCTAssertTrue(vowelI.contains(where: { $0.morph == 5 && abs($0.weight - 0.5) < 0.001 }))
         let presentation = CharacterPresentation.placeholder.applying(scene)
         XCTAssertFalse(presentation.usesPlaceholderMesh)
         XCTAssertEqual(SpeechLevel.mouthOpen(samples: [Float](repeating: 0, count: 8)), 0)
@@ -112,6 +121,24 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(text.contains("baseColorTexture"))
         XCTAssertTrue(text.contains("JOINTS_0"))
         XCTAssertTrue(text.contains("\"name\":\"idle\""))
+        XCTAssertTrue(text.contains("\"name\":\"blink\""))
+        XCTAssertTrue(text.contains("\"bone\":\"hips\""))
+        XCTAssertTrue(text.contains("\"bone\":\"head\""))
+        XCTAssertTrue(text.contains("\"bone\":\"leftEye\""))
+        XCTAssertTrue(text.contains("\"bone\":\"rightEye\""))
+        XCTAssertTrue(text.contains("5121"))
+        let bones = try VRMHumanoidReader.bones(in: bytes)
+        XCTAssertEqual(bones.map(\.name), ["hips", "spine", "neck", "head", "leftEye", "rightEye"])
+        let phrase = VisemeTimeline.presets(in: "Hello papa")
+        XCTAssertTrue(phrase.contains(.e))
+        XCTAssertTrue(phrase.contains(.o))
+        XCTAssertTrue(phrase.contains(.a))
+        XCTAssertTrue(phrase.contains(.pp))
+        XCTAssertEqual(VisemeTimeline.preset(in: "Hello papa", at: 0).rawValue, "sil")
+        let wav = WavFile.encode(samples: [Float](repeating: 0.25, count: 16), sampleRate: 16_000)
+        XCTAssertEqual(String(decoding: wav.prefix(4), as: UTF8.self), "RIFF")
+        XCTAssertEqual(String(decoding: wav.dropFirst(8).prefix(4), as: UTF8.self), "WAVE")
+        XCTAssertGreaterThan(WavFile.rms(samples: [Float](repeating: 0.25, count: 16)), 0.2)
         XCTAssertEqual(ScreenshotPose.mouthOpen, 1)
         XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: false), 1)
         XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: true), 0)
