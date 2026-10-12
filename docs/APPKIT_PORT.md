@@ -126,7 +126,7 @@ A status item lists the companion, the main window, Settings, and Quit. Those ti
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` feeds a synthetic PCM buffer through `SpeechLevel`, writes a framebuffer PNG, and leaves the window up. The macOS job then captures that window. This checkout did not run that job.
+`AORI_SCREENSHOT=1` feeds a synthetic PCM buffer through `SpeechLevel`, writes a framebuffer PNG, and leaves the window up. The macOS job then captures that window. Run 38269452282 did that on `macos-latest`. The framebuffer corners are clear. The center pixel is the textured blush. The window capture shows the caption "Aori Sample".
 
 ### Milestone 2 follow-up
 
@@ -150,6 +150,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 33 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 9 tests with Rust 1.99.0. A debug build rendered the 280 by 380 frame in 2.75 ms. `cargo check -p aori-gpui` passed. This checkout did not launch the app. Speech playback, Keychain, and the GPUI window were not executed.
+The work ran on Linux. `swift test` passed 33 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 9 tests with Rust 1.99.0. A debug build rendered the 280 by 380 frame in 2.75 ms. `cargo check -p aori-gpui` passed. This checkout did not launch the app. Speech playback, Keychain, and the GPUI window were not executed. Run 38269452282 launched `AoriApp` on `macos-latest` and saved both PNGs.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.
