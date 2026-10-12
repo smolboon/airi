@@ -1,3 +1,4 @@
+import AoriCore
 import CoreGraphics
 import Foundation
 import ImageIO

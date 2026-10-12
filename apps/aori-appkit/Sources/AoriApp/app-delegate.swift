@@ -1,6 +1,7 @@
 import AppKit
 import ApplicationServices
 import AoriCore
+import AoriProviders
 import CoreGraphics
 import UniformTypeIdentifiers
 
