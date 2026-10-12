@@ -1,4 +1,3 @@
-import Synchronization
 import XCTest
 @testable import AoriCore
 
@@ -97,7 +96,7 @@ private func testConfiguration() -> ProviderConfiguration {
 }
 
 private final class ScriptedChatClient: ChatCompletionClient, @unchecked Sendable {
-    private let recorded = Mutex<[[ChatMessage]]>([])
+    private let recorded = LockedBox<[[ChatMessage]]>([])
     private let events: [ChatStreamEvent]
 
     init(events: [ChatStreamEvent]) {
@@ -108,7 +107,7 @@ private final class ScriptedChatClient: ChatCompletionClient, @unchecked Sendabl
         messages: [ChatMessage],
         configuration: ProviderConfiguration
     ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
-        recorded.withLock { $0.append(messages) }
+        recorded.append(messages)
         let events = events
         return AsyncThrowingStream { continuation in
             for event in events {
@@ -119,7 +118,28 @@ private final class ScriptedChatClient: ChatCompletionClient, @unchecked Sendabl
     }
 
     func recordedMessages() -> [[ChatMessage]] {
-        recorded.withLock { $0 }
+        recorded.value
+    }
+}
+
+private final class LockedBox<Value>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storage: Value
+
+    init(_ value: Value) {
+        storage = value
+    }
+
+    var value: Value {
+        lock.lock()
+        defer { lock.unlock() }
+        return storage
+    }
+
+    func append(_ item: Value.Element) where Value: RangeReplaceableCollection {
+        lock.lock()
+        defer { lock.unlock() }
+        storage.append(item)
     }
 }
 

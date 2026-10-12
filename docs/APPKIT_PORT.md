@@ -58,8 +58,8 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
 | Idle motion | character modules | Blink and sway on the placeholder | Idle clips on a real mesh later |
 | Emotion | VRM expressions | glad, sorry, and wow change the placeholder face | Blend shapes later |
-| Lip-sync | audio weights on VRM mouths | A timer while speech is active | Mouth from audio samples in milestone 2 |
-| VRM mesh | `stage-ui-three` | Metadata plus a SceneKit placeholder | Load the mesh in milestone 2 |
+| Lip-sync | audio weights on VRM mouths | RMS of TTS PCM buffers on the A blend shape | Phoneme visemes come later |
+| VRM mesh | `stage-ui-three` | CC0 head in SceneKit, bind pose, flat color | Bone animation and textures come later |
 | Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
@@ -103,9 +103,15 @@ apps/aori-appkit/
 
 The companion window is transparent, draggable, and able to stay above other apps. Settings stores a name and a personality. Those lines become the system prompt. A JSON file stores facts from "remember that". Launch shows a local greeting and speaks it. The greeting does not call the provider. The placeholder blinks and sways while idle. The words glad, sorry, and wow change the face. The mouth moves on a timer while speech is active. That timer is not lip-sync from audio samples. Chat still streams from an OpenAI-compatible endpoint. The key comes from the environment or the Keychain. VRM files expose a title and a mesh count. The mesh is still the placeholder.
 
-### Milestone 2, voice and a real face
+### Milestone 2, this change
 
-Read glTF buffers from the VRM file. Skin the mesh with SceneKit or Metal. Drive the mouth from speech audio, not from a timer. Map feelings onto blend shapes. Keep a voice turn going without a separate Speak press.
+`VRMSceneReader` reads positions, normals, indices, and morph targets from a binary VRM file. SceneKit draws those meshes. The bundled file is `Sources/AoriApp/Resources/aori-sample.vrm`. It is an original low-poly head. The license is CC0. See `Resources/LICENSE.txt`.
+
+`AVSpeechSynthesizer.write` returns PCM buffers. The A blend shape uses the root-mean-square of each buffer. Joy, sorrow, surprised, and blink follow the emotion and the idle blink. The mesh stays in the bind pose. Bone animation is not applied. The material is a flat color. This is not a phoneme viseme map.
+
+### Milestone 2 follow-up
+
+Skin the mesh with bones. Add textures. Map speech to phoneme visemes. Keep a voice turn going without a separate Speak press.
 
 ### Milestone 3, memory that lasts
 
@@ -125,4 +131,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 32 tests and 0 failures. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed. macOS CI is the compile and bundle step.
+The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed.
+
+The macOS job on 2026-10-12 failed before this change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. The new macOS job builds `AoriApp` and runs `swift test`.

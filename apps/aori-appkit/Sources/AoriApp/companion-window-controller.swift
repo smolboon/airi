@@ -56,6 +56,11 @@ final class CompanionWindowController: NSWindowController {
     }
 
     func refresh() {
-        characterView.apply(presentation: model.presentation, speaking: model.isSpeaking)
+        characterView.apply(
+            presentation: model.presentation,
+            speaking: model.isSpeaking,
+            mouthLevel: model.mouthLevel,
+            scene: model.vrmScene
+        )
     }
 }

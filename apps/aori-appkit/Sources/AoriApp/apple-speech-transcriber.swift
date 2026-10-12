@@ -1,8 +1,9 @@
+import AoriCore
 import AVFoundation
 import Foundation
 import Speech
 
-final class AppleSpeechTranscriber: NSObject, SpeechTranscriber, @unchecked Sendable {
+final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Sendable {
     private let recognizer: SFSpeechRecognizer?
     private let engine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?

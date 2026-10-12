@@ -28,7 +28,7 @@ public struct CharacterPresentation: Equatable, Sendable {
 
     public static let placeholder = CharacterPresentation(
         title: "Aori",
-        subtitle: "SceneKit placeholder. A VRM file shows its name here. The mesh is not imported yet.",
+        subtitle: "The VRM mesh is not loaded.",
         mouthOpen: 0,
         usesPlaceholderMesh: true,
         emotion: .neutral
@@ -39,9 +39,21 @@ public struct CharacterPresentation: Equatable, Sendable {
         let version = document.vrmVersion ?? "unknown"
         return CharacterPresentation(
             title: title,
-            subtitle: "VRM \(version). \(document.meshCount) meshes. SceneKit still draws the placeholder.",
+            subtitle: "VRM \(version). \(document.meshCount) meshes. This path does not read mesh bytes.",
             mouthOpen: mouthOpen,
             usesPlaceholderMesh: true,
+            emotion: emotion
+        )
+    }
+
+    public func applying(_ scene: VRMScene) -> CharacterPresentation {
+        let title = scene.document.title ?? title
+        let shapes = scene.blendShapes.count
+        return CharacterPresentation(
+            title: title,
+            subtitle: "VRM mesh. \(scene.vertexCount) vertices. \(shapes) blend shapes.",
+            mouthOpen: mouthOpen,
+            usesPlaceholderMesh: scene.vertexCount == 0,
             emotion: emotion
         )
     }

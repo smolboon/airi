@@ -28,6 +28,34 @@ enum JSONValue: Equatable, Sendable {
         }
         return values.count
     }
+
+    var array: [JSONValue] {
+        guard case .array(let values) = self else {
+            return []
+        }
+        return values
+    }
+
+    var double: Double? {
+        guard case .number(let value) = self else {
+            return nil
+        }
+        return value
+    }
+
+    var int: Int? {
+        guard let double else {
+            return nil
+        }
+        return Int(double)
+    }
+
+    subscript(index: Int) -> JSONValue? {
+        guard case .array(let values) = self, values.indices.contains(index) else {
+            return nil
+        }
+        return values[index]
+    }
 }
 
 extension JSONValue: Decodable {

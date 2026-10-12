@@ -29,6 +29,8 @@ public final class ChatViewModel {
     public private(set) var configuration: ProviderConfiguration
     public private(set) var persona: CompanionPersona
     public private(set) var memory: UserMemory
+    public private(set) var vrmScene: VRMScene?
+    public private(set) var mouthLevel: Double = 0
     public var onChange: (@MainActor () -> Void)?
     public var onProfileChange: (@MainActor () -> Void)?
 
@@ -110,12 +112,27 @@ public final class ChatViewModel {
 
     public func setSpeaking(_ speaking: Bool) {
         isSpeaking = speaking
+        if !speaking {
+            mouthLevel = 0
+        }
+        publish()
+    }
+
+    public func setMouthLevel(_ level: Double) {
+        mouthLevel = min(1, max(0, level))
         publish()
     }
 
     public func apply(vrm document: VRMDocument) {
         presentation = presentation.applying(document)
         showsModelTitle = true
+        publish()
+    }
+
+    public func apply(scene: VRMScene) {
+        vrmScene = scene
+        presentation = presentation.applying(scene)
+        showsModelTitle = scene.document.title != nil
         publish()
     }
 

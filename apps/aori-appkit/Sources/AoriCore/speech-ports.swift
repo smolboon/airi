@@ -32,7 +32,8 @@ public protocol SpeechSynthesizer: AnyObject {
 }
 
 /// Platform speech input. The macOS app uses the Speech framework.
-public protocol SpeechTranscriber: AnyObject, Sendable {
+/// The name is not `SpeechTranscriber`. That name is an Apple class on newer SDKs.
+public protocol VoiceTranscriber: AnyObject, Sendable {
     func requestAuthorization() async -> SpeechPermission
     func start(onPartial: @escaping @Sendable (String) -> Void) throws
     func stop()

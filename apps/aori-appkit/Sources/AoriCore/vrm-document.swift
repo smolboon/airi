@@ -39,8 +39,14 @@ public enum VRMDocumentError: Error, Equatable, Sendable, CustomStringConvertibl
     }
 }
 
-public enum VRMDocumentReader {
-    public static func read(_ data: Data) throws -> VRMDocument {
+struct GLBFile {
+    var version: UInt32
+    var json: JSONValue
+    var bin: Data
+}
+
+enum GLBFileReader {
+    static func read(_ data: Data) throws -> GLBFile {
         guard data.count >= 20 else {
             throw VRMDocumentError.tooSmall
         }
@@ -56,6 +62,7 @@ public enum VRMDocumentReader {
 
         var offset = 12
         var json: JSONValue?
+        var bin = Data()
         while offset + 8 <= length {
             let chunkLength = Int(readUInt32(data, offset: offset))
             let chunkType = readUInt32(data, offset: offset + 4)
@@ -64,20 +71,29 @@ public enum VRMDocumentReader {
             guard end <= length else {
                 throw VRMDocumentError.truncated
             }
+            let chunk = data.subdata(in: start..<end)
             if chunkType == 0x4E4F_534A {
-                let chunk = trimJSONPadding(data.subdata(in: start..<end))
                 do {
-                    json = try JSONDecoder().decode(JSONValue.self, from: chunk)
+                    json = try JSONDecoder().decode(JSONValue.self, from: trimJSONPadding(chunk))
                 } catch {
                     throw VRMDocumentError.invalidJSON
                 }
+            } else if chunkType == 0x004E_4942 {
+                bin = chunk
             }
             offset = end
         }
         guard let json else {
             throw VRMDocumentError.missingJSONChunk
         }
-        return map(json, version: version)
+        return GLBFile(version: version, json: json, bin: bin)
+    }
+}
+
+public enum VRMDocumentReader {
+    public static func read(_ data: Data) throws -> VRMDocument {
+        let file = try GLBFileReader.read(data)
+        return map(file.json, version: file.version)
     }
 
     private static func map(_ json: JSONValue, version: UInt32) -> VRMDocument {
@@ -103,26 +119,26 @@ public enum VRMDocumentReader {
             meshCount: json["meshes"]?.arrayCount ?? 0
         )
     }
+}
 
-    private static func readUInt32(_ data: Data, offset: Int) -> UInt32 {
-        let start = data.startIndex + offset
-        let b0 = UInt32(data[start])
-        let b1 = UInt32(data[start + 1])
-        let b2 = UInt32(data[start + 2])
-        let b3 = UInt32(data[start + 3])
-        return b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
-    }
+func readUInt32(_ data: Data, offset: Int) -> UInt32 {
+    let start = data.startIndex + offset
+    let b0 = UInt32(data[start])
+    let b1 = UInt32(data[start + 1])
+    let b2 = UInt32(data[start + 2])
+    let b3 = UInt32(data[start + 3])
+    return b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+}
 
-    private static func trimJSONPadding(_ data: Data) -> Data {
-        var end = data.count
-        while end > 0 {
-            let byte = data[data.index(data.startIndex, offsetBy: end - 1)]
-            if byte == 0x20 || byte == 0x0A || byte == 0x0D || byte == 0x09 || byte == 0x00 {
-                end -= 1
-            } else {
-                break
-            }
+func trimJSONPadding(_ data: Data) -> Data {
+    var end = data.count
+    while end > 0 {
+        let byte = data[data.index(data.startIndex, offsetBy: end - 1)]
+        if byte == 0x20 || byte == 0x0A || byte == 0x0D || byte == 0x09 || byte == 0x00 {
+            end -= 1
+        } else {
+            break
         }
-        return data.prefix(end)
     }
+    return data.prefix(end)
 }

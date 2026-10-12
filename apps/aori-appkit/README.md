@@ -4,7 +4,7 @@ Aori is the native macOS companion. It is based on Project AIRI. The windows are
 
 ## What it does
 
-The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A few words change the face. Speak uses `AVSpeechSynthesizer`. Listen uses the Speech framework. The mouth moves while speech is active. It does not follow audio samples. The character is a SceneKit placeholder. A binary VRM file can supply its name. The mesh is not imported.
+The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A few words change blend shapes. Speak uses `AVSpeechSynthesizer`. The mouth blend shape uses the level of the spoken audio. Listen uses the Speech framework. The bundled character is a CC0 VRM head drawn by SceneKit. You can open another `.vrm` file. The mesh stays in the bind pose.
 
 ## How to use it
 
@@ -59,4 +59,4 @@ The macOS CI job also runs `./scripts/assemble-app.sh`.
 
 ## Limits
 
-This tree does not render a VRM mesh. It does not run Live2D. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. The mouth timer is not audio lip-sync.
+This tree does not run Live2D. It does not play bone animation. The sample head uses a flat color. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Lip-sync uses audio level, not phoneme visemes.

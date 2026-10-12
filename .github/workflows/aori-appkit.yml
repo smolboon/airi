@@ -33,14 +33,16 @@ jobs:
         run: swift test
 
   build-and-test-macos:
-    name: Build and test on macOS
+    name: Build the AppKit target and test on macOS
     runs-on: macos-latest
     defaults:
       run:
         working-directory: apps/aori-appkit
     steps:
       - uses: actions/checkout@v6
-      - name: Test and compile the app
+      - name: Test
         run: swift test
+      - name: Build the AppKit target
+        run: swift build --product AoriApp
       - name: Assemble the app bundle
         run: ./scripts/assemble-app.sh

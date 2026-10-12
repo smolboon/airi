@@ -21,6 +21,9 @@ targets.append(
     .executableTarget(
         name: "AoriApp",
         dependencies: ["AoriCore", "AoriProviders"],
+        resources: [
+            .copy("Resources/aori-sample.vrm"),
+        ],
         linkerSettings: [
             .linkedFramework("AppKit"),
             .linkedFramework("AVFoundation"),

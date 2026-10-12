@@ -1,0 +1,4 @@
+Aori Sample is an original low-poly VRM head made for this app.
+
+The model and this file are dedicated to the public domain under the CC0 1.0 Universal license.
+https://creativecommons.org/publicdomain/zero/1.0/

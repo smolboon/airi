@@ -84,6 +84,30 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertNotEqual(idle.sway, CharacterMotion.pose(time: 1, speaking: false, emotion: .neutral).sway)
     }
 
+    func testSampleVRMHasAMeshAndBlendShapes() throws {
+        let url = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Sources/AoriApp/Resources/aori-sample.vrm")
+        let scene = try VRMSceneReader.read(Data(contentsOf: url))
+        XCTAssertEqual(scene.document.title, "Aori Sample")
+        XCTAssertGreaterThan(scene.vertexCount, 20)
+        XCTAssertFalse(scene.meshes[0].morphs.isEmpty)
+        let happy = FaceDriver.morphWeights(
+            blendShapes: scene.blendShapes,
+            emotion: .happy,
+            mouthOpen: 0.5,
+            blink: 0
+        )
+        XCTAssertTrue(happy.contains(where: { $0.morph == 1 && $0.weight == 1 }))
+        XCTAssertTrue(happy.contains(where: { $0.morph == 0 && abs($0.weight - 0.5) < 0.001 }))
+        let presentation = CharacterPresentation.placeholder.applying(scene)
+        XCTAssertFalse(presentation.usesPlaceholderMesh)
+        XCTAssertEqual(SpeechLevel.mouthOpen(samples: [Float](repeating: 0, count: 8)), 0)
+        XCTAssertGreaterThan(SpeechLevel.mouthOpen(samples: [Float](repeating: 0.25, count: 8)), 0.5)
+    }
+
     func testStandardCompanionStyle() {
         let style = CompanionWindowPolicy.standard.style()
         XCTAssertTrue(style.floating)

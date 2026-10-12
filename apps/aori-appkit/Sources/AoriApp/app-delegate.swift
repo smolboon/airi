@@ -106,6 +106,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         synthesizer.onSpeakingChanged = { [weak self] speaking in
             self?.model?.setSpeaking(speaking)
         }
+        synthesizer.onMouthLevel = { [weak self] level in
+            self?.model?.setMouthLevel(level)
+        }
+        loadSampleModel(into: model)
 
         mainWindow.showWindow(nil)
         companionWindow.showWindow(nil)
@@ -114,6 +118,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companionWindow.refresh()
         speakReply()
         NSApp.activate()
+    }
+
+    private func loadSampleModel(into model: ChatViewModel) {
+        guard let data = SampleModel.data() else {
+            model.setStatus("The sample VRM is not in the app bundle.")
+            return
+        }
+        do {
+            model.apply(scene: try VRMSceneReader.read(data))
+        } catch {
+            model.setStatus(String(describing: error))
+        }
     }
 
     private func loadProfile() -> CompanionProfile {
@@ -160,7 +176,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Aori"
-        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character stays on the desktop. Milestone 1 stores a persona and local memory. The mesh is still a placeholder."
+        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a VRM mesh. Speech levels move the mouth. Feelings move blend shapes."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
@@ -191,10 +207,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         do {
             let data = try Data(contentsOf: url)
-            let document = try VRMDocumentReader.read(data)
-            model?.apply(vrm: document)
-            let title = document.title ?? url.lastPathComponent
-            model?.setStatus("Loaded VRM metadata for \(title). The mesh is still the placeholder.")
+            let scene = try VRMSceneReader.read(data)
+            model?.apply(scene: scene)
+            let title = scene.document.title ?? url.lastPathComponent
+            model?.setStatus("Loaded \(title). \(scene.vertexCount) vertices.")
         } catch {
             model?.setStatus(String(describing: error))
         }
