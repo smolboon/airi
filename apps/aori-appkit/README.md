@@ -12,6 +12,8 @@ Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
+`AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied. The host does not run JavaScript.
+
 You can open another `.vrm` file. A separate GPUI window paints the lit sample raster. That window is not the AppKit app. Clear pixels on the companion window pass clicks through. Opaque pixels and the caption keep the click. The screenshot path posts one click onto a window titled Aori Behind.
 
 ## How to use it
@@ -30,6 +32,7 @@ In Xcode, open `Package.swift` and run the AoriApp scheme. You can also open `Ao
 Optional environment variables:
 
 - `AORI_AVATAR` with the value `live2d` selects the flat character. The default is the VRM.
+- `AORI_PLUGINS` is a plugin directory. The sample path is `plugins/aori-greeting`.
 - `AORI_OPENAI_BASE_URL` or `OPENAI_BASE_URL`
 - `AORI_OPENAI_MODEL` or `OPENAI_MODEL`
 - `OPENAI_API_KEY` when `AORI_OPENAI_API_KEY` is absent
@@ -42,7 +45,7 @@ Use it to work on the native macOS companion. Use it to run the milestone 1 shel
 
 ## When not to use it
 
-Do not use it for Cubism moc3 models, plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
+Do not use it for Cubism moc3 models, JavaScript plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 
@@ -55,6 +58,7 @@ apps/aori-appkit/
 ├── Sources/AoriApp/          # AppKit, speech, raster blit (macOS only)
 ├── rust/aori-face/           # Skin, light, depth raster, layered avatar, sample glTF read
 ├── rust/aori-gpui/           # Separate GPUI window
+├── plugins/aori-greeting/    # Sample Manifest v2 command list
 └── Tests/
 ```
 
@@ -85,7 +89,7 @@ The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./script
 
 ## Limits
 
-This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
+The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
 

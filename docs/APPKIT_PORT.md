@@ -10,7 +10,7 @@ The verb for this note is "make sure". The noun for saved values is "configurati
 
 Aori is a desktop AI companion. It is based on Project AIRI. The same kind of product is Animates, from Animation Inc.
 
-The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools, plugins, and games come after the companion can stay, speak, and remember.
+The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools, vision, and games come after the companion can stay, speak, and remember.
 
 ### What Animates is
 
@@ -62,7 +62,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | VRM mesh | `stage-ui-three` | Original CC0 VRM 0 humanoid, loaded from a file | Downloaded characters stay out |
 | Live2D | `stage-ui-live2d` | Flat layers | Live2D parameter ids and motion3.json curves. Not Cubism moc3 |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
-| Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
+| Plugins | `plugin-sdk` | Manifest v2 host | Command list inside the native grant. No JavaScript |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
 | Vision and games | stage modules, integrations | Absent | After the companion can stay and speak |
@@ -103,6 +103,7 @@ apps/aori-appkit/
 ├── Sources/AoriApp/         # AppKit shell, speech, raster blit
 ├── rust/aori-face/          # Skin, depth raster, and the sample glTF read
 ├── rust/aori-gpui/          # Separate GPUI window for the same head
+├── plugins/aori-greeting/   # Sample Manifest v2 command list
 └── Tests/                   # XCTest for the core modules
 ```
 
@@ -164,7 +165,9 @@ If the license allows it, a native Cubism renderer can replace these layers. `WK
 
 ### Milestone 5, plugins
 
-Host Manifest v2 in a native process. Keep the manifest checks. Do not embed Electron.
+The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the AIRI range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
+
+The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory. A `.js`, `.mjs`, or `.cjs` file is rejected, and the host does not embed Electron. This grant is not the macOS App Sandbox. The process stays unsandboxed.
 
 ### Milestone 6, the rest of AIRI
 

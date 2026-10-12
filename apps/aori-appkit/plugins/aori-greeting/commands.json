@@ -1,0 +1,14 @@
+{
+  "calls": [
+    {
+      "area": "capabilities",
+      "action": "snapshot",
+      "key": "aori.companion.greeting"
+    },
+    {
+      "area": "capabilities",
+      "action": "snapshot",
+      "key": "aori.files.read"
+    }
+  ]
+}

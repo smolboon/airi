@@ -63,6 +63,7 @@ AORI_SCREENSHOT=1 \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
     AORI_AVATAR=live2d \
+    AORI_PLUGINS="$PWD/plugins/aori-greeting" \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >"$log" 2>&1 &
@@ -135,6 +136,10 @@ need = [
     "aori_click_through=on",
     "aori_click_through=delivered",
     "aori_avatar=live2d",
+    "aori_plugin=loaded id=aori-greeting",
+    "aori_plugin_call=aori.companion.greeting",
+    "aori_plugin_result=Plugin greeting.",
+    "aori_plugin_denied=aori.files.read",
     "aori_hit_corner=pass",
     "aori_hit_body=keep",
     "aori_ignores_mouse=true",

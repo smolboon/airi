@@ -140,6 +140,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model.greetIfNeeded()
         mainWindow.refresh()
         companionWindow.refresh()
+        logPlugins()
         if screenshotMode {
             presentScreenshot()
             return
@@ -151,6 +152,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var screenshotMode: Bool {
         ProcessInfo.processInfo.environment["AORI_SCREENSHOT"] == "1"
+    }
+
+    private func logPlugins() {
+        let raw = ProcessInfo.processInfo.environment["AORI_PLUGINS"] ?? ""
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            logLine("aori_plugin=none")
+            return
+        }
+        let report = PluginHost.run(directory: URL(fileURLWithPath: trimmed))
+        for line in report.lines {
+            logLine(line)
+        }
     }
 
     private func presentScreenshot() {
