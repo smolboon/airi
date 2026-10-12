@@ -1,8 +1,13 @@
 use crate::{
   add_morph, skin::{
-    joint_globals, sample_rotation, skin_positions, with_blink, with_look,
+    joint_globals, sample_rotation, skin_normals, skin_positions, with_blink, with_look,
   }, FaceScene, RgbaImage, Vec3,
 };
+
+pub struct PosedSurface {
+  pub positions: Vec<Vec3>,
+  pub normals: Vec<Vec3>,
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct RenderPose {
@@ -49,8 +54,8 @@ pub fn render_frame(
     return image;
   }
   let mut depth = vec![f32::INFINITY; (width as usize) * (height as usize)];
-  let meshes = deformed_meshes(scene, pose);
-  for (mesh_index, positions) in meshes.iter().enumerate() {
+  let meshes = deformed_surface(scene, pose);
+  for (mesh_index, posed) in meshes.iter().enumerate() {
     let Some(mesh) = scene.meshes.get(mesh_index) else {
       continue;
     };
@@ -62,11 +67,18 @@ pub fn render_frame(
         mesh.indices[index + 2] as usize,
       ];
       index += 3;
-      if ids.iter().any(|id| *id >= positions.len()) {
+      if ids.iter().any(|id| *id >= posed.positions.len()) {
         continue;
       }
       let uvs = ids.map(|id| mesh.uvs.get(id).copied().unwrap_or([0.0, 0.0]));
-      let projected = ids.map(|id| project(positions[id], width as f32, height as f32));
+      let projected = ids.map(|id| project(posed.positions[id], width as f32, height as f32));
+      let normals = ids.map(|id| {
+        posed.normals.get(id).copied().unwrap_or(Vec3 {
+          x: 0.0,
+          y: 0.0,
+          z: 1.0,
+        })
+      });
       paint_triangle(
         &mut image,
         &mut depth,
@@ -74,6 +86,7 @@ pub fn render_frame(
         height,
         projected,
         uvs,
+        normals,
         mesh.color,
         mesh.texture.as_ref(),
       );
@@ -82,10 +95,21 @@ pub fn render_frame(
   image
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 pub fn deformed_meshes(
   scene: &FaceScene,
   pose: &RenderPose,
 ) -> Vec<Vec<Vec3>> {
+  deformed_surface(scene, pose)
+    .into_iter()
+    .map(|surface| surface.positions)
+    .collect()
+}
+
+pub fn deformed_surface(
+  scene: &FaceScene,
+  pose: &RenderPose,
+) -> Vec<PosedSurface> {
   let mut spins = vec![[0.0, 0.0, 0.0, 1.0]; scene.joints.len()];
   if !pose.reduce_motion {
     if let Some(idle) = scene
@@ -131,7 +155,20 @@ pub fn deformed_meshes(
         }
       }
       skin_positions(scene, mesh_index, &mut positions, &globals);
-      positions
+      let mut normals = if mesh.normals.len() == positions.len() {
+        mesh.normals.clone()
+      } else {
+        vec![
+          Vec3 {
+            x: 0.0,
+            y: 0.0,
+            z: 1.0,
+          };
+          positions.len()
+        ]
+      };
+      skin_normals(scene, mesh_index, &mut normals, &globals);
+      PosedSurface { positions, normals }
     })
     .collect()
 }
@@ -180,6 +217,43 @@ fn project(
   [x, (height - 1.0) - y_up, camera_depth]
 }
 
+pub fn shade_lambert(
+  color: [f32; 4],
+  normal: Vec3,
+) -> [f32; 4] {
+  let light = normalize_light(Vec3 {
+    x: -0.3,
+    y: 0.8,
+    z: 0.6,
+  });
+  let shaded = normalize_light(normal);
+  let diffuse = (shaded.x * light.x + shaded.y * light.y + shaded.z * light.z).max(0.0);
+  let ambient = 0.28;
+  let scale = ambient + (1.0 - ambient) * diffuse;
+  [
+    color[0] * scale,
+    color[1] * scale,
+    color[2] * scale,
+    color[3],
+  ]
+}
+
+fn normalize_light(value: Vec3) -> Vec3 {
+  let length = (value.x * value.x + value.y * value.y + value.z * value.z).sqrt();
+  if length <= 1.0e-8 {
+    return Vec3 {
+      x: 0.0,
+      y: 0.0,
+      z: 1.0,
+    };
+  }
+  Vec3 {
+    x: value.x / length,
+    y: value.y / length,
+    z: value.z / length,
+  }
+}
+
 fn paint_triangle(
   image: &mut [u8],
   depth: &mut [f32],
@@ -187,6 +261,7 @@ fn paint_triangle(
   height: u32,
   projected: [[f32; 3]; 3],
   uvs: [[f32; 2]; 3],
+  normals: [Vec3; 3],
   color: [f32; 4],
   texture: Option<&RgbaImage>,
 ) {
@@ -257,6 +332,16 @@ fn paint_triangle(
         ]
       };
       let sampled = sample_color(texture, uv, color);
+      let normal = if inv.abs() < 1.0e-6 {
+        normals[0]
+      } else {
+        Vec3 {
+          x: (normals[0].x * inv0 + normals[1].x * inv1 + normals[2].x * inv2) / inv,
+          y: (normals[0].y * inv0 + normals[1].y * inv1 + normals[2].y * inv2) / inv,
+          z: (normals[0].z * inv0 + normals[1].z * inv1 + normals[2].z * inv2) / inv,
+        }
+      };
+      let sampled = shade_lambert(sampled, normal);
       let offset = pixel * 4;
       image[offset] = channel(sampled[0]);
       image[offset + 1] = channel(sampled[1]);

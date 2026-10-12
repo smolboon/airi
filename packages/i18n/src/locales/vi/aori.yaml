@@ -1,0 +1,13 @@
+menu:
+  appName: Aori
+  about: Giới thiệu Aori
+  settings: Cài đặt…
+  quit: Thoát Aori
+  newChat: Cuộc trò chuyện mới
+  openVRM: Mở VRM…
+  showMainWindow: Hiện cửa sổ chính
+  showCompanion: Hiện người bạn
+  hideCompanion: Ẩn người bạn
+  alwaysOnTop: Người bạn luôn ở trên
+  language: Ngôn ngữ
+  statusItem: Aori

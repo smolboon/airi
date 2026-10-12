@@ -40,7 +40,7 @@ final class ChatPanelController: NSViewController {
         transcriptView.drawsBackground = true
         transcriptView.backgroundColor = .textBackgroundColor
         transcriptView.textContainerInset = NSSize(width: 8, height: 8)
-        transcriptView.setAccessibilityLabel("Chat transcript")
+        transcriptView.setAccessibilityLabel(AccessibilityCopy.transcript)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.hasVerticalScroller = true
         scrollView.borderType = .noBorder
@@ -48,7 +48,7 @@ final class ChatPanelController: NSViewController {
         searchField.placeholderString = "Search chat"
         searchField.font = .systemFont(ofSize: 13)
         searchField.translatesAutoresizingMaskIntoConstraints = false
-        searchField.setAccessibilityLabel("Search chat")
+        searchField.setAccessibilityLabel(AccessibilityCopy.search)
         searchField.target = self
         searchField.action = #selector(searchChanged)
         NotificationCenter.default.addObserver(
@@ -61,7 +61,7 @@ final class ChatPanelController: NSViewController {
         draftField.placeholderString = "Message Aori"
         draftField.font = .systemFont(ofSize: 14)
         draftField.translatesAutoresizingMaskIntoConstraints = false
-        draftField.setAccessibilityLabel("Message")
+        draftField.setAccessibilityLabel(AccessibilityCopy.message)
         draftField.target = self
         draftField.action = #selector(send)
 
@@ -69,11 +69,11 @@ final class ChatPanelController: NSViewController {
         statusLabel.textColor = .secondaryLabelColor
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         statusLabel.maximumNumberOfLines = 3
-        statusLabel.setAccessibilityLabel("Status")
+        statusLabel.setAccessibilityLabel(AccessibilityCopy.status)
 
-        configure(sendButton, label: "Send message", action: #selector(send))
-        configure(speakButton, label: "Speak the last reply", action: #selector(speak))
-        configure(listenButton, label: "Listen with the microphone", action: #selector(listen))
+        configure(sendButton, label: AccessibilityCopy.send, action: #selector(send))
+        configure(speakButton, label: AccessibilityCopy.speak, action: #selector(speak))
+        configure(listenButton, label: AccessibilityCopy.listen, action: #selector(listen))
         let buttons = NSStackView(views: [listenButton, speakButton, sendButton])
         buttons.orientation = .horizontal
         buttons.spacing = 8

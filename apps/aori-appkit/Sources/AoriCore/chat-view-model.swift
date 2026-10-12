@@ -178,22 +178,37 @@ public final class ChatViewModel {
         publishMessages()
 
         do {
-            let stream = try await client.streamChat(
-                messages: requestMessages(),
-                configuration: configuration
-            )
-            for try await event in stream {
-                if Task.isCancelled {
+            var receivedDelta = false
+            var attempt = 0
+            while true {
+                do {
+                    let stream = try await client.streamChat(
+                        messages: requestMessages(),
+                        configuration: configuration
+                    )
+                    for try await event in stream {
+                        if Task.isCancelled {
+                            break
+                        }
+                        switch event {
+                        case .delta(let piece):
+                            receivedDelta = true
+                            assistant.content += piece
+                            messages[messages.count - 1] = assistant
+                            presentation.emotion = CompanionEmotion.infer(from: assistant.content)
+                            publishMessages()
+                        case .finished:
+                            break
+                        }
+                    }
                     break
-                }
-                switch event {
-                case .delta(let piece):
-                    assistant.content += piece
-                    messages[messages.count - 1] = assistant
-                    presentation.emotion = CompanionEmotion.infer(from: assistant.content)
-                    publishMessages()
-                case .finished:
-                    break
+                } catch {
+                    if receivedDelta || attempt > 0 {
+                        throw error
+                    }
+                    attempt += 1
+                    statusText = "Trying again."
+                    publish()
                 }
             }
             if assistant.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {

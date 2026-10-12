@@ -1,6 +1,5 @@
 import AppKit
 import AoriCore
-import AoriProviders
 import UniformTypeIdentifiers
 
 @MainActor
@@ -70,7 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let configuration = loadConfiguration()
         let profile = loadProfile()
         let model = ChatViewModel(
-            client: OpenAICompatibleClient(),
+            client: RoutingChatClient(),
             configuration: configuration,
             persona: profile.persona,
             memory: profile.memory
@@ -159,13 +158,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate()
         writeFramebuffer()
         Task {
+            logLine("aori_accessibility=\(AccessibilityCopy.proof)")
+            logLine(KeychainProbe.line(store: self.secrets))
             let mic = self.transcriber.probeMicrophone()
             logLine("aori_mic=\(mic)")
             await self.synthesizer.speak("Hello papa")
             await self.runFixtureTurn()
             logLine("aori_turn=done")
         }
-        Timer.scheduledTimer(withTimeInterval: 55, repeats: false) { _ in
+        Timer.scheduledTimer(withTimeInterval: 80, repeats: false) { _ in
             Task { @MainActor in
                 NSApp.terminate(nil)
             }
@@ -418,12 +419,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let activity = VoiceActivity(threshold: 0.02, silenceSeconds: 0.2, sampleRate: Double(decoded.sampleRate))
         logLine(activity.containsSpeech(decoded.samples) ? "aori_vad=speech" : "aori_vad=silence")
         let status = await transcriber.authorization(timeout: 5)
+        logLine("aori_stt_auth=\(status.rawValue)")
         let text: String
         if status == .granted {
+            logLine("aori_stt_engine=speech")
             text = await transcriber.transcribeFile(at: URL(fileURLWithPath: path))
+        } else if let recognizer = OnDeviceRecognizer.fromEnvironment() {
+            logLine("aori_stt_engine=whisper")
+            text = (try? recognizer.transcribe(wavPath: path)) ?? ""
         } else {
+            logLine("aori_stt_engine=missing")
             text = ""
-            logLine("aori_stt_auth=\(status.rawValue)")
         }
         let heard = text.trimmingCharacters(in: .whitespacesAndNewlines)
         logLine("aori_stt=\(heard.isEmpty ? "empty" : heard)")
@@ -433,18 +439,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 logLine(AoriLog.event("turn", fields: ["step": "send", "text": line]))
             }
         }
-        if model?.configuration.apiKey.isEmpty != false {
+        guard !heard.isEmpty, let model else {
             logLine("aori_llm=skipped")
             await synthesizer.speak("I am here.")
             return
         }
-        guard !heard.isEmpty, let model else {
-            logLine("aori_llm=skipped")
-            return
-        }
         model.setDraft(heard)
         await model.send()
-        logLine("aori_llm=sent")
+        let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
+        logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         if let reply = model.textForSpeech() {
             await synthesizer.speak(reply)
         }
@@ -518,18 +521,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model?.setDraft(spoken)
         mainWindow?.setDraft("")
         Task {
-            if self.model?.configuration.apiKey.isEmpty != false {
-                logLine("aori_llm=skipped")
-                let reply = "I am here."
-                _ = self.turn.acceptReply(reply)
-                await self.synthesizer.speak(reply)
-                self.turn.finishSpeech()
-                self.startHandsFree()
-                return
-            }
             await self.model?.send()
             let reply = self.model?.textForSpeech() ?? ""
-            if case .speak = self.turn.acceptReply(reply) {
+            let usesLocal = self.model?.configuration.apiKey.isEmpty != false || self.model?.configuration.model == "local"
+            logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
+            if !reply.isEmpty, case .speak = self.turn.acceptReply(reply) {
                 await self.synthesizer.speak(reply)
             }
             self.turn.finishSpeech()

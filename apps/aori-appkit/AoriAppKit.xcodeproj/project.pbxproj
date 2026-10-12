@@ -139,7 +139,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -eu\ncd \"$PROJECT_DIR/rust\"\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  cargo build --release -p aori-face\nelse\n  cargo build -p aori-face\nfi\n";
+			shellScript = "set -eu\nexport PATH=\"$HOME/.cargo/bin:$PATH\"\ncd \"$PROJECT_DIR/rust\"\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  cargo build --release -p aori-face\nelse\n  cargo build -p aori-face\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -196,6 +196,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -229,6 +230,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";

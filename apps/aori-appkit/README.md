@@ -8,7 +8,7 @@ The app opens a main window and a transparent companion window. The companion wi
 
 Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
-Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Menu strings come from `packages/i18n`. Missing Aori keys use English.
+Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
 You can open another `.vrm` file. A separate GPUI window paints the same sample with flat triangles. That window is not the AppKit app.
 
@@ -50,7 +50,7 @@ apps/aori-appkit/
 ├── Sources/AoriCore/         # Chat, secrets, VRM bytes, window policy
 ├── Sources/AoriProviders/    # OpenAI-compatible streaming client
 ├── Sources/AoriApp/          # AppKit, speech, raster blit (macOS only)
-├── rust/aori-face/           # Skin, depth raster, sample glTF read
+├── rust/aori-face/           # Skin, light, depth raster, sample glTF read
 ├── rust/aori-gpui/           # Separate GPUI window
 └── Tests/
 ```
@@ -78,8 +78,8 @@ cargo test -p aori-face
 cargo check -p aori-gpui
 ```
 
-The macOS CI job also runs `./scripts/assemble-app.sh` and `./scripts/screenshot-app.sh`. The screenshot script sets `AORI_SCREENSHOT=1`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it.
+The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./scripts/assemble-app.sh`, and `./scripts/screenshot-app.sh`. The screenshot script sets `AORI_SCREENSHOT=1`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it.
 
 ## Limits
 
-This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer. The GPUI window does not use the depth buffer. It does not hear speech. Every locale directory under `packages/i18n` can load. Only the English file has Aori menu strings.
+This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer. The GPUI window does not use the depth buffer. It does not hear speech. Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.

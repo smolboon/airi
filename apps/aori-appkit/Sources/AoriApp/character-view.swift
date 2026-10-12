@@ -32,6 +32,9 @@ final class CharacterView: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
+        setAccessibilityElement(true)
+        setAccessibilityRole(.image)
+        setAccessibilityLabel(AccessibilityCopy.character)
         buildChrome()
         applyBackground()
         startTimer()

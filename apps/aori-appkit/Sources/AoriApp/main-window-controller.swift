@@ -20,6 +20,7 @@ final class MainWindowController: NSWindowController {
             defer: false
         )
         window.title = "Aori"
+        window.setAccessibilityLabel(AccessibilityCopy.chatWindow)
         window.minSize = NSSize(width: 720, height: 480)
         super.init(window: window)
 

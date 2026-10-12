@@ -37,6 +37,7 @@ pub struct FaceMesh {
   pub joints: Vec<[u16; 4]>,
   pub weights: Vec<[f32; 4]>,
   pub texture: Option<RgbaImage>,
+  pub normals: Vec<Vec3>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -436,11 +437,54 @@ mod tests {
   }
 
   #[test]
+  fn directional_light_darkens_a_back_normal() {
+    let scene = sample();
+    assert_eq!(scene.meshes[0].normals.len(), scene.meshes[0].positions.len());
+    let rest = raster::deformed_surface(
+      &scene,
+      &RenderPose {
+        reduce_motion: true,
+        ..RenderPose::default()
+      },
+    );
+    for (base, next) in scene.meshes[0].normals.iter().zip(rest[0].normals.iter()) {
+      assert!((base.x - next.x).abs() < 1.0e-3);
+      assert!((base.y - next.y).abs() < 1.0e-3);
+      assert!((base.z - next.z).abs() < 1.0e-3);
+      let length = (next.x * next.x + next.y * next.y + next.z * next.z).sqrt();
+      assert!((length - 1.0).abs() < 1.0e-3);
+    }
+    let turned = raster::deformed_surface(
+      &scene,
+      &RenderPose {
+        time: 1.6,
+        ..RenderPose::default()
+      },
+    );
+    let moved = rest[0]
+      .normals
+      .iter()
+      .zip(turned[0].normals.iter())
+      .any(|(base, next)| (base.x - next.x).abs() > 0.01);
+    assert!(moved, "the idle clip rotates a skinned normal");
+
+    let front = render_frame(&lit_triangle(Vec3 { x: 0.0, y: 1.0, z: 0.0 }), &RenderPose::default(), 64, 64);
+    let back = render_frame(&lit_triangle(Vec3 { x: 0.0, y: -1.0, z: 0.0 }), &RenderPose::default(), 64, 64);
+    let front_px = first_opaque(&front).expect("front pixel");
+    let back_px = first_opaque(&back).expect("back pixel");
+    let front_sum = front_px[0] as u16 + front_px[1] as u16 + front_px[2] as u16;
+    let back_sum = back_px[0] as u16 + back_px[1] as u16 + back_px[2] as u16;
+    assert!(front_sum > back_sum, "front {front_px:?} back {back_px:?}");
+    assert!(front_px[0] != 200 || front_px[1] != 180 || front_px[2] != 160);
+  }
+
+  #[test]
   fn nearer_triangle_wins_the_depth_test() {
     let scene = overlapping_quads();
     let image = render_frame(&scene, &RenderPose::default(), 48, 48);
     let center = pixel(&image, 48, 24, 24);
-    assert!(center[1] > 200, "near green fragment, got {center:?}");
+    assert!(center[1] > center[0], "near green fragment, got {center:?}");
+    assert!(center[1] > 80, "near green fragment, got {center:?}");
     assert!(center[0] < 40);
   }
 
@@ -469,7 +513,9 @@ mod tests {
       220,
     );
     assert!(open.chunks(4).any(|pixel| pixel[3] == 0));
-    assert!(open.chunks(4).any(|pixel| pixel[0] > 180 && pixel[1] < 90 && pixel[3] == 255));
+    assert!(open.chunks(4).any(|pixel| {
+      pixel[0] > 80 && (pixel[1] as u16) * 2 < pixel[0] as u16 && pixel[3] == 255
+    }));
     let eye_row = average_row(&open, 160, |pixel| pixel[0] < 50 && pixel[1] < 50 && pixel[3] == 255);
     assert!(eye_row < 110.0, "eyes sit above the center, row {eye_row}");
     assert!(count_diff(&open, &blink) > 10);
@@ -530,6 +576,38 @@ mod tests {
     read_glb(bytes).expect("sample vrm")
   }
 
+  fn lit_triangle(normal: Vec3) -> FaceScene {
+    FaceScene {
+      meshes: vec![FaceMesh {
+        name: "lit".into(),
+        positions: vec![
+          Vec3 { x: -0.45, y: -0.15, z: 0.2 },
+          Vec3 { x: 0.45, y: -0.15, z: 0.2 },
+          Vec3 { x: 0.0, y: 0.75, z: 0.2 },
+        ],
+        indices: vec![0, 1, 2],
+        color: [1.0, 1.0, 1.0, 1.0],
+        morphs: Vec::new(),
+        uvs: vec![[0.0, 0.0], [1.0, 0.0], [0.5, 1.0]],
+        joints: Vec::new(),
+        weights: Vec::new(),
+        texture: Some(RgbaImage {
+          width: 1,
+          height: 1,
+          pixels: vec![200, 180, 160, 255],
+        }),
+        normals: vec![normal, normal, normal],
+      }],
+      joints: Vec::new(),
+      inverse_binds: Vec::new(),
+      animations: Vec::new(),
+    }
+  }
+
+  fn first_opaque(image: &[u8]) -> Option<[u8; 4]> {
+    image.chunks(4).find(|pixel| pixel[3] > 0).map(|pixel| [pixel[0], pixel[1], pixel[2], pixel[3]])
+  }
+
   fn overlapping_quads() -> FaceScene {
     let triangle = |z: f32, color: [f32; 4]| FaceMesh {
       name: "quad".into(),
@@ -545,6 +623,7 @@ mod tests {
       joints: Vec::new(),
       weights: Vec::new(),
       texture: None,
+      normals: Vec::new(),
     };
     FaceScene {
       meshes: vec![

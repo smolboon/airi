@@ -95,7 +95,7 @@ final class SettingsWindowController: NSWindowController {
             modelField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             keyField.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ])
-        keyField.setAccessibilityLabel("API key")
+        keyField.setAccessibilityLabel(AccessibilityCopy.apiKey)
     }
 
     @objc private func save() {

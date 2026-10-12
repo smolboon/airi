@@ -118,13 +118,13 @@ The companion window is transparent, draggable, and able to stay above other app
 
 The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded character. Bones are hips, spine, neck, head, both eyes, and both arms. Skin weights use unsigned bytes. The idle clip sways the neck and the head, turns the eyes, and rotates the lower arms. A blink clip targets the eye bones. Look-at adds yaw and pitch on those eye bones. See `Resources/LICENSE.txt`.
 
-`aori-face` applies morphs, skins those bones, and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
+`aori-face` applies morphs, skins those bones, skins the normals, and fills a depth buffer. A directional light shades each pixel. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
 
 Known words use a small ARPAbet list. hello becomes HH EH L OW. papa becomes P AA P AH. Those symbols map to the mouth presets. Other words use the letter map. Playback time advances the units at about 12 per second. RMS still scales the open vowel. This list is not a phoneme recognizer.
 
 `AORI_SPEECH_WAV` stores the PCM that `AVSpeechSynthesizer.write` returned. The macOS job checks that the WAV is not silent and that the viseme log has more than one preset. This checkout did not play that audio.
 
-Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` can load. Only the English file has Aori menu strings. Missing keys use that English text. The View menu lists the locale ids.
+Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` have Aori menu keys. The View menu lists the locale ids. A failed stream retries once before any text arrives. After a text delta, it does not retry. The status line says "Trying again." during that retry.
 
 A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
 
@@ -132,7 +132,7 @@ A status item lists the companion, the main window, Settings, and Quit. Those ti
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job then runs voice activity on that WAV, asks Speech for a transcript, and speaks a short reply when the API key is missing. It also probes the microphone and logs started or unavailable. Run 38277207278 did that on `macos-latest`. The microphone engine started. Voice activity found speech. The WAV RMS is 0.1532. The phoneme line is HH, EH, L, OW, P, AA, P, AH. The viseme log includes e, o, a, and pp. Speech authorization stayed unknown, so the transcript was empty. The LLM call was skipped. The frame line is `{"event":"frame","ms":12.39}`. The locale was ja and the Aori menu fell back to English. The loaded bones include both arms.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key uses a local template and logs `aori_llm=local`. A key uses the OpenAI-compatible provider. The job also probes the microphone and a Keychain probe account. Run 38277207278 is the previous capture. Speech authorization stayed unknown. The transcript was empty. The LLM call was skipped. The frame line was `{"event":"frame","ms":12.39}`. On this Linux machine, whisper.cpp v1.7.6 read the WAV from run 38277207278. The CLI printed `Hello Paca`. The spoken line was Hello papa. The tiny model missed one word. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
 
 ### Milestone 2 follow-up
 

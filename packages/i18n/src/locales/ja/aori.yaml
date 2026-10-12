@@ -1,0 +1,13 @@
+menu:
+  appName: Aori
+  about: Aori について
+  settings: 設定…
+  quit: Aori を終了
+  newChat: 新規チャット
+  openVRM: VRM を開く…
+  showMainWindow: メインウインドウを表示
+  showCompanion: コンパニオンを表示
+  hideCompanion: コンパニオンを隠す
+  alwaysOnTop: コンパニオンを常に手前に表示
+  language: 言語
+  statusItem: Aori

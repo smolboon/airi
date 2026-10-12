@@ -16,9 +16,16 @@ if matches.isEmpty {
     }
     exit(1)
 }
-let chosen = matches.first { item in
+let role = CommandLine.arguments.dropFirst().first ?? "companion"
+guard let chosen = matches.first(where: { item in
     let title = item[kCGWindowName as String] as? String ?? ""
+    if role == "main" {
+        return title == "Aori"
+    }
     return title.contains("Companion")
-} ?? matches[0]
+}) else {
+    fputs("No \(role) window.\n", stderr)
+    exit(1)
+}
 let number = chosen[kCGWindowNumber as String] as? Int ?? 0
 print(number)

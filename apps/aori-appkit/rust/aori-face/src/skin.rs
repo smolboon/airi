@@ -115,6 +115,57 @@ pub fn skin_positions(
   }
 }
 
+pub fn skin_normals(
+  scene: &FaceScene,
+  mesh_index: usize,
+  normals: &mut [Vec3],
+  globals: &[[f32; 16]],
+) {
+  let Some(mesh) = scene.meshes.get(mesh_index) else {
+    return;
+  };
+  let skinned = !mesh.joints.is_empty() && !scene.inverse_binds.is_empty();
+  for (index, normal) in normals.iter_mut().enumerate() {
+    if !skinned {
+      *normal = normalize_vec(*normal);
+      continue;
+    }
+    let joints = mesh.joints.get(index).copied().unwrap_or([0, 0, 0, 0]);
+    let weights = mesh
+      .weights
+      .get(index)
+      .copied()
+      .unwrap_or([1.0, 0.0, 0.0, 0.0]);
+    let mut acc = Vec3 {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    };
+    let mut total = 0.0;
+    for slot in 0..4 {
+      let weight = weights[slot];
+      if weight <= 0.0 {
+        continue;
+      }
+      let joint = joints[slot] as usize;
+      let (Some(global), Some(inverse)) = (globals.get(joint), scene.inverse_binds.get(joint)) else {
+        continue;
+      };
+      let matrix = mul(global, inverse);
+      let transformed = transform_vector(&matrix, *normal);
+      acc.x += transformed.x * weight;
+      acc.y += transformed.y * weight;
+      acc.z += transformed.z * weight;
+      total += weight;
+    }
+    *normal = if total > 0.0 {
+      normalize_vec(acc)
+    } else {
+      normalize_vec(*normal)
+    };
+  }
+}
+
 pub fn with_blink(spin: [f32; 4]) -> [f32; 4] {
   mul_quat(spin, quat_x(0.8))
 }
@@ -249,5 +300,32 @@ fn transform_point(
     x: matrix[0] * position.x + matrix[4] * position.y + matrix[8] * position.z + matrix[12],
     y: matrix[1] * position.x + matrix[5] * position.y + matrix[9] * position.z + matrix[13],
     z: matrix[2] * position.x + matrix[6] * position.y + matrix[10] * position.z + matrix[14],
+  }
+}
+
+fn transform_vector(
+  matrix: &[f32; 16],
+  normal: Vec3,
+) -> Vec3 {
+  Vec3 {
+    x: matrix[0] * normal.x + matrix[4] * normal.y + matrix[8] * normal.z,
+    y: matrix[1] * normal.x + matrix[5] * normal.y + matrix[9] * normal.z,
+    z: matrix[2] * normal.x + matrix[6] * normal.y + matrix[10] * normal.z,
+  }
+}
+
+fn normalize_vec(value: Vec3) -> Vec3 {
+  let length = (value.x * value.x + value.y * value.y + value.z * value.z).sqrt();
+  if length <= 1.0e-8 {
+    return Vec3 {
+      x: 0.0,
+      y: 0.0,
+      z: 1.0,
+    };
+  }
+  Vec3 {
+    x: value.x / length,
+    y: value.y / length,
+    z: value.z / length,
   }
 }

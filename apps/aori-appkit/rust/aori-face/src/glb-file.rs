@@ -163,6 +163,16 @@ fn read_meshes(
       None => Vec::new(),
     };
     let texture = texture_of(json, bin, material);
+    let mut normals = match attributes
+      .and_then(|item| item.get("NORMAL"))
+      .and_then(json_usize)
+    {
+      Some(accessor) => read_vec3(json, bin, accessor).unwrap_or_default(),
+      None => Vec::new(),
+    };
+    if normals.len() != positions.len() {
+      normals.clear();
+    }
     result.push(FaceMesh {
       name,
       positions,
@@ -173,6 +183,7 @@ fn read_meshes(
       joints,
       weights,
       texture,
+      normals,
     });
   }
   Ok(result)

@@ -1,0 +1,13 @@
+menu:
+  appName: Aori
+  about: О программе Aori
+  settings: Настройки…
+  quit: Выйти из Aori
+  newChat: Новый чат
+  openVRM: Открыть VRM…
+  showMainWindow: Показать главное окно
+  showCompanion: Показать спутника
+  hideCompanion: Скрыть спутника
+  alwaysOnTop: Спутник всегда сверху
+  language: Язык
+  statusItem: Aori

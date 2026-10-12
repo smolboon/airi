@@ -8,8 +8,27 @@ log="$PWD/build/aori-launch.log"
 wav="$PWD/build/aori-speech.wav"
 visemes="$PWD/build/aori-visemes.log"
 vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
-rm -f "$frame" "$window" "$wav" "$visemes"
+chat="$PWD/build/aori-chat-window.png"
+rm -f "$frame" "$window" "$chat" "$wav" "$visemes"
 mkdir -p build
+prepare_keychain() {
+    chain="$HOME/Library/Keychains/aori-ci.keychain-db"
+    security delete-keychain "$chain" 2>/dev/null || true
+    security create-keychain -p aori-ci "$chain"
+    security set-keychain-settings -lut 21600 "$chain"
+    security unlock-keychain -p aori-ci "$chain"
+    security list-keychains -d user -s "$chain"
+    security default-keychain -s "$chain"
+}
+if ! prepare_keychain; then
+    echo "aori_keychain_setup=failed"
+fi
+if [ -f build/whisper.env ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . ./build/whisper.env
+    set +a
+fi
 AORI_SCREENSHOT=1 \
     AORI_LOCALE=ja \
     AORI_LOCALES_ROOT="$PWD/../../packages/i18n/src/locales" \
@@ -17,11 +36,13 @@ AORI_SCREENSHOT=1 \
     AORI_SPEECH_WAV="$wav" \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
+    AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
+    AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >"$log" 2>&1 &
 pid=$!
 ready=0
 i=0
-while [ "$i" -lt 140 ]; do
+while [ "$i" -lt 200 ]; do
     if [ -f "$frame" ] && [ -f "$wav" ] && [ -f "$visemes" ] && grep -q "aori_turn=done" "$log"; then
         ready=1
         break
@@ -79,21 +100,31 @@ need = [
     "aori_stt=",
     "aori_llm=",
     "aori_locale=ja",
-    "aori_locale_menu=fallback",
+    "aori_locale_menu=loaded",
+    "aori_stt_engine=whisper",
+    "aori_llm=local",
+    "aori_accessibility=Chat transcript",
     "aori_mic=",
     "leftLowerArm",
     "aori_turn=done",
 ]
 missing = [item for item in need if item not in text]
+if any(line.strip() == "aori_stt=empty" for line in text.splitlines()):
+    missing.append("aori_stt=empty")
 print("aori_log_missing=" + ",".join(missing))
 sys.exit(0 if not missing else 1)
 PY
 sleep 1
 cp scripts/window-id.swift /tmp/aori-window-id.swift
 swiftc -o build/window-id /tmp/aori-window-id.swift
-wid="$(build/window-id)"
+wid="$(build/window-id companion)"
 screencapture -l "$wid" "$window"
+chatid="$(build/window-id main || true)"
+if [ -n "$chatid" ]; then
+    screencapture -l "$chatid" "$chat" || true
+fi
 kill "$pid" 2>/dev/null || true
 wait "$pid" 2>/dev/null || true
 test -s "$window"
-echo "Wrote $frame and $window"
+test -s "$chat"
+echo "Wrote $frame, $window, and $chat"

@@ -15,6 +15,7 @@ final class CompanionWindowController: NSWindowController {
             defer: false
         )
         window.title = "Aori Companion"
+        window.setAccessibilityLabel(AccessibilityCopy.companionWindow)
         window.minSize = NSSize(width: 220, height: 280)
         super.init(window: window)
         characterView.dragsWindow = true

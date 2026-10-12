@@ -7,7 +7,7 @@ on:
       - ".github/workflows/aori-appkit.yml"
       - "docs/APPKIT_PORT.md"
       - "docs/AUDIT.md"
-      - "packages/i18n/src/locales/en/aori.yaml"
+      - "packages/i18n/src/locales/**/aori.yaml"
   push:
     branches:
       - main
@@ -16,7 +16,7 @@ on:
       - ".github/workflows/aori-appkit.yml"
       - "docs/APPKIT_PORT.md"
       - "docs/AUDIT.md"
-      - "packages/i18n/src/locales/en/aori.yaml"
+      - "packages/i18n/src/locales/**/aori.yaml"
   workflow_dispatch:
 
 jobs:
@@ -69,8 +69,12 @@ jobs:
         run: cargo check -p aori-gpui
       - name: Build the AppKit target
         run: ./scripts/build-app.sh
+      - name: Build the Xcode project
+        run: xcodebuild -project AoriAppKit.xcodeproj -scheme Aori -configuration Debug -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
       - name: Assemble the app bundle
         run: ./scripts/assemble-app.sh
+      - name: Build the on-device recognizer
+        run: ./scripts/fetch-whisper.sh
       - name: Launch the app and capture the window
         run: ./scripts/screenshot-app.sh
       - name: Upload the companion capture
@@ -83,5 +87,6 @@ jobs:
             apps/aori-appkit/build/aori-framebuffer.png
             apps/aori-appkit/build/aori-window.png
             apps/aori-appkit/build/aori-launch.log
+            apps/aori-appkit/build/aori-chat-window.png
             apps/aori-appkit/build/aori-speech.wav
             apps/aori-appkit/build/aori-visemes.log

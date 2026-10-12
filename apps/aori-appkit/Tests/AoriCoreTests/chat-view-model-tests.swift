@@ -29,6 +29,38 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(messages.last?.content, "Partial")
         let phase = await model.phase
         XCTAssertEqual(phase, .failed("The provider returned HTTP 500. down"))
+        XCTAssertEqual(client.callCount(), 1)
+    }
+
+    func testRetryOnceBeforeAnyText() async {
+        let client = FlakyChatClient()
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        let notes = LockedBox<[String]>([])
+        await MainActor.run {
+            model.onChange = {
+                notes.append(model.statusText)
+            }
+        }
+        await model.setDraft("Hello")
+        await model.send()
+        let messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "Hi")
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+        XCTAssertEqual(client.callCount(), 2)
+        XCTAssertTrue(notes.value.contains("Trying again."))
+    }
+
+    func testRetryStopsAfterTheSecondFailure() async {
+        let client = FailingChatClient()
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Hello")
+        await model.send()
+        let phase = await model.phase
+        XCTAssertEqual(phase, .failed("The provider returned HTTP 500. down"))
+        let status = await model.statusText
+        XCTAssertEqual(status, "The provider returned HTTP 500. down")
+        XCTAssertEqual(client.callCount(), 2)
     }
 
     func testEmptyReplyFailsAndEmptyDraftDoesNotSend() async throws {
@@ -172,13 +204,89 @@ private final class LockedBox<Value>: @unchecked Sendable {
 }
 
 private final class PartialChatClient: ChatCompletionClient, @unchecked Sendable {
+    private let lock = NSLock()
+    private var calls = 0
+
+    func callCount() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return calls
+    }
+
+    private func nextCall() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        calls += 1
+        return calls
+    }
+
     func streamChat(
         messages: [ChatMessage],
         configuration: ProviderConfiguration
     ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
-        AsyncThrowingStream { continuation in
+        _ = nextCall()
+        return AsyncThrowingStream { continuation in
             continuation.yield(.delta("Partial"))
             continuation.finish(throwing: ChatProviderError.httpStatus(500, "down"))
         }
+    }
+}
+
+private final class FlakyChatClient: ChatCompletionClient, @unchecked Sendable {
+    private let lock = NSLock()
+    private var calls = 0
+
+    func callCount() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return calls
+    }
+
+    private func nextCall() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        calls += 1
+        return calls
+    }
+
+    func streamChat(
+        messages: [ChatMessage],
+        configuration: ProviderConfiguration
+    ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
+        let call = nextCall()
+        if call == 1 {
+            throw ChatProviderError.httpStatus(503, "busy")
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(.delta("Hi"))
+            continuation.yield(.finished)
+            continuation.finish()
+        }
+    }
+}
+
+private final class FailingChatClient: ChatCompletionClient, @unchecked Sendable {
+    private let lock = NSLock()
+    private var calls = 0
+
+    func callCount() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return calls
+    }
+
+    private func nextCall() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        calls += 1
+        return calls
+    }
+
+    func streamChat(
+        messages: [ChatMessage],
+        configuration: ProviderConfiguration
+    ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
+        _ = nextCall()
+        throw ChatProviderError.httpStatus(500, "down")
     }
 }

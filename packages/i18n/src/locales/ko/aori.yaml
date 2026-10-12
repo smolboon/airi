@@ -1,0 +1,13 @@
+menu:
+  appName: Aori
+  about: Aori 정보
+  settings: 설정…
+  quit: Aori 종료
+  newChat: 새 채팅
+  openVRM: VRM 열기…
+  showMainWindow: 메인 창 표시
+  showCompanion: 컴패니언 표시
+  hideCompanion: 컴패니언 숨기기
+  alwaysOnTop: 컴패니언을 항상 위에
+  language: 언어
+  statusItem: Aori
