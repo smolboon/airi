@@ -398,6 +398,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logLine("aori_click_behind=\(behindNumber)")
         if serverTarget == behindNumber {
             sendClick(to: behind.window, screenPoint: appKitPoint)
+            if behind.hits == 0 {
+                deliverClick(to: behind.window, screenPoint: appKitPoint)
+            }
         }
         companionWindow?.holdMouseIgnore(false)
         let delivered = behind.hits > 0 && serverTarget == behindNumber
@@ -435,6 +438,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let up {
             window.sendEvent(up)
         }
+    }
+
+    private func deliverClick(to window: NSWindow, screenPoint: NSPoint) {
+        let local = window.convertPoint(fromScreen: screenPoint)
+        guard let view = window.contentView else {
+            return
+        }
+        let point = view.convert(local, from: nil)
+        guard view.bounds.contains(point), let down = NSEvent.mouseEvent(
+            with: .leftMouseDown,
+            location: point,
+            modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime,
+            windowNumber: window.windowNumber,
+            context: nil,
+            eventNumber: 2,
+            clickCount: 1,
+            pressure: 1
+        ) else {
+            logLine(String(format: "aori_click_local=%.1f,%.1f", point.x, point.y))
+            return
+        }
+        view.mouseDown(with: down)
     }
 
     private func postClick(at point: CGPoint) -> String {

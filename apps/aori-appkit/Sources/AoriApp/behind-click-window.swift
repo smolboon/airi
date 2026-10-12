@@ -13,7 +13,7 @@ final class BehindClickWindow {
     init() {
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 240, height: 180),
-            styleMask: [.titled, .closable],
+            styleMask: [.borderless],
             backing: .buffered,
             defer: false
         )
