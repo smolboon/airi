@@ -1,9 +1,11 @@
 #[path = "glb-file.rs"]
 mod glb;
+mod live2d;
 mod raster;
 mod skin;
 
 pub use glb::{read_glb, FaceError};
+pub use live2d::{render_layered, sample_motion, sample_segments, LayeredPose};
 pub use raster::{encode_png, render_frame, RenderPose};
 
 #[derive(Clone, Copy, Debug, PartialEq)]

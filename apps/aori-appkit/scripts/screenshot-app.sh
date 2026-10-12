@@ -62,6 +62,7 @@ AORI_SCREENSHOT=1 \
     AORI_SPEECH_WAV="$wav" \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
+    AORI_AVATAR=live2d \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >"$log" 2>&1 &
@@ -133,6 +134,7 @@ need = [
     "aori_llm_reply=Mock reply from CI.",
     "aori_click_through=on",
     "aori_click_through=delivered",
+    "aori_avatar=live2d",
     "aori_hit_corner=pass",
     "aori_hit_body=keep",
     "aori_ignores_mouse=true",

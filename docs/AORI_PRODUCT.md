@@ -18,8 +18,10 @@ The character is an original CC0 humanoid. Rust skins the mesh, lights it, and f
 
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 
+When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. Rust draws the layers. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust can sample a motion3.json curve. This path does not load Cubism Core or a moc3 file.
+
 Menu strings exist for en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The API key can live in the Keychain. A provider error retries once before any reply text. VoiceOver labels are on the chat controls, the character, and both windows. The screenshot path reads those live labels. It then tries to start VoiceOver.
 
 ## Not in this app
 
-Live2D, plugins, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
+Cubism moc3, plugins, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.

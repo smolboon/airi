@@ -32,6 +32,19 @@ func aoriFaceRender(
     _ outRGBA: UnsafeMutablePointer<UInt8>
 ) -> Int32
 
+@_silgen_name("aori_face_render_live2d")
+func aoriFaceRenderLive2D(
+    _ mouth: Float,
+    _ eyeL: Float,
+    _ eyeR: Float,
+    _ angleX: Float,
+    _ angleY: Float,
+    _ time: Float,
+    _ width: UInt32,
+    _ height: UInt32,
+    _ outRGBA: UnsafeMutablePointer<UInt8>
+) -> Int32
+
 @_silgen_name("aori_face_project")
 func aoriFaceProject(
     _ positions: UnsafePointer<Float>,
@@ -86,6 +99,39 @@ enum FaceRaster {
                 time,
                 lookX,
                 lookY,
+                UInt32(width),
+                UInt32(height),
+                base
+            )
+        }
+        return code == 0 ? pixels : nil
+    }
+
+    static func renderLive2D(
+        mouth: Float,
+        eyeL: Float,
+        eyeR: Float,
+        angleX: Float,
+        angleY: Float,
+        time: Float,
+        width: Int,
+        height: Int
+    ) -> [UInt8]? {
+        guard width > 0, height > 0, width <= 1280, height <= 1280 else {
+            return nil
+        }
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        let code = pixels.withUnsafeMutableBufferPointer { buffer in
+            guard let base = buffer.baseAddress else {
+                return Int32(-1)
+            }
+            return aoriFaceRenderLive2D(
+                mouth,
+                eyeL,
+                eyeR,
+                angleX,
+                angleY,
+                time,
                 UInt32(width),
                 UInt32(height),
                 base

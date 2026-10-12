@@ -8,7 +8,9 @@ The app opens a main window and a transparent companion window. The companion wi
 
 Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
-Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
+Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
+
+When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
 You can open another `.vrm` file. A separate GPUI window paints the lit sample raster. That window is not the AppKit app. Clear pixels on the companion window pass clicks through. Opaque pixels and the caption keep the click. The screenshot path posts one click onto a window titled Aori Behind.
 
@@ -27,6 +29,7 @@ In Xcode, open `Package.swift` and run the AoriApp scheme. You can also open `Ao
 
 Optional environment variables:
 
+- `AORI_AVATAR` with the value `live2d` selects the flat character. The default is the VRM.
 - `AORI_OPENAI_BASE_URL` or `OPENAI_BASE_URL`
 - `AORI_OPENAI_MODEL` or `OPENAI_MODEL`
 - `OPENAI_API_KEY` when `AORI_OPENAI_API_KEY` is absent
@@ -39,7 +42,7 @@ Use it to work on the native macOS companion. Use it to run the milestone 1 shel
 
 ## When not to use it
 
-Do not use it for Live2D, plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
+Do not use it for Cubism moc3 models, plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 
@@ -50,7 +53,7 @@ apps/aori-appkit/
 ├── Sources/AoriCore/         # Chat, secrets, VRM bytes, window policy
 ├── Sources/AoriProviders/    # OpenAI-compatible streaming client
 ├── Sources/AoriApp/          # AppKit, speech, raster blit (macOS only)
-├── rust/aori-face/           # Skin, light, depth raster, sample glTF read
+├── rust/aori-face/           # Skin, light, depth raster, layered avatar, sample glTF read
 ├── rust/aori-gpui/           # Separate GPUI window
 └── Tests/
 ```

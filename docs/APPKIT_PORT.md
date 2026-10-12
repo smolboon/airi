@@ -60,7 +60,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
 | Lip-sync | audio weights on VRM mouths | Letter visemes on real TTS PCM, scaled by RMS | A phoneme recognizer comes later |
 | VRM mesh | `stage-ui-three` | Original CC0 VRM 0 humanoid, loaded from a file | Downloaded characters stay out |
-| Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
+| Live2D | `stage-ui-live2d` | Flat layers | Live2D parameter ids and motion3.json curves. Not Cubism moc3 |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
 | Integrations | `integrations/` | Absent | Port one host at a time |
@@ -76,7 +76,7 @@ Use these Apple APIs for the port:
 - `URLSession` for provider HTTP.
 - `AVSpeechSynthesizer` for speech output.
 - Speech framework and `AVAudioEngine` for speech input.
-- Rust `aori-face` for skinning, morphs, and a depth-buffer image.
+- Rust `aori-face` for skinning, morphs, a depth-buffer image, and flat layers.
 - GPUI 0.2.2 for a separate character window. The crate is Apache-2.0.
 - A small glTF header reader for VRM names. The reader is pure Swift. The Rust crate reads the same sample file.
 
@@ -148,7 +148,7 @@ The frame line is `{"event":"frame","ms":9.34}`. The log also says `aori_keychai
 
 ### Milestone 2 follow-up
 
-A spoken microphone utterance and VoiceOver captions are still open. Live2D and the sandbox stay in later milestones.
+A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 and the sandbox stay in later milestones.
 
 ### Milestone 3, memory that lasts
 
@@ -156,7 +156,9 @@ Keep the milestone 1 notes. Add recall by topic. Add notes the companion writes 
 
 ### Milestone 4, Live2D
 
-Use a native Cubism renderer if the license and the SDK allow it. If that renderer cannot ship, host the existing Live2D page in `WKWebView`.
+When `AORI_AVATAR` is `live2d`, the companion window draws flat layers. The parameters use Live2D ids. Rust samples motion3.json curves. The art is original. Cubism Core and moc3 stay out. `WKWebView` stays out.
+
+If the license allows it, a native Cubism renderer can replace these layers. `WKWebView` stays the last option.
 
 ### Milestone 5, plugins
 

@@ -33,6 +33,8 @@ final class CharacterView: NSView {
     private var latestHeight = 0
     private nonisolated(unsafe) var faceScene: OpaquePointer?
     private var started = Date()
+    private let avatarKind = AvatarKind.resolve(ProcessInfo.processInfo.environment["AORI_AVATAR"])
+    private var loggedLayeredAvatar = false
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -273,7 +275,13 @@ final class CharacterView: NSView {
     }
 
     private func rasterPixels(time: Double, blink: Double, width: Int, height: Int) -> [UInt8]? {
-        guard let faceScene, width > 1, height > 1 else {
+        guard width > 1, height > 1 else {
+            return nil
+        }
+        if avatarKind == .layered {
+            return layeredPixels(time: time, blink: blink, width: width, height: height)
+        }
+        guard let faceScene else {
             return nil
         }
         let feelings = feelingWeights(emotion)
@@ -293,6 +301,41 @@ final class CharacterView: NSView {
             width: width,
             height: height
         )
+    }
+
+    private func layeredPixels(time: Double, blink: Double, width: Int, height: Int) -> [UInt8]? {
+        let preset = Viseme(rawValue: viseme) ?? .sil
+        let look = LookAt.offset(time: time, reduceMotion: reduceMotion)
+        let mouth = speaking ? mouthLevel : 0
+        let parameters = Live2DPose.parameters(
+            mouth: mouth,
+            blink: blink,
+            viseme: preset,
+            lookX: look.x,
+            lookY: look.y,
+            emotion: emotion
+        )
+        guard let pixels = FaceRaster.renderLive2D(
+            mouth: Float(parameters.mouthOpenY),
+            eyeL: Float(parameters.eyeLOpen),
+            eyeR: Float(parameters.eyeROpen),
+            angleX: Float(parameters.angleX),
+            angleY: Float(parameters.angleY),
+            time: Float(time),
+            width: width,
+            height: height
+        ) else {
+            return nil
+        }
+        if !loggedLayeredAvatar {
+            loggedLayeredAvatar = true
+            let line = "aori_avatar=live2d\n"
+            if let data = line.data(using: .utf8) {
+                FileHandle.standardOutput.write(data)
+                try? FileHandle.standardOutput.synchronize()
+            }
+        }
+        return pixels
     }
 
     private func feelingWeights(_ emotion: CompanionEmotion) -> (happy: Float, sad: Float, surprised: Float) {
