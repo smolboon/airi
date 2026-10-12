@@ -130,6 +130,7 @@ watch([isAuthenticated, streamingAvailable, model], async ([authenticated, avail
 // transport the runtime pipeline uses (ws → API proxy → unspeech
 // bridge → Volcengine v3 bidirectional) so the preview faithfully
 // represents what the user hears in actual chat. The session is opened
+
 // per-preview because there's no LLM token stream here — we just send
 // one `text` frame containing the static preview prompt.
 async function handleGenerateSpeech(input: string, voiceId: string, _useSSML: boolean): Promise<ArrayBuffer> {

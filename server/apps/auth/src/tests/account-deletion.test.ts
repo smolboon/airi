@@ -11,7 +11,7 @@ import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { createAuth } from '../auth'
 import { createTestDatabase } from './mock-db'
 
-const env = {
+const env = castUnknown<(AuthEnv)>({
   PUBLIC_URL: 'http://localhost:3000',
   AUTH_GOOGLE_CLIENT_ID: 'google-client',
   AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -19,7 +19,7 @@ const env = {
   AUTH_GITHUB_CLIENT_SECRET: 'github-secret',
   BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
   ADDITIONAL_TRUSTED_ORIGINS: [],
-} as unknown as AuthEnv
+})
 
 describe('account deletion with a subscription that can still charge', () => {
   /** The order of the deletion side effects. */
@@ -30,13 +30,13 @@ describe('account deletion with a subscription that can still charge', () => {
   let auth: ReturnType<typeof createAuth>
   let cookie: string
 
-  const email = {
+  const email = castUnknown<(EmailService)>({
     async sendVerification() {},
     async sendDeleteAccountVerification({ url }) {
       calls.push('email')
       deletionUrl = url
     },
-  } as Partial<EmailService> as EmailService
+  })
 
   const resourceApi: ResourceApi = {
     async checkUserDeletion() {
@@ -61,7 +61,7 @@ describe('account deletion with a subscription that can still charge', () => {
   beforeAll(async () => {
     const db = await createTestDatabase()
     // The in-memory database has the same query interface as the pooled production handle.
-    auth = createAuth(db as unknown as AuthDatabase, env, email, null, resourceApi, {
+    auth = createAuth(castUnknown<(AuthDatabase)>(db), env, email, null, resourceApi, {
       async revokeForUser() {
         calls.push('external-authorizations')
       },
@@ -129,3 +129,7 @@ describe('account deletion with a subscription that can still charge', () => {
     expect(calls).toEqual(['check', 'external-authorizations', 'resource-data'])
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

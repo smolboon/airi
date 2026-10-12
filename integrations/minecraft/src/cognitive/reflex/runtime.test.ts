@@ -160,6 +160,7 @@ describe('reflexRuntime async behavior slot locking', () => {
   // An async behavior only locked its slot for `Math.max(deltaMs, 50)` ms. A long survival
   // action (e.g. the ~1.5s auto-eat equip+consume) outlived that window, so the next tick
   // re-selected and a lower-priority reflex could start while the first promise was still
+
   // running — and re-equipping for that reflex cancels `bot.consume()`, dropping the bite.
   //
   // We fixed this by locking the slot until the promise settles (released via `.finally`,

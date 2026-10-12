@@ -45,11 +45,13 @@ const continueURL = computed(() => {
 // the same origin (/ui/...), so BroadcastChannel works without setup.
 //
 // Why not poll /get-session every 2s? An abandoned pending tab would burn
+
 // 1800 requests/hour for no reason, and the request volume scales with time
 // the user takes to check their inbox. With BroadcastChannel the only work
 // happens when verification actually finishes.
 //
 // Why still call /get-session at all? The verifying tab cannot complete the
+
 // OIDC handoff itself — the original tab is the only one carrying the PKCE
 // flowState in sessionStorage. So we wait for the signal, then fetch the
 // session once to make sure the cookie is live before navigating into the

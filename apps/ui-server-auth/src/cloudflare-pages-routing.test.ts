@@ -14,6 +14,7 @@ describe('cloudflare Pages routing', () => {
     // assets are then cached as HTML under their immutable asset URLs.
     //
     // We keep the SPA rewrite scoped to /ui/* and provide the top-level 404
+
     // document that makes every other missing file return HTTP 404.
     const [notFoundPage, redirects] = await Promise.all([
       readFile(resolve(publicDirectory, '404.html'), 'utf8'),

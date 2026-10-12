@@ -13,12 +13,12 @@ async function buildRoute(rows: Array<Array<{ id: string, emailVerified?: unknow
   for (const result of rows)
     limit.mockResolvedValueOnce(result)
   const select = vi.fn(() => ({ from: () => ({ where: () => ({ limit }) }) }))
-  const deps = {
+  const deps = castUnknown<(AuthRoutesDeps)>({
     auth: { handler: vi.fn(), api: { getSession: vi.fn() } },
     db: { select },
     env: { PUBLIC_URL: 'https://api.airi.test', AUTH_UI_URL: 'https://accounts.airi.test/ui', ADDITIONAL_TRUSTED_ORIGINS: [] },
     rateLimitMetrics: null,
-  } as unknown as AuthRoutesDeps
+  })
   const app = new Hono().route('/', await createAuthRoutes(deps)).onError((error, c) => {
     if (error instanceof ApiError)
       return c.json({ error: error.errorCode }, error.statusCode)
@@ -74,3 +74,7 @@ describe('email verification discovery', () => {
     expect(select).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

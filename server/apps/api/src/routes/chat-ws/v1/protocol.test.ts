@@ -27,6 +27,7 @@ describe('v1 chat WebSocket protocol', () => {
   //
   // Eventa beta.15 restores dual-shape transport support. This test sends an
   // actual beta.13 envelope and checks that the server also writes its legacy
+
   // fields. Therefore the server needs one Eventa package.
   it('reads and writes beta.13 envelopes through the beta.15 adapter', async () => {
     const received: Array<{ value: string }> = []

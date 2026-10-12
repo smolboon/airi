@@ -244,7 +244,7 @@ export function fromImported(): AppUpdaterLike {
     return new MockAutoUpdater()
 
   const { autoUpdater } = electronUpdater
-  return autoUpdater as unknown as AppUpdaterLike
+  return castUnknown<(AppUpdaterLike)>(autoUpdater)
 }
 
 type MainContext = ReturnType<typeof createContext>['context']
@@ -604,4 +604,8 @@ export function createAutoUpdaterService(params: { context: MainContext, window:
 
   window.on('closed', cleanup)
   return cleanup
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

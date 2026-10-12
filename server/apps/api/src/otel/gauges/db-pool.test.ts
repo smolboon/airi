@@ -7,11 +7,11 @@ import { registerDbPoolGauge } from './db-pool'
 function makeGauge() {
   let callback: ((result: { observe: (value: number, attributes: Record<string, string>) => void }) => void) | null = null
   const observe = vi.fn()
-  const gauge = {
+  const gauge = castUnknown<(DatabaseMetrics['poolConnections'])>({
     addCallback: vi.fn((registeredCallback: typeof callback) => {
       callback = registeredCallback
     }),
-  } as unknown as DatabaseMetrics['poolConnections']
+  })
 
   return {
     gauge,
@@ -45,3 +45,7 @@ describe('registerDbPoolGauge', () => {
     expect(observe).toHaveBeenCalledWith(3, { pool_state: 'waiting' })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

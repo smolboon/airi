@@ -107,6 +107,7 @@ export const METRIC_GEN_AI_CLIENT_FIRST_TOKEN_DURATION = 'gen_ai.client.first_to
 //                     from_key, reason. Dashboard sum gives 24h fallback volume.
 // upstream_errors   — upstream-side error responses. Labels: provider, status_code.
 // key_exhausted     — all keys in a single request failed. Labels: provider.
+
 //                     **Primary alert source for "user-facing degradation"**.
 // same_status_exhaustion
 //                  — all keys failed in one request *with the same status code*.
@@ -114,6 +115,7 @@ export const METRIC_GEN_AI_CLIENT_FIRST_TOKEN_DURATION = 'gen_ai.client.first_to
 //                     that ordinary fallback can't help with. Drives D33's blind
 //                     spot detection per adversarial review.
 // config_reload    — local in-memory configKV cache reloaded. Labels: source
+
 //                     (`pubsub` | `ttl` | `manual`), service_instance_id.
 // decrypt_failures — envelope-crypto decryption auth-tag failures. Labels:
 //                     provider, key_entry_id. >0 = config corruption or rotation
@@ -122,6 +124,7 @@ export const METRIC_GEN_AI_CLIENT_FIRST_TOKEN_DURATION = 'gen_ai.client.first_to
 //                     (`subscribed` | `reconnecting` | `error` | `closed`).
 // config_invalid_hmac
 //                  — Pub/Sub invalidation messages dropped due to HMAC mismatch
+
 //                     (forged or replayed). >0 = investigate Redis access.
 export const METRIC_AIRI_GEN_AI_GATEWAY_FALLBACK_COUNT = 'airi.gen_ai.gateway.fallback.count'
 export const METRIC_AIRI_GEN_AI_GATEWAY_UPSTREAM_ERRORS = 'airi.gen_ai.gateway.upstream.errors'
@@ -138,6 +141,7 @@ export const METRIC_AIRI_GEN_AI_GATEWAY_CONFIG_INVALID_HMAC = 'airi.gen_ai.gatew
 //                    — a pool was circuit-broken after exhausting with a 429
 //                      (labels: provider, app_id).
 // pool_inflight      — cluster-wide gauge of current in-flight requests per pool,
+
 //                      sourced from Redis (label: app_id). Dashboard must avg(),
 //                      not sum() — every replica reports the same value.
 export const METRIC_AIRI_GEN_AI_GATEWAY_POOL_SLOT_REJECTED = 'airi.gen_ai.gateway.pool.slot_rejected'

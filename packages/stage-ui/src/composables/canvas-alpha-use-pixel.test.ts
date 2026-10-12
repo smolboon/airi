@@ -30,9 +30,9 @@ describe('useCanvasPixelAtPoint', () => {
       UNSIGNED_BYTE: 0x1401,
       readPixels,
     }
-    const canvas = {
+    const canvas = castUnknown<(HTMLCanvasElement)>({
       getContext: vi.fn(() => gl),
-    } as unknown as HTMLCanvasElement
+    })
 
     const { pixel } = useCanvasPixelAtPoint(ref(canvas), ref(60), ref(30))
 
@@ -40,3 +40,7 @@ describe('useCanvasPixelAtPoint', () => {
     expect(readPixels).toHaveBeenCalledWith(100, 89, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, expect.any(Uint8Array))
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

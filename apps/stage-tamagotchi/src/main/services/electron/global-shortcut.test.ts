@@ -54,19 +54,11 @@ function createMockWindow(): MockWindow {
 // driver touches. Casting through `unknown` lets us pass them to
 // `service.registerWindow` whose typed signature wants the full
 // `EventaContext` and `BrowserWindow` types.
-function asEventaContext(ctx: MockContext): EventaContext {
-  return ctx as unknown as EventaContext
-}
-
-function asBrowserWindow(window: MockWindow): BrowserWindow {
-  return window as unknown as BrowserWindow
-}
-
 function registerMockWindow(service: { registerWindow: (params: { context: EventaContext, window: BrowserWindow }) => void }, ctx: MockContext): MockWindow {
   const window = createMockWindow()
   service.registerWindow({
-    context: asEventaContext(ctx),
-    window: asBrowserWindow(window),
+    context: castUnknown<(EventaContext)>(ctx),
+    window: castUnknown<(BrowserWindow)>(window),
   })
   return window
 }
@@ -479,3 +471,7 @@ describe('setupGlobalShortcutService', () => {
     expect(m.unregisterMock).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

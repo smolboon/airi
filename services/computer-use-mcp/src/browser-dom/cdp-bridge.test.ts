@@ -15,13 +15,13 @@ function attachHeartbeatSocket(bridge: CdpBridge, socket: EventEmitter & {
   terminate: () => void
   close: () => void
 }) {
-  const internals = bridge as unknown as {
+  const internals = castUnknown<({
     awaitingHeartbeatPong: boolean
     consecutiveHeartbeatFailures: number
     socket: typeof socket
     status: { connected: boolean }
     startHeartbeat: () => void
-  }
+  })>(bridge)
   internals.socket = socket
   internals.status.connected = true
   socket.on('pong', () => {
@@ -257,3 +257,7 @@ describe('cdpBridge', () => {
     expect(bridge.getStatus().lastError).toBe('CDP ping write failed')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

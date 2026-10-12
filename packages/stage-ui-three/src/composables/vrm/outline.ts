@@ -387,6 +387,7 @@ function patchBuiltInOutlineMaterial(material: MToonMaterial) {
   // `lib/three-vrm-materials-mtoon.module.js`. The current patch depends on three stable anchors:
   // `#include <common>`, `#include <beginnormal_vertex>`, and the built-in outline block body.
   // We keep the original `onBeforeCompile` untouched so three-vrm can continue prepending its
+
   // define set; this patch only rewrites the stored vertex shader string and program cache key.
   material.vertexShader = patchedVertexShader
   material.needsUpdate = true

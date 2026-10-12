@@ -36,7 +36,7 @@ function stubCanvas() {
     fillText: () => {},
   }
 
-  return { width: 0, height: 0, getContext: () => context } as unknown as HTMLCanvasElement
+  return castUnknown<(HTMLCanvasElement)>({ width: 0, height: 0, getContext: () => context })
 }
 
 const palette: PresenceBubblePalette = {
@@ -138,3 +138,7 @@ describe('presence bubble painter', () => {
     expect(frame.height - frame.anchorY - frame.panelHeight).toBeGreaterThan(frame.tailReach)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

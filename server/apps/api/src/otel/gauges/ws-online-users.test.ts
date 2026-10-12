@@ -7,11 +7,11 @@ import { registerWsOnlineUsersGauge } from './ws-online-users'
 function makeGauge() {
   let callback: ((result: { observe: (value: number) => void }) => void | Promise<void>) | null = null
   const observe = vi.fn()
-  const gauge = {
+  const gauge = castUnknown<(EngagementMetrics['wsUsersOnline'])>({
     addCallback: vi.fn((registeredCallback: typeof callback) => {
       callback = registeredCallback
     }),
-  } as unknown as EngagementMetrics['wsUsersOnline']
+  })
 
   return {
     gauge,
@@ -27,7 +27,7 @@ function makeGauge() {
 function makeReadErrors() {
   const add = vi.fn()
   return {
-    metricReadErrors: { add } as unknown as ObservabilityMetrics['metricReadErrors'],
+    metricReadErrors: castUnknown<(ObservabilityMetrics['metricReadErrors'])>({ add }),
     add,
   }
 }
@@ -85,3 +85,7 @@ describe('registerWsOnlineUsersGauge', () => {
     expect(add).toHaveBeenCalledWith(1, { metric: 'ws.users.online' })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

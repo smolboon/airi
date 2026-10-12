@@ -280,6 +280,7 @@ describe('channel-server store reconnect', () => {
   // single-flight lock, so the later explicit-token call reused the anonymous
   // promise and the server rejected every retry.
   //
+
   // We fixed this by replacing an in-flight client when the requested
   // connection URL or token changes.
   it('replaces an anonymous in-flight initialization when explicit credentials arrive', async () => {

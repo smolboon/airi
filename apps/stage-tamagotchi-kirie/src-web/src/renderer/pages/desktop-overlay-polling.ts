@@ -253,6 +253,7 @@ export function createOverlayPollController(config: OverlayPollConfig): OverlayP
     // tracked calls are permanently hung, waiting for settlement also makes the
     // overlay permanently stale. Drop one old tracking slot only after a long
     // recovery interval so the overlay can probe again without returning to a
+
     // per-poll unbounded RPC backlog.
     backgroundHungCalls = backgroundHungCalls.slice(1)
     lastHungRecoveryProbeAt = now
@@ -297,6 +298,7 @@ export function createOverlayPollController(config: OverlayPollConfig): OverlayP
       // hanging forever if the eventa invoke never resolves (e.g. during
       // startup when the main-process RPC handlers may not be ready yet).
       // NOTICE: Eventa does not expose abort semantics here, so a timed-out
+
       // invoke can still be unresolved in the background. Track timed-out calls
       // and allow only a low-frequency recovery probe when all tracked slots
       // are hung, balancing bounded IPC pressure with eventual overlay recovery.

@@ -48,6 +48,7 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic
 // (http.server.request.duration in seconds). MUST be set BEFORE the
 // HttpInstrumentation constructor runs — that constructor reads the env var
 // once and caches the result.
+
 // Truthy check (not `??=`) so empty string from Railway / missing-var also
 // falls back to STABLE.
 if (!env.OTEL_SEMCONV_STABILITY_OPT_IN)
@@ -89,12 +90,14 @@ else {
   // sample as a "duplicate timestamp" or collapse the series outright,
   // making per-replica `sum()` aggregates undercount.
   //
+
   // Source preference, strongest → weakest:
   //  1. RAILWAY_REPLICA_ID — Railway-managed, guaranteed unique per replica.
   //  2. SERVER_INSTANCE_ID — operator-supplied override.
   //  3. randomUUID() — per-process fallback. Logged as a warning so ops
   //     know we're relying on a value that doesn't survive restarts (i.e.
   //     metric series cardinality climbs every deploy until staleness
+
   //     evicts old instance ids).
   //
   // HOSTNAME was previously used as a fallback but Railway's HOSTNAME

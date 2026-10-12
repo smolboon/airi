@@ -257,6 +257,7 @@ export const actionsList: Action[] = [
     // NOTICE: detach auto-follow before mining. The idle auto-follow reflex drives the same
     // mineflayer pathfinder as digging; if left attached it periodically re-points the bot at the
     // followed player, which both cancels navigation to the ore ("Path was stopped") and aborts the
+
     // in-progress bot.dig ("Digging aborted"), producing the stutter of repeated half-digs.
     followControl: 'detach',
     schema: z.object({

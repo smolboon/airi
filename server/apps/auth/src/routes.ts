@@ -311,10 +311,12 @@ export async function createAuthRoutes(deps: AuthRoutesDeps) {
     // resolveRequestAuth), and oauthProvider's /oauth2/userinfo validates the
     // bearer JWT by signature only — so a banned user's still-valid access
     // token (<=1h TTL) could otherwise read its own profile claims after a ban.
-    // This guard re-applies the ban check on that one endpoint. We resolve the
-    // subject ignoring the ban, then 403 if banned, so an invalid/expired token
-    // still falls through to better-auth's own 401 rather than being masked.
-    // (/oauth2/introspect needs confidential client credentials, which no
+
+  // This guard re-applies the ban check on that one endpoint. We resolve the
+  // subject ignoring the ban, then 403 if banned, so an invalid/expired token
+  // still falls through to better-auth's own 401 rather than being masked.
+  // (/oauth2/introspect needs confidential client credentials, which no
+
     // first-party AIRI client has, so it has no reachable banned-caller path.)
     .use('/api/auth/oauth2/userinfo', async (c, next) => {
       const resolved = await resolveSessionIgnoringBan(deps.auth, deps.db, verifyAccessToken, c.req.raw.headers)

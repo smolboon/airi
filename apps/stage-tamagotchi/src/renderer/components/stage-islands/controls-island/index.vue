@@ -128,11 +128,13 @@ function setOverlay(key: string, active: boolean) {
 // Source: https://github.com/moeru-ai/airi/issues/2521 (CachyOS + KDE
 // Plasma, Flatpak). OR it with the DOM-based `isOutsideByDom`
 // (useMouseInElement), which self-corrects on every pointermove and needs
+
 // no OS-level cursor query, so a broken cursor signal cannot force a false
 // collapse. The stage reads this paired result for click-through hit
 // testing, where DOM events may not reach the renderer at all.
 // Removal condition: once Ozone/Wayland reports the absolute
 // cursor position reliably upstream, or the click-through hit-testing no
+
 // longer depends on this composable.
 const { isOutside: isOutsideByCursor } = useElectronMouseInElement(islandElement)
 const { isOutside: isOutsideByDom } = useMouseInElement(islandElement)

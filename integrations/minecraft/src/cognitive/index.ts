@@ -69,7 +69,7 @@ export function CognitiveEngine(options: CognitiveEngineOptions): MineflayerPlug
       await taskExecutor.initialize()
 
       // Type conversion
-      const botWithAgents = bot as unknown as MineflayerWithAgents
+      const botWithAgents = castUnknown<(MineflayerWithAgents)>(bot)
       botWithAgents.reflexManager = reflexManager
 
       const startCognitive = () => {
@@ -184,4 +184,8 @@ export function CognitiveEngine(options: CognitiveEngineOptions): MineflayerPlug
       bot.bot.removeAllListeners('chat')
     },
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

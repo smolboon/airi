@@ -71,6 +71,7 @@ export function parseTranscriptBlocks(entries: readonly TranscriptEntry[]): Tran
         // produce duplicates, but retry/replay edge cases can surface them.
         // Deduplicating here (keeping the first occurrence) ensures projection
         // never emits multiple tool messages for the same id, which most
+
         // providers reject as invalid conversation state.
         const seenResultIds = new Set<string>()
         let lastId = entry.id
@@ -91,6 +92,7 @@ export function parseTranscriptBlocks(entries: readonly TranscriptEntry[]): Tran
             // In normal append-only flow this should not occur, but retry/replay
             // can surface it. We skip the duplicate (j++) rather than break so
             // that later valid results for other declared tool_call_ids are still
+
             // attached to this block. Example: [tc1, tc1(dup), tc2] → tc2 must
             // still be consumed here, not left orphaned for the next block.
             j++

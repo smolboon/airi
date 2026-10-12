@@ -74,7 +74,7 @@ createApp(App)
   .use(synced.vue)
   .use(MotionPlugin)
   // TODO: Fix autoAnimatePlugin type error
-  .use(autoAnimatePlugin as unknown as Plugin)
+  .use(castUnknown<(Plugin)>(autoAnimatePlugin))
   .use(router)
   .use(pinia)
   .use(PiniaColada)
@@ -84,3 +84,7 @@ createApp(App)
   // The stage window registers a global hold shortcut. Every window shares this app, so the settings window offers the mode too.
   .provide(pushToTalkTriggerKey, true)
   .mount('#app')
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -27,7 +27,7 @@ describe('dashscopeCosyvoiceAdapter', () => {
         baseURL: 'https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer',
         unspeechBaseURL: UNSPEECH,
         adapterParams: { model: 'cosyvoice-v2' },
-        fetchImpl: fetchImpl as unknown as typeof fetch,
+        fetchImpl: castUnknown<(typeof fetch)>(fetchImpl),
       },
     )
 
@@ -65,7 +65,7 @@ describe('dashscopeCosyvoiceAdapter', () => {
           baseURL: 'https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer',
           unspeechBaseURL: UNSPEECH,
           adapterParams: {},
-          fetchImpl: fetchImpl as unknown as typeof fetch,
+          fetchImpl: castUnknown<(typeof fetch)>(fetchImpl),
         },
       )
     }
@@ -91,7 +91,7 @@ describe('dashscopeCosyvoiceAdapter', () => {
         baseURL: 'https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer',
         unspeechBaseURL: UNSPEECH,
         adapterParams: {},
-        fetchImpl: fetchImpl as unknown as typeof fetch,
+        fetchImpl: castUnknown<(typeof fetch)>(fetchImpl),
       },
     )).rejects.toMatchObject({ statusCode: 400 })
 
@@ -118,7 +118,7 @@ describe('dashscopeCosyvoiceAdapter', () => {
         baseURL: 'https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer',
         unspeechBaseURL: UNSPEECH,
         adapterParams: {},
-        fetchImpl: fetchImpl as unknown as typeof fetch,
+        fetchImpl: castUnknown<(typeof fetch)>(fetchImpl),
       },
     )).rejects.toMatchObject({ statusCode: 400 })
 
@@ -130,9 +130,9 @@ describe('dashscopeCosyvoiceAdapter', () => {
     // unspeech/pkg/backend/alibaba/voices.go). This test only verifies the
     // wire contract — fixture content is intentionally minimal so an
     // unspeech-side roster change doesn't break us.
-    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({
+    const fetchImpl = castUnknown<(typeof fetch)>(vi.fn(async () => new Response(JSON.stringify({
       voices: [{ id: 'longxiaochun_v2', name: 'Longxiaochun v2' }],
-    }), { status: 200 })) as unknown as typeof fetch
+    }), { status: 200 })))
     const catalog = await dashscopeCosyvoiceAdapter.getVoiceCatalog({
       adapterParams: { model: 'cosyvoice-v2' },
       unspeechBaseURL: UNSPEECH,
@@ -148,3 +148,7 @@ describe('dashscopeCosyvoiceAdapter', () => {
     )
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

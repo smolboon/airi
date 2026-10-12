@@ -66,9 +66,9 @@ describe('createVADStates', () => {
     vi.stubGlobal('AudioContext', FakeAudioContext)
     vi.stubGlobal('AudioWorkletNode', FakeAudioWorkletNode)
     const stop = vi.fn()
-    const stream = {
+    const stream = castUnknown<(MediaStream)>({
       getTracks: () => [{ stop }],
-    } as unknown as MediaStream
+    })
 
     const manager = createVADStates(createVADMock(), '/vad-worklet.js')
     await manager.initialize()
@@ -95,9 +95,9 @@ describe('createVADStates', () => {
 
     vi.stubGlobal('AudioContext', ReconnectAudioContext)
     vi.stubGlobal('AudioWorkletNode', FakeAudioWorkletNode)
-    const stream = {
+    const stream = castUnknown<(MediaStream)>({
       getTracks: () => [],
-    } as unknown as MediaStream
+    })
 
     const manager = createVADStates(createVADMock(), '/vad-worklet.js')
     await manager.initialize()
@@ -109,3 +109,7 @@ describe('createVADStates', () => {
     expect(createdSources[1].disconnect).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

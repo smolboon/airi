@@ -43,6 +43,7 @@ export async function packageJSONForVSCode(name: string) {
 //     0.8.0-alpha.6 -> 0.8.(0*10000+1000+6)=0.8.1006 (preview=true)
 //     0.8.0-beta.1 -> 0.8.2001 (preview=true)
 //     0.8.0        -> 0.8.(0*10000+9000)=0.8.9000 (preview=false)
+
 //   This keeps ordering: alpha < beta < rc < stable. Unknown prerelease tags default to alpha.
 export function encodeNumericVersion(version: string) {
   const match = version.match(/^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<pre>[0-9A-Z.-]+))?$/i)

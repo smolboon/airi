@@ -27,7 +27,7 @@ export function useVersionedLocalStorage<T>(
     key,
     { version: defaultVersion, data: toValue(initialValue) },
     options?.storage ?? defaultWindow?.localStorage,
-    options as unknown as UseStorageOptions<Versioned<T>>,
+    castUnknown<(UseStorageOptions<Versioned<T>>)>(options),
   )
 
   const syncDataToStorage = watch(data, (value) => {
@@ -83,4 +83,8 @@ export function useVersionedLocalStorage<T>(
   })
 
   return data
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

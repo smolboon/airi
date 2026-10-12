@@ -134,6 +134,7 @@ describe('adaptive input', () => {
     //
     // Before the fix, the cached pre-layout path canceled every matching pointerdown.
     //
+
     // We fixed this by preserving native activation until the closing viewport becomes stable.
     const viewport = document.createElement('div')
     const area = document.createElement('div')

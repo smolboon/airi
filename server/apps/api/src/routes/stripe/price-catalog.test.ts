@@ -11,12 +11,12 @@ function createStripe(overrides: {
   list?: ReturnType<typeof vi.fn>
   retrieve?: ReturnType<typeof vi.fn>
 } = {}) {
-  return {
+  return castUnknown<(Stripe)>({
     prices: {
       list: overrides.list ?? vi.fn(async () => ({ data: [] })),
       retrieve: overrides.retrieve ?? vi.fn(),
     },
-  } as unknown as Stripe
+  })
 }
 
 function listedPrice(overrides: Partial<Stripe.Price> = {}): Stripe.Price {
@@ -117,3 +117,7 @@ describe('findActivePrice', () => {
     await expect(catalog.findActivePrice(productId, 'price_starter')).resolves.toBeNull()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

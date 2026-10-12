@@ -23,7 +23,7 @@ export async function mockDB(schema: Record<string, any>): Promise<Database> {
   })
 
   // Create Drizzle instance without running full migrations
-  const db = drizzle(client, { schema }) as unknown as Database
+  const db = castUnknown<(Database)>(drizzle(client, { schema }))
 
   // Enable pgvector type in this in-memory database before applying schema
   // This mirrors the production pglite initialization which runs:
@@ -35,4 +35,8 @@ export async function mockDB(schema: Record<string, any>): Promise<Database> {
   await apply()
 
   return db
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

@@ -52,6 +52,7 @@ export const autoEatBehavior: ReflexBehavior = {
     // Hold reflexEngaged across the whole equip+consume window. A fresh attacker stays valid in
     // recentAttacker() for ~600ms — longer than the runtime's ~50ms async behavior slot — so without
     // this guard the next tick could start the defend reflex, whose attackEntity re-equips a weapon and
+
     // cancels the survival bite mid-animation (exactly the low-health-in-combat case this handles).
     // defend.when() yields while reflexEngaged is set.
     api.context.updateAutonomy({ reflexEngaged: true })

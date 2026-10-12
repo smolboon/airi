@@ -49,6 +49,10 @@ const emits = defineEmits<{
   (e: 'animationsDiscovered', value: { animations: { name: string, duration: number }[], skins: { name: string }[] }): void
 }>()
 
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
+
 const componentState = defineModel<'pending' | 'loading' | 'mounted'>('state', { default: 'pending' })
 
 const spineStore = useSpine()
@@ -366,7 +370,7 @@ async function loadModel() {
             // loader types every runtime as 4.2. Both branches set the same blend.
             // Removal condition: when 4.0 support is dropped.
             if (batcher.setBlendMode.length === 3) {
-              const setGLBlend = batcher.setBlendMode as unknown as (src: number, srcAlpha: number, dst: number) => void
+              const setGLBlend = castUnknown<((src: number, srcAlpha: number, dst: number) => void)>(batcher.setBlendMode)
               setGLBlend.call(batcher, sc.gl.SRC_ALPHA, sc.gl.ONE, sc.gl.ONE_MINUS_SRC_ALPHA)
             }
             else {
@@ -433,13 +437,13 @@ function patchAssetManagerForZipAssets(
   rawData: Record<string, Uint8Array | string>,
   texturePaths: string[],
 ) {
-  const downloader = (assetManager as unknown as {
+  const downloader = castUnknown<({
     downloader?: {
       rawDataUris: Record<string, string>
       downloadText: (url: string, success: (data: string) => void, error: (status: number, responseText: string) => void) => void
       downloadBinary: (url: string, success: (data: Uint8Array) => void, error: (status: number, response: unknown) => void) => void
     }
-  }).downloader
+  })>(assetManager).downloader
   if (!downloader)
     return
 

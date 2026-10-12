@@ -90,6 +90,7 @@ describe('provider store synchronization boundary', () => {
   // snapshot and starved the main window's event loop.
   //
   // We fixed this by keeping executable actions in the provider store and
+
   // placing the replicated data in an internal state-only store.
   it('keeps replicated runtime data out of the executable provider store state', () => {
     const store = useProviderStore()
@@ -160,6 +161,7 @@ describe('provider store synchronization boundary', () => {
   // the source provider record, so later input was not persisted.
   //
   // The provider record is now the only existence check. A derived entry cannot
+
   // prevent initialization of the persisted source state.
   // https://github.com/moeru-ai/airi/issues/2449
   it('creates the provider when only a derived configuration entry exists (Issue #2449)', async () => {
@@ -423,6 +425,7 @@ describe('provider store synchronization boundary', () => {
   // the synchronized provider action. Each caller created its own request.
   //
   // We keep one leader-owned request per provider, model, and configuration
+
   // until it settles, so concurrent callers share the same result.
   it('shares concurrent voice catalog requests', async () => {
     const store = useProviderStore()
@@ -461,6 +464,7 @@ describe('provider store synchronization boundary', () => {
   // Before: the provider starts the official request without an authenticated
   // access token.
   //
+
   // We fixed this at the provider boundary. Authentication-owned providers do
   // not create an in-flight task until the session and token are both ready.
   it('does not start auth-owned voice requests before the session has a token', async () => {

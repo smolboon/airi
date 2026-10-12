@@ -184,7 +184,7 @@ describe('route middleware', () => {
   })
 
   it('ignores primitive data payloads when checking destinations', () => {
-    const event = {
+    const event = castUnknown<(WebSocketBaseEvent<'spark:notify', WebSocketEvents['spark:notify'], any>)>({
       type: 'spark:notify',
       data: 'not-an-object',
       metadata: {
@@ -192,7 +192,7 @@ describe('route middleware', () => {
         event: { id: 'evt-primitive' },
       },
       route: undefined,
-    } as unknown as WebSocketBaseEvent<'spark:notify', WebSocketEvents['spark:notify'], any>
+    })
 
     expect(collectDestinations(event)).toBeUndefined()
   })
@@ -335,3 +335,7 @@ describe('route middleware', () => {
     expect(isDevtoolsPeer(peer)).toBe(true)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

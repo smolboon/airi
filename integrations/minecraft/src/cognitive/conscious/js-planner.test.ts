@@ -190,6 +190,7 @@ describe('javaScriptPlanner', () => {
     // The prompt promises self.pos.x, but the worker bound `self` straight from the reflex snapshot
     // (only `.location`), so self.pos / self.position were undefined and scripts crashed with
     // "Cannot read properties of undefined". buildRuntimeSnapshot now aliases pos/position -> location
+
     // on the isolate snapshot the worker binds from. Earlier the alias only reached the debug preview.
     const planner = new JavaScriptPlanner()
     const executeAction = vi.fn(async action => `ok:${action.tool}`)

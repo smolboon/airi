@@ -88,6 +88,7 @@ describe('createLocalShellRunner', () => {
   // the shell shared the runner's process group. On timeout the runner called
   // `child.kill('SIGTERM')`, which signals only the shell PID. A command that
   // had forked a background grandchild (`cmd &`, `nohup`, a server) left that
+
   // grandchild reparented to init instead of being reaped.
   //
   // We fixed this by spawning the shell `detached` (making it a process-group

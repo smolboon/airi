@@ -35,6 +35,7 @@ describe('host displays', () => {
   // them with the WebView device-pixel ratio. This lost Godot's native menu-bar and
   // dock exclusions and could use a scale from a different display.
   //
+
   // We fixed this by fetching bounds, usable work area, and scale as one native
   // snapshot and converting both rectangles with that snapshot's scale.
   it('uses the native usable area and scale from the same Godot display snapshot', async () => {

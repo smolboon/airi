@@ -35,7 +35,7 @@ function createBridgeHarness(options: { commandAvailable?: boolean } = {}) {
   // The root cause is that AiriBridge accepts concrete Client and EventBus classes instead of narrow structural ports.
   // Source/context: integrations/minecraft/src/airi/airi-bridge.ts constructor.
   // Remove this cast when the bridge constructor accepts dedicated client and event-bus interfaces.
-  const bridge = new AiriBridge(client as unknown as Client, eventBus as unknown as EventBus)
+  const bridge = new AiriBridge(castUnknown<(Client)>(client), castUnknown<(EventBus)>(eventBus))
   bridge.init()
   bridge.setCommandAvailable(options.commandAvailable ?? true)
 
@@ -132,3 +132,7 @@ describe('airiBridge spark command routing', () => {
     bridge.destroy()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

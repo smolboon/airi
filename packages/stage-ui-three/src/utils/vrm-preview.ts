@@ -11,7 +11,7 @@ function disposePreviewVrm(vrm?: VRM, group?: Group) {
   group?.removeFromParent()
 
   if (vrm) {
-    VRMUtils.deepDispose(vrm.scene as unknown as Object3D)
+    VRMUtils.deepDispose(castUnknown<(Object3D)>(vrm.scene))
   }
 }
 
@@ -108,4 +108,8 @@ export async function loadVrmModelPreview(file: File) {
     offscreenCanvas.width = 0
     offscreenCanvas.height = 0
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

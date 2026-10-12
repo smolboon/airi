@@ -18,9 +18,9 @@ import { registerTtsPoolGauge } from './tts-pool'
 function makeGauge() {
   let cb: ((result: { observe: (v: number, attrs: Record<string, string>) => void }) => void | Promise<void>) | null = null
   const observe = vi.fn()
-  const gauge = {
+  const gauge = castUnknown<(GatewayMetrics['poolInflight'])>({
     addCallback: vi.fn((fn: typeof cb) => { cb = fn }),
-  } as unknown as GatewayMetrics['poolInflight']
+  })
   return {
     gauge,
     observe,
@@ -33,19 +33,19 @@ function makeGauge() {
 }
 
 function makeLedger(snapshot: () => Promise<Array<{ poolId: string, inflight: number }>>): ConcurrencyLedger {
-  return {
+  return castUnknown<(ConcurrencyLedger)>({
     tryAcquire: vi.fn(),
     release: vi.fn(),
     markSaturated: vi.fn(),
     isSaturated: vi.fn(),
     currentInflight: vi.fn(),
     snapshot: vi.fn(snapshot),
-  } as unknown as ConcurrencyLedger
+  })
 }
 
 function makeReadErrors() {
   const add = vi.fn()
-  return { metricReadErrors: { add } as unknown as ObservabilityMetrics['metricReadErrors'], add }
+  return { metricReadErrors: castUnknown<(ObservabilityMetrics['metricReadErrors'])>({ add }), add }
 }
 
 describe('registerTtsPoolGauge', () => {
@@ -116,3 +116,7 @@ describe('registerTtsPoolGauge', () => {
     expect(ledger.snapshot).toHaveBeenCalledTimes(2)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

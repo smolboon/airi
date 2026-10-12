@@ -86,7 +86,7 @@ describe('captureDesktopGrounding', () => {
       .mockResolvedValueOnce(genericObservation)
       .mockResolvedValueOnce(chromeObservation)
 
-    const executor = {
+    const executor = castUnknown<(DesktopExecutor)>({
       takeScreenshot: vi.fn().mockResolvedValue({
         dataBase64: '',
         mimeType: 'image/png',
@@ -94,7 +94,7 @@ describe('captureDesktopGrounding', () => {
         capturedAt: new Date().toISOString(),
       }),
       observeWindows,
-    } as unknown as DesktopExecutor
+    })
 
     const snapshot = await captureDesktopGrounding({
       config: {} as never,
@@ -105,3 +105,7 @@ describe('captureDesktopGrounding', () => {
     expect(snapshot.targetCandidates.some(candidate => candidate.source === 'chrome_dom')).toBe(false)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

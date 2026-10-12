@@ -6,7 +6,7 @@ import { useVRMEmote } from './expression'
 
 function createMockVRMCore() {
   const values = new Map<string, number>()
-  return {
+  return castUnknown<(VRMCore)>({
     expressionManager: {
       expressionMap: {
         happy: {},
@@ -29,7 +29,7 @@ function createMockVRMCore() {
         values.set(name, val)
       }),
     },
-  } as unknown as VRMCore
+  })
 }
 
 describe('useVRMEmote', () => {
@@ -78,6 +78,7 @@ describe('useVRMEmote', () => {
     // VRMModel suppressed procedural blinking for the entire hold period
     // of *any* emotion — including a custom state added via
     // addEmotionState whose targets are only viseme mouth morphs and
+
     // never touch the eye region. That left the model unable to blink
     // naturally while such a state was held, despite no real conflict.
     //
@@ -106,6 +107,7 @@ describe('useVRMEmote', () => {
     // map every time setEmotion() ran. If a caller removed (or replaced)
     // the departing emotion's state — e.g. removeEmotionState('happy') —
     // before the scheduled reset fired, that morph silently dropped out of
+
     // ownership and the neutral transition never wrote it back to 0,
     // leaving the avatar stuck showing the removed expression forever.
     //
@@ -247,3 +249,7 @@ describe('useVRMEmote', () => {
     expect(vrm.expressionManager?.setValue).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

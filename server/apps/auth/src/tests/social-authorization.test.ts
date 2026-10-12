@@ -33,13 +33,13 @@ function createCredentials(): Pick<AuthEnv, 'AUTH_GOOGLE_CLIENT_ID' | 'AUTH_GOOG
 }
 
 function createAccountDb(accounts: SocialAccount[]): AuthDatabase {
-  return {
+  return castUnknown<(AuthDatabase)>({
     select: vi.fn(() => ({
       from: vi.fn(() => ({
         where: vi.fn(async () => accounts),
       })),
     })),
-  } as unknown as AuthDatabase
+  })
 }
 
 describe('social authorization revocation', () => {
@@ -322,3 +322,7 @@ describe('social authorization revocation', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -78,6 +78,7 @@ describe('origin utils', () => {
     // blocking FLUX purchases on desktop (web/mobile were unaffected because they
     // send a trusted web origin).
     //
+
     // Before patch: no trusted origin -> undefined -> route throws INVALID_ORIGIN.
     // After patch: no trusted origin -> falls back to the configured web app URL,
     // which Stripe accepts as a success_url/cancel_url base.

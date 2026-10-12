@@ -61,6 +61,7 @@ export function createServerSignInContext(currentUrl: string, apiServerUrl: stri
   // e.g. the 24-char password-reset token better-auth appends when it
   // redirects through redirectTo (better-auth/dist/api/routes/password.mjs L65, L118)
   // back into /auth/sign-in — would synthesize
+
   // `/api/auth/oauth2/authorize?token=...` as the callback. The OIDC zod
   // schema then rejects it for missing client_id / response_type
   // (oauth-provider/dist/index.mjs L2808-2826) and the user sees a

@@ -103,6 +103,7 @@ if (isLinux) {
   // appendSwitch('enable-features', ...) call overwrites the previous value and
   // only the last feature survives.
   // Source: Chromium base::CommandLine behavior; see
+
   // https://github.com/electron/electron/issues/41763 for the WebGPU setup this supports.
   // Removal condition: never for the join itself; this block can be deleted once
   // WebGPU works on Linux Electron without manual feature switches.
@@ -137,6 +138,7 @@ if (isLinux) {
     // Vulkan surfaces.
     // Source: Chromium Ozone/Wayland surface factory; workaround tracked via
     // https://github.com/electron/electron/issues/41763 (WebGPU on Linux).
+
     // Removal condition: when Chromium/Electron supports Vulkan with the Wayland
     // Ozone backend, drop the isWayland guard and always push 'Vulkan'.
     enabledFeatures.push('Vulkan')

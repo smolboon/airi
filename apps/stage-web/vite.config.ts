@@ -186,10 +186,12 @@ export default defineConfig({
     // the plugin breaks Vite's import-analysis with a "Failed to resolve
     // import" error.
     // SW generation in dev is already disabled by `devOptions.enabled:
+
     // false` (the plugin's own default). So new SWs do NOT register from
     // `pnpm dev` alone — but a previously-registered SW (e.g. from an
     // earlier `vite preview` / `vite build`) lives on per-origin in the
     // browser and keeps intercepting fetches even in dev. To recover from
+
     // that state, unregister via DevTools → Application → Storage → Clear
     // site data.
     ...(env.TARGET_HUGGINGFACE_SPACE
@@ -319,6 +321,7 @@ export default defineConfig({
     // dist/assets/duckdb-eh-BJOC5S4x.wasm                                  32,604.02 kB │ gzip: 7,133.37 kB
     // dist/assets/duckdb-mvp-8HYqhb4i.wasm                                 37,345.64 kB │ gzip: 8,099.69 kB
     //
+
     // they are too large to be able to put into deployments like Cloudflare Workers or Pages,
     // we need to upload them to external storage and use renderBuiltUrl to rewrite their URLs.
     ...((!env.S3_ENDPOINT || !env.S3_ACCESS_KEY_ID || !env.S3_SECRET_ACCESS_KEY)

@@ -27,6 +27,10 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
+
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute('/v2/settings/providers/edit/[providerId]/')
@@ -116,7 +120,7 @@ const safeOllamaConnectivityTroubleshootingHtml = computed(() => {
 })
 
 function getSchemaShape(schema: $ZodType): Record<string, ZodType> {
-  const anySchema = schema as unknown as { shape?: Record<string, ZodType> | (() => Record<string, ZodType>), _def?: { shape?: Record<string, ZodType> | (() => Record<string, ZodType>) } }
+  const anySchema = castUnknown<({ shape?: Record<string, ZodType> | (() => Record<string, ZodType>), _def?: { shape?: Record<string, ZodType> | (() => Record<string, ZodType>) } })>(schema)
   if (anySchema.shape) {
     return typeof anySchema.shape === 'function' ? anySchema.shape() : anySchema.shape
   }

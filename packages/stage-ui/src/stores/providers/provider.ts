@@ -195,6 +195,7 @@ export const useProviderStore = defineStore('provider', () => {
   // provider, which exists only when `UNSPEECH_UPSTREAM.streaming` is
   // configured server-side). A `false` entry hides the provider from the
   // available lists regardless of its static `isAvailableBy`; an absent entry
+
   // means no override. Written by the auth-sync glue after it probes the
   // server. Reactive so the available/configured provider lists re-derive.
   const providerAvailabilityOverrides = computed({

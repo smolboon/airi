@@ -75,7 +75,7 @@ type ErasedProviderDefinitions<TDefinitions extends readonly ProviderDefinitionR
 function eraseProviderDefinitions<const TDefinitions extends readonly ProviderDefinitionRegistration[]>(
   ...definitions: TDefinitions
 ): ErasedProviderDefinitions<TDefinitions> {
-  return definitions as unknown as ErasedProviderDefinitions<TDefinitions>
+  return castUnknown<(ErasedProviderDefinitions<TDefinitions>)>(definitions)
 }
 
 /**
@@ -146,3 +146,7 @@ export const portableProviderDefinitions = eraseProviderDefinitions(
 )
 
 export { createProviderRegistry, defineProvider } from './registry'
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

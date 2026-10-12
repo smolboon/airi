@@ -141,6 +141,7 @@ describe('permissionService', () => {
     // This occurs when a plugin asks for a wildcard scope up front, but the host policy
     // or user approval flow only accepts one concrete resource key from that set.
     // The bug was caused by the intersection logic always writing back the requested key,
+
     // which meant `plugin.resource.*` stayed in the granted snapshot even though the host
     // only approved `plugin.resource.settings`.
     const snapshot = service.initialize('plugin-c', requested, {
@@ -176,6 +177,7 @@ describe('permissionService', () => {
     // This occurs when a plugin requests one broad API namespace, but the host grants a
     // selective subset across different keys and actions. That is a normal outcome for a
     // least-privilege resolver that narrows access based on policy, user consent, or both.
+
     // The old behavior collapsed every overlap back into the wildcard request, which let one
     // narrow approval accidentally authorize unrelated keys within the same namespace.
     const snapshot = service.initialize('plugin-d', requested, {

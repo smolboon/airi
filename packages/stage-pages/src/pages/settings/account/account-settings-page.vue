@@ -64,6 +64,7 @@ const capacitorAvailable = isCapacitorAvailable()
 // Avatar editing is intentionally absent here pending the avatar-upload
 // feature (R2/MinIO presigned PUT pipeline). The previous URL-pasting input
 // was a placeholder UX and has been removed; the existing user.image is
+
 // still rendered as the avatar circle above, just not editable for now.
 const profileForm = reactive({ name: '' })
 
@@ -134,6 +135,7 @@ function scrollToSection(id: SectionId) {
 // method guard, and the auto-refresh on auth state change.
 //
 // We destructure at top level so the refs auto-unwrap inside the template
+
 // — Vue's auto-unwrap only fires on top-level setup bindings, not on
 // `obj.someRef` field access.
 const {
@@ -307,6 +309,7 @@ async function handleSendSetPasswordLink() {
     // browser origin. This page is shared with apps/stage-tamagotchi,
     // whose Electron renderer loads from `file://` — `window.location.origin`
     // would put a `file://` URL into the reset email and break the flow
+
     // for any user who clicks from their inbox. The auth UI is hosted at
     // `${SERVER_URL}/auth/reset-password` and reachable from the public
     // internet.
@@ -336,11 +339,13 @@ async function handleSendSetPasswordLink() {
 // (1) Click "Delete account" -> open a reka-ui Dialog with a focus-trap and
 //     overlay so the destructive action is unambiguously modal. Inside the
 //     dialog the user retypes their email; we only enable the submit button
+
 //     when the entered value matches `userEmail` exactly. This is the same
 //     irreversible-action pattern GitHub / Linear use.
 // (2) On confirm, call `authClient.deleteUser({ callbackURL })`. better-auth
 //     emails a single-use link; clicking it runs the soft-delete handlers
 //     server-side, hard-deletes the auth tables, then redirects the browser
+
 //     to `callbackURL`. We point the callback at ui-server-auth's success
 //     page on the API server origin — stage-web and stage-tamagotchi do not
 //     own a dedicated post-delete route, and ui-server-auth is reachable
@@ -386,6 +391,7 @@ async function handleConfirmDelete(event: Event) {
     // ui-server-auth bundle). It tells the user the deletion completed
     // and asks them to close the tab — there is no "back to home"
     // because the API server has no reliable way to know which calling
+
     // app origin (stage-web / stage-tamagotchi / stage-pocket) the
     // request came from.
     const callbackURL = new URL('/auth/delete-account', SERVER_URL).toString()

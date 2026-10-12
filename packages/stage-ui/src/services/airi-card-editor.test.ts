@@ -128,6 +128,7 @@ describe('airi card editor validation', () => {
     // body models, backgrounds, advanced speech/artistry fields, and agent
     // prompts were therefore lost after an otherwise unrelated edit.
     //
+
     // We fix this by applying the editor-owned fields as a structured patch
     // over the existing extension.
     const existing: AiriExtension = {

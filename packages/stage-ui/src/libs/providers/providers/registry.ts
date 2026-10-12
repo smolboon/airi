@@ -85,7 +85,11 @@ export function defineProvider<T, const TId extends string = string>(definition:
 
   // The registry selects a provider by id. The selected configuration shape is
   // only known by the caller after that lookup.
-  providerRegistry.set(definition.id, definition as unknown as ProviderDefinition)
+  providerRegistry.set(definition.id, castUnknown<(ProviderDefinition)>(definition))
 
   return provider
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

@@ -83,7 +83,7 @@ function createRuntimeForActionTest(configOverrides: Partial<ComputerUseConfig> 
     }),
   }
 
-  const runtime = {
+  const runtime = castUnknown<(ComputerUseServerRuntime)>({
     config: createTestConfig({
       executor: 'dry-run',
       approvalMode: 'never',
@@ -99,7 +99,7 @@ function createRuntimeForActionTest(configOverrides: Partial<ComputerUseConfig> 
     taskMemory: {},
     desktopSessionController,
     chromeSessionManager: {},
-  } as unknown as ComputerUseServerRuntime
+  })
 
   return {
     runtime,
@@ -742,7 +742,7 @@ describe('createExecuteAction', () => {
       }),
     }
 
-    const runtime = {
+    const runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({
         executor: 'dry-run',
         approvalMode: 'never',
@@ -755,7 +755,7 @@ describe('createExecuteAction', () => {
       cdpBridgeManager,
       stateManager,
       taskMemory: {},
-    } as unknown as ComputerUseServerRuntime
+    })
 
     const executeAction = createExecuteAction(runtime)
     const result = await executeAction({
@@ -881,7 +881,7 @@ describe('createExecuteAction', () => {
       }),
     }
 
-    const runtime = {
+    const runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({
         executor: 'dry-run',
         approvalMode: 'never',
@@ -894,7 +894,7 @@ describe('createExecuteAction', () => {
       cdpBridgeManager,
       stateManager,
       taskMemory: {},
-    } as unknown as ComputerUseServerRuntime
+    })
 
     const executeAction = createExecuteAction(runtime)
     const result = await executeAction({
@@ -1005,3 +1005,7 @@ describe('createExecuteAction', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

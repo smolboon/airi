@@ -116,6 +116,7 @@ describe('polaroid imported Live2D model', () => {
     // model uses a blob URL without the .zip suffix, so the loader also needs
     // the selected display model ID to resolve the archive from OPFS.
     //
+
     // The loader also kept its mutex locked when the first render had no model
     // source. We fixed both paths by passing the selected ID and releasing the
     // mutex across every early return.

@@ -49,6 +49,7 @@ describe('mapForBreakpoints', () => {
     // with sm/md/lg sizes), no breakpoint matches and the previous fallback was
     // `Object.values(sizes)[0]`, which depends on object key insertion order.
     // Sorting the sizes map (e.g. sm/md/lg -> lg/md/sm by a lint rule) changed
+
     // the fallback from the sm formula to the lg formula and moved the inlay on
     // small displays.
     //

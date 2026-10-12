@@ -94,6 +94,7 @@ export const useDisplayModelsStore = defineStore('display-models', () => {
     // Reading memory first keeps updateStageModel from racing an IndexedDB write and treating
     // a just-imported display-model id as missing, which used to fall back to the default model.
     // Source/context: model-selector confirmImport/handleAddVRMModel -> model-settings handleModelPick.
+
     // Removal condition: custom model imports and selection are handled by a single transactional API.
     const modelFromMemory = displayModels.value.find(model => model.id === id)
     if (modelFromMemory)
@@ -158,6 +159,7 @@ export const useDisplayModelsStore = defineStore('display-models', () => {
     // after import; fire-and-forget persistence creates a race where the selected custom model
     // exists in the UI but is not yet readable from IndexedDB in a later route/render pass.
     // Source/context: model-selector import flow -> settings-stage-model.updateStageModel().
+
     // Removal condition: imported display models are persisted through a transactional queue
     // that blocks pick/navigation until the write is durably complete.
     await localforage.setItem<DisplayModelFile>(newDisplayModel.id, newDisplayModel)
@@ -224,6 +226,7 @@ export const useDisplayModelsStore = defineStore('display-models', () => {
     // and a module-evaluation failure here must not prevent the Live2D/VRM/
     // Spine preview functions (assigned above) from being wired up. A thrown
     // import previously aborted initialize() and silently broke all previews.
+
     // Removal condition: the MMD preview module is guaranteed to import.
     try {
       const { loadMMDModelPreview } = await import('@proj-airi/stage-ui-mmd/utils/mmd-preview')

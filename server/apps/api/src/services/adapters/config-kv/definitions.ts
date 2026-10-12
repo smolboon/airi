@@ -124,6 +124,7 @@ export const ttsUpstreamSchema = object({
   // one app_id (Volcengine `adapterParams.appid`), capped by the provider at a
   // small number (e.g. 10). When set on any upstream of a model, the router
   // switches from fixed-order fallback to capacity-aware routing across pools.
+
   // Absent = unlimited: that model keeps the original fixed-order behavior and
   // makes zero Redis calls (no regression for existing single-app configs).
   maxConcurrency: optional(pipe(number(), check(v => v >= 1, 'tts.upstreams[].maxConcurrency must be >= 1 when set'))),
@@ -282,6 +283,7 @@ export const configEntrySchemas = {
   // router TTS model id (LLM_ROUTER_CONFIG.tts.models key) for REST or a
   // streaming api_resource_id (e.g. `seed-tts-2.0`) for the streaming surface.
   // The two key spaces do not overlap. Consumed by the client to preselect a
+
   // voice matching UI locale per active model.
   DEFAULT_TTS_VOICES: optional(record(string(), record(string(), string())), {}),
   // Server-side alias resolution for `model: 'auto'` in /chat/completions and
@@ -289,6 +291,7 @@ export const configEntrySchemas = {
   // LLM_ROUTER_CONFIG.{llm,tts}.models — the router itself doesn't understand
   // `auto`, this layer translates before dispatch. No default: missing entry
   // surfaces CONFIG_NOT_SET (resolveWithDefault swallows ValiError) so a
+
   // misconfigured deploy fails the request instead of silently routing to an
   // empty modelName. Naked schema (not wrapped in optional) keeps the inferred
   // type tight (`string` rather than `string | undefined`) for call sites.

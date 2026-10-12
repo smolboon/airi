@@ -119,11 +119,13 @@ defineExpose({
 // Source: https://github.com/moeru-ai/airi/issues/2521 (CachyOS + KDE
 // Plasma, Flatpak). OR it with the DOM-based `isOutsideByDom`
 // (useMouseInElement), which self-corrects on every pointermove and needs
+
 // no OS-level cursor query, so a broken cursor signal cannot force a false
 // collapse. The Electron-cursor signal stays the one used elsewhere (e.g.
 // hit-testing over click-through regions, where DOM events never reach the
 // renderer). Removal condition: once Ozone/Wayland reports the absolute
 // cursor position reliably upstream, or the click-through hit-testing no
+
 // longer depends on this composable.
 const { isOutside: isOutsideByCursor } = useHostMouseInElement(islandElement)
 const { isOutside: isOutsideByDom } = useMouseInElement(islandElement)

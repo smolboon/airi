@@ -81,6 +81,7 @@ async function main() {
     // The bot's Node event loop occasionally goes quiet for ~30s (busy mineflayer packet handling /
     // perception ticks), during which the heartbeat ping timer can't fire, so the default 30s
     // readTimeout would trip and tear down the AIRI connection — making the in-game bot flap
+
     // online/offline and the desktop's game-command relay unusable. Widen the read tolerance to 120s
     // (still under the server's 60s-per-miss TTL for a single ~30s gap) and keep pings frequent so
     // the connection recovers immediately once the loop frees up.

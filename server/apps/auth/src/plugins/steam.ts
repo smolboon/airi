@@ -35,6 +35,7 @@ const STEAM_CLAIMED_ID_PATTERN = /^https:\/\/steamcommunity\.com\/openid\/id\/(\
 // `instanceof z.ZodObject` on `body`/`query` to emit request/query schemas
 // (node_modules/better-auth/dist/plugins/open-api/generator.mjs), so Valibot
 // schemas would validate at runtime (better-call uses Standard Schema) but
+
 // silently drop those OpenAPI fields. Keep these schemas in Zod until
 // better-auth's OpenAPI generation supports non-Zod schemas.
 const SignInBodySchema = z.object({

@@ -232,11 +232,15 @@ function stopMonitoring(params: { controlLoopInterval: IntervalHandle }) {
  * Deactivate the plugin
  */
 export async function deactivate() {
-  const { client } = await injeca.resolve({ client: { key: 'proj-airi:client' } as unknown as ProvidedBy<Client> })
-  const { eventListeners } = await injeca.resolve({ eventListeners: { key: 'self:event-listeners' } as unknown as ProvidedBy<vscode.Disposable[]> })
-  const { controlLoopInterval } = await injeca.resolve({ controlLoopInterval: { key: 'self:control-loop:interval:send' } as unknown as ProvidedBy<IntervalHandle> })
+  const { client } = await injeca.resolve({ client: castUnknown<(ProvidedBy<Client>)>({ key: 'proj-airi:client' }) })
+  const { eventListeners } = await injeca.resolve({ eventListeners: castUnknown<(ProvidedBy<vscode.Disposable[]>)>({ key: 'self:event-listeners' }) })
+  const { controlLoopInterval } = await injeca.resolve({ controlLoopInterval: castUnknown<(ProvidedBy<IntervalHandle>)>({ key: 'self:control-loop:interval:send' }) })
 
   unregisterListeners({ eventListeners, controlLoopInterval })
   client?.disconnect()
   useLogger().log('AIRI deactivated!')
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

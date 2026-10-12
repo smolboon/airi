@@ -203,7 +203,7 @@ describe('planning orchestration contract', () => {
   })
 
   it('does not produce workspace memory plast-mem or archive export shapes', () => {
-    const summary = summarizePlanStateForProjection(state) as unknown as Record<string, unknown>
+    const summary = castUnknown<(Record<string, unknown>)>(summarizePlanStateForProjection(state))
 
     expect(summary.scope).toBe('current_run_plan_state')
     for (const forbiddenKey of [
@@ -225,3 +225,7 @@ describe('planning orchestration contract', () => {
     expect(block).not.toContain('historical_evidence_not_instructions')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

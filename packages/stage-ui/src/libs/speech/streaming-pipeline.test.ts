@@ -82,17 +82,17 @@ function makeStubAudioContext(): BaseAudioContext {
     decodeAudioData: vi.fn(async (buf: ArrayBuffer) => {
       // Return a fake AudioBuffer-like object identifiable by index/byteLength.
       counter += 1
-      return {
+      return castUnknown<(AudioBuffer)>({
         duration: buf.byteLength / 24000,
         length: buf.byteLength,
         numberOfChannels: 1,
         sampleRate: 24000,
         __index: counter,
         __byteLength: buf.byteLength,
-      } as unknown as AudioBuffer
+      })
     }),
   }
-  return ctx as unknown as BaseAudioContext
+  return castUnknown<(BaseAudioContext)>(ctx)
 }
 
 describe('createStreamingTtsPipeline', () => {
@@ -303,6 +303,7 @@ describe('createStreamingTtsPipeline', () => {
     // resolved raced the mock server's `message` event.
     // `cancel()` queues the cancel frame in the ws write buffer, then `terminate()`
     // defers `ws.close()` + `onDone()` by one macrotask (streaming-pipeline.ts) —
+
     // but the frame still has to cross a real loopback socket and be dispatched to
     // the server's `message` listener, which on a loaded runner can happen AFTER
     // the client-side `onDone` fired.
@@ -315,3 +316,7 @@ describe('createStreamingTtsPipeline', () => {
     }, { interval: 10, timeout: 1500 })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

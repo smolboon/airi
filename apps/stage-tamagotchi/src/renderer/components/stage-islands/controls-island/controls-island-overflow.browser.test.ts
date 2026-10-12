@@ -348,6 +348,7 @@ describe('controls Island overflow', () => {
   //
   // Before the patch, the bottom dock could open with its main controls clipped.
   //
+
   // We fixed this by aligning the outer viewport to the dock edge after layout changes.
   it('issue #2400 aligns bottom docks to the visible vertical scroll end', async () => {
     await page.viewport(450, 200)
@@ -373,6 +374,7 @@ describe('controls Island overflow', () => {
   // Before the patch, the outside timer collapsed the menu during a scrollbar drag.
   //
   // We fixed this by treating pressed scrollbar interaction as a blocked state.
+
   // The interaction path is independent from the size and dock matrix.
   it('issue #2400 keeps the expanded menu open during a scrollbar drag', async () => {
     await page.viewport(450, 300)
@@ -427,6 +429,7 @@ it('keeps the menu open while genuinely hovered even if the Electron cursor sign
   // "outside" and collapsing the menu regardless of where the cursor
   // actually is.
   //
+
   // We fixed this by ORing that signal with useMouseInElement's plain
   // DOM-based isOutside, which tracks real pointer position and needs no
   // OS-level cursor query. The menu now stays open whenever either signal
@@ -530,6 +533,7 @@ it('keeps the profile creation form open for pointer interaction (PR #2474)', as
   // card with the name entered for the previous card.
   //
   // We fixed this by canceling creation when a non-create option is selected.
+
   // The close-to-create transition remains allowed.
   await screen.getByRole('combobox').click()
   await page.getByRole('option', { name: i18n.global.t('stage.profile-switcher.save-as-new') }).click()

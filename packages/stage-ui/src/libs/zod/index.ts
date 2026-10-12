@@ -8,11 +8,15 @@ export function getSchemaDefault<T>(schema: $ZodType<T> | null | undefined): Par
   if (!schema)
     return {}
 
-  const object = schema as unknown as ZodObject
+  const object = castUnknown<(ZodObject)>(schema)
 
   return Object.fromEntries(
     Object.entries(object.shape)
       .map(([k, v]) => [k, v instanceof ZodDefault ? v._def.defaultValue : undefined])
       .filter(([_, v]) => v !== undefined),
   )
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

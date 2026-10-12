@@ -281,6 +281,7 @@ export const providerOfficialSpeechStreaming = defineProvider({
       // catalogue without requiring credentials.
       //
       // `model` here is the unspeech-routed id (e.g. `volcengine/seed-tts-2.0`).
+
       // unspeech expects the bare `api_resource_id` for its filter, so we
       // strip the backend prefix before forwarding.
       const apiResourceId = model?.includes('/') ? model.split('/', 2)[1] : model
@@ -425,6 +426,7 @@ const AUTO_PICK_PROVIDER_IDS = new Set([OFFICIAL_SPEECH_PROVIDER_ID, OFFICIAL_SP
 // a default voice after login. Third-party providers leave voice selection to
 // the user. The target locale is derived from the UI locale on each run — we
 // don't persist it, since that was the root of the cross-provider filter
+
 // drift bug.
 /** Selects from the catalog and recommendations loaded in this renderer; valid selections stay unchanged. */
 export function pickOfficialSpeechVoice(ctx: {
@@ -456,6 +458,7 @@ export function pickOfficialSpeechVoice(ctx: {
   //   1) server-recommended voice for the exact locale, then the same
   //      language prefix
   //   2) any other server-recommended voice for the same model
+
   //   3) first voice speaking the exact target locale
   //   4) any English voice (en-US, then en-*) — broadest comprehensible
   //      fallback when the user's locale has no coverage at all

@@ -1,12 +1,12 @@
 import type { Counter, Histogram, ObservableGauge } from '@opentelemetry/api'
+
 // NOTICE:
 // HTTP server metrics (request duration, active requests) are emitted by
 // `@hono/otel`'s `httpInstrumentationMiddleware` registered in `app.ts`. It
 // records the standard semconv names with the matched Hono route pattern,
 // so we don't create those handles here. We keep the auto HttpInstrumentation
-// for OUTBOUND requests only (LLM gateway, Stripe, Resend) — see
+// for OUTBOUND requests (LLM gateway, Stripe, Resend) — see
 // `instrumentation.ts`.
-
 import type { Env } from '../libs/env'
 
 import { useLogger } from '@guiiai/logg'
@@ -476,6 +476,7 @@ export function initOtel(env: Env): OtelInstance | null {
   // Without this priming step, low-traffic counters (auth_failures_total,
   // stripe_*_total, payment_failed, ...) never appear in Prometheus / Grafana
   // until an event happens — making panels look broken on fresh deploys and
+
   // making absence-based alerts impossible to author. add(0) registers the
   // series with a baseline of 0 without distorting any rates.
   // Removal condition: OTel SDK changes default to register Counters at create

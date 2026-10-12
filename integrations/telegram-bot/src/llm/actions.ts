@@ -163,7 +163,7 @@ export async function imagineAnAction(
             raw.chatId = unreadChatIds[0]
         }
 
-        const action = raw as unknown as Action
+        const action = castUnknown<(Action)>(raw)
         s.setAttribute('telegram.bot.id', botId)
         s.setAttribute('telegram.module.generate_agent_action.parsed_action', JSON.stringify(action))
 
@@ -179,4 +179,8 @@ export async function imagineAnAction(
       throw err
     }
   })
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

@@ -11,11 +11,11 @@ vi.mock('../windows/shared/window', () => ({
 }))
 
 function createMockApp(hasSingleInstanceLock: boolean): MockApp {
-  return {
+  return castUnknown<(MockApp)>({
     on: vi.fn(),
     quit: vi.fn(),
     requestSingleInstanceLock: vi.fn(() => hasSingleInstanceLock),
-  } as unknown as MockApp
+  })
 }
 
 function createMockWindow() {
@@ -75,4 +75,8 @@ type MockApp = App & {
   on: ReturnType<typeof vi.fn>
   quit: ReturnType<typeof vi.fn>
   requestSingleInstanceLock: ReturnType<typeof vi.fn>
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

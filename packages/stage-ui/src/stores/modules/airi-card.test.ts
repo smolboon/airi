@@ -138,6 +138,7 @@ describe('airi-card store', () => {
   // The card then showed missing module settings instead of inherited settings.
   //
   // We fix this by keeping the default card module fields empty. Empty fields
+
   // inherit the global module settings and never replace them during activation.
   it('keeps default card modules inherited after authenticated defaults load', async () => {
     const consciousnessStore = useConsciousnessStore()
@@ -369,6 +370,7 @@ describe('airi-card store', () => {
   // the same object reference while changing the selected ID, so the runtime
   // stage model stayed on the previous card's model.
   //
+
   // We fixed this by applying card settings from the stable activation key.
   // https://github.com/moeru-ai/airi/issues/2089
   it('issue #2089: applies the activated card display model to the stage runtime', async () => {
@@ -452,6 +454,7 @@ describe('airi-card store', () => {
   // treated unchanged card settings as an edit. Applying those settings
   // mutated other synchronized stores and committed another full snapshot.
   //
+
   // We prevent the feedback loop by applying runtime settings only through an
   // explicit card command, never in response to a state snapshot.
   it('does not reapply runtime settings for an unchanged synchronized card snapshot', async () => {

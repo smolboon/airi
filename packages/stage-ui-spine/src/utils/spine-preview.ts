@@ -97,10 +97,10 @@ export async function loadSpineModelPreview(file: File): Promise<string | undefi
               skeleton.setSkinByName(skeletonData.skins[0].name)
               skeleton.setSlotsToSetupPose()
             }
-            ;(canvasApp as unknown as { __previewSkeleton: import('@esotericsoftware/spine-webgl').Skeleton }).__previewSkeleton = skeleton
+            ;(castUnknown<({ __previewSkeleton: import('@esotericsoftware/spine-webgl').Skeleton })>(canvasApp)).__previewSkeleton = skeleton
           },
           update: (canvasApp: import('@esotericsoftware/spine-webgl').SpineCanvas, _delta: number) => {
-            const skeleton = (canvasApp as unknown as { __previewSkeleton?: import('@esotericsoftware/spine-webgl').Skeleton }).__previewSkeleton
+            const skeleton = (castUnknown<({ __previewSkeleton?: import('@esotericsoftware/spine-webgl').Skeleton })>(canvasApp)).__previewSkeleton
             if (skeleton) {
               if (spine.Physics)
                 skeleton.updateWorldTransform(spine.Physics.update)
@@ -109,7 +109,7 @@ export async function loadSpineModelPreview(file: File): Promise<string | undefi
             }
           },
           render: (canvasApp: import('@esotericsoftware/spine-webgl').SpineCanvas) => {
-            const skeleton = (canvasApp as unknown as { __previewSkeleton?: import('@esotericsoftware/spine-webgl').Skeleton }).__previewSkeleton
+            const skeleton = (castUnknown<({ __previewSkeleton?: import('@esotericsoftware/spine-webgl').Skeleton })>(canvasApp)).__previewSkeleton
             if (!skeleton)
               return
 
@@ -122,6 +122,7 @@ export async function loadSpineModelPreview(file: File): Promise<string | undefi
             // Most rigs anchor the root at the feet, so the model occupies
             // roughly y: 0..height around x: 0. The renderer's default camera
             // sits at the origin and would crop everything above the ankles —
+
             // this is the actual cause of the cropped preview. getBounds gives
             // the AABB of the currently posed attachments; we centre on it and
             // zoom so the whole box fits with a small margin.
@@ -163,10 +164,10 @@ export async function loadSpineModelPreview(file: File): Promise<string | undefi
 
         // Use a custom path handler so AssetManager fetches go through our
         // blob URLs instead of trying the resolved path on the network.
-        const SpineCanvasCtor = spine.SpineCanvas as unknown as new (
+        const SpineCanvasCtor = castUnknown<(new (
           canvas: HTMLCanvasElement,
           config: { app: import('@esotericsoftware/spine-webgl').SpineCanvasApp, pathPrefix?: string, webglConfig?: WebGLContextAttributes },
-        ) => import('@esotericsoftware/spine-webgl').SpineCanvas
+        ) => import('@esotericsoftware/spine-webgl').SpineCanvas)>(spine.SpineCanvas)
 
         const spineCanvas = new SpineCanvasCtor(canvas!, {
           app,
@@ -213,13 +214,13 @@ function patchAssetManagerForZipAssets(
   rawData: Record<string, Uint8Array | string>,
   texturePaths: string[],
 ) {
-  const downloader = (assetManager as unknown as {
+  const downloader = (castUnknown<({
     downloader?: {
       rawDataUris: Record<string, string>
       downloadText: (url: string, success: (data: string) => void, error: (status: number, responseText: string) => void) => void
       downloadBinary: (url: string, success: (data: Uint8Array) => void, error: (status: number, response: unknown) => void) => void
     }
-  }).downloader
+  })>(assetManager)).downloader
   if (!downloader)
     return
 
@@ -267,4 +268,8 @@ function patchAssetManagerForZipAssets(
     if (slash !== -1)
       downloader.rawDataUris[path.slice(slash + 1)] = url
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

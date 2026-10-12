@@ -70,6 +70,7 @@ const effectiveCallbackURL = computed(() =>
 // verify-email success page, never to the OIDC `/oauth2/authorize` URL.
 // Email links open in a new tab where sessionStorage (and therefore the PKCE
 // flowState saved by the OIDC client) is empty, so a direct OIDC handoff in
+
 // that tab would fail with "Missing OIDC flow state". Instead, the original
 // tab polls the session and resumes the OIDC flow itself once the cookie is
 // set by `autoSignInAfterVerification`.

@@ -117,6 +117,7 @@ it('publishes the onboarding login click on the leader', async () => {
 // catalog ("no models available") despite validation succeeding.
 //
 // The desktop onboarding window is a sync follower; this test drives the real
+
 // dialog there and asserts the save reaches the leader and localStorage.
 it('persists configured credentials through the leader and loads the model list', async () => {
   const namespace = `onboarding-dialog:${crypto.randomUUID()}`

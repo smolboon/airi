@@ -65,6 +65,7 @@ export function useControlsIslandLayout(elements: LayoutElements, expanded: Ref<
   // during rapid Controls Island layout changes.
   // Source/context: https://github.com/moeru-ai/airi/pull/2474#discussion_r3954626137
   // Removal condition: Remove this scheduling when Chromium no longer logs the
+
   // warning and the Controls Island browser tests pass without deferred alignment.
   const { pause, resume } = useRafFn(() => {
     pause()
