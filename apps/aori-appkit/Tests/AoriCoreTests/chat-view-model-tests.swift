@@ -1,0 +1,110 @@
+import Synchronization
+import XCTest
+@testable import AoriCore
+
+final class ChatViewModelTests: XCTestCase {
+    func testSendStreamsAssistantTextAndOmitsThePlaceholder() async throws {
+        let client = ScriptedChatClient(events: [.delta("Hi"), .delta(" there"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Hello")
+        await model.send()
+
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.role), [.user, .assistant])
+        XCTAssertEqual(messages.map(\.content), ["Hello", "Hi there"])
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+
+        let recorded = client.recordedMessages()
+        XCTAssertEqual(recorded.first?.map(\.role), [.system, .user])
+        XCTAssertEqual(recorded.first?.last?.content, "Hello")
+        XCTAssertEqual(recorded.first?.first?.content, ChatPrompt.companion)
+    }
+
+    func testFailureKeepsPartialText() async throws {
+        let client = PartialChatClient()
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Hello")
+        await model.send()
+        let messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "Partial")
+        let phase = await model.phase
+        XCTAssertEqual(phase, .failed("The provider returned HTTP 500. down"))
+    }
+
+    func testEmptyReplyFailsAndEmptyDraftDoesNotSend() async throws {
+        let client = ScriptedChatClient(events: [.finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("   ")
+        await model.send()
+        let untouched = await model.messages
+        XCTAssertTrue(untouched.isEmpty)
+        XCTAssertTrue(client.recordedMessages().isEmpty)
+
+        await model.setDraft("Hello")
+        await model.send()
+        let phase = await model.phase
+        XCTAssertEqual(phase, .failed("The provider returned no text."))
+    }
+
+    func testTranscriptClearAndSpeechText() async {
+        let model = await ChatViewModel(client: ScriptedChatClient(events: []), configuration: testConfiguration())
+        await model.applyTranscript("heard you")
+        let draft = await model.draft
+        XCTAssertEqual(draft, "heard you")
+        let spokenBefore = await model.textForSpeech()
+        XCTAssertNil(spokenBefore)
+
+        await model.clear()
+        let cleared = await model.draft
+        XCTAssertEqual(cleared, "")
+    }
+}
+
+private func testConfiguration() -> ProviderConfiguration {
+    ProviderConfiguration(
+        baseURL: URL(string: "https://example.test/v1")!,
+        model: "test-model",
+        apiKey: "test-key",
+        keySource: .explicit
+    )
+}
+
+private final class ScriptedChatClient: ChatCompletionClient, @unchecked Sendable {
+    private let recorded = Mutex<[[ChatMessage]]>([])
+    private let events: [ChatStreamEvent]
+
+    init(events: [ChatStreamEvent]) {
+        self.events = events
+    }
+
+    func streamChat(
+        messages: [ChatMessage],
+        configuration: ProviderConfiguration
+    ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
+        recorded.withLock { $0.append(messages) }
+        let events = events
+        return AsyncThrowingStream { continuation in
+            for event in events {
+                continuation.yield(event)
+            }
+            continuation.finish()
+        }
+    }
+
+    func recordedMessages() -> [[ChatMessage]] {
+        recorded.withLock { $0 }
+    }
+}
+
+private final class PartialChatClient: ChatCompletionClient, @unchecked Sendable {
+    func streamChat(
+        messages: [ChatMessage],
+        configuration: ProviderConfiguration
+    ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
+        AsyncThrowingStream { continuation in
+            continuation.yield(.delta("Partial"))
+            continuation.finish(throwing: ChatProviderError.httpStatus(500, "down"))
+        }
+    }
+}

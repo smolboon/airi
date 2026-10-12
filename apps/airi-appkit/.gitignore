@@ -1,7 +1,0 @@
-.build/
-.swiftpm/
-build/
-DerivedData/
-*.xcuserstate
-xcuserdata/
-Airi.app/

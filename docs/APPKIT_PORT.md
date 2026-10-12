@@ -1,6 +1,8 @@
-# AIRI AppKit port
+# Aori AppKit port
 
-This note maps the current AIRI apps to a native macOS app. The new app is `apps/airi-appkit`. It uses Swift and AppKit. Apple Silicon is the first machine target. Intel Macs on macOS 14 can build the same package.
+Aori is a native macOS app based on Project AIRI. The app lives in `apps/aori-appkit`. It uses Swift and AppKit. Apple Silicon is the first machine target. Intel Macs on macOS 14 can build the same package.
+
+This note maps the current AIRI apps onto Aori.
 
 The verb for this note is "make sure". The noun for saved values is "configuration".
 
@@ -63,14 +65,14 @@ RealityKit loads USDZ and Reality files. It does not load VRM. Milestone 2 can s
 ## Package layout
 
 ```text
-apps/airi-appkit/
-├── Sources/AiriCore/        # Messages, session, SSE, secrets, VRM metadata
-├── Sources/AiriProviders/   # OpenAI-compatible client
-├── Sources/AiriApp/         # AppKit shell, speech, SceneKit
+apps/aori-appkit/
+├── Sources/AoriCore/        # Messages, session, SSE, secrets, VRM metadata
+├── Sources/AoriProviders/   # OpenAI-compatible client
+├── Sources/AoriApp/         # AppKit shell, speech, SceneKit
 └── Tests/                   # XCTest for the core modules
 ```
 
-`Package.swift` compiles `AiriApp` only on macOS. Linux `swift test` builds the core modules. The Xcode project `AiriAppKit.xcodeproj` links those modules into an AIRI app target.
+`Package.swift` compiles `AoriApp` only on macOS. Linux `swift test` builds the core modules. The Xcode project `AoriAppKit.xcodeproj` links those modules into an Aori app target.
 
 ## Milestone plan
 
@@ -96,8 +98,8 @@ Host Manifest v2 in a native process. Keep the manifest checks. Do not embed Ele
 
 ### Milestone 6, the rest of AIRI
 
-Add vision, games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time.
+Add vision, games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AiriCore` and `AiriProviders` with Swift 6.0.3. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed. macOS CI is the compile and bundle step.
+The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed. macOS CI is the compile and bundle step.
