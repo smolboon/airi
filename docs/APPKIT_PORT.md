@@ -144,6 +144,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. `cargo test -p aori-face` passed 4 tests with Rust 1.99.0. `cargo check -p aori-gpui` passed. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and the GPUI window were not executed.
+The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. `cargo test -p aori-face` passed 4 tests with Rust 1.99.0. `cargo check -p aori-gpui` passed on Linux. Run 38265960268 then passed the same checks on `macos-latest` and compiled `AoriApp`. The windows were not opened. Speech, Keychain, and the GPUI window were not executed.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.
