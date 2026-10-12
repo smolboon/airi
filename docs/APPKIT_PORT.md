@@ -132,7 +132,7 @@ A status item lists the companion, the main window, Settings, and Quit. Those ti
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` still writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. Run 38269452282 captured the earlier window. The new WAV check does not have a run id yet.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. Run 38273314570 did that on `macos-latest`. The WAV RMS is 0.1532. The engine started. The viseme log includes e, o, a, and pp. The frame time was 8.21 ms. The loaded bones are hips, spine, neck, head, leftEye, and rightEye.
 
 ### Milestone 2 follow-up
 
