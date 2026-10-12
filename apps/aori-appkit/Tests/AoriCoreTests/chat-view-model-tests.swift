@@ -59,6 +59,32 @@ final class ChatViewModelTests: XCTestCase {
         let cleared = await model.draft
         XCTAssertEqual(cleared, "")
     }
+
+    func testGreetingDoesNotCallTheProvider() async {
+        let client = ScriptedChatClient(events: [])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.greetIfNeeded()
+        await model.greetIfNeeded()
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.role), [.assistant])
+        XCTAssertEqual(messages.first?.content, CompanionGreeting.opening(persona: .standard, memory: .empty))
+        XCTAssertTrue(client.recordedMessages().isEmpty)
+        let emotion = await model.presentation.emotion
+        XCTAssertEqual(emotion, .happy)
+    }
+
+    func testRememberThatStoresAFactInThePrompt() async {
+        let client = ScriptedChatClient(events: [.delta("I am glad to keep that."), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Remember that I like tea")
+        await model.send()
+        let notes = await model.memory.notes.map(\.text)
+        XCTAssertEqual(notes, ["I like tea"])
+        let recorded = client.recordedMessages()
+        XCTAssertTrue(recorded.first?.first?.content.contains("I like tea") == true)
+        let emotion = await model.presentation.emotion
+        XCTAssertEqual(emotion, .happy)
+    }
 }
 
 private func testConfiguration() -> ProviderConfiguration {

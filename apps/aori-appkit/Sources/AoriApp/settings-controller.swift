@@ -4,16 +4,19 @@ import AoriCore
 @MainActor
 final class SettingsWindowController: NSWindowController {
     private let secrets: KeychainSecretStore
+    private let nameField = NSTextField(string: "")
+    private let personalityField = NSTextField(string: "")
     private let baseField = NSTextField(string: "")
     private let modelField = NSTextField(string: "")
     private let keyField = NSSecureTextField(string: "")
     private let sourceLabel = NSTextField(wrappingLabelWithString: "")
     var onSave: ((ProviderConfiguration) -> Void)?
+    var onSavePersona: ((CompanionPersona) -> Void)?
 
-    init(secrets: KeychainSecretStore, configuration: ProviderConfiguration) {
+    init(secrets: KeychainSecretStore, configuration: ProviderConfiguration, persona: CompanionPersona) {
         self.secrets = secrets
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 280),
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 420),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
@@ -21,7 +24,7 @@ final class SettingsWindowController: NSWindowController {
         window.title = "Settings"
         super.init(window: window)
         build()
-        refresh(configuration: configuration)
+        refresh(configuration: configuration, persona: persona)
         window.center()
     }
 
@@ -30,21 +33,25 @@ final class SettingsWindowController: NSWindowController {
         nil
     }
 
-    func refresh(configuration: ProviderConfiguration) {
+    func refresh(configuration: ProviderConfiguration, persona: CompanionPersona) {
+        nameField.stringValue = persona.name
+        personalityField.stringValue = persona.personality
         baseField.stringValue = configuration.baseURL.absoluteString
         modelField.stringValue = configuration.model
         keyField.placeholderString = configuration.apiKey.isEmpty ? "API key" : "Saved. Type a new key to replace it."
-        sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown."
+        sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown. Say remember that ... in chat to store a fact."
     }
 
     private func build() {
         let root = NSView()
         window?.contentView = root
 
+        let nameLabel = NSTextField(labelWithString: "Name")
+        let personalityLabel = NSTextField(labelWithString: "Personality")
         let baseLabel = NSTextField(labelWithString: "Base URL")
         let modelLabel = NSTextField(labelWithString: "Model")
         let keyLabel = NSTextField(labelWithString: "API key")
-        sourceLabel.maximumNumberOfLines = 3
+        sourceLabel.maximumNumberOfLines = 4
         sourceLabel.textColor = .secondaryLabelColor
 
         let save = NSButton(title: "Save", target: self, action: #selector(save))
@@ -54,6 +61,8 @@ final class SettingsWindowController: NSWindowController {
         remove.bezelStyle = .rounded
 
         let stack = NSStackView(views: [
+            nameLabel, nameField,
+            personalityLabel, personalityField,
             baseLabel, baseField,
             modelLabel, modelField,
             keyLabel, keyField,
@@ -73,6 +82,8 @@ final class SettingsWindowController: NSWindowController {
             stack.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -16),
             stack.topAnchor.constraint(equalTo: root.topAnchor, constant: 16),
+            nameField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            personalityField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             baseField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             modelField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             keyField.widthAnchor.constraint(equalTo: stack.widthAnchor),
@@ -83,8 +94,9 @@ final class SettingsWindowController: NSWindowController {
     @objc private func save() {
         do {
             let configuration = try persist(removeKey: false)
+            onSavePersona?(currentPersona())
             onSave?(configuration)
-            refresh(configuration: configuration)
+            refresh(configuration: configuration, persona: currentPersona())
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }
@@ -96,7 +108,7 @@ final class SettingsWindowController: NSWindowController {
             keyField.stringValue = ""
             let configuration = try persist(removeKey: true)
             onSave?(configuration)
-            refresh(configuration: configuration)
+            refresh(configuration: configuration, persona: currentPersona())
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }
@@ -123,5 +135,12 @@ final class SettingsWindowController: NSWindowController {
             storedModel: UserDefaults.standard.string(forKey: AoriPreferences.modelKey)
         )
         return try resolver.resolve()
+    }
+
+    private func currentPersona() -> CompanionPersona {
+        CompanionPersona(
+            name: nameField.stringValue,
+            personality: personalityField.stringValue
+        )
     }
 }

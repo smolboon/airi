@@ -22,5 +22,7 @@ public struct ChatMessage: Identifiable, Equatable, Sendable {
 
 public enum ChatPrompt {
     /// Short spoken replies. The AppKit chat view speaks this text aloud.
-    public static let companion = "You are Aori, a desktop companion on macOS. Reply in short spoken sentences. Do not use markdown."
+    public static var companion: String {
+        CompanionPrompt.system(persona: .standard, memory: .empty)
+    }
 }

@@ -16,21 +16,28 @@ final class CharacterView: NSView {
     private let caption = NSVisualEffectView()
     private let titleLabel = NSTextField(labelWithString: "Aori")
     private let subtitleLabel = NSTextField(wrappingLabelWithString: "")
+    private let head = SCNNode()
     private let mouth: SCNNode
+    private let leftEye: SCNNode
+    private let rightEye: SCNNode
     // The timer is created on the main run loop and invalidated in deinit.
     private nonisolated(unsafe) var timer: Timer?
     private var speaking = false
+    private var emotion = CompanionEmotion.neutral
     private var started = Date()
 
     override init(frame frameRect: NSRect) {
         let mouthGeometry = SCNBox(width: 0.12, height: 0.02, length: 0.04, chamferRadius: 0.01)
         mouthGeometry.firstMaterial = Self.material(.systemRed)
         mouth = SCNNode(geometry: mouthGeometry)
+        leftEye = Self.eyeNode(x: -0.09)
+        rightEye = Self.eyeNode(x: 0.09)
         super.init(frame: frameRect)
         wantsLayer = true
         buildScene()
         buildChrome()
         applyBackground()
+        startTimer()
     }
 
     @available(*, unavailable)
@@ -46,12 +53,8 @@ final class CharacterView: NSView {
         titleLabel.stringValue = presentation.title
         subtitleLabel.stringValue = presentation.subtitle
         self.speaking = speaking
-        if speaking {
-            startTimer()
-        } else {
-            stopTimer()
-            setMouth(presentation.mouthOpen)
-        }
+        emotion = presentation.emotion
+        tick()
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -64,7 +67,7 @@ final class CharacterView: NSView {
 
     private func buildScene() {
         let scene = SCNScene()
-        let head = SCNNode(geometry: SCNSphere(radius: 0.28))
+        head.geometry = SCNSphere(radius: 0.28)
         head.geometry?.firstMaterial = Self.material(NSColor(calibratedRed: 0.96, green: 0.78, blue: 0.74, alpha: 1))
         head.position = SCNVector3(0, 0.55, 0)
 
@@ -73,9 +76,6 @@ final class CharacterView: NSView {
         hair.position = SCNVector3(0, 0.12, -0.02)
         hair.scale = SCNVector3(1, 0.72, 1)
         head.addChildNode(hair)
-
-        let leftEye = eyeNode(x: -0.09)
-        let rightEye = eyeNode(x: 0.09)
         head.addChildNode(leftEye)
         head.addChildNode(rightEye)
 
@@ -162,9 +162,9 @@ final class CharacterView: NSView {
         sceneView.backgroundColor = clearsBackground ? .clear : .windowBackgroundColor
     }
 
-    private func eyeNode(x: Float) -> SCNNode {
+    private static func eyeNode(x: Float) -> SCNNode {
         let eye = SCNNode(geometry: SCNSphere(radius: 0.035))
-        eye.geometry?.firstMaterial = Self.material(.black)
+        eye.geometry?.firstMaterial = material(.black)
         eye.position = SCNVector3(x, 0.04, 0.24)
         return eye
     }
@@ -190,12 +190,12 @@ final class CharacterView: NSView {
 
     private func tick() {
         let time = Date().timeIntervalSince(started)
-        setMouth(CharacterMotion.mouthOpen(time: time, speaking: speaking))
-    }
-
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
+        let pose = CharacterMotion.pose(time: time, speaking: speaking, emotion: emotion)
+        setMouth(pose.mouthOpen)
+        let eyeScale = Float(max(0.05, pose.eyeOpen))
+        leftEye.scale = SCNVector3(1, eyeScale, 1)
+        rightEye.scale = SCNVector3(1, eyeScale, 1)
+        head.position = SCNVector3(Float(pose.sway), 0.55, 0)
     }
 
     private static func material(_ color: NSColor) -> SCNMaterial {

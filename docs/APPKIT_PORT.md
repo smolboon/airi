@@ -6,6 +6,24 @@ This note maps the current AIRI apps onto Aori.
 
 The verb for this note is "make sure". The noun for saved values is "configuration".
 
+## Product direction
+
+Aori is a desktop AI companion. It is based on Project AIRI. The same kind of product is Animates, from Animation Inc.
+
+The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools, plugins, and games come after the companion can stay, speak, and remember.
+
+### What Animates is
+
+Animates is a product from Animation Inc. The site calls them AI companions that live on your phone and desktop. The apps are for iPhone, Android, Mac, and Windows. Source: [animates.ai](https://animates.ai/).
+
+The Apple listing says the companions use real-time voice, show an emotional range, and keep memory of the user. It says you can shape the companion. It says the companion keeps learning when the app is closed. Voice and text share one conversation, including a messenger. The Mac build needs macOS 15 and Apple Silicon. Source: [App Store](https://apps.apple.com/us/app/animates-life-companions/id6758621319).
+
+A fan site, not Animation Inc., describes desktop display modes. Those modes include Overlay, which stays above other windows, and Holographic, which hides the monitor background with a black field. The same site says each companion keeps its own memories. It also says custom personality controls are a plan, not a shipped feature. Source: [Companions Fan FAQ](https://companionsfan.cz/en/faq/) and [glossary](https://companionsfan.cz/en/glossary/). This checkout did not launch Animates. Treat the fan notes as secondary.
+
+The official pages do not say that the Mac window is a transparent, click-through pet. Aori takes that desktop behavior from Project AIRI Stage Tamagotchi, not from a verified Animates window.
+
+AniMate at getanimate.app is a different product. It is a VRM desktop pet. This note does not use it as the source for Animates.
+
 ## Current AIRI
 
 Stage Web, Stage Tamagotchi, and Stage Pocket share Vue, Pinia, and `packages/stage-ui`. Stage Tamagotchi is the Electron desktop app. Stage Pocket is the Capacitor mobile app.
@@ -35,14 +53,19 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | API key storage | local storage and cloud replica | Keychain and environment | Do not copy keys into git |
 | Speech output | provider TTS and Web Speech | `AVSpeechSynthesizer` | Add provider TTS after the Apple voice works |
 | Speech input | hearing store | Speech framework | Add Sherpa later for offline models |
+| Persona | stage prompts | Name and personality in Settings | Richer character cards later |
+| Long-term memory | stage pages, Telegram, pgvector | Local notes from "remember that" | Topic recall and companion-written notes later |
+| Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
+| Idle motion | character modules | Blink and sway on the placeholder | Idle clips on a real mesh later |
+| Emotion | VRM expressions | glad, sorry, and wow change the placeholder face | Blend shapes later |
+| Lip-sync | audio weights on VRM mouths | A timer while speech is active | Mouth from audio samples in milestone 2 |
 | VRM mesh | `stage-ui-three` | Metadata plus a SceneKit placeholder | Load the mesh in milestone 2 |
 | Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
-| Memory | stage pages, Telegram, pgvector | Absent | Local store first. Server vectors stay on the server |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
 | Integrations | `integrations/` | Absent | Port one host at a time |
-| Companion window | Electron | Transparent and always on top | Click-through comes later |
-| Vision and games | stage modules, integrations | Absent | After the companion can speak |
+| Companion window | Electron | Transparent, draggable, and always on top | Click-through comes later |
+| Vision and games | stage modules, integrations | Absent | After the companion can stay and speak |
 
 ## Native mapping
 
@@ -78,19 +101,19 @@ apps/aori-appkit/
 
 ### Milestone 1, this change
 
-The shell has a menu bar, a main window, and a companion window. The companion window is transparent and can stay above other apps. Chat streams from an OpenAI-compatible endpoint. The key comes from the environment or the Keychain. Speak and Listen call Apple speech APIs. The character view is a SceneKit placeholder. VRM files expose a title and a mesh count.
+The companion window is transparent, draggable, and able to stay above other apps. Settings stores a name and a personality. Those lines become the system prompt. A JSON file stores facts from "remember that". Launch shows a local greeting and speaks it. The greeting does not call the provider. The placeholder blinks and sways while idle. The words glad, sorry, and wow change the face. The mouth moves on a timer while speech is active. That timer is not lip-sync from audio samples. Chat still streams from an OpenAI-compatible endpoint. The key comes from the environment or the Keychain. VRM files expose a title and a mesh count. The mesh is still the placeholder.
 
-### Milestone 2, VRM mesh
+### Milestone 2, voice and a real face
 
-Read glTF buffers from the VRM file. Skin the mesh with SceneKit or Metal. Move the mouth from speech audio, not from a timer.
+Read glTF buffers from the VRM file. Skin the mesh with SceneKit or Metal. Drive the mouth from speech audio, not from a timer. Map feelings onto blend shapes. Keep a voice turn going without a separate Speak press.
 
-### Milestone 3, Live2D
+### Milestone 3, memory that lasts
+
+Keep the milestone 1 notes. Add recall by topic. Add notes the companion writes after a talk. Make sure that server-side pgvector stays behind the API. Do not embed Postgres in the app.
+
+### Milestone 4, Live2D
 
 Use a native Cubism renderer if the license and the SDK allow it. If that renderer cannot ship, host the existing Live2D page in `WKWebView`.
-
-### Milestone 4, memory
-
-Store local memory in SQLite. Make sure that server-side pgvector stays behind the API. Do not embed Postgres in the app.
 
 ### Milestone 5, plugins
 
@@ -102,4 +125,4 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed. macOS CI is the compile and bundle step.
+The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 32 tests and 0 failures. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed. macOS CI is the compile and bundle step.

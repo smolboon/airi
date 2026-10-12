@@ -4,7 +4,7 @@ Aori is the native macOS companion. It is based on Project AIRI. The windows are
 
 ## What it does
 
-The app opens a main window and a transparent companion window. The companion window stays above other apps. You can chat with an OpenAI-compatible provider. Replies stream into the transcript. Speak uses `AVSpeechSynthesizer`. Listen uses the Speech framework. The character is a SceneKit placeholder. A binary VRM file can supply its name. The mesh is not imported.
+The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. A few words change the face. Speak uses `AVSpeechSynthesizer`. Listen uses the Speech framework. The mouth moves while speech is active. It does not follow audio samples. The character is a SceneKit placeholder. A binary VRM file can supply its name. The mesh is not imported.
 
 ## How to use it
 
@@ -27,11 +27,11 @@ The default base URL is `https://api.openai.com/v1`. The default model is `gpt-4
 
 ## When to use it
 
-Use it to work on the native macOS port of Project AIRI. Use it to run the milestone 1 chat shell on Apple Silicon. An Intel Mac on macOS 14 or later can run the same shell.
+Use it to work on the native macOS companion. Use it to run the milestone 1 shell on Apple Silicon. An Intel Mac on macOS 14 or later can run the same shell.
 
 ## When not to use it
 
-Do not use it for Live2D, plugins, memory, vision, or games. Use Stage Web or Stage Tamagotchi for those features. Do not commit an API key.
+Do not use it for Live2D, plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 
@@ -59,4 +59,4 @@ The macOS CI job also runs `./scripts/assemble-app.sh`.
 
 ## Limits
 
-This tree does not render a VRM mesh. It does not run Live2D. Chat text stays in memory until the app quits. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them.
+This tree does not render a VRM mesh. It does not run Live2D. Chat text is lost when the app quits. Persona and memory notes are stored in `companion.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. The mouth timer is not audio lip-sync.

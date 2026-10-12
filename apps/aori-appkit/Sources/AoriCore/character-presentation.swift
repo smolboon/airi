@@ -10,19 +10,28 @@ public struct CharacterPresentation: Equatable, Sendable {
     public var subtitle: String
     public var mouthOpen: Double
     public var usesPlaceholderMesh: Bool
+    public var emotion: CompanionEmotion
 
-    public init(title: String, subtitle: String, mouthOpen: Double, usesPlaceholderMesh: Bool) {
+    public init(
+        title: String,
+        subtitle: String,
+        mouthOpen: Double,
+        usesPlaceholderMesh: Bool,
+        emotion: CompanionEmotion = .neutral
+    ) {
         self.title = title
         self.subtitle = subtitle
         self.mouthOpen = mouthOpen
         self.usesPlaceholderMesh = usesPlaceholderMesh
+        self.emotion = emotion
     }
 
     public static let placeholder = CharacterPresentation(
         title: "Aori",
         subtitle: "SceneKit placeholder. A VRM file shows its name here. The mesh is not imported yet.",
         mouthOpen: 0,
-        usesPlaceholderMesh: true
+        usesPlaceholderMesh: true,
+        emotion: .neutral
     )
 
     public func applying(_ document: VRMDocument) -> CharacterPresentation {
@@ -32,8 +41,23 @@ public struct CharacterPresentation: Equatable, Sendable {
             title: title,
             subtitle: "VRM \(version). \(document.meshCount) meshes. SceneKit still draws the placeholder.",
             mouthOpen: mouthOpen,
-            usesPlaceholderMesh: true
+            usesPlaceholderMesh: true,
+            emotion: emotion
         )
+    }
+}
+
+public struct CharacterPose: Equatable, Sendable {
+    public var mouthOpen: Double
+    public var eyeOpen: Double
+    public var sway: Double
+    public var emotion: CompanionEmotion
+
+    public init(mouthOpen: Double, eyeOpen: Double, sway: Double, emotion: CompanionEmotion) {
+        self.mouthOpen = mouthOpen
+        self.eyeOpen = eyeOpen
+        self.sway = sway
+        self.emotion = emotion
     }
 }
 
@@ -46,5 +70,29 @@ public enum CharacterMotion {
         let wave = (sin(time * 14) + 1) / 2
         let amount = 0.15 + (0.85 * wave)
         return min(1, max(0, amount))
+    }
+
+    /// Idle blink and sway, plus a speech-timed mouth. The mouth is not driven by audio samples.
+    public static func pose(time: Double, speaking: Bool, emotion: CompanionEmotion) -> CharacterPose {
+        let blink = !speaking && abs(time.truncatingRemainder(dividingBy: 3.2) - 0.1) < 0.08
+        let eyeOpen: Double
+        switch emotion {
+        case .surprised:
+            eyeOpen = blink ? 0.2 : 1.2
+        case .sad:
+            eyeOpen = blink ? 0.2 : 0.7
+        case .neutral, .happy:
+            eyeOpen = blink ? 0.15 : 1
+        }
+        let mouthOpen: Double
+        if speaking {
+            mouthOpen = Self.mouthOpen(time: time, speaking: true)
+        } else if emotion == .happy {
+            mouthOpen = 0.25
+        } else {
+            mouthOpen = 0
+        }
+        let sway = sin(time * 0.8) * (speaking ? 0.02 : 0.05)
+        return CharacterPose(mouthOpen: mouthOpen, eyeOpen: eyeOpen, sway: sway, emotion: emotion)
     }
 }

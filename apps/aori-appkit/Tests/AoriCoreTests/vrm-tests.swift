@@ -67,6 +67,23 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(presentation.subtitle.contains("3"))
     }
 
+    func testIdleBlinkAndSpeechMouth() {
+        let idle = CharacterMotion.pose(time: 0.1, speaking: false, emotion: .neutral)
+        XCTAssertEqual(idle.mouthOpen, 0)
+        XCTAssertLessThan(idle.eyeOpen, 0.5)
+
+        let open = CharacterMotion.pose(time: 1, speaking: false, emotion: .neutral)
+        XCTAssertGreaterThan(open.eyeOpen, 0.9)
+
+        let speaking = CharacterMotion.pose(time: 0.4, speaking: true, emotion: .neutral)
+        XCTAssertGreaterThan(speaking.mouthOpen, 0)
+        XCTAssertLessThanOrEqual(speaking.mouthOpen, 1)
+
+        let happy = CharacterMotion.pose(time: 1, speaking: false, emotion: .happy)
+        XCTAssertEqual(happy.mouthOpen, 0.25)
+        XCTAssertNotEqual(idle.sway, CharacterMotion.pose(time: 1, speaking: false, emotion: .neutral).sway)
+    }
+
     func testStandardCompanionStyle() {
         let style = CompanionWindowPolicy.standard.style()
         XCTAssertTrue(style.floating)

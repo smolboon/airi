@@ -26,6 +26,7 @@ enum AoriMain {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let secrets = KeychainSecretStore(service: AoriSecrets.keychainService)
+    private let profileStore = FileCompanionProfileStore(fileURL: AoriFiles.profileURL())
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
     private var companionWindow: CompanionWindowController?
@@ -57,7 +58,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func launch() {
         let configuration = loadConfiguration()
-        let model = ChatViewModel(client: OpenAICompatibleClient(), configuration: configuration)
+        let profile = loadProfile()
+        let model = ChatViewModel(
+            client: OpenAICompatibleClient(),
+            configuration: configuration,
+            persona: profile.persona,
+            memory: profile.memory
+        )
         self.model = model
         if let launchStatus {
             model.setStatus(launchStatus)
@@ -74,11 +81,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let companionWindow = CompanionWindowController(model: model, policy: companionPolicy)
         self.companionWindow = companionWindow
 
-        let settingsWindow = SettingsWindowController(secrets: secrets, configuration: configuration)
+        let settingsWindow = SettingsWindowController(
+            secrets: secrets,
+            configuration: configuration,
+            persona: profile.persona
+        )
         settingsWindow.onSave = { [weak self] configuration in
             self?.model?.updateConfiguration(configuration)
             let source = configuration.keySource.rawValue
             self?.model?.setStatus("Saved the provider configuration. Key source: \(source).")
+        }
+        settingsWindow.onSavePersona = { [weak self] persona in
+            self?.model?.updatePersona(persona)
         }
         self.settingsWindow = settingsWindow
 
@@ -86,15 +100,41 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.mainWindow?.refresh()
             self?.companionWindow?.refresh()
         }
+        model.onProfileChange = { [weak self] in
+            self?.saveProfile()
+        }
         synthesizer.onSpeakingChanged = { [weak self] speaking in
             self?.model?.setSpeaking(speaking)
         }
 
         mainWindow.showWindow(nil)
         companionWindow.showWindow(nil)
+        model.greetIfNeeded()
         mainWindow.refresh()
         companionWindow.refresh()
+        speakReply()
         NSApp.activate()
+    }
+
+    private func loadProfile() -> CompanionProfile {
+        do {
+            return try profileStore.load()
+        } catch {
+            launchStatus = String(describing: error)
+            return .standard
+        }
+    }
+
+    private func saveProfile() {
+        guard let model else {
+            return
+        }
+        let profile = CompanionProfile(persona: model.persona, memory: model.memory)
+        do {
+            try profileStore.save(profile)
+        } catch {
+            model.setStatus("The companion configuration was not saved. \(String(describing: error))")
+        }
     }
 
     private func loadConfiguration() -> ProviderConfiguration {
@@ -120,7 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Aori"
-        alert.informativeText = "Aori is a native macOS companion based on Project AIRI. Milestone 1 streams chat from an OpenAI-compatible provider. The character is a SceneKit placeholder."
+        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character stays on the desktop. Milestone 1 stores a persona and local memory. The mesh is still a placeholder."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
@@ -129,13 +169,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard let model else {
             return
         }
-        settingsWindow?.refresh(configuration: model.configuration)
+        settingsWindow?.refresh(configuration: model.configuration, persona: model.persona)
         settingsWindow?.showWindow(sender)
     }
 
     @objc func newChat(_ sender: Any?) {
         model?.clear()
         mainWindow?.setDraft("")
+        model?.greetIfNeeded()
+        speakReply()
     }
 
     @objc func openVRM(_ sender: Any?) {
@@ -234,5 +276,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             model?.setStatus(String(describing: error))
         }
+    }
+}
+
+private enum AoriFiles {
+    static func profileURL() -> URL {
+        let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("Aori", isDirectory: true)
+        return directory.appendingPathComponent("companion.json")
     }
 }
