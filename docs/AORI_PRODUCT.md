@@ -26,6 +26,8 @@ The app reads an AIRI Manifest v2 file named `extension.airi.json`. The host gra
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 
+The screenshot path asks ScreenCaptureKit for one frame. When permission is denied, the app sends a PNG fixture through the OpenAI-compatible client. The workload is `screen:interpret`. The app does not run a vision ticker. A granted capture sends that frame to the configured provider.
+
 ## Not in this app
 
-Cubism moc3, JavaScript plugins, vision, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
+Cubism moc3, JavaScript plugins, a vision ticker, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.

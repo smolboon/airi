@@ -6,6 +6,7 @@ public enum ChatProviderError: Error, Equatable, Sendable, CustomStringConvertib
     case httpStatus(Int, String)
     case providerMessage(String)
     case malformedResponse(String)
+    case invalidVisionFrame
 
     public var description: String {
         switch self {
@@ -19,6 +20,8 @@ public enum ChatProviderError: Error, Equatable, Sendable, CustomStringConvertib
             return message
         case .malformedResponse(let detail):
             return "The provider response is not valid. \(detail)"
+        case .invalidVisionFrame:
+            return "The frame is not a PNG."
         }
     }
 }

@@ -14,6 +14,8 @@ Aori splits the native app into three Swift modules and two Rust crates. `AoriCo
 
 This host does not run JavaScript. The macOS App Sandbox stays off. Run 38298286037 logged `aori_plugin_result=Plugin greeting.` and `aori_plugin_denied=aori.files.read`.
 
+`VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.
+
 ## Voice turn
 
 The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.

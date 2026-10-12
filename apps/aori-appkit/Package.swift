@@ -34,6 +34,9 @@ targets.append(
             .linkedFramework("AVFoundation"),
             .linkedFramework("Speech"),
             .linkedFramework("Security"),
+            .linkedFramework("ScreenCaptureKit"),
+            .linkedFramework("CoreGraphics"),
+            .linkedFramework("ImageIO"),
             // The static library is produced by `cargo build -p aori-face`.
             .unsafeFlags(["-L", "rust/target/debug", "-laori_face"]),
         ]

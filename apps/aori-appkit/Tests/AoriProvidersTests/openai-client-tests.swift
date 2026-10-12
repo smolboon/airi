@@ -95,6 +95,34 @@ final class OpenAICompatibleClientTests: XCTestCase {
         XCTAssertEqual(transport.requests().count, 1)
     }
 
+    func testVisionRequestUsesTheSameProviderAndKeepsTheKeyOutOfTheBody() async throws {
+        let transport = ScriptedTransport(
+            status: 200,
+            chunks: [Data("data: {\"choices\":[{\"delta\":{\"content\":\"Mock vision from CI.\"}}]}\n\ndata: [DONE]\n\n".utf8)]
+        )
+        let png = Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMAAf4C/gAAAABJRU5ErkJggg==")!
+        let client = OpenAICompatibleClient(transport: transport)
+        let stream = try await client.streamVision(
+            png: png,
+            configuration: configuration(apiKey: "test-key")
+        )
+        var text = ""
+        for try await event in stream {
+            if case .delta(let piece) = event {
+                text += piece
+            }
+        }
+        XCTAssertEqual(text, "Mock vision from CI.")
+        let request = try XCTUnwrap(transport.requests().first)
+        XCTAssertEqual(request.url.absoluteString, "https://example.test/v1/chat/completions")
+        XCTAssertEqual(request.headers["Authorization"], "Bearer test-key")
+        let body = String(data: request.body, encoding: .utf8) ?? ""
+        XCTAssertTrue(body.contains("\"type\":\"image_url\""))
+        XCTAssertTrue(body.contains("data:image/png;base64,") || body.contains("data:image\\/png;base64,"))
+        XCTAssertTrue(body.contains("You are an on-device vision assistant."))
+        XCTAssertFalse(body.contains("test-key"))
+    }
+
     func testTransportCanBeConstructedWithoutARequest() {
         _ = URLSessionHTTPTransport()
     }

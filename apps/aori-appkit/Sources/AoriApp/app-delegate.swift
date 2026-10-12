@@ -188,6 +188,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine("aori_mic=\(mic)")
             await self.synthesizer.speak("Hello papa")
             await self.runFixtureTurn()
+            await self.runVisionTurn()
             logLine("aori_turn=done")
         }
         Timer.scheduledTimer(withTimeInterval: 80, repeats: false) { _ in
@@ -666,6 +667,88 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine("aori_llm_reply=\(reply)")
             await synthesizer.speak(reply)
         }
+    }
+
+    private func runVisionTurn() async {
+        var permission = ScreenCaptureSession.preflight()
+        // NOTICE:
+        // The screenshot path does not ask for screen recording access.
+        // CGRequestScreenCaptureAccess can present a dialog and stall a headless job.
+        // Apple TCC, CGRequestScreenCaptureAccess.
+        // Remove this gate when the screenshot job can answer the dialog.
+        if permission != .granted, ProcessInfo.processInfo.environment["AORI_VISION_REQUEST"] == "1" {
+            permission = ScreenCaptureSession.requestAccess()
+        }
+        logLine("aori_vision_permission=\(permission.rawValue)")
+        let screenPNG: Data?
+        if permission == .granted {
+            switch await ScreenCaptureSession.capturePNG() {
+            case .png(let data):
+                screenPNG = data
+                logLine("aori_vision_capture=png")
+            case .empty:
+                screenPNG = nil
+                logLine("aori_vision_capture=empty")
+            case .error:
+                screenPNG = nil
+                logLine("aori_vision_capture=error")
+            case .timeout:
+                screenPNG = nil
+                logLine("aori_vision_capture=timeout")
+            }
+        } else {
+            screenPNG = nil
+            logLine("aori_vision_capture=skipped")
+        }
+        let plan = VisionCapturePlan.select(
+            permission: permission,
+            screenPNG: screenPNG,
+            fixturePNG: visionFixture()
+        )
+        logLine("aori_vision_source=\(plan.source.rawValue)")
+        logLine("aori_vision_workload=\(VisionRequest.workload)")
+        guard let png = plan.png, let model else {
+            logLine("aori_vision=skipped")
+            logLine("aori_vision_reply=none")
+            return
+        }
+        logLine("aori_vision_bytes=\(png.count)")
+        let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
+        logLine(usesLocal ? "aori_vision=local" : "aori_vision=sent")
+        let client: any VisionCompletionClient = usesLocal ? LocalVisionClient() : OpenAICompatibleClient()
+        do {
+            let stream = try await client.streamVision(png: png, configuration: model.configuration)
+            var text = ""
+            for try await event in stream {
+                if case .delta(let piece) = event {
+                    text += piece
+                }
+            }
+            logLine("aori_vision_reply=\(visionReplyToken(text))")
+        } catch {
+            logLine("aori_vision_reply=error")
+        }
+    }
+
+    private func visionFixture() -> Data? {
+        let path = ProcessInfo.processInfo.environment["AORI_VISION_PNG"] ?? ""
+        let trimmed = path.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            return nil
+        }
+        return try? Data(contentsOf: URL(fileURLWithPath: trimmed))
+    }
+
+    private func visionReplyToken(_ text: String) -> String {
+        let cleaned = text.replacingOccurrences(of: "\n", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        if cleaned.isEmpty {
+            return "empty"
+        }
+        if cleaned.count > 80 {
+            return String(cleaned.prefix(80))
+        }
+        return cleaned
     }
 
     private func startHandsFree() {

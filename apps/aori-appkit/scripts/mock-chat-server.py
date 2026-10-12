@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
-"""OpenAI-compatible mock. One bearer token returns one streamed reply."""
+"""OpenAI-compatible mock. A text body and an image body return different replies."""
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HOST = "127.0.0.1"
 PORT = 8765
 TOKEN = "Bearer ci-mock-key"
-REPLY = (
-    'data: {"choices":[{"delta":{"content":"Mock reply from CI."}}]}\n\n'
-    "data: [DONE]\n\n"
-)
+
+
+def reply_for(payload):
+    text = payload.decode("utf-8", "replace").replace("\\/", "/")
+    if "image_url" in text and "data:image/png;base64," in text:
+        content = "Mock vision from CI."
+    else:
+        content = "Mock reply from CI."
+    return (
+        'data: {"choices":[{"delta":{"content":"'
+        + content
+        + '"}}]}\n\n'
+        "data: [DONE]\n\n"
+    ).encode()
 
 
 class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers.get("Content-Length", "0") or "0")
-        if length > 0:
-            self.rfile.read(length)
+        payload = self.rfile.read(length) if length > 0 else b""
         if self.headers.get("Authorization", "") != TOKEN:
             body = b'{"error":"unauthorized"}'
             self._send(401, "application/json", body)
@@ -25,7 +34,7 @@ class Handler(BaseHTTPRequestHandler):
             body = b'{"error":"not found"}'
             self._send(404, "application/json", body)
             return
-        self._send(200, "text/event-stream", REPLY.encode())
+        self._send(200, "text/event-stream", reply_for(payload))
 
     def _send(self, status, content_type, body):
         self.send_response(status)

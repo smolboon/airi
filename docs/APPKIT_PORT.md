@@ -10,7 +10,7 @@ The verb for this note is "make sure". The noun for saved values is "configurati
 
 Aori is a desktop AI companion. It is based on Project AIRI. The same kind of product is Animates, from Animation Inc.
 
-The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools, vision, and games come after the companion can stay, speak, and remember.
+The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools and games come after the companion can stay, speak, and remember.
 
 ### What Animates is
 
@@ -65,7 +65,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Plugins | `plugin-sdk` | Manifest v2 host | Command list inside the native grant. No JavaScript |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
-| Vision and games | stage modules, integrations | Absent | After the companion can stay and speak |
+| Vision and games | stage modules, integrations | One screen read | Games stay absent. No vision ticker |
 
 ## Native mapping
 
@@ -76,6 +76,7 @@ Use these Apple APIs for the port:
 - `URLSession` for provider HTTP.
 - `AVSpeechSynthesizer` for speech output.
 - Speech framework and `AVAudioEngine` for speech input.
+- ScreenCaptureKit for one display frame. The screenshot path does not present the permission dialog.
 - Rust `aori-face` for skinning, morphs, a depth-buffer image, and flat layers.
 - GPUI 0.2.2 for a separate character window. The crate is Apache-2.0.
 - A small glTF header reader for VRM names. The reader is pure Swift. The Rust crate reads the same sample file.
@@ -171,9 +172,15 @@ The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
 
-### Milestone 6, the rest of AIRI
+### Milestone 6, one screen read
 
-Add vision, games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
+The screenshot path calls `CGPreflightScreenCaptureAccess`. When the result is granted, `SCScreenshotManager` captures one display. When the result is denied, the path does not capture. `AORI_VISION_PNG` is the fixture. `OpenAICompatibleClient` posts the frame as an `image_url` on the chat completions endpoint. The prompt is the AIRI `screen:interpret` workload.
+
+The screenshot path does not call `CGRequestScreenCaptureAccess`. A dialog can stall a headless job. This read is not a vision ticker. Games stay absent.
+
+### Milestone 7, the rest of AIRI
+
+Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
 
 ## What this checkout did not run
 

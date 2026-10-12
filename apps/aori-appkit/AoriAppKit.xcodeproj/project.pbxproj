@@ -201,6 +201,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Aori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aori uses the microphone to hear you.";
+				INFOPLIST_KEY_NSScreenCaptureUsageDescription = "Aori reads the screen when you allow screen capture.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aori uses speech recognition to turn your voice into chat text.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -210,6 +211,8 @@
 				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					"ScreenCaptureKit",
 					"-L$(PROJECT_DIR)/rust/target/debug",
 					"-laori_face",
 				);
@@ -235,6 +238,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Aori;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aori uses the microphone to hear you.";
+				INFOPLIST_KEY_NSScreenCaptureUsageDescription = "Aori reads the screen when you allow screen capture.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aori uses speech recognition to turn your voice into chat text.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -244,6 +248,8 @@
 				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					"ScreenCaptureKit",
 					"-L$(PROJECT_DIR)/rust/target/release",
 					"-laori_face",
 				);

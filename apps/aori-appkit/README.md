@@ -14,6 +14,8 @@ When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The
 
 `AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied. The host does not run JavaScript.
 
+`AORI_VISION_PNG` is a PNG fixture. When screen capture is denied, the screenshot path sends that file. A granted capture sends one display frame. The request uses the chat provider. The workload is `screen:interpret`. The path does not open a permission dialog.
+
 You can open another `.vrm` file. A separate GPUI window paints the lit sample raster. That window is not the AppKit app. Clear pixels on the companion window pass clicks through. Opaque pixels and the caption keep the click. The screenshot path posts one click onto a window titled Aori Behind.
 
 ## How to use it
@@ -33,6 +35,7 @@ Optional environment variables:
 
 - `AORI_AVATAR` with the value `live2d` selects the flat character. The default is the VRM.
 - `AORI_PLUGINS` is a plugin directory. The sample path is `plugins/aori-greeting`.
+- `AORI_VISION_PNG` is a PNG file. When screen capture is denied, the screenshot path sends this file.
 - `AORI_OPENAI_BASE_URL` or `OPENAI_BASE_URL`
 - `AORI_OPENAI_MODEL` or `OPENAI_MODEL`
 - `OPENAI_API_KEY` when `AORI_OPENAI_API_KEY` is absent
@@ -45,7 +48,7 @@ Use it to work on the native macOS companion. Use it to run the milestone 1 shel
 
 ## When not to use it
 
-Do not use it for Cubism moc3 models, JavaScript plugins, vision, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
+Do not use it for Cubism moc3 models, JavaScript plugins, a vision ticker, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 

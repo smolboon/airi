@@ -11,6 +11,14 @@ vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
 rm -f "$frame" "$window" "$chat" "$wav" "$visemes"
 mkdir -p build
+python3 - <<'PY'
+import pathlib
+png = bytes.fromhex(
+    "89504e470d0a1a0a0000000d4948445200000001000000010802000000907753de"
+    "0000000c4944415408d763f8cfc00000000300010005fe02fe0000000049454e44ae426082"
+)
+pathlib.Path("build/aori-vision-fixture.png").write_bytes(png)
+PY
 python3 scripts/mock-chat-server.py &
 mock_pid=$!
 cleanup() {
@@ -64,6 +72,7 @@ AORI_SCREENSHOT=1 \
     AORI_VRM_PATH="$vrm" \
     AORI_AVATAR=live2d \
     AORI_PLUGINS="$PWD/plugins/aori-greeting" \
+    AORI_VISION_PNG="$PWD/build/aori-vision-fixture.png" \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >"$log" 2>&1 &
@@ -140,6 +149,9 @@ need = [
     "aori_plugin_call=aori.companion.greeting",
     "aori_plugin_result=Plugin greeting.",
     "aori_plugin_denied=aori.files.read",
+    "aori_vision_workload=screen:interpret",
+    "aori_vision=sent",
+    "aori_vision_reply=Mock vision from CI.",
     "aori_hit_corner=pass",
     "aori_hit_body=keep",
     "aori_ignores_mouse=true",
@@ -160,6 +172,23 @@ utterance = [line.strip() for line in text.splitlines() if line.startswith("aori
 allowed = {"aori_mic_utterance=no-device", "aori_mic_utterance=silence", "aori_mic_utterance=speech"}
 if not utterance or utterance[-1] not in allowed:
     missing.append("aori_mic_utterance")
+permission = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_permission=")]
+source = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_source=")]
+if not permission or permission[-1] not in {"aori_vision_permission=granted", "aori_vision_permission=denied"}:
+    missing.append("aori_vision_permission")
+if not source or source[-1] not in {"aori_vision_source=screen", "aori_vision_source=fixture"}:
+    missing.append("aori_vision_source")
+if source and permission and source[-1] == "aori_vision_source=screen" and permission[-1] != "aori_vision_permission=granted":
+    missing.append("aori_vision_source_without_permission")
+bytes_line = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_bytes=")]
+if not bytes_line:
+    missing.append("aori_vision_bytes")
+else:
+    try:
+        if int(bytes_line[-1].split("=", 1)[1]) <= 0:
+            missing.append("aori_vision_bytes")
+    except ValueError:
+        missing.append("aori_vision_bytes")
 print("aori_log_missing=" + ",".join(missing))
 sys.exit(0 if not missing else 1)
 PY

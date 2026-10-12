@@ -1,7 +1,7 @@
 import AoriCore
 import Foundation
 
-public struct OpenAICompatibleClient: ChatCompletionClient {
+public struct OpenAICompatibleClient: ChatCompletionClient, VisionCompletionClient {
     private let transport: any HTTPTransport
 
     public init(transport: any HTTPTransport = URLSessionHTTPTransport()) {
@@ -16,8 +16,35 @@ public struct OpenAICompatibleClient: ChatCompletionClient {
             throw ChatProviderError.missingAPIKey
         }
         let request = try makeRequest(messages: messages, configuration: configuration)
+        return stream(request, apiKey: configuration.apiKey)
+    }
+
+    public func streamVision(
+        png: Data,
+        configuration: ProviderConfiguration
+    ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
+        guard !configuration.apiKey.isEmpty else {
+            throw ChatProviderError.missingAPIKey
+        }
+        let data = try VisionRequest.encode(model: configuration.model, png: png)
+        let request = HTTPRequest(
+            url: configuration.chatCompletionsURL,
+            method: "POST",
+            headers: [
+                "Content-Type": "application/json",
+                "Accept": "text/event-stream",
+                "Authorization": "Bearer \(configuration.apiKey)",
+            ],
+            body: data
+        )
+        return stream(request, apiKey: configuration.apiKey)
+    }
+
+    private func stream(
+        _ request: HTTPRequest,
+        apiKey: String
+    ) -> AsyncThrowingStream<ChatStreamEvent, Error> {
         let events = transport.open(request)
-        let apiKey = configuration.apiKey
         return AsyncThrowingStream { continuation in
             let task = Task {
                 var decoder = SSEDecoder()
