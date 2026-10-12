@@ -126,17 +126,23 @@ Known words use a small ARPAbet list. hello becomes HH EH L OW. papa becomes P A
 
 Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` have Aori menu keys. The View menu lists the locale ids. A failed stream retries once before any text arrives. After a text delta, it does not retry. The status line says "Trying again." during that retry.
 
-A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
+A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. The interactive window paints that same raster. It does not hear TTS buffers. Run 38282943123 uploaded that PNG from Linux. This checkout did not open the interactive window.
 
-`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key uses a local template and logs `aori_llm=local`. A key uses the OpenAI-compatible provider. The job also probes the microphone and a Keychain probe account. Run 38279625671 did that on `macos-latest`. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp printed Hello Paca. The spoken line was Hello papa. The local reply was Hello. I am here. The log says `aori_keychain=roundtrip` and `aori_locale_menu=loaded`. The frame line is `{"event":"frame","ms":15.00}`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key uses a local template and logs `aori_llm=local`.
+
+A key uses the OpenAI-compatible provider. The job also probes the microphone and a Keychain probe account. Clear pixels set `ignoresMouseEvents`. Opaque pixels and the caption keep the click.
+
+Run 38282943123 did that on `macos-latest`. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The spoken line was Hello papa. The local reply was Hello. I am here.
+
+The log says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The frame line is `{"event":"frame","ms":18.98}`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`. A click was not posted through the window.
 
 ### Milestone 2 follow-up
 
-Add click-through on the companion window. Prove a live microphone on a machine that has one.
+Post a click through the companion window onto an app behind it. Prove a live microphone on a machine that has one.
 
 ### Milestone 3, memory that lasts
 
@@ -156,6 +162,8 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 33 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 9 tests with Rust 1.99.0. A debug build rendered the 280 by 380 frame in 2.75 ms. `cargo check -p aori-gpui` passed. This checkout did not launch the app. Speech playback, Keychain, and the GPUI window were not executed. Run 38269452282 launched `AoriApp` on `macos-latest` and saved both PNGs.
+The work ran on Linux. `swift test` passed 47 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+
+`AORI_GPUI_PNG` wrote a lit PNG on this machine. This checkout did not launch the Mac app. Speech playback, Keychain, and the interactive GPUI window were not executed here. Run 38282943123 launched `AoriApp` on `macos-latest` and saved the window captures. The Linux job in that run saved the GPUI PNG.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.
