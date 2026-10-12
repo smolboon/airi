@@ -130,7 +130,7 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The Linux job in run 38290795770 checked that PNG. The macOS job opened the window and saved `aori-gpui-window.png`.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The Linux job in run 38295099387 checked that PNG. The macOS job opened the window, and that window still shows the checker head.
 
 `AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key, or the model name local, uses a local template and logs `aori_llm=local`. A key with any other model calls the provider and logs `aori_llm=sent` and `aori_llm_reply`.
 
@@ -142,9 +142,11 @@ The same path reads live accessibility labels and logs `aori_ax`. It presses the
 
 Run 38282943123 was the earlier capture. It used the local reply Hello. I am here. It did not post a click, open the GPUI window, start VoiceOver, or call the mock server.
 
-Run 38290795770 is the capture for this round. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The chat reply is Mock reply from CI. The log says `aori_llm=sent` and `aori_click_through=delivered`. The hit count is 1. The microphone mark is `silence`. The VoiceOver process was running. The GPUI window capture shows the checker head.
+Run 38290795770 is the earlier capture for the posted click and the mock reply. Run 38293603474 drew the flat character, and the companion window in that run was upside down.
 
-The frame line is `{"event":"frame","ms":9.34}`. The log also says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
+Run 38295099387 is the capture for the flat character. `AORI_AVATAR` is `live2d`. The framebuffer and the companion window both show the hair above the blue body. The framebuffer mouth is open. The window mouth is a line after the spoken turn. The log says `aori_avatar=live2d` and `aori_frame_ms=8.08`.
+
+The log also says `aori_click_through=delivered`, `aori_llm_reply=Mock reply from CI.`, `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_hit_corner=pass`, and `aori_hit_body=keep`. The microphone mark is `silence`. The VoiceOver process was running. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
 
 ### Milestone 2 follow-up
 
