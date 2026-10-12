@@ -5,6 +5,7 @@ import AoriCore
 final class CharacterView: NSView {
     var dragsWindow = false
     var clickThrough = false
+    var holdMouseIgnore = false
     var clearsBackground = false {
         didSet { applyBackground() }
     }
@@ -216,6 +217,9 @@ final class CharacterView: NSView {
     }
 
     private func updateMousePass() {
+        guard !holdMouseIgnore else {
+            return
+        }
         guard let window else {
             return
         }

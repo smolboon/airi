@@ -22,6 +22,9 @@ guard let chosen = matches.first(where: { item in
     if role == "main" {
         return title == "Aori"
     }
+    if role == "gpui" {
+        return title.contains("GPUI")
+    }
     return title.contains("Companion")
 }) else {
     fputs("No \(role) window.\n", stderr)

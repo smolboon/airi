@@ -11,6 +11,11 @@ public enum ClickThrough {
         height - 1 - viewY
     }
 
+    /// CoreGraphics y grows down from the top of the main display.
+    public static func coreGraphicsY(appKitY: Double, screenHeight: Double) -> Double {
+        screenHeight - appKitY
+    }
+
     public static func decision(pass: Bool) -> String {
         pass ? "pass" : "keep"
     }

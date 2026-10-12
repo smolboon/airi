@@ -91,6 +91,8 @@ jobs:
         run: ./scripts/fetch-whisper.sh
       - name: Launch the app and capture the window
         run: ./scripts/screenshot-app.sh
+      - name: Open the GPUI window
+        run: ./scripts/capture-gpui-window.sh
       - name: Upload the companion capture
         if: always()
         uses: actions/upload-artifact@v4
@@ -104,3 +106,5 @@ jobs:
             apps/aori-appkit/build/aori-chat-window.png
             apps/aori-appkit/build/aori-speech.wav
             apps/aori-appkit/build/aori-visemes.log
+            apps/aori-appkit/build/aori-gpui-window.png
+            apps/aori-appkit/build/aori-gpui.log

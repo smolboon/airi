@@ -130,19 +130,23 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. The interactive window paints that same raster. It does not hear TTS buffers. Run 38282943123 uploaded that PNG from Linux. This checkout did not open the interactive window.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. Run 38282943123 uploaded that PNG from Linux. This checkout did not open the interactive window.
 
-`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key uses a local template and logs `aori_llm=local`.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key, or the model name local, uses a local template and logs `aori_llm=local`. A key with any other model calls the provider and logs `aori_llm=sent` and `aori_llm_reply`.
 
-A key uses the OpenAI-compatible provider. The job also probes the microphone and a Keychain probe account. Clear pixels set `ignoresMouseEvents`. Opaque pixels and the caption keep the click.
+The screenshot script starts a mock server on 127.0.0.1 port 8765. It sets the key, the base URL, and the model name mock. The mock returns the text Mock reply from CI.
 
-Run 38282943123 did that on `macos-latest`. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The spoken line was Hello papa. The local reply was Hello. I am here.
+The screenshot path posts one click through the companion window. A window titled Aori Behind counts that click. The log says delivered only when that window receives the click. Clear pixels set `ignoresMouseEvents`. Opaque pixels and the caption keep the click. The job also probes the microphone and a Keychain probe account. A short capture logs `aori_mic_utterance` as no-device, silence, or speech.
 
-The log says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The frame line is `{"event":"frame","ms":18.98}`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`. A click was not posted through the window.
+The same path reads live accessibility labels and logs `aori_ax`. It presses the Send message control and logs `aori_ax_press`. After the captures, the script tries to start VoiceOver and logs running or unavailable.
+
+Run 38282943123 did the earlier capture on `macos-latest`. `xcodebuild` passed. Speech authorization stayed unknown. whisper.cpp with `ggml-base.en.bin` printed Hello papa. The spoken line was Hello papa. The local reply was Hello. I am here. That run did not post a click, open the GPUI window, start VoiceOver, or call the mock server.
+
+The log says `aori_keychain=roundtrip`, `aori_locale_menu=loaded`, `aori_click_through=on`, `aori_hit_corner=pass`, `aori_hit_body=keep`, and `aori_ignores_mouse=true`. The frame line is `{"event":"frame","ms":18.98}`. The product notes are in `docs/AORI_PRODUCT.md`. The module map is in `docs/AORI_ARCHITECTURE.md`.
 
 ### Milestone 2 follow-up
 
-Post a click through the companion window onto an app behind it. Prove a live microphone on a machine that has one.
+Read the next macOS log for a delivered click, the GPUI window capture, the VoiceOver line, and the microphone mark.
 
 ### Milestone 3, memory that lasts
 
@@ -162,7 +166,7 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 47 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+The work ran on Linux. `swift test` passed 49 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 11 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
 
 `AORI_GPUI_PNG` wrote a lit PNG on this machine. This checkout did not launch the Mac app. Speech playback, Keychain, and the interactive GPUI window were not executed here. Run 38282943123 launched `AoriApp` on `macos-latest` and saved the window captures. The Linux job in that run saved the GPUI PNG.
 

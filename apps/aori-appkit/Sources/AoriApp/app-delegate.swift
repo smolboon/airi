@@ -1,5 +1,7 @@
 import AppKit
+import ApplicationServices
 import AoriCore
+import CoreGraphics
 import UniformTypeIdentifiers
 
 @MainActor
@@ -161,6 +163,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate()
         writeFramebuffer()
         logClickThrough()
+        deliverClickThrough()
+        logAccessibilityTree()
+        logLine("aori_mic_utterance=\(transcriber.captureUtterance())")
         Task {
             logLine("aori_accessibility=\(AccessibilityCopy.proof)")
             logLine(KeychainProbe.line(store: self.secrets))
@@ -360,6 +365,111 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logLine("aori_ignores_mouse=\(sample.ignoresMouse)")
     }
 
+    private func deliverClickThrough() {
+        guard let companion = companionWindow?.window,
+              let screen = NSScreen.screens.first(where: { $0.frame.origin == .zero }) ?? NSScreen.main
+        else {
+            logLine("aori_click_post=no-screen")
+            logLine("aori_click_through=missed")
+            return
+        }
+        let behind = BehindClickWindow()
+        behind.place(under: companion.frame)
+        companion.level = .floating
+        companion.orderFrontRegardless()
+        companionWindow?.holdMouseIgnore(true)
+        companion.ignoresMouseEvents = true
+        let appKitPoint = NSPoint(x: companion.frame.minX + 4, y: companion.frame.maxY - 4)
+        let point = CGPoint(
+            x: appKitPoint.x,
+            y: ClickThrough.coreGraphicsY(appKitY: appKitPoint.y, screenHeight: screen.frame.height)
+        )
+        logLine("aori_click_post=\(postClick(at: point))")
+        let deadline = Date().addingTimeInterval(0.5)
+        while Date() < deadline {
+            RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
+        }
+        companionWindow?.holdMouseIgnore(false)
+        logLine("aori_click_hits=\(behind.hits)")
+        logLine(behind.hits > 0 ? "aori_click_through=delivered" : "aori_click_through=missed")
+    }
+
+    private func postClick(at point: CGPoint) -> String {
+        guard let source = CGEventSource(stateID: .hidSystemState),
+              let down = CGEvent(
+                mouseEventSource: source,
+                mouseType: .leftMouseDown,
+                mouseCursorPosition: point,
+                mouseButton: .left
+              ),
+              let up = CGEvent(
+                mouseEventSource: source,
+                mouseType: .leftMouseUp,
+                mouseCursorPosition: point,
+                mouseButton: .left
+              )
+        else {
+            return "none"
+        }
+        down.post(tap: .cghidEventTap)
+        up.post(tap: .cghidEventTap)
+        down.post(tap: .cgSessionEventTap)
+        up.post(tap: .cgSessionEventTap)
+        return "posted"
+    }
+
+    private func logAccessibilityTree() {
+        var labels: [String] = []
+        func add(_ label: String?) {
+            guard let label, !label.isEmpty, !labels.contains(label) else {
+                return
+            }
+            labels.append(label)
+        }
+        func walkView(_ view: NSView) {
+            add(view.accessibilityLabel())
+            for subview in view.subviews {
+                walkView(subview)
+            }
+        }
+        func walkElement(_ element: AXUIElement, depth: Int) {
+            guard depth < 12 else {
+                return
+            }
+            add(axString(element, kAXTitleAttribute))
+            add(axString(element, kAXDescriptionAttribute))
+            var children: CFTypeRef?
+            let copied = AXUIElementCopyAttributeValue(element, kAXChildrenAttribute as CFString, &children)
+            guard copied == .success, let list = children as? [AXUIElement] else {
+                return
+            }
+            for child in list {
+                walkElement(child, depth: depth + 1)
+            }
+        }
+        let windows = [mainWindow?.window, companionWindow?.window].compactMap { $0 }
+        for window in windows where window.isVisible {
+            add(window.accessibilityLabel())
+            if let content = window.contentView {
+                walkView(content)
+            }
+        }
+        walkElement(AXUIElementCreateApplication(ProcessInfo.processInfo.processIdentifier), depth: 0)
+        logLine("aori_ax=\(labels.joined(separator: "|"))")
+        if let pressed = mainWindow?.pressSendForAccessibility(), !pressed.isEmpty {
+            logLine("aori_ax_press=\(pressed)")
+        }
+    }
+
+    private func axString(_ element: AXUIElement, _ attribute: String) -> String? {
+        var value: CFTypeRef?
+        let copied = AXUIElementCopyAttributeValue(element, attribute as CFString, &value)
+        guard copied == .success else {
+            return nil
+        }
+        return value as? String
+    }
+
     private func sendDraft() {
         guard let model, let mainWindow else {
             return
@@ -469,6 +579,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         if let reply = model.textForSpeech() {
+            logLine("aori_llm_reply=\(reply)")
             await synthesizer.speak(reply)
         }
     }

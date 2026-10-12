@@ -74,4 +74,8 @@ final class MainWindowController: NSWindowController {
     func setListening(_ listening: Bool) {
         chatPanel.setListening(listening)
     }
+
+    func pressSendForAccessibility() -> String {
+        chatPanel.pressSendForAccessibility()
+    }
 }

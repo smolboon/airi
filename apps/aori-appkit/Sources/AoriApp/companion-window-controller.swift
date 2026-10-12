@@ -70,6 +70,10 @@ final class CompanionWindowController: NSWindowController {
         characterView.sampleClickThrough()
     }
 
+    func holdMouseIgnore(_ hold: Bool) {
+        characterView.holdMouseIgnore = hold
+    }
+
     func refresh() {
         characterView.apply(
             presentation: model.presentation,

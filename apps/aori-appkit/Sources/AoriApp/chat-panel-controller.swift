@@ -41,6 +41,7 @@ final class ChatPanelController: NSViewController {
         transcriptView.backgroundColor = .textBackgroundColor
         transcriptView.textContainerInset = NSSize(width: 8, height: 8)
         transcriptView.setAccessibilityLabel(AccessibilityCopy.transcript)
+        scrollView.setAccessibilityLabel(AccessibilityCopy.transcript)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.hasVerticalScroller = true
         scrollView.borderType = .noBorder
@@ -148,6 +149,12 @@ final class ChatPanelController: NSViewController {
 
     func setListening(_ listening: Bool) {
         listenButton.title = listening ? "Stop" : "Listen"
+    }
+
+    func pressSendForAccessibility() -> String {
+        let label = sendButton.accessibilityLabel() ?? AccessibilityCopy.send
+        sendButton.performClick(nil)
+        return label
     }
 
     @objc private func send() {

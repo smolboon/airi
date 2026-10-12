@@ -1,6 +1,6 @@
 import Foundation
 
-/// Labels for VoiceOver. The running app logs `proof`. VoiceOver itself is not driven.
+/// Labels for VoiceOver. The app logs `proof` and the live accessibility labels.
 public enum AccessibilityCopy {
     public static let transcript = "Chat transcript"
     public static let search = "Search chat"

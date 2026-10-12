@@ -11,6 +11,29 @@ vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
 rm -f "$frame" "$window" "$chat" "$wav" "$visemes"
 mkdir -p build
+python3 scripts/mock-chat-server.py &
+mock_pid=$!
+cleanup() {
+    kill "$mock_pid" 2>/dev/null || true
+}
+trap cleanup EXIT
+mock_ready=0
+i=0
+while [ "$i" -lt 50 ]; do
+    if curl -sf -o /dev/null -X POST http://127.0.0.1:8765/v1/chat/completions \
+        -H "Authorization: Bearer ci-mock-key" \
+        -H "Content-Type: application/json" \
+        -d '{}'; then
+        mock_ready=1
+        break
+    fi
+    i=$((i + 1))
+    sleep 0.1
+done
+if [ "$mock_ready" -ne 1 ]; then
+    echo "The mock chat server did not start."
+    exit 1
+fi
 prepare_keychain() {
     chain="$HOME/Library/Keychains/aori-ci.keychain-db"
     security delete-keychain "$chain" 2>/dev/null || true
@@ -30,6 +53,9 @@ if [ -f build/whisper.env ]; then
     set +a
 fi
 AORI_SCREENSHOT=1 \
+    AORI_OPENAI_API_KEY=ci-mock-key \
+    AORI_OPENAI_BASE_URL=http://127.0.0.1:8765/v1 \
+    AORI_OPENAI_MODEL=mock \
     AORI_LOCALE=ja \
     AORI_LOCALES_ROOT="$PWD/../../packages/i18n/src/locales" \
     AORI_FRAMEBUFFER_PATH="$frame" \
@@ -103,12 +129,15 @@ need = [
     "aori_locale_menu=loaded",
     "aori_stt_engine=whisper",
     "aori_stt=Hello papa",
-    "aori_llm=local",
+    "aori_llm=sent",
+    "aori_llm_reply=Mock reply from CI.",
     "aori_click_through=on",
+    "aori_click_through=delivered",
     "aori_hit_corner=pass",
     "aori_hit_body=keep",
     "aori_ignores_mouse=true",
     "aori_accessibility=Chat transcript",
+    "aori_ax_press=Send message",
     "aori_mic=",
     "leftLowerArm",
     "aori_turn=done",
@@ -116,6 +145,14 @@ need = [
 missing = [item for item in need if item not in text]
 if any(line.strip() == "aori_stt=empty" for line in text.splitlines()):
     missing.append("aori_stt=empty")
+ax = [line for line in text.splitlines() if line.startswith("aori_ax=")]
+ax_labels = ["Chat transcript", "Companion character", "Send message", "Companion window", "Chat window"]
+if not ax or any(label not in ax[-1] for label in ax_labels):
+    missing.append("aori_ax")
+utterance = [line.strip() for line in text.splitlines() if line.startswith("aori_mic_utterance=")]
+allowed = {"aori_mic_utterance=no-device", "aori_mic_utterance=silence", "aori_mic_utterance=speech"}
+if not utterance or utterance[-1] not in allowed:
+    missing.append("aori_mic_utterance")
 print("aori_log_missing=" + ",".join(missing))
 sys.exit(0 if not missing else 1)
 PY
@@ -132,4 +169,20 @@ kill "$pid" 2>/dev/null || true
 wait "$pid" 2>/dev/null || true
 test -s "$window"
 test -s "$chat"
+voiceover="unavailable"
+if open -g -a VoiceOver >/dev/null 2>&1; then
+    sleep 8
+    if pgrep -x VoiceOver >/dev/null 2>&1 || pgrep -f "VoiceOver.app" >/dev/null 2>&1; then
+        voiceover="running"
+    fi
+    killall VoiceOver >/dev/null 2>&1 || true
+fi
+echo "aori_voiceover=$voiceover" >>"$log"
+python3 - "$log" <<'PY'
+import pathlib, sys
+text = pathlib.Path(sys.argv[1]).read_text()
+marks = [line.strip() for line in text.splitlines() if line.startswith("aori_voiceover=")]
+allowed = {"aori_voiceover=running", "aori_voiceover=unavailable"}
+sys.exit(0 if marks and marks[-1] in allowed else 1)
+PY
 echo "Wrote $frame, $window, and $chat"

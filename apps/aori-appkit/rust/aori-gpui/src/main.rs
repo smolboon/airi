@@ -1,4 +1,4 @@
-use std::{path::Path, sync::Arc};
+use std::{io::Write, path::Path, sync::Arc, time::Duration};
 
 use aori_face::{encode_png, read_glb, render_frame, FaceScene, RenderPose};
 use gpui::{
@@ -86,7 +86,7 @@ fn main() {
       WindowOptions {
         window_bounds: Some(WindowBounds::Windowed(bounds)),
         titlebar: Some(TitlebarOptions {
-          title: Some("Aori".into()),
+          title: Some("Aori GPUI".into()),
           appears_transparent: true,
           traffic_light_position: None,
         }),
@@ -98,6 +98,19 @@ fn main() {
       move |_window, cx| cx.new(move |_| FaceWindow { image: Arc::clone(&image) }),
     )
     .expect("The GPUI window opens.");
+    if let Ok(text) = std::env::var("AORI_GPUI_EXIT_MS") {
+      if let Ok(ms) = text.parse::<u64>() {
+        cx.spawn(async move |cx| {
+          let timer = cx.background_executor().timer(Duration::from_millis(ms));
+          timer.await;
+          let _ = cx.update(|app| app.quit());
+        })
+        .detach();
+      }
+    }
+    let mut out = std::io::stdout().lock();
+    let _ = writeln!(out, "aori_gpui_window=open");
+    let _ = out.flush();
     cx.activate(true);
   });
 }

@@ -182,6 +182,20 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertEqual(ClickThrough.decision(pass: false), "keep")
         XCTAssertEqual(AoriCopy.clickThrough, "Click Through")
     }
+
+    func testCoreGraphicsClickPoint() {
+        XCTAssertEqual(ClickThrough.coreGraphicsY(appKitY: 100, screenHeight: 900), 800)
+        XCTAssertEqual(ClickThrough.coreGraphicsY(appKitY: 0, screenHeight: 900), 900)
+        XCTAssertEqual(ClickThrough.coreGraphicsY(appKitY: 900, screenHeight: 900), 0)
+    }
+
+    func testLiveUtteranceMark() {
+        XCTAssertEqual(LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false), "no-device")
+        XCTAssertEqual(LiveUtterance.mark(hasDevice: false, sampleCount: 10, speech: true), "no-device")
+        XCTAssertEqual(LiveUtterance.mark(hasDevice: true, sampleCount: 0, speech: false), "silence")
+        XCTAssertEqual(LiveUtterance.mark(hasDevice: true, sampleCount: 8, speech: false), "silence")
+        XCTAssertEqual(LiveUtterance.mark(hasDevice: true, sampleCount: 8, speech: true), "speech")
+    }
 }
 
 private func glb(json: String, chunkType: UInt32 = 0x4E4F_534A) -> Data {

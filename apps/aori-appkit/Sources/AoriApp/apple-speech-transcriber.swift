@@ -73,6 +73,37 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         }
     }
 
+    /// Reads a short buffer. The mark is no-device, silence, or speech.
+    @MainActor
+    func captureUtterance(seconds: Double = 0.4) -> String {
+        let probe = AVAudioEngine()
+        let input = probe.inputNode
+        let format = input.outputFormat(forBus: 0)
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            return LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false)
+        }
+        let box = SampleBox()
+        input.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
+            box.append(Self.samples(of: buffer))
+        }
+        do {
+            try probe.start()
+        } catch {
+            input.removeTap(onBus: 0)
+            return LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false)
+        }
+        let deadline = Date().addingTimeInterval(seconds)
+        while Date() < deadline {
+            RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
+        }
+        probe.stop()
+        input.removeTap(onBus: 0)
+        let samples = box.copy()
+        let activity = VoiceActivity(threshold: 0.02, silenceSeconds: 0.2, sampleRate: format.sampleRate)
+        let speech = activity.containsSpeech(samples)
+        return LiveUtterance.mark(hasDevice: true, sampleCount: samples.count, speech: speech)
+    }
+
     /// Starts the input engine and stops it. The result is started or unavailable.
     func probeMicrophone() -> String {
         let probe = AVAudioEngine()
@@ -181,6 +212,23 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         @unknown default:
             return .unknown
         }
+    }
+}
+
+private final class SampleBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var samples: [Float] = []
+
+    func append(_ next: [Float]) {
+        lock.lock()
+        samples.append(contentsOf: next)
+        lock.unlock()
+    }
+
+    func copy() -> [Float] {
+        lock.lock()
+        defer { lock.unlock() }
+        return samples
     }
 }
 
