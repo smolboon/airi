@@ -178,13 +178,15 @@ The screenshot path calls `CGPreflightScreenCaptureAccess`. When the result is g
 
 The screenshot path does not call `CGRequestScreenCaptureAccess`. A dialog can stall a headless job. This read is not a vision ticker. Games stay absent.
 
+Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_capture=png`. The source was `screen`. The byte count was 30500. The mock reply was `Mock vision from CI.`. That job did not use the fixture.
+
 ### Milestone 7, the rest of AIRI
 
 Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 59 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+The work ran on Linux. `swift test` passed 63 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
 
 `AORI_GPUI_PNG` wrote a lit PNG on this machine in an earlier session. This checkout did not launch the Mac app. Run 38290795770 launched `AoriApp` on `macos-latest`, posted the click, called the mock, and opened the GPUI window. The Linux job in that run passed 49 tests and saved the GPUI PNG.
 

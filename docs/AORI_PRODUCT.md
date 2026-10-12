@@ -28,6 +28,8 @@ Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_de
 
 The screenshot path asks ScreenCaptureKit for one frame. When permission is denied, the app sends a PNG fixture through the OpenAI-compatible client. The workload is `screen:interpret`. The app does not run a vision ticker. A granted capture sends that frame to the configured provider.
 
+Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_source=screen`. The PNG was 30500 bytes. The mock reply was `Mock vision from CI.`. The mock does not read the pixels. The chat reply stayed `Mock reply from CI.`.
+
 ## Not in this app
 
 Cubism moc3, JavaScript plugins, a vision ticker, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
