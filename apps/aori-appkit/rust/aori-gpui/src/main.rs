@@ -90,7 +90,7 @@ fn main() {
           appears_transparent: true,
           traffic_light_position: None,
         }),
-        kind: WindowKind::PopUp,
+        kind: WindowKind::Normal,
         is_movable: true,
         window_background: WindowBackgroundAppearance::Transparent,
         ..Default::default()

@@ -76,6 +76,24 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
     /// Reads a short buffer. The mark is no-device, silence, or speech.
     @MainActor
     func captureUtterance(seconds: Double = 0.4) -> String {
+        let box = MarkBox()
+        let waiter = DispatchSemaphore(value: 0)
+        DispatchQueue.global(qos: .userInitiated).async {
+            box.set(Self.recordUtterance(seconds: seconds))
+            waiter.signal()
+        }
+        // NOTICE:
+        // The main thread waits on a semaphore and does not run its loop.
+        // A main run loop presents the recording prompt and does not return.
+        // Run 38289090176 stopped after aori_ax_press=Send message.
+        // Remove this wait when the screenshot path no longer reads the mic.
+        if waiter.wait(timeout: .now() + seconds + 1.0) == .timedOut {
+            return LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false)
+        }
+        return box.get()
+    }
+
+    private static func recordUtterance(seconds: Double) -> String {
         let probe = AVAudioEngine()
         let input = probe.inputNode
         let format = input.outputFormat(forBus: 0)
@@ -86,22 +104,35 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         input.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
             box.append(Self.samples(of: buffer))
         }
+        micLog("aori_mic_engine=start")
         do {
             try probe.start()
         } catch {
             input.removeTap(onBus: 0)
+            micLog("aori_mic_engine=unavailable")
             return LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false)
         }
-        let deadline = Date().addingTimeInterval(seconds)
-        while Date() < deadline {
-            RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
+        micLog("aori_mic_engine=running")
+        let waiter = DispatchSemaphore(value: 0)
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + seconds) {
+            waiter.signal()
         }
+        _ = waiter.wait(timeout: .now() + seconds + 0.2)
         probe.stop()
         input.removeTap(onBus: 0)
+        micLog("aori_mic_engine=stopped")
         let samples = box.copy()
         let activity = VoiceActivity(threshold: 0.02, silenceSeconds: 0.2, sampleRate: format.sampleRate)
         let speech = activity.containsSpeech(samples)
         return LiveUtterance.mark(hasDevice: true, sampleCount: samples.count, speech: speech)
+    }
+
+    private static func micLog(_ line: String) {
+        guard let data = (line + "\n").data(using: .utf8) else {
+            return
+        }
+        FileHandle.standardOutput.write(data)
+        try? FileHandle.standardOutput.synchronize()
     }
 
     /// Starts the input engine and stops it. The result is started or unavailable.
@@ -212,6 +243,23 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         @unknown default:
             return .unknown
         }
+    }
+}
+
+private final class MarkBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var mark = "no-device"
+
+    func set(_ value: String) {
+        lock.lock()
+        mark = value
+        lock.unlock()
+    }
+
+    func get() -> String {
+        lock.lock()
+        defer { lock.unlock() }
+        return mark
     }
 }
 

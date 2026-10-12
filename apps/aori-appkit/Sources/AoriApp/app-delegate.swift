@@ -165,6 +165,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logClickThrough()
         deliverClickThrough()
         logAccessibilityTree()
+        logLine("aori_mic_probe=begin")
         logLine("aori_mic_utterance=\(transcriber.captureUtterance())")
         Task {
             logLine("aori_accessibility=\(AccessibilityCopy.proof)")

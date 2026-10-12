@@ -9,8 +9,10 @@ cp scripts/window-id.swift /tmp/aori-window-id.swift
 swiftc -o build/window-id /tmp/aori-window-id.swift
 (
     cd rust
-    AORI_GPUI_EXIT_MS=4000 cargo run -q -p aori-gpui
-) >"$log" 2>&1 &
+    cargo build -p aori-gpui
+)
+bin="$PWD/rust/target/debug/aori-gpui"
+AORI_GPUI_EXIT_MS=20000 "$bin" >"$log" 2>&1 &
 pid=$!
 wid=""
 i=0

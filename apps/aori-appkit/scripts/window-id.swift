@@ -5,7 +5,8 @@ let info = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as
 let matches = info.filter { item in
     let owner = item[kCGWindowOwnerName as String] as? String ?? ""
     let title = item[kCGWindowName as String] as? String ?? ""
-    return owner == "Aori" || owner == "AoriApp" || title.contains("Aori")
+    let gpuiOwner = owner.range(of: "gpui", options: .caseInsensitive) != nil
+    return owner == "Aori" || owner == "AoriApp" || title.contains("Aori") || gpuiOwner
 }
 if matches.isEmpty {
     fputs("No Aori window. On-screen owners:\n", stderr)
@@ -18,12 +19,14 @@ if matches.isEmpty {
 }
 let role = CommandLine.arguments.dropFirst().first ?? "companion"
 guard let chosen = matches.first(where: { item in
+    let owner = item[kCGWindowOwnerName as String] as? String ?? ""
     let title = item[kCGWindowName as String] as? String ?? ""
     if role == "main" {
         return title == "Aori"
     }
     if role == "gpui" {
-        return title.contains("GPUI")
+        let gpuiOwner = owner.range(of: "gpui", options: .caseInsensitive) != nil
+        return title.contains("GPUI") || gpuiOwner
     }
     return title.contains("Companion")
 }) else {
