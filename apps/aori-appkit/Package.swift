@@ -28,7 +28,6 @@ targets.append(
             .linkedFramework("AppKit"),
             .linkedFramework("AVFoundation"),
             .linkedFramework("Speech"),
-            .linkedFramework("SceneKit"),
             .linkedFramework("Security"),
         ]
     )

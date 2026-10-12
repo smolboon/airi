@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = ["aori-face", "aori-gpui"]
+
+[patch.crates-io]
+xattr = { path = "patches/xattr" }

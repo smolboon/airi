@@ -1,35 +1,31 @@
 import AppKit
-import SceneKit
 import AoriCore
 
 @MainActor
 final class CharacterView: NSView {
-    var dragsWindow = false {
-        didSet { sceneView.dragsWindow = dragsWindow }
-    }
-
+    var dragsWindow = false
     var clearsBackground = false {
         didSet { applyBackground() }
     }
 
-    private let sceneView = DragSceneView()
     private let caption = NSVisualEffectView()
     private let titleLabel = NSTextField(labelWithString: "Aori")
     private let subtitleLabel = NSTextField(wrappingLabelWithString: "")
-    private let characterRoot = SCNNode()
     // The timer is created on the main run loop and invalidated in deinit.
     private nonisolated(unsafe) var timer: Timer?
     private var speaking = false
     private var emotion = CompanionEmotion.neutral
     private var mouthLevel = 0.0
+    private var sway = 0.0
+    private var meshes: [VRMMesh] = []
     private var blendShapes: [VRMBlendShape] = []
+    private var weights: [MorphWeight] = []
     private var loadedVertexCount = -1
     private var started = Date()
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
-        buildScene()
         buildChrome()
         applyBackground()
         startTimer()
@@ -51,8 +47,7 @@ final class CharacterView: NSView {
         emotion = presentation.emotion
         self.mouthLevel = mouthLevel
         if let scene, scene.vertexCount != loadedVertexCount {
-            characterRoot.childNodes.forEach { $0.removeFromParentNode() }
-            characterRoot.addChildNode(VRMSceneBuilder.makeRoot(scene: scene))
+            meshes = scene.meshes
             blendShapes = scene.blendShapes
             loadedVertexCount = scene.vertexCount
         }
@@ -67,34 +62,13 @@ final class CharacterView: NSView {
         super.mouseDown(with: event)
     }
 
-    private func buildScene() {
-        let scene = SCNScene()
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        cameraNode.camera?.zFar = 20
-        cameraNode.position = SCNVector3(0, 0.22, 1.35)
-
-        let ambient = SCNNode()
-        ambient.light = SCNLight()
-        ambient.light?.type = .ambient
-        ambient.light?.intensity = 650
-
-        let directional = SCNNode()
-        directional.light = SCNLight()
-        directional.light?.type = .directional
-        directional.light?.intensity = 800
-        directional.eulerAngles = SCNVector3(-0.6, 0.4, 0)
-
-        scene.rootNode.addChildNode(characterRoot)
-        scene.rootNode.addChildNode(cameraNode)
-        scene.rootNode.addChildNode(ambient)
-        scene.rootNode.addChildNode(directional)
-
-        sceneView.scene = scene
-        sceneView.allowsCameraControl = false
-        sceneView.autoenablesDefaultLighting = false
-        sceneView.antialiasingMode = .multisampling4X
-        sceneView.translatesAutoresizingMaskIntoConstraints = false
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        if !clearsBackground {
+            NSColor.windowBackgroundColor.setFill()
+            bounds.fill()
+        }
+        FaceDraw.paint(meshes: meshes, weights: weights, sway: sway, bounds: bounds)
     }
 
     private func buildChrome() {
@@ -114,17 +88,9 @@ final class CharacterView: NSView {
         caption.translatesAutoresizingMaskIntoConstraints = false
         caption.addSubview(titleLabel)
         caption.addSubview(subtitleLabel)
-
-        sceneView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(sceneView)
         addSubview(caption)
 
         NSLayoutConstraint.activate([
-            sceneView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            sceneView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            sceneView.topAnchor.constraint(equalTo: topAnchor),
-            sceneView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             caption.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             caption.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             caption.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
@@ -141,7 +107,10 @@ final class CharacterView: NSView {
     }
 
     private func applyBackground() {
-        sceneView.backgroundColor = clearsBackground ? .clear : .windowBackgroundColor
+        layer?.backgroundColor = clearsBackground
+            ? NSColor.clear.cgColor
+            : NSColor.windowBackgroundColor.cgColor
+        needsDisplay = true
     }
 
     private func startTimer() {
@@ -163,29 +132,13 @@ final class CharacterView: NSView {
         let pose = CharacterMotion.pose(time: time, speaking: speaking, emotion: emotion)
         let blink = abs(time.truncatingRemainder(dividingBy: 3.2) - 0.1) < 0.08 ? 1.0 : 0.0
         let mouth = speaking ? mouthLevel : 0
-        let weights = FaceDriver.morphWeights(
+        weights = FaceDriver.morphWeights(
             blendShapes: blendShapes,
             emotion: emotion,
             mouthOpen: mouth,
             blink: blink
         )
-        if let modelRoot = characterRoot.childNodes.first {
-            VRMSceneBuilder.apply(weights: weights, to: modelRoot)
-        }
-        characterRoot.position = SCNVector3(Float(pose.sway), 0, 0)
-    }
-
-}
-
-@MainActor
-private final class DragSceneView: SCNView {
-    var dragsWindow = false
-
-    override func mouseDown(with event: NSEvent) {
-        if dragsWindow {
-            window?.performDrag(with: event)
-            return
-        }
-        super.mouseDown(with: event)
+        sway = pose.sway
+        needsDisplay = true
     }
 }

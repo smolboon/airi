@@ -176,7 +176,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Aori"
-        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a VRM mesh. Speech levels move the mouth. Feelings move blend shapes."
+        alert.informativeText = "Aori is a desktop companion based on Project AIRI. The character is a VRM mesh drawn in AppKit. A Rust library moves the vertices. Speech levels move the mouth. Feelings move blend shapes."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }

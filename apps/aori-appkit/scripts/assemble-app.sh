@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 cd "$(dirname "$0")/.."
-swift build --product AoriApp
+./scripts/build-app.sh
 bin_dir="$(swift build --show-bin-path)"
 app_dir="build/Aori.app"
 rm -rf "$app_dir"

@@ -59,6 +59,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A1111111111111111111110B /* Build configuration list for PBXNativeTarget "Aori" */;
 			buildPhases = (
+				A11111111111111111111115 /* Build the face library */,
 				A11111111111111111111107 /* Sources */,
 				A11111111111111111111108 /* Frameworks */,
 				A11111111111111111111109 /* Resources */,
@@ -125,6 +126,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A11111111111111111111115 /* Build the face library */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build the face library";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\ncd \"$PROJECT_DIR/rust\"\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  cargo build --release -p aori-face\nelse\n  cargo build -p aori-face\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A11111111111111111111107 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -189,6 +207,11 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-L$(PROJECT_DIR)/rust/target/debug",
+					"-laori_face",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ai.moeru.aori.appkit;
 				PRODUCT_NAME = Aori;
 				SDKROOT = macosx;
@@ -217,6 +240,11 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-L$(PROJECT_DIR)/rust/target/release",
+					"-laori_face",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ai.moeru.aori.appkit;
 				PRODUCT_NAME = Aori;
 				SDKROOT = macosx;

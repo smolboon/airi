@@ -59,7 +59,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Idle motion | character modules | Blink and sway on the placeholder | Idle clips on a real mesh later |
 | Emotion | VRM expressions | glad, sorry, and wow change the placeholder face | Blend shapes later |
 | Lip-sync | audio weights on VRM mouths | RMS of TTS PCM buffers on the A blend shape | Phoneme visemes come later |
-| VRM mesh | `stage-ui-three` | CC0 head in SceneKit, bind pose, flat color | Bone animation and textures come later |
+| VRM mesh | `stage-ui-three` | CC0 head, AppKit triangles, Rust deform | Bone animation and textures come later |
 | Live2D | `stage-ui-live2d` | Absent | Native Cubism first. `WKWebView` only as a bridge |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Absent | Native host for Manifest v2 |
@@ -76,22 +76,33 @@ Use these Apple APIs for the port:
 - `URLSession` for provider HTTP.
 - `AVSpeechSynthesizer` for speech output.
 - Speech framework and `AVAudioEngine` for speech input.
-- SceneKit for the milestone 1 character. SceneKit draws with Metal.
-- A small glTF header reader for VRM names. The reader is pure Swift.
+- Rust `aori-face` for mesh deform and the flat projection.
+- GPUI 0.2.2 for a separate character window. The crate is Apache-2.0.
+- A small glTF header reader for VRM names. The reader is pure Swift. The Rust crate reads the same sample file for the GPUI window.
 
 Do not use SwiftUI for the window shell. A later control can be SwiftUI only when AppKit cannot express it.
 
+Do not use SceneKit. The AppKit view fills projected triangles.
+
+Zig is not a dependency. The mesh routine is small, so it lives in Rust. Add Zig when a routine is smaller there than in Rust.
+
+GPUI 0.2.2 owns its run loop. Zed pull request 63077 adds an embedded macOS loop. That pull request is not merged. This tree does not depend on it. The GPUI binary is a second window. The AppKit app does not host it.
+
+`xattr` 0.2.3 does not build with libc 0.2.190 on Linux. A patched copy in `rust/patches/xattr` uses `ENODATA` for that name. Delete the copy when GPUI depends on a fixed release.
+
 Do not use `WKWebView` in milestone 1. If a native Cubism renderer cannot ship, a later milestone can host Live2D in `WKWebView`. That bridge is the last option, not the default.
 
-RealityKit loads USDZ and Reality files. It does not load VRM. Milestone 2 can skin the VRM mesh in SceneKit or Metal. A USDZ conversion is a separate decision.
+RealityKit loads USDZ and Reality files. It does not load VRM. A USDZ conversion is a separate decision.
 
 ## Package layout
 
 ```text
 apps/aori-appkit/
-├── Sources/AoriCore/        # Messages, session, SSE, secrets, VRM metadata
+├── Sources/AoriCore/        # Messages, session, SSE, secrets, VRM bytes
 ├── Sources/AoriProviders/   # OpenAI-compatible client
-├── Sources/AoriApp/         # AppKit shell, speech, SceneKit
+├── Sources/AoriApp/         # AppKit shell, speech, triangle view
+├── rust/aori-face/          # Deform, project, and the sample glTF read
+├── rust/aori-gpui/          # Separate GPUI window for the same head
 └── Tests/                   # XCTest for the core modules
 ```
 
@@ -105,9 +116,11 @@ The companion window is transparent, draggable, and able to stay above other app
 
 ### Milestone 2, this change
 
-`VRMSceneReader` reads positions, normals, indices, and morph targets from a binary VRM file. SceneKit draws those meshes. The bundled file is `Sources/AoriApp/Resources/aori-sample.vrm`. It is an original low-poly head. The license is CC0. See `Resources/LICENSE.txt`.
+`VRMSceneReader` reads positions, normals, indices, and morph targets from a binary VRM file. The AppKit view fills the projected triangles. `aori-face` applies the morph deltas. The bundled file is `Sources/AoriApp/Resources/aori-sample.vrm`. It is an original low-poly head. The license is CC0. See `Resources/LICENSE.txt`.
 
 `AVSpeechSynthesizer.write` returns PCM buffers. The A blend shape uses the root-mean-square of each buffer. Joy, sorrow, surprised, and blink follow the emotion and the idle blink. The mesh stays in the bind pose. Bone animation is not applied. The material is a flat color. This is not a phoneme viseme map.
+
+The `aori-gpui` binary reads the same sample file and paints it with GPUI. That window uses a fixed mouth weight of 0.65. It does not hear the TTS buffers. This checkout did not open that window.
 
 ### Milestone 2 follow-up
 
@@ -131,6 +144,6 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed.
+The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. `cargo test -p aori-face` passed 4 tests with Rust 1.99.0. `cargo check -p aori-gpui` passed. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and the GPUI window were not executed.
 
 The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.

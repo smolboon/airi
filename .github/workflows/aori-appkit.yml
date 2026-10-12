@@ -29,8 +29,19 @@ jobs:
       - uses: swift-actions/setup-swift@v2
         with:
           swift-version: "6.0.3"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.99.0"
+      - name: Install GPUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libwayland-dev libxkbcommon-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
       - name: Test
         run: swift test
+      - name: Test the face library
+        working-directory: apps/aori-appkit/rust
+        run: cargo test -p aori-face
+      - name: Check the GPUI window
+        working-directory: apps/aori-appkit/rust
+        run: cargo check -p aori-gpui
 
   build-and-test-macos:
     name: Build the AppKit target and test on macOS
@@ -40,9 +51,18 @@ jobs:
         working-directory: apps/aori-appkit
     steps:
       - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.99.0"
       - name: Test
         run: swift test
+      - name: Test the face library
+        working-directory: apps/aori-appkit/rust
+        run: cargo test -p aori-face
+      - name: Check the GPUI window
+        working-directory: apps/aori-appkit/rust
+        run: cargo check -p aori-gpui
       - name: Build the AppKit target
-        run: swift build --product AoriApp
+        run: ./scripts/build-app.sh
       - name: Assemble the app bundle
         run: ./scripts/assemble-app.sh

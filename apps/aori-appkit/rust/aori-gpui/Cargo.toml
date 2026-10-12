@@ -1,0 +1,14 @@
+[package]
+name = "aori-gpui"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "GPUI window for the Aori sample head."
+
+[[bin]]
+name = "aori-gpui"
+path = "src/main.rs"
+
+[dependencies]
+aori-face = { path = "../aori-face" }
+gpui = "=0.2.2"
