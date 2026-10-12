@@ -25,6 +25,8 @@ func aoriFaceRender(
     _ surprised: Float,
     _ viseme: Int32,
     _ time: Float,
+    _ lookX: Float,
+    _ lookY: Float,
     _ width: UInt32,
     _ height: UInt32,
     _ outRGBA: UnsafeMutablePointer<UInt8>
@@ -60,6 +62,8 @@ enum FaceRaster {
         surprised: Float,
         viseme: Int32,
         time: Float,
+        lookX: Float,
+        lookY: Float,
         width: Int,
         height: Int
     ) -> [UInt8]? {
@@ -80,6 +84,8 @@ enum FaceRaster {
                 surprised,
                 viseme,
                 time,
+                lookX,
+                lookY,
                 UInt32(width),
                 UInt32(height),
                 base

@@ -116,27 +116,27 @@ The companion window is transparent, draggable, and able to stay above other app
 
 ### Milestone 2, this change
 
-The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded character. Bones are hips, spine, neck, head, leftEye, and rightEye. Skin weights use unsigned bytes. The idle clip sways the neck and the head, and it turns the eyes. A blink clip targets the eye bones. See `Resources/LICENSE.txt`.
+The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded character. Bones are hips, spine, neck, head, both eyes, and both arms. Skin weights use unsigned bytes. The idle clip sways the neck and the head, turns the eyes, and rotates the lower arms. A blink clip targets the eye bones. Look-at adds yaw and pitch on those eye bones. See `Resources/LICENSE.txt`.
 
 `aori-face` applies morphs, skins those bones, and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
 
-Letters map to VRM presets a, i, u, e, and o. The letters m, b, and p close the mouth. Playback time advances the preset at about 12 characters per second. `willSpeakRangeOfSpeechString` wins when it fires. RMS still scales the open vowel. This is not a phoneme recognizer.
+Known words use a small ARPAbet list. hello becomes HH EH L OW. papa becomes P AA P AH. Those symbols map to the mouth presets. Other words use the letter map. Playback time advances the units at about 12 per second. RMS still scales the open vowel. This list is not a phoneme recognizer.
 
 `AORI_SPEECH_WAV` stores the PCM that `AVSpeechSynthesizer.write` returned. The macOS job checks that the WAV is not silent and that the viseme log has more than one preset. This checkout did not play that audio.
 
-Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. English menu strings come from `packages/i18n/src/locales/en/aori.yaml`. Other locales are not loaded.
+Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` can load. Only the English file has Aori menu strings. Missing keys use that English text. The View menu lists the locale ids.
 
-A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more.
+A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. Run 38273314570 did that on `macos-latest`. The WAV RMS is 0.1532. The engine started. The viseme log includes e, o, a, and pp. The frame time was 8.21 ms. The loaded bones are hips, spine, neck, head, leftEye, and rightEye.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job then runs voice activity on that WAV, asks Speech for a transcript, and speaks a short reply when the API key is missing. It also probes the microphone and logs started or unavailable. Run 38273314570 is the last green capture before this turn path. That WAV RMS is 0.1532. The engine started. The viseme log includes e, o, a, and pp. The frame time was 8.21 ms.
 
 ### Milestone 2 follow-up
 
-Keep a voice turn going without a separate Speak press. Add click-through on the companion window.
+Add click-through on the companion window. Prove a live microphone on a machine that has one.
 
 ### Milestone 3, memory that lasts
 

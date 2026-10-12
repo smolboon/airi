@@ -1,6 +1,6 @@
 use crate::{
   add_morph, skin::{
-    joint_globals, sample_rotation, skin_positions, with_blink,
+    joint_globals, sample_rotation, skin_positions, with_blink, with_look,
   }, FaceScene, RgbaImage, Vec3,
 };
 
@@ -13,6 +13,8 @@ pub struct RenderPose {
   pub surprised: f32,
   pub viseme: i32,
   pub time: f32,
+  pub look_x: f32,
+  pub look_y: f32,
   pub reduce_motion: bool,
 }
 
@@ -26,6 +28,8 @@ impl Default for RenderPose {
       surprised: 0.0,
       viseme: 0,
       time: 0.0,
+      look_x: 0.0,
+      look_y: 0.0,
       reduce_motion: false,
     }
   }
@@ -101,6 +105,14 @@ pub fn deformed_meshes(
         let name = joint.name.to_ascii_lowercase();
         if name == "lefteye" || name == "righteye" {
           spins[index] = with_blink(spins[index]);
+        }
+      }
+    }
+    if pose.look_x.abs() > 1.0e-4 || pose.look_y.abs() > 1.0e-4 {
+      for (index, joint) in scene.joints.iter().enumerate() {
+        let name = joint.name.to_ascii_lowercase();
+        if name == "lefteye" || name == "righteye" {
+          spins[index] = with_look(spins[index], pose.look_x, pose.look_y);
         }
       }
     }

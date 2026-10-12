@@ -102,5 +102,63 @@ final class CompanionBehaviorTests: XCTestCase {
         AoriCopy.load(text)
         XCTAssertEqual(AoriCopy.showCompanion, "Show Companion")
         XCTAssertEqual(AoriCopy.settings, "Settings…")
+        XCTAssertEqual(AoriCopy.language, "Language")
+    }
+
+    func testSearchNotesAndChat() {
+        let messages = [
+            ChatMessage(role: .user, content: "The garden topic is roses"),
+            ChatMessage(role: .assistant, content: "I like rain"),
+        ]
+        let notes = [MemoryNote(text: "Papa likes roses")]
+        let hit = TranscriptSearch.match(query: "roses", messages: messages, notes: notes)
+        XCTAssertEqual(hit.messages.map(\.content), ["The garden topic is roses"])
+        XCTAssertEqual(hit.notes.map(\.text), ["Papa likes roses"])
+        let miss = TranscriptSearch.match(query: "roses rain", messages: messages, notes: notes)
+        XCTAssertTrue(miss.messages.isEmpty)
+        XCTAssertTrue(miss.notes.isEmpty)
+    }
+
+    func testVoiceActivityFindsAQuietTail() {
+        let activity = VoiceActivity(threshold: 0.05, silenceSeconds: 0.3, sampleRate: 1_000)
+        var samples = [Float](repeating: 0.2, count: 400)
+        samples.append(contentsOf: [Float](repeating: 0, count: 400))
+        XCTAssertTrue(activity.containsSpeech(samples))
+        XCTAssertTrue(activity.endpoint(samples))
+        XCTAssertFalse(activity.endpoint([Float](repeating: 0, count: 800)))
+    }
+
+    func testFrameLogIsJson() throws {
+        let line = AoriLog.frame(milliseconds: 8.21)
+        let data = Data(line.utf8)
+        let object = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        XCTAssertEqual(object?["event"] as? String, "frame")
+        XCTAssertEqual(object?["ms"] as? Double ?? 0, 8.21, accuracy: 0.001)
+    }
+
+    func testEveryLocaleDirectoryLoads() throws {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("packages/i18n/src/locales")
+        let loaded = LocaleCatalog.loadAll(root: root)
+        XCTAssertEqual(loaded.map(\.id), LocaleCatalog.ids)
+        XCTAssertTrue(loaded.allSatisfy(\.directoryExists))
+        XCTAssertTrue(loaded.allSatisfy { !$0.proof.isEmpty })
+        let japanese = try XCTUnwrap(loaded.first { $0.id == "ja" })
+        XCTAssertNil(japanese.menuText)
+        XCTAssertTrue(japanese.proof.contains("設定"))
+        let english = try XCTUnwrap(loaded.first { $0.id == "en" })
+        XCTAssertEqual(LocaleTable.parse(english.menuText ?? "").values["menu.showCompanion"], "Show Companion")
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("aori-locale-\(UUID().uuidString)", isDirectory: true)
+        let store = FileLocalePreferenceStore(fileURL: directory.appendingPathComponent("locale.json"))
+        XCTAssertEqual(try store.load(), "en")
+        try store.save(id: "ja")
+        XCTAssertEqual(try store.load(), "ja")
+        try FileManager.default.removeItem(at: directory)
     }
 }

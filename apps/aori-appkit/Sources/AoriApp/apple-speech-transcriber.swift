@@ -8,6 +8,7 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
     private let engine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
+    private var fileTask: SFSpeechRecognitionTask?
     private var tapInstalled = false
 
     init(locale: Locale = Locale(identifier: "en-US")) {
@@ -33,7 +34,10 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         return microphone ? .granted : .denied
     }
 
-    func start(onPartial: @escaping @Sendable (String) -> Void) throws {
+    func start(
+        onPartial: @escaping @Sendable (String) -> Void,
+        onSamples: @escaping @Sendable ([Float], Double) -> Void
+    ) throws {
         stop()
         guard let recognizer, recognizer.isAvailable else {
             throw SpeechSessionError.recognizerUnavailable
@@ -47,8 +51,13 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         guard format.sampleRate > 0, format.channelCount > 0 else {
             throw SpeechSessionError.microphoneUnavailable
         }
+        let rate = format.sampleRate
         input.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak request] buffer, _ in
             request?.append(buffer)
+            let samples = Self.samples(of: buffer)
+            if !samples.isEmpty {
+                onSamples(samples, rate)
+            }
         }
         tapInstalled = true
         engine.prepare()
@@ -60,6 +69,75 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
             }
             if error != nil || result?.isFinal == true {
                 onPartial(result?.bestTranscription.formattedString ?? "")
+            }
+        }
+    }
+
+    /// Starts the input engine and stops it. The result is started or unavailable.
+    func probeMicrophone() -> String {
+        let probe = AVAudioEngine()
+        let input = probe.inputNode
+        let format = input.outputFormat(forBus: 0)
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            return "unavailable"
+        }
+        input.installTap(onBus: 0, bufferSize: 512, format: format) { _, _ in }
+        do {
+            try probe.start()
+            probe.stop()
+            input.removeTap(onBus: 0)
+            return "started"
+        } catch {
+            return "unavailable"
+        }
+    }
+
+    func authorization(timeout seconds: Double) async -> SpeechPermission {
+        let current = Self.map(SFSpeechRecognizer.authorizationStatus())
+        if current != .unknown {
+            return current
+        }
+        return await withCheckedContinuation { continuation in
+            let gate = ResumeGate()
+            let finish: @Sendable (SpeechPermission) -> Void = { status in
+                if gate.claim() {
+                    continuation.resume(returning: status)
+                }
+            }
+            SFSpeechRecognizer.requestAuthorization { status in
+                finish(Self.map(status))
+            }
+            DispatchQueue.global().asyncAfter(deadline: .now() + seconds) {
+                finish(.unknown)
+            }
+        }
+    }
+
+    func transcribeFile(at url: URL, timeout seconds: Double = 12) async -> String {
+        await withCheckedContinuation { continuation in
+            let gate = ResumeGate()
+            let finish: @Sendable (String) -> Void = { text in
+                if gate.claim() {
+                    continuation.resume(returning: text)
+                }
+            }
+            guard let recognizer, recognizer.isAvailable else {
+                finish("")
+                return
+            }
+            let request = SFSpeechURLRecognitionRequest(url: url)
+            request.shouldReportPartialResults = true
+            fileTask = recognizer.recognitionTask(with: request) { result, error in
+                if let result, result.isFinal {
+                    finish(result.bestTranscription.formattedString)
+                    return
+                }
+                if error != nil {
+                    finish(result?.bestTranscription.formattedString ?? "")
+                }
+            }
+            DispatchQueue.global().asyncAfter(deadline: .now() + seconds) {
+                finish("")
             }
         }
     }
@@ -82,6 +160,14 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         }
     }
 
+    private static func samples(of buffer: AVAudioPCMBuffer) -> [Float] {
+        let count = Int(buffer.frameLength)
+        guard count > 0, let channels = buffer.floatChannelData else {
+            return []
+        }
+        return Array(UnsafeBufferPointer(start: channels[0], count: count))
+    }
+
     private static func map(_ status: SFSpeechRecognizerAuthorizationStatus) -> SpeechPermission {
         switch status {
         case .authorized:
@@ -95,5 +181,20 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
         @unknown default:
             return .unknown
         }
+    }
+}
+
+private final class ResumeGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var done = false
+
+    func claim() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        if done {
+            return false
+        }
+        done = true
+        return true
     }
 }

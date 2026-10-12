@@ -8,7 +8,10 @@ description = "Skin, raster, and glTF read for the Aori companion."
 [lib]
 name = "aori_face"
 path = "src/lib.rs"
-crate-type = ["lib", "staticlib"]
+crate-type = [
+  "lib",
+  "staticlib",
+]
 
 [dependencies]
 png = "0.17"

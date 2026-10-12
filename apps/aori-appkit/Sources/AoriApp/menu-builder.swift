@@ -7,7 +7,7 @@ struct InstalledMenu {
 
 @MainActor
 enum MenuBuilder {
-    static func install(target: AnyObject) -> InstalledMenu {
+    static func install(target: AnyObject, localeID: String) -> InstalledMenu {
         let main = NSMenu()
 
         let appMenu = NSMenu(title: AoriCopy.appName)
@@ -53,6 +53,21 @@ enum MenuBuilder {
             keyEquivalent: "t"
         )
         bind(alwaysOnTop, target: target)
+        let languageMenu = NSMenu(title: AoriCopy.language)
+        for id in LocaleCatalog.ids {
+            let item = languageMenu.addItem(
+                withTitle: id,
+                action: #selector(AppDelegate.selectLocale(_:)),
+                keyEquivalent: ""
+            )
+            item.representedObject = id
+            item.state = id == localeID ? .on : .off
+            bind(item, target: target)
+        }
+        let languageItem = NSMenuItem()
+        languageItem.title = AoriCopy.language
+        languageItem.submenu = languageMenu
+        viewMenu.addItem(languageItem)
         let viewItem = NSMenuItem()
         viewItem.submenu = viewMenu
         main.addItem(viewItem)

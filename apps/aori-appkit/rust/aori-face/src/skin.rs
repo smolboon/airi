@@ -119,9 +119,23 @@ pub fn with_blink(spin: [f32; 4]) -> [f32; 4] {
   mul_quat(spin, quat_x(0.8))
 }
 
+pub fn with_look(
+  spin: [f32; 4],
+  look_x: f32,
+  look_y: f32,
+) -> [f32; 4] {
+  let yaw = mul_quat(spin, quat_y(look_x));
+  mul_quat(yaw, quat_x(look_y))
+}
+
 fn quat_x(angle: f32) -> [f32; 4] {
   let half = angle * 0.5;
   [half.sin(), 0.0, 0.0, half.cos()]
+}
+
+fn quat_y(angle: f32) -> [f32; 4] {
+  let half = angle * 0.5;
+  [0.0, half.sin(), 0.0, half.cos()]
 }
 
 fn mul_quat(

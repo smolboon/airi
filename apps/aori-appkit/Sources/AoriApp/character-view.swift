@@ -20,6 +20,7 @@ final class CharacterView: NSView {
     private var sway = 0.0
     private var poseTime = 0.0
     private var blink = 0.0
+    private var reduceMotion = false
     private var meshes: [VRMMesh] = []
     private var blendShapes: [VRMBlendShape] = []
     private var weights: [MorphWeight] = []
@@ -162,7 +163,7 @@ final class CharacterView: NSView {
 
     private func tick() {
         let time = Date().timeIntervalSince(started)
-        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         poseTime = MotionPolicy.idleTime(time: time, reduceMotion: reduceMotion)
         blink = MotionPolicy.blink(time: time, reduceMotion: reduceMotion)
         let pose = CharacterMotion.pose(time: poseTime, speaking: speaking, emotion: emotion)
@@ -174,7 +175,7 @@ final class CharacterView: NSView {
             blink: blink,
             viseme: viseme
         )
-        sway = reduceMotion ? 0 : pose.sway
+        sway = self.reduceMotion ? 0 : pose.sway
         needsDisplay = true
     }
 
@@ -196,6 +197,7 @@ final class CharacterView: NSView {
         }
         let feelings = feelingWeights(emotion)
         let mouth = speaking ? Float(mouthLevel) : 0
+        let look = LookAt.offset(time: time, reduceMotion: reduceMotion)
         return FaceRaster.render(
             scene: faceScene,
             mouth: mouth,
@@ -205,6 +207,8 @@ final class CharacterView: NSView {
             surprised: feelings.surprised,
             viseme: Viseme(rawValue: viseme)?.code ?? Viseme.sil.code,
             time: Float(time),
+            lookX: Float(look.x),
+            lookY: Float(look.y),
             width: width,
             height: height
         )

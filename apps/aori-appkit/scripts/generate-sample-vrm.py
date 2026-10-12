@@ -166,6 +166,33 @@ def eye_skin(positions, left_count):
     return joints, [(1.0, 0.0, 0.0, 0.0)] * len(positions)
 
 
+def box(center, half):
+    cx, cy, cz = center
+    hx, hy, hz = half
+    corners = []
+    for x in (-hx, hx):
+        for y in (-hy, hy):
+            for z in (-hz, hz):
+                corners.append((cx + x, cy + y, cz + z))
+    quads = [
+        (0, 1, 3, 2),
+        (4, 6, 7, 5),
+        (0, 4, 5, 1),
+        (2, 3, 7, 6),
+        (0, 2, 6, 4),
+        (1, 5, 7, 3),
+    ]
+    indices = []
+    for a, b, c, d in quads:
+        indices.extend((a, b, c, a, c, d))
+    normals = []
+    for x, y, z in corners:
+        dx, dy, dz = x - cx, y - cy, z - cz
+        length = math.sqrt(dx * dx + dy * dy + dz * dz) or 1.0
+        normals.append((dx / length, dy / length, dz / length))
+    return corners, normals, indices
+
+
 def main():
     head_center = (0.0, 0.2, 0.0)
     left_center = (-0.09, 0.26, 0.30)
@@ -226,7 +253,21 @@ def main():
         inverse_translation(0.0, 0.17, 0.0),
         inverse_translation(-0.09, 0.26, 0.30),
         inverse_translation(0.09, 0.26, 0.30),
+        inverse_translation(-0.16, 0.04, 0.0),
+        inverse_translation(-0.16, -0.04, 0.0),
+        inverse_translation(-0.16, -0.14, 0.0),
+        inverse_translation(0.16, 0.04, 0.0),
+        inverse_translation(0.16, -0.04, 0.0),
+        inverse_translation(0.16, -0.14, 0.0),
     ]
+    left_arm, left_arm_normals, left_arm_indices = box((-0.16, -0.14, 0.0), (0.02, 0.05, 0.02))
+    right_arm, right_arm_normals, right_arm_indices = box((0.16, -0.14, 0.0), (0.02, 0.05, 0.02))
+    arm_positions = left_arm + right_arm
+    arm_normals = left_arm_normals + right_arm_normals
+    arm_indices = list(left_arm_indices)
+    arm_indices.extend(index + len(left_arm) for index in right_arm_indices)
+    arm_joints = [(8, 0, 0, 0)] * len(left_arm) + [(11, 0, 0, 0)] * len(right_arm)
+    arm_weights = [(1.0, 0.0, 0.0, 0.0)] * len(arm_positions)
 
     binary = Bin()
     head_position = binary.vec3(head_positions)
@@ -243,6 +284,11 @@ def main():
     eye_weight = binary.weights(eye_weights)
     eye_index = binary.scalar(eye_indices)
     eye_blink_accessor = binary.vec3(eye_blink)
+    arm_position = binary.vec3(arm_positions)
+    arm_normal = binary.vec3(arm_normals)
+    arm_joint = binary.joints(arm_joints)
+    arm_weight = binary.weights(arm_weights)
+    arm_index = binary.scalar(arm_indices)
     inverse_bind = binary.mat4(binds)
     idle_time = binary.floats([0.0, 1.6, 3.2], "SCALAR")
     blink_time = binary.floats([0.0, 0.12, 0.24], "SCALAR")
@@ -251,6 +297,8 @@ def main():
         (rest, quat_axis(0, 1, 0, 0.22), rest),
         (rest, quat_axis(0, 1, 0, 0.40), rest),
         (rest, quat_axis(0, 1, 0, -0.25), rest),
+        (rest, quat_axis(0, 0, 1, 0.55), rest),
+        (rest, quat_axis(0, 0, 1, -0.55), rest),
     ]
     blink_turn = quat_axis(1, 0, 0, 0.8)
     blink_keys = [
@@ -288,6 +336,14 @@ def main():
                     "roughnessFactor": 0.4,
                 },
             },
+            {
+                "name": "arms",
+                "pbrMetallicRoughness": {
+                    "baseColorFactor": [0.96, 0.78, 0.74, 1],
+                    "metallicFactor": 0,
+                    "roughnessFactor": 0.7,
+                },
+            },
         ],
         "meshes": [
             {
@@ -322,20 +378,40 @@ def main():
                     "targets": [{"POSITION": eye_blink_accessor}],
                 }],
             },
+            {
+                "name": "arms",
+                "primitives": [{
+                    "attributes": {
+                        "POSITION": arm_position,
+                        "NORMAL": arm_normal,
+                        "JOINTS_0": arm_joint,
+                        "WEIGHTS_0": arm_weight,
+                    },
+                    "indices": arm_index,
+                    "material": 2,
+                }],
+            },
         ],
         "nodes": [
             {"name": "hips", "translation": [0, 0, 0], "children": [1]},
-            {"name": "spine", "translation": [0, 0.02, 0], "children": [2]},
+            {"name": "spine", "translation": [0, 0.02, 0], "children": [2, 6, 9]},
             {"name": "neck", "translation": [0, 0.03, 0], "children": [3]},
             {"name": "head", "translation": [0, 0.12, 0], "children": [4, 5]},
             {"name": "leftEye", "translation": [-0.09, 0.09, 0.30]},
             {"name": "rightEye", "translation": [0.09, 0.09, 0.30]},
+            {"name": "leftShoulder", "translation": [-0.16, 0.02, 0], "children": [7]},
+            {"name": "leftUpperArm", "translation": [0, -0.08, 0], "children": [8]},
+            {"name": "leftLowerArm", "translation": [0, -0.10, 0]},
+            {"name": "rightShoulder", "translation": [0.16, 0.02, 0], "children": [10]},
+            {"name": "rightUpperArm", "translation": [0, -0.08, 0], "children": [11]},
+            {"name": "rightLowerArm", "translation": [0, -0.10, 0]},
             {"name": "headMesh", "mesh": 0, "skin": 0},
             {"name": "eyesMesh", "mesh": 1, "skin": 0},
+            {"name": "armsMesh", "mesh": 2, "skin": 0},
         ],
         "skins": [{
             "name": "armature",
-            "joints": [0, 1, 2, 3, 4, 5],
+            "joints": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             "inverseBindMatrices": inverse_bind,
         }],
         "animations": [
@@ -346,6 +422,8 @@ def main():
                     {"sampler": 1, "target": {"node": 3, "path": "rotation"}},
                     {"sampler": 2, "target": {"node": 4, "path": "rotation"}},
                     {"sampler": 3, "target": {"node": 5, "path": "rotation"}},
+                    {"sampler": 4, "target": {"node": 8, "path": "rotation"}},
+                    {"sampler": 5, "target": {"node": 11, "path": "rotation"}},
                 ],
                 "samplers": [
                     {"input": idle_time, "output": accessor, "interpolation": "LINEAR"}
@@ -364,7 +442,7 @@ def main():
                 ],
             },
         ],
-        "scenes": [{"nodes": [0, 6, 7]}],
+        "scenes": [{"nodes": [0, 12, 13, 14]}],
         "scene": 0,
         "extensions": {
             "VRM": {
@@ -396,6 +474,12 @@ def main():
                         {"bone": "head", "node": 3, "useDefaultValues": True},
                         {"bone": "leftEye", "node": 4, "useDefaultValues": True},
                         {"bone": "rightEye", "node": 5, "useDefaultValues": True},
+                        {"bone": "leftShoulder", "node": 6, "useDefaultValues": True},
+                        {"bone": "leftUpperArm", "node": 7, "useDefaultValues": True},
+                        {"bone": "leftLowerArm", "node": 8, "useDefaultValues": True},
+                        {"bone": "rightShoulder", "node": 9, "useDefaultValues": True},
+                        {"bone": "rightUpperArm", "node": 10, "useDefaultValues": True},
+                        {"bone": "rightLowerArm", "node": 11, "useDefaultValues": True},
                     ]
                 },
             }

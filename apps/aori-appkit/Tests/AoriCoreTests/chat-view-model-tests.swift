@@ -72,6 +72,25 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(emotion, .happy)
     }
 
+    func testHandsFreeTurnSendsWithoutASpeakAction() async {
+        let client = ScriptedChatClient(events: [.delta("Hi"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        var turn = VoiceTurn()
+        let action = turn.hear(utterance: "hello papa")
+        guard case .send(let text) = action else {
+            XCTFail("The turn did not send.")
+            return
+        }
+        await model.setDraft(text)
+        await model.send()
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["hello papa", "Hi"])
+        XCTAssertEqual(turn.acceptReply(messages.last?.content ?? ""), .speak("Hi"))
+        XCTAssertEqual(client.recordedMessages().count, 1)
+        turn.finishSpeech()
+        XCTAssertEqual(turn.phase, .listening)
+    }
+
     func testSavedTranscriptSkipsTheGreeting() async {
         let model = await ChatViewModel(client: ScriptedChatClient(events: []), configuration: testConfiguration())
         let saved = ChatMessage(role: .user, content: "saved line")

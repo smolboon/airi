@@ -201,6 +201,8 @@ pub unsafe extern "C" fn aori_face_render(
   surprised: f32,
   viseme: i32,
   time: f32,
+  look_x: f32,
+  look_y: f32,
   width: u32,
   height: u32,
   out_rgba: *mut u8,
@@ -222,6 +224,8 @@ pub unsafe extern "C" fn aori_face_render(
       surprised,
       viseme,
       time,
+      look_x,
+      look_y,
       reduce_motion: false,
     },
     width,
@@ -311,12 +315,14 @@ mod tests {
   #[test]
   fn bind_pose_keeps_vertices_and_the_idle_clip_moves_them() {
     let scene = sample();
-    assert_eq!(scene.joints.len(), 6);
+    assert_eq!(scene.joints.len(), 12);
     let names: Vec<&str> = scene.joints.iter().map(|joint| joint.name.as_str()).collect();
     assert!(names.contains(&"hips"));
     assert!(names.contains(&"head"));
     assert!(names.contains(&"leftEye"));
     assert!(names.contains(&"rightEye"));
+    assert!(names.contains(&"leftLowerArm"));
+    assert!(names.contains(&"rightLowerArm"));
     assert!(scene.animations.iter().any(|clip| clip.name == "idle"));
     assert!(scene.animations.iter().any(|clip| clip.name == "blink"));
     let rest = raster::deformed_meshes(&scene, &RenderPose::default());
@@ -340,6 +346,12 @@ mod tests {
       .zip(turned[0].iter())
       .any(|(base, next)| (base.x - next.x).abs() > 0.02);
     assert!(moved);
+    let arm_moved = scene.meshes[2]
+      .positions
+      .iter()
+      .zip(turned[2].iter())
+      .any(|(base, next)| (base.x - next.x).abs() > 0.01);
+    assert!(arm_moved, "the idle clip rotates a lower arm");
     let held = raster::deformed_meshes(
       &scene,
       &RenderPose {
@@ -408,6 +420,19 @@ mod tests {
       .zip(vowel_i[0].iter())
       .any(|(left, right)| (left.y - right.y).abs() > 0.005 || (left.z - right.z).abs() > 0.005);
     assert!(viseme_differs);
+    let gazed = raster::deformed_meshes(
+      &scene,
+      &RenderPose {
+        look_x: 0.8,
+        ..RenderPose::default()
+      },
+    );
+    let gaze_moved = scene.meshes[1]
+      .positions
+      .iter()
+      .zip(gazed[1].iter())
+      .any(|(base, next)| (base.x - next.x).abs() > 0.005 || (base.z - next.z).abs() > 0.005);
+    assert!(gaze_moved, "look-at turns an eye bone");
   }
 
   #[test]
@@ -490,11 +515,11 @@ mod tests {
     assert!(!scene.is_null());
     let mut image = vec![0_u8; 32 * 32 * 4];
     let code = unsafe {
-      aori_face_render(scene, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 32, 32, image.as_mut_ptr())
+      aori_face_render(scene, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 32, 32, image.as_mut_ptr())
     };
     assert_eq!(code, 0);
     assert!(image.iter().any(|byte| *byte > 0));
-    let bad = unsafe { aori_face_render(std::ptr::null(), 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 32, 32, image.as_mut_ptr()) };
+    let bad = unsafe { aori_face_render(std::ptr::null(), 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 32, 32, image.as_mut_ptr()) };
     assert_eq!(bad, -1);
     unsafe { aori_face_free(scene) };
     assert!(unsafe { aori_face_load(std::ptr::null(), 4) }.is_null());

@@ -1,4 +1,9 @@
 import Foundation
+#if canImport(Glibc)
+import Glibc
+#elseif canImport(Darwin)
+import Darwin
+#endif
 
 /// English UI copy for the native shell. `load` reads `packages/i18n` before the menu is built.
 public enum AoriCopy {
@@ -21,6 +26,7 @@ public enum AoriCopy {
     public static var showCompanion: String { text("menu.showCompanion", fallback: "Show Companion") }
     public static var hideCompanion: String { text("menu.hideCompanion", fallback: "Hide Companion") }
     public static var alwaysOnTop: String { text("menu.alwaysOnTop", fallback: "Companion Always on Top") }
+    public static var language: String { text("menu.language", fallback: "Language") }
     public static var statusItem: String { text("menu.statusItem", fallback: "Aori") }
 
     private static func text(_ key: String, fallback: String) -> String {
@@ -53,6 +59,16 @@ public enum MotionPolicy {
             remainder += 3.2
         }
         return abs(remainder - 0.1) < 0.08 ? 1 : 0
+    }
+}
+
+public enum LookAt {
+    /// Eye yaw and pitch in radians. Reduce motion holds the eyes at rest.
+    public static func offset(time: Double, reduceMotion: Bool) -> (x: Double, y: Double) {
+        if reduceMotion {
+            return (0, 0)
+        }
+        return (sin(time * 0.7) * 0.35, sin(time * 0.35) * 0.12)
     }
 }
 

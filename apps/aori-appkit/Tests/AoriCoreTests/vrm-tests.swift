@@ -128,7 +128,15 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(text.contains("\"bone\":\"rightEye\""))
         XCTAssertTrue(text.contains("5121"))
         let bones = try VRMHumanoidReader.bones(in: bytes)
-        XCTAssertEqual(bones.map(\.name), ["hips", "spine", "neck", "head", "leftEye", "rightEye"])
+        XCTAssertEqual(
+            bones.map(\.name),
+            ["hips", "spine", "neck", "head", "leftEye", "rightEye", "leftShoulder", "leftUpperArm", "leftLowerArm", "rightShoulder", "rightUpperArm", "rightLowerArm"]
+        )
+        XCTAssertEqual(
+            PhonemeTimeline.symbols(in: "Hello papa"),
+            ["HH", "EH", "L", "OW", "P", "AA", "P", "AH"]
+        )
+        XCTAssertTrue(PhonemeTimeline.visemes(in: "Hi").contains(.i))
         let phrase = VisemeTimeline.presets(in: "Hello papa")
         XCTAssertTrue(phrase.contains(.e))
         XCTAssertTrue(phrase.contains(.o))
@@ -144,6 +152,9 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertEqual(String(decoding: wav.prefix(4), as: UTF8.self), "RIFF")
         XCTAssertEqual(String(decoding: wav.dropFirst(8).prefix(4), as: UTF8.self), "WAVE")
         XCTAssertGreaterThan(WavFile.rms(samples: [Float](repeating: 0.25, count: 16)), 0.2)
+        let decoded = WavFile.decode(wav)
+        XCTAssertEqual(decoded?.sampleRate, 16_000)
+        XCTAssertEqual(decoded?.samples.count, 16)
         XCTAssertEqual(ScreenshotPose.mouthOpen, 1)
         XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: false), 1)
         XCTAssertEqual(MotionPolicy.blink(time: 0.1, reduceMotion: true), 0)

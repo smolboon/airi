@@ -23,6 +23,7 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
     private var visemes: [String] = []
     private var engineFailed = false
     private var artifactsWritten = false
+    private var keptArtifact = false
 
     func speak(_ text: String) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -164,19 +165,25 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         }
         artifactsWritten = true
         let environment = ProcessInfo.processInfo.environment
-        if let path = environment["AORI_SPEECH_WAV"], !path.isEmpty, !recorded.isEmpty {
-            let wav = WavFile.encode(samples: recorded, sampleRate: Int(sampleRate.rounded()))
-            try? wav.write(to: URL(fileURLWithPath: path))
-            let rms = WavFile.rms(samples: recorded)
-            logLine(String(format: "aori_speech_rms=%.4f", rms))
-        }
-        if let path = environment["AORI_VISEME_LOG"], !path.isEmpty {
-            let body = visemes.isEmpty ? "" : visemes.joined(separator: "\n") + "\n"
-            try? Data(body.utf8).write(to: URL(fileURLWithPath: path))
-            logLine("aori_visemes=\(visemes.joined(separator: ","))")
+        if !keptArtifact {
+            if let path = environment["AORI_SPEECH_WAV"], !path.isEmpty, !recorded.isEmpty {
+                let wav = WavFile.encode(samples: recorded, sampleRate: Int(sampleRate.rounded()))
+                try? wav.write(to: URL(fileURLWithPath: path))
+                let rms = WavFile.rms(samples: recorded)
+                logLine(String(format: "aori_speech_rms=%.4f", rms))
+            }
+            if let path = environment["AORI_VISEME_LOG"], !path.isEmpty {
+                let body = visemes.isEmpty ? "" : visemes.joined(separator: "\n") + "\n"
+                try? Data(body.utf8).write(to: URL(fileURLWithPath: path))
+                logLine("aori_visemes=\(visemes.joined(separator: ","))")
+            }
+            let symbols = PhonemeTimeline.symbols(in: spokenText)
+            logLine("aori_phonemes=\(symbols.joined(separator: ","))")
+            keptArtifact = true
         }
         let engine = engineFailed ? "failed" : (engineReady ? "started" : "idle")
         logLine("aori_speech_engine=\(engine)")
+        logLine(AoriLog.event("speech", ["engine": engine]))
     }
 
     private func logLine(_ line: String) {

@@ -11,6 +11,8 @@ vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
 rm -f "$frame" "$window" "$wav" "$visemes"
 mkdir -p build
 AORI_SCREENSHOT=1 \
+    AORI_LOCALE=ja \
+    AORI_LOCALES_ROOT="$PWD/../../packages/i18n/src/locales" \
     AORI_FRAMEBUFFER_PATH="$frame" \
     AORI_SPEECH_WAV="$wav" \
     AORI_VISEME_LOG="$visemes" \
@@ -19,8 +21,8 @@ AORI_SCREENSHOT=1 \
 pid=$!
 ready=0
 i=0
-while [ "$i" -lt 80 ]; do
-    if [ -f "$frame" ] && [ -f "$wav" ] && [ -f "$visemes" ]; then
+while [ "$i" -lt 140 ]; do
+    if [ -f "$frame" ] && [ -f "$wav" ] && [ -f "$visemes" ] && grep -q "aori_turn=done" "$log"; then
         ready=1
         break
     fi
@@ -66,6 +68,25 @@ unique = set(lines)
 print("aori_viseme_presets=" + ",".join(sorted(unique)))
 needed = {"e", "o", "a", "pp"}
 sys.exit(0 if needed.issubset(unique) else 1)
+PY
+python3 - "$log" <<'PY'
+import pathlib, sys
+text = pathlib.Path(sys.argv[1]).read_text()
+need = [
+    '"event":"frame"',
+    "aori_phonemes=HH,EH,L,OW,P,AA,P,AH",
+    "aori_vad=speech",
+    "aori_stt=",
+    "aori_llm=",
+    "aori_locale=ja",
+    "aori_locale_menu=fallback",
+    "aori_mic=",
+    "leftLowerArm",
+    "aori_turn=done",
+]
+missing = [item for item in need if item not in text]
+print("aori_log_missing=" + ",".join(missing))
+sys.exit(0 if not missing else 1)
 PY
 sleep 1
 cp scripts/window-id.swift /tmp/aori-window-id.swift

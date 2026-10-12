@@ -35,6 +35,9 @@ public protocol SpeechSynthesizer: AnyObject {
 /// The name is not `SpeechTranscriber`. That name is an Apple class on newer SDKs.
 public protocol VoiceTranscriber: AnyObject, Sendable {
     func requestAuthorization() async -> SpeechPermission
-    func start(onPartial: @escaping @Sendable (String) -> Void) throws
+    func start(
+        onPartial: @escaping @Sendable (String) -> Void,
+        onSamples: @escaping @Sendable ([Float], Double) -> Void
+    ) throws
     func stop()
 }

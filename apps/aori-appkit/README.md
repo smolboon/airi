@@ -8,7 +8,7 @@ The app opens a main window and a transparent companion window. The companion wi
 
 Settings stores a name and a personality. Say "remember that" in chat to store a fact. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
-Speak uses `AVSpeechSynthesizer`. Letters pick a viseme. The audio level scales that shape. Listen uses the Speech framework. The bundled character is an original CC0 VRM humanoid with a texture. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image. Chat history and provider settings are saved next to the persona file. English menu strings come from `packages/i18n`.
+Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other words use letters. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh and fills a depth buffer. AppKit shows that image. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Menu strings come from `packages/i18n`. Missing Aori keys use English.
 
 You can open another `.vrm` file. A separate GPUI window paints the same sample with flat triangles. That window is not the AppKit app.
 
@@ -82,4 +82,4 @@ The macOS CI job also runs `./scripts/assemble-app.sh` and `./scripts/screenshot
 
 ## Limits
 
-This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Visemes follow letters in the spoken line. They are not a phoneme recognizer. The GPUI window does not use the depth buffer. Other locales are not loaded.
+This tree does not run Live2D. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer. The GPUI window does not use the depth buffer. It does not hear speech. Every locale directory under `packages/i18n` can load. Only the English file has Aori menu strings.

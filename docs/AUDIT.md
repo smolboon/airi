@@ -21,18 +21,18 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 | Architecture and module boundaries | 3 | `AoriCore` and `AoriProviders` do not import AppKit. `Package.swift` adds `AoriApp` only on macOS. `aori-face` is Rust and has no AppKit. `ChatViewModel` owns the send state. |
 | Platform integration | 3 | AppKit, a status item, Keychain, Speech, and AVFoundation are in `Sources/AoriApp`. The raster is a Rust static library. GPUI is a second binary. Run 38269452282 launched `AoriApp` on `macos-latest`. This checkout did not open the microphone, the Keychain, or the GPUI window. |
 | User interface and interaction | 3 | Run 38269452282 captured the companion window. The image is 280 by 380. Corner alpha is 0. The caption reads "Aori Sample". The status item and the chat window are not in that image. |
-| Graphics and character rendering | 4 | `aori-face` skins hips, spine, neck, head, and both eyes. Tests keep the bind pose and move the head, the eyes, and the blink bone. The sample is an original CC0 VRM 0 file. There is no Live2D view. The GPUI binary still paints flat triangles. |
-| Audio, speech input, and speech output | 3 | Run 38273314570 recorded PCM from `AVSpeechSynthesizer.write`. The WAV RMS is 0.1532. The engine started. The viseme log includes e, o, a, and pp. This is a letter map, not a phoneme recognizer. The microphone was not opened. |
+| Graphics and character rendering | 4 | `aori-face` skins hips, spine, neck, head, both eyes, and both arms. Tests keep the bind pose and move the head, an arm, the blink bone, and a look-at yaw. The sample is an original CC0 VRM 0 file. There is no Live2D view. The GPUI binary still paints flat triangles. |
+| Audio, speech input, and speech output | 3 | Run 38273314570 recorded PCM from `AVSpeechSynthesizer.write`. The WAV RMS is 0.1532. The engine started. Known words now use an ARPAbet list. Other words use letters. A Linux test sends the heard line to the chat client with no Speak action. The last macOS capture did not open the microphone and did not run that turn. |
 | Networking and model providers | 3 | `OpenAICompatibleClient` parses streamed chat completions. Tests use a scripted transport. There is no live network call. Linux `URLSession` buffers the body. See the NOTICE in `http-transport.swift`. |
 | Security, secrets, and privacy | 3 | Key order is explicit, then `AORI_OPENAI_API_KEY`, then `OPENAI_API_KEY`, then Keychain. A Keychain read fails instead of showing a prompt. `SecretRedaction` strips the key from error text. No key is committed. The Keychain code was not executed here. The app is not sandboxed. |
-| Data persistence | 3 | `chat.json` stores the transcript. `settings.json` stores the base URL and the model. `companion.json` stores the persona and memory notes. Linux tests round-trip the chat and the settings file. There is no topic search. |
+| Data persistence | 4 | `chat.json` stores the transcript. `settings.json` stores the base URL and the model. `locale.json` stores the locale id. `companion.json` stores the persona and memory notes. `TranscriptSearch` matches every query word in a chat line and in a memory note. The chat panel has a search field. This is not embeddings or pgvector. |
 | Error handling and recovery | 3 | `ChatProviderError` covers a missing key, HTTP status, and a bad event. A failed stream keeps partial text. The client does not retry. `core-agent` retries some HTTP statuses. This client does not. |
-| Testing | 4 | XCTest covers the humanoid bones, visemes, the WAV header, chat files, settings files, and the English menu yaml. `swift test` on Linux Swift 6.0.3 ran 36 tests with 0 failures. `cargo test -p aori-face` ran 9 tests with 0 failures. Run 38273314570 checked the recorded WAV and the viseme log. |
+| Testing | 4 | XCTest covers the arm bones, phoneme units, WAV decode, chat search, the locale catalog, voice activity, and the hands-free send. `swift test` on Linux Swift 6.0.3 ran 41 tests with 0 failures. `cargo test -p aori-face` ran 9 tests with 0 failures. Run 38273314570 checked the recorded WAV and the viseme log. |
 | Continuous integration and build | 4 | `.github/workflows/aori-appkit.yml` runs `swift test`, `cargo test -p aori-face`, and `cargo check -p aori-gpui` on `ubuntu-latest`. On `macos-latest` it launches the app, checks the WAV, and uploads the capture. Run 38273314570 passed both jobs. The Xcode project is not the CI build. |
 | Documentation | 4 | `docs/APPKIT_PORT.md`, this file, and `apps/aori-appkit/README.md` match the tree. They name the CC0 rig, the depth buffer, and the Linux limit. |
 | Accessibility | 3 | Send, Speak, Listen, the draft field, and the transcript have accessibility labels. The status item has an accessibility description. Reduced motion holds the neck clip and the blink. There was no VoiceOver pass. |
-| Internationalization | 3 | Run 38273314570 printed `aori_i18n=loaded`. English menu strings come from `packages/i18n/src/locales/en/aori.yaml`. A test checks `menu.showCompanion`. Other locales are not loaded. |
-| Performance and operability | 3 | A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more. Run 38273314570 printed `aori_frame_ms=8.21`. There is no log pipeline. |
+| Internationalization | 3 | A Linux test loads en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The Japanese tray file supplies 設定. Aori menu keys exist only in English. Missing keys use that English text. The View menu lists the locale ids. Run 38273314570 printed `aori_i18n=loaded` before this catalog. It did not print `aori_locale`. |
+| Performance and operability | 3 | A debug build rendered 20 frames at 280 by 380. The median was 2.70 ms. The max was 2.80 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes `{"event":"frame","ms":...}`. A test parses that line. Run 38273314570 printed `aori_frame_ms=8.21` before this logger. |
 
 ## What works in code
 
@@ -42,23 +42,26 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 - A name and a personality in Settings. They become the system prompt.
 - Local memory notes from "remember that", stored in `companion.json`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
-- Idle blink, neck sway, head sway, and an eye look. Keyword faces for glad, sorry, and wow.
+- Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.
 - Streaming OpenAI-compatible chat, including split SSE events.
 - API keys from the environment or `KeychainSecretStore`. Error text redacts the key.
 - Speech buttons that call `AVSpeechSynthesizer` and `SFSpeechRecognizer`.
-- An original CC0 VRM 0 humanoid. Bones are hips, spine, neck, head, leftEye, and rightEye. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
-- Letter visemes on TTS PCM. RMS scales the open vowel. Run 38273314570 recorded the PCM and started the audio engine.
+- An original CC0 VRM 0 humanoid. Bones include hips, spine, neck, head, both eyes, and both arms. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
+- Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel. Run 38273314570 recorded the PCM and started the audio engine.
+- A hands-free turn. Voice activity ends an utterance. The next step sends that text. The reply is spoken. A Speak press is not part of that path.
+- Word search over saved chat and memory notes.
+- A JSON log line for frame time.
 - VRM 0 and VRM 1 name parsing, plus mesh bytes from the sample file.
 
 ## What is stubbed
 
-- A phoneme recognizer. The viseme map reads letters, not recognized phonemes.
+- A phoneme recognizer. The viseme path is a word list plus a letter fallback.
 - Downloaded character files. The sample humanoid is original and CC0.
 - Model-written greetings, topic recall, and notes the companion writes.
 - Live2D, MMD, and Spine.
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
 - Tool calls, plugins, and the integrations.
-- Topic search over saved chat.
+- Embedding search. Word search is in the chat panel. pgvector stays on the server.
 - Click-through on the companion window.
 - Retries, cloud key sync, and a sandbox.
 
@@ -66,10 +69,10 @@ The scores judge the native port, not the Vue apps. The long-term aim is above 4
 
 Command: `swift test` in `apps/aori-appkit`.
 
-Result: 33 tests passed, 0 failures, Swift 6.0.3 on `x86_64-unknown-linux-gnu`.
+Result: 41 tests passed, 0 failures, Swift 6.0.3 on `x86_64-unknown-linux-gnu`.
 
-This session ran `cargo test -p aori-face` and `cargo check -p aori-gpui` with Rust 1.99.0. Both passed. The face crate ran 9 tests. Twenty debug frames at 280 by 380 had a median of 2.70 ms and a max of 2.80 ms. Sample load took 1.78 ms. `swift test` passed 36 tests. Run 38273314570 launched `AoriApp` on `macos-latest`. The launch log says `aori_i18n=loaded`, `aori_frame_ms=8.21`, and `aori_speech_engine=started`. The WAV RMS is 0.1532. The viseme log is `sil,e,sil,o,pp,o,sil,pp,a,pp,a`. The bones are hips, spine, neck, head, leftEye, and rightEye. The window caption reads "Aori Sample" and "10 blend shapes." This session did not run `xcodebuild`. It did not launch the app on this machine.
+This session ran `cargo test -p aori-face` and `cargo check -p aori-gpui` with Rust 1.99.0. Both passed. The face crate ran 9 tests. The bind pose stays put. The idle clip moves an arm. Look-at moves an eye. `swift test` passed 41 tests. Run 38273314570 is the last macOS launch in this file. It predates the hands-free turn, the locale switcher, and the JSON frame log. This session did not run `xcodebuild`. It did not launch the app on this machine.
 
 ## Next milestones
 
-The plan is in `docs/APPKIT_PORT.md`. Milestone 2 follow-up is a voice turn without a separate Speak press. Milestone 3 is richer memory. Milestone 4 is Live2D. Milestone 5 is a native plugin host.
+The plan is in `docs/APPKIT_PORT.md`. Milestone 2 follow-up is click-through and a live microphone on a machine that has one. Milestone 3 is richer memory. Milestone 4 is Live2D. Milestone 5 is a native plugin host.

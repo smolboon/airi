@@ -29,6 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let profileStore = FileCompanionProfileStore(fileURL: AoriFiles.profileURL())
     private let transcriptStore = FileChatTranscriptStore(fileURL: AoriFiles.chatURL())
     private let settingsStore = FileProviderSettingsStore(fileURL: AoriFiles.settingsURL())
+    private let localeStore = FileLocalePreferenceStore(fileURL: AoriFiles.localeURL())
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
     private var companionWindow: CompanionWindowController?
@@ -40,15 +41,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: StatusItemController?
     private var listening = false
     private var launchStatus: String?
+    private var localeID = "en"
+    private var turn = VoiceTurn()
+    private var heardSamples: [Float] = []
+    private var heardText = ""
+    private var voiceActivity = VoiceActivity.standard
 
     func applicationWillFinishLaunching(_ notification: Notification) {
-        if let text = LocaleFile.englishMenu() {
-            AoriCopy.load(text)
-            logLine("aori_i18n=loaded")
-        } else {
-            logLine("aori_i18n=fallback")
-        }
-        installMenu()
+        applyLocale(initialLocale(), persist: false)
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -60,7 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func installMenu() {
-        let menu = MenuBuilder.install(target: self)
+        let menu = MenuBuilder.install(target: self, localeID: localeID)
         alwaysOnTopItem = menu.alwaysOnTopItem
         alwaysOnTopItem?.state = companionPolicy.alwaysOnTop ? .on : .off
     }
@@ -141,6 +141,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         speakReply()
+        startHandsFree()
         NSApp.activate()
     }
 
@@ -158,9 +159,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate()
         writeFramebuffer()
         Task {
-            await synthesizer.speak("Hello papa")
+            let mic = self.transcriber.probeMicrophone()
+            logLine("aori_mic=\(mic)")
+            await self.synthesizer.speak("Hello papa")
+            await self.runFixtureTurn()
+            logLine("aori_turn=done")
         }
-        Timer.scheduledTimer(withTimeInterval: 40, repeats: false) { _ in
+        Timer.scheduledTimer(withTimeInterval: 55, repeats: false) { _ in
             Task { @MainActor in
                 NSApp.terminate(nil)
             }
@@ -174,6 +179,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         let milliseconds = Date().timeIntervalSince(started) * 1000
+        logLine(AoriLog.frame(milliseconds: milliseconds))
         logLine(String(format: "aori_frame_ms=%.2f", milliseconds))
         let path = ProcessInfo.processInfo.environment["AORI_FRAMEBUFFER_PATH"] ?? "/tmp/aori-framebuffer.png"
         do {
@@ -322,6 +328,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companionWindow?.window?.orderOut(sender)
     }
 
+    @objc func selectLocale(_ sender: NSMenuItem?) {
+        let id = sender?.representedObject as? String ?? "en"
+        applyLocale(id, persist: true)
+    }
+
     @objc func toggleAlwaysOnTop(_ sender: Any?) {
         companionPolicy.alwaysOnTop.toggle()
         alwaysOnTopItem?.state = companionPolicy.alwaysOnTop ? .on : .off
@@ -351,6 +362,181 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func initialLocale() -> String {
+        if let env = ProcessInfo.processInfo.environment["AORI_LOCALE"], LocaleCatalog.ids.contains(env) {
+            return env
+        }
+        if let saved = try? localeStore.load(), LocaleCatalog.ids.contains(saved) {
+            return saved
+        }
+        return "en"
+    }
+
+    private func localesRoot() -> URL {
+        if let path = ProcessInfo.processInfo.environment["AORI_LOCALES_ROOT"], !path.isEmpty {
+            return URL(fileURLWithPath: path, isDirectory: true)
+        }
+        let bundled = Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/locales", isDirectory: true)
+        if FileManager.default.fileExists(atPath: bundled.path) {
+            return bundled
+        }
+        return bundled
+    }
+
+    private func applyLocale(_ id: String, persist: Bool) {
+        let choice = LocaleCatalog.ids.contains(id) ? id : "en"
+        localeID = choice
+        let loaded = LocaleCatalog.load(root: localesRoot(), id: choice)
+        if let menu = loaded.menuText, menu.contains("showCompanion") {
+            AoriCopy.load(menu)
+            logLine("aori_locale_menu=loaded")
+            logLine("aori_i18n=loaded")
+        } else if let english = LocaleFile.englishMenu() {
+            AoriCopy.load(english)
+            logLine("aori_locale_menu=fallback")
+            logLine("aori_i18n=loaded")
+        } else {
+            logLine("aori_locale_menu=fallback")
+            logLine("aori_i18n=fallback")
+        }
+        logLine("aori_locale=\(choice)")
+        logLine("aori_locale_proof=\(loaded.proof)")
+        if persist {
+            try? localeStore.save(id: choice)
+        }
+        installMenu()
+    }
+
+    private func runFixtureTurn() async {
+        let path = ProcessInfo.processInfo.environment["AORI_SPEECH_WAV"] ?? ""
+        guard !path.isEmpty, let data = try? Data(contentsOf: URL(fileURLWithPath: path)), let decoded = WavFile.decode(data) else {
+            logLine("aori_vad=missing")
+            logLine("aori_stt=missing")
+            logLine("aori_llm=skipped")
+            return
+        }
+        let activity = VoiceActivity(threshold: 0.02, silenceSeconds: 0.2, sampleRate: Double(decoded.sampleRate))
+        logLine(activity.containsSpeech(decoded.samples) ? "aori_vad=speech" : "aori_vad=silence")
+        let status = await transcriber.authorization(timeout: 5)
+        let text: String
+        if status == .granted {
+            text = await transcriber.transcribeFile(at: URL(fileURLWithPath: path))
+        } else {
+            text = ""
+            logLine("aori_stt_auth=\(status.rawValue)")
+        }
+        let heard = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        logLine("aori_stt=\(heard.isEmpty ? "empty" : heard)")
+        if !heard.isEmpty {
+            var fixture = VoiceTurn()
+            if case .send(let line) = fixture.hear(utterance: heard) {
+                logLine(AoriLog.event("turn", ["step": "send", "text": line]))
+            }
+        }
+        if model?.configuration.apiKey.isEmpty != false {
+            logLine("aori_llm=skipped")
+            await synthesizer.speak("I am here.")
+            return
+        }
+        guard !heard.isEmpty, let model else {
+            logLine("aori_llm=skipped")
+            return
+        }
+        model.setDraft(heard)
+        await model.send()
+        logLine("aori_llm=sent")
+        if let reply = model.textForSpeech() {
+            await synthesizer.speak(reply)
+        }
+    }
+
+    private func startHandsFree() {
+        Task {
+            let mic = self.transcriber.probeMicrophone()
+            logLine("aori_mic=\(mic)")
+            let permission = await self.transcriber.requestAuthorization()
+            guard permission == .granted else {
+                logLine("aori_listen=denied")
+                return
+            }
+            do {
+                self.listening = true
+                try self.transcriber.start { [weak self] text in
+                    Task { @MainActor in
+                        self?.heardText = text
+                    }
+                } onSamples: { [weak self] samples, rate in
+                    Task { @MainActor in
+                        self?.noteSamples(samples, rate: rate)
+                    }
+                }
+                self.mainWindow?.setListening(true)
+                self.model?.setStatus("Listening.")
+                logLine("aori_listen=started")
+            } catch {
+                self.listening = false
+                logLine("aori_listen=unavailable")
+                self.model?.setStatus(String(describing: error))
+            }
+        }
+    }
+
+    private func noteSamples(_ samples: [Float], rate: Double) {
+        guard listening, !samples.isEmpty else {
+            return
+        }
+        if rate > 0 {
+            voiceActivity.sampleRate = rate
+        }
+        heardSamples.append(contentsOf: samples)
+        let cap = Int(voiceActivity.sampleRate * 8)
+        if heardSamples.count > cap {
+            heardSamples.removeFirst(heardSamples.count - cap)
+        }
+        guard voiceActivity.endpoint(samples: heardSamples) else {
+            return
+        }
+        let text = heardText.trimmingCharacters(in: .whitespacesAndNewlines)
+        heardSamples = []
+        guard !text.isEmpty else {
+            return
+        }
+        heardText = ""
+        transcriber.stop()
+        listening = false
+        mainWindow?.setListening(false)
+        handleUtterance(text)
+    }
+
+    private func handleUtterance(_ text: String) {
+        let action = turn.hear(utterance: text)
+        guard case .send(let spoken) = action else {
+            startHandsFree()
+            return
+        }
+        logLine(AoriLog.event("turn", ["step": "send"]))
+        model?.setDraft(spoken)
+        mainWindow?.setDraft("")
+        Task {
+            if self.model?.configuration.apiKey.isEmpty != false {
+                logLine("aori_llm=skipped")
+                let reply = "I am here."
+                _ = self.turn.acceptReply(reply)
+                await self.synthesizer.speak(reply)
+                self.turn.finishSpeech()
+                self.startHandsFree()
+                return
+            }
+            await self.model?.send()
+            let reply = self.model?.textForSpeech() ?? ""
+            if case .speak = self.turn.acceptReply(reply) {
+                await self.synthesizer.speak(reply)
+            }
+            self.turn.finishSpeech()
+            self.startHandsFree()
+        }
+    }
+
     private func toggleListen() {
         Task {
             await self.toggleListenAsync()
@@ -373,8 +559,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try transcriber.start { [weak self] text in
                 Task { @MainActor in
+                    self?.heardText = text
                     self?.model?.applyTranscript(text)
                     self?.mainWindow?.setDraft(text)
+                }
+            } onSamples: { [weak self] samples, rate in
+                Task { @MainActor in
+                    self?.noteSamples(samples, rate: rate)
                 }
             }
             listening = true
@@ -402,6 +593,10 @@ private enum AoriFiles {
 
     static func settingsURL() -> URL {
         directory().appendingPathComponent("settings.json")
+    }
+
+    static func localeURL() -> URL {
+        directory().appendingPathComponent("locale.json")
     }
 }
 
