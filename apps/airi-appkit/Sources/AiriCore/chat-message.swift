@@ -1,0 +1,26 @@
+import Foundation
+
+public enum ChatRole: String, Codable, Sendable, Equatable {
+    case system
+    case user
+    case assistant
+}
+
+public struct ChatMessage: Identifiable, Equatable, Sendable {
+    public var id: UUID
+    public var role: ChatRole
+    public var content: String
+    public var createdAt: Date
+
+    public init(id: UUID = UUID(), role: ChatRole, content: String, createdAt: Date = Date()) {
+        self.id = id
+        self.role = role
+        self.content = content
+        self.createdAt = createdAt
+    }
+}
+
+public enum ChatPrompt {
+    /// Short spoken replies. The AppKit chat view speaks this text aloud.
+    public static let companion = "You are AIRI, a desktop companion on macOS. Reply in short spoken sentences. Do not use markdown."
+}
