@@ -132,7 +132,7 @@ A status item lists the companion, the main window, Settings, and Quit. Those ti
 
 The GPUI binary still paints flat triangles. It uses a fixed mouth weight of 0.65. It does not hear TTS buffers. This checkout did not open that window.
 
-`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job then runs voice activity on that WAV, asks Speech for a transcript, and speaks a short reply when the API key is missing. It also probes the microphone and logs started or unavailable. Run 38273314570 is the last green capture before this turn path. That WAV RMS is 0.1532. The engine started. The viseme log includes e, o, a, and pp. The frame time was 8.21 ms.
+`AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job then runs voice activity on that WAV, asks Speech for a transcript, and speaks a short reply when the API key is missing. It also probes the microphone and logs started or unavailable. Run 38277207278 did that on `macos-latest`. The microphone engine started. Voice activity found speech. The WAV RMS is 0.1532. The phoneme line is HH, EH, L, OW, P, AA, P, AH. The viseme log includes e, o, a, and pp. Speech authorization stayed unknown, so the transcript was empty. The LLM call was skipped. The frame line is `{"event":"frame","ms":12.39}`. The locale was ja and the Aori menu fell back to English. The loaded bones include both arms.
 
 ### Milestone 2 follow-up
 
