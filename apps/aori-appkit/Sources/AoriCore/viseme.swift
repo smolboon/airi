@@ -65,4 +65,22 @@ public enum VisemeTimeline {
         let index = min(characters.count - 1, max(0, Int(seconds * 12)))
         return VisemeMap.preset(for: characters[index])
     }
+
+    /// Lists each preset change inside one played buffer. A long buffer still covers the vowels.
+    public static func presets(in phrase: String, from start: Double, to end: Double) -> [Viseme] {
+        let characters = Array(phrase)
+        guard !characters.isEmpty else {
+            return [.sil]
+        }
+        let first = min(characters.count - 1, max(0, Int(start * 12)))
+        let last = min(characters.count - 1, max(first, Int(end * 12)))
+        var result: [Viseme] = []
+        for index in first...last {
+            let preset = VisemeMap.preset(for: characters[index])
+            if result.last != preset {
+                result.append(preset)
+            }
+        }
+        return result
+    }
 }

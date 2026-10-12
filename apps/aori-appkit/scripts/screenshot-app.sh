@@ -62,9 +62,10 @@ PY
 python3 - "$visemes" <<'PY'
 import pathlib, sys
 lines = [line.strip() for line in pathlib.Path(sys.argv[1]).read_text().splitlines() if line.strip()]
-unique = sorted(set(lines))
-print("aori_viseme_presets=" + ",".join(unique))
-sys.exit(0 if len(unique) > 1 else 1)
+unique = set(lines)
+print("aori_viseme_presets=" + ",".join(sorted(unique)))
+needed = {"e", "o", "a", "pp"}
+sys.exit(0 if needed.issubset(unique) else 1)
 PY
 sleep 1
 cp scripts/window-id.swift /tmp/aori-window-id.swift

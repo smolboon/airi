@@ -21,7 +21,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
     private var sampleRate = 22_050.0
     private var recorded: [Float] = []
     private var visemes: [String] = []
-    private var rangeViseme = false
     private var engineFailed = false
     private var artifactsWritten = false
 
@@ -40,7 +39,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         sampleRate = 22_050
         recorded = []
         visemes = []
-        rangeViseme = false
         engineFailed = false
         artifactsWritten = false
         onSpeakingChanged?(true)
@@ -91,9 +89,10 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         if buffer.format.sampleRate > 0 {
             sampleRate = buffer.format.sampleRate
         }
-        if !rangeViseme {
-            let seconds = sampleRate > 0 ? Double(playedFrames) / sampleRate : 0
-            note(viseme: VisemeTimeline.preset(in: spokenText, at: seconds).rawValue)
+        let start = sampleRate > 0 ? Double(playedFrames) / sampleRate : 0
+        let span = sampleRate > 0 ? Double(buffer.frameLength) / sampleRate : 0
+        for preset in VisemeTimeline.presets(in: spokenText, from: start, to: start + span) {
+            note(viseme: preset.rawValue)
         }
         playedFrames += Int(buffer.frameLength)
         onMouthLevel?(level)
@@ -226,7 +225,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
             preset = Viseme.sil.rawValue
         }
         Task { @MainActor in
-            self.rangeViseme = true
             self.note(viseme: preset)
         }
     }
