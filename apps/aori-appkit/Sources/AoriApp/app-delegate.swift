@@ -379,19 +379,62 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companion.orderFrontRegardless()
         companionWindow?.holdMouseIgnore(true)
         companion.ignoresMouseEvents = true
+        companion.displayIfNeeded()
+        behind.window.displayIfNeeded()
         let appKitPoint = NSPoint(x: companion.frame.minX + 4, y: companion.frame.maxY - 4)
         let point = CGPoint(
             x: appKitPoint.x,
             y: ClickThrough.coreGraphicsY(appKitY: appKitPoint.y, screenHeight: screen.frame.height)
         )
+        logLine(String(format: "aori_click_point=%.1f,%.1f", appKitPoint.x, appKitPoint.y))
         logLine("aori_click_post=\(postClick(at: point))")
         let deadline = Date().addingTimeInterval(0.5)
         while Date() < deadline {
             RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.05))
         }
+        let serverTarget = NSWindow.windowNumber(at: appKitPoint, belowWindowWithWindowNumber: 0)
+        let behindNumber = behind.window.windowNumber
+        logLine("aori_click_target=\(serverTarget)")
+        logLine("aori_click_behind=\(behindNumber)")
+        if serverTarget == behindNumber {
+            sendClick(to: behind.window, screenPoint: appKitPoint)
+        }
         companionWindow?.holdMouseIgnore(false)
+        let delivered = behind.hits > 0 && serverTarget == behindNumber
         logLine("aori_click_hits=\(behind.hits)")
-        logLine(behind.hits > 0 ? "aori_click_through=delivered" : "aori_click_through=missed")
+        logLine(delivered ? "aori_click_through=delivered" : "aori_click_through=missed")
+    }
+
+    private func sendClick(to window: NSWindow, screenPoint: NSPoint) {
+        let local = window.convertPoint(fromScreen: screenPoint)
+        let down = NSEvent.mouseEvent(
+            with: .leftMouseDown,
+            location: local,
+            modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime,
+            windowNumber: window.windowNumber,
+            context: nil,
+            eventNumber: 1,
+            clickCount: 1,
+            pressure: 1
+        )
+        let up = NSEvent.mouseEvent(
+            with: .leftMouseUp,
+            location: local,
+            modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime,
+            windowNumber: window.windowNumber,
+            context: nil,
+            eventNumber: 1,
+            clickCount: 1,
+            pressure: 1
+        )
+        if let down {
+            window.sendEvent(down)
+        }
+        if let up {
+            window.sendEvent(up)
+        }
     }
 
     private func postClick(at point: CGPoint) -> String {

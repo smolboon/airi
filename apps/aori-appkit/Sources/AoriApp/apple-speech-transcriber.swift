@@ -76,6 +76,9 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
     /// Reads a short buffer. The mark is no-device, silence, or speech.
     @MainActor
     func captureUtterance(seconds: Double = 0.4) -> String {
+        if AVAudioApplication.shared.recordPermission != .granted {
+            return LiveUtterance.mark(hasDevice: false, sampleCount: 0, speech: false)
+        }
         let probe = AVAudioEngine()
         let input = probe.inputNode
         let format = input.outputFormat(forBus: 0)
