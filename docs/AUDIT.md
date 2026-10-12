@@ -19,7 +19,7 @@ The scores judge the native port, not the Vue apps.
 | --- | --- | --- |
 | Product scope and feature parity | 2 | The app has a desktop companion, a persona, local memory notes, a greeting, a CC0 VRM head, audio-level lip-sync, and emotion blend shapes. The head has no bones and no texture. Tool rounds, plugins, Live2D, vision, and games are absent. |
 | Architecture and module boundaries | 3 | `AoriCore` and `AoriProviders` do not import AppKit. `Package.swift` adds `AoriApp` only on macOS. `ChatViewModel` owns the send state. |
-| Platform integration | 2 | AppKit, Keychain, Speech, AVFoundation, and SceneKit are in `Sources/AoriApp`. This Linux checkout did not compile or launch that target. |
+| Platform integration | 2 | AppKit, Keychain, Speech, AVFoundation, and SceneKit are in `Sources/AoriApp`. macOS job 38262709300 compiled `AoriApp`. This checkout did not launch the app, the microphone, or the Keychain. |
 | User interface and interaction | 2 | The menu, main window, companion window, and Settings window are coded. No window was opened here. There is no screenshot. |
 | Graphics and character rendering | 2 | `VRMSceneReader` reads mesh bytes. `VRMSceneBuilder` builds a SceneKit morpher. The sample is `aori-sample.vrm`, CC0, flat color, bind pose. No window was opened here. There is no Live2D view and no `WKWebView`. |
 | Audio, speech input, and speech output | 2 | `AVSpeechSynthesizer.write` feeds PCM into `SpeechLevel`. The A blend shape uses that level. No test on this machine can play audio or open a microphone. |
@@ -28,7 +28,7 @@ The scores judge the native port, not the Vue apps.
 | Data persistence | 2 | UserDefaults stores the base URL and the model. The Keychain stores the key. `companion.json` stores the persona and memory notes. Chat text is lost when the process ends. There is no topic search. |
 | Error handling and recovery | 3 | `ChatProviderError` covers a missing key, HTTP status, and a bad event. A failed stream keeps partial text. The client does not retry. `core-agent` retries some HTTP statuses. This client does not. |
 | Testing | 3 | XCTest covers SSE, UTF-8 splits, key order, the sample VRM mesh, blend-shape weights, speech RMS, the chat model, persona, memory, and the provider client. `swift test` on Linux Swift 6.0.3 ran 33 tests with 0 failures. There is no UI test and no speech playback test. |
-| Continuous integration and build | 2 | `.github/workflows/aori-appkit.yml` runs `swift test` on `ubuntu-latest`. On `macos-latest` it runs `swift test`, `swift build --product AoriApp`, and the assemble script. The macOS job failed on 2026-10-12 before the Mutex and SpeechTranscriber fixes. This sentence does not claim the new job is green. |
+| Continuous integration and build | 3 | `.github/workflows/aori-appkit.yml` runs `swift test` on `ubuntu-latest`. On `macos-latest` it runs `swift test`, `swift build --product AoriApp`, and the assemble script. Run 38262709300 passed both jobs. The Xcode project is not the CI build. The app was not launched. |
 | Documentation | 4 | `docs/APPKIT_PORT.md`, this file, and `apps/aori-appkit/README.md` match the tree. They name the CC0 head, the bind pose, and the Linux limit. |
 | Accessibility | 2 | Send, Speak, Listen, the draft field, and the transcript have accessibility labels. System colors are used. There was no VoiceOver pass. The mouth timer ignores reduced motion. |
 | Internationalization | 0 | The new strings are English only. `packages/i18n` is not wired in. |
@@ -68,7 +68,7 @@ Command: `swift test` in `apps/aori-appkit`.
 
 Result: 33 tests passed, 0 failures, Swift 6.0.3 on `x86_64-unknown-linux-gnu`.
 
-This session did not run `swift build --product AoriApp`, `xcodebuild`, or the app. Those need macOS.
+This session did not run `swift build --product AoriApp` on Linux. macOS job 38262709300 did run `swift build --product AoriApp` and `swift test`. This session did not run `xcodebuild` or launch the app.
 
 ## Next milestones
 

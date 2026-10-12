@@ -133,4 +133,4 @@ Add vision, games, character cards, cloud provider sync, and the remaining chat 
 
 The work ran on Linux. `swift test` passed for `AoriCore` and `AoriProviders` with Swift 6.0.3. That run had 33 tests and 0 failures. The AppKit target was not compiled here. The windows were not opened. Speech, Keychain, and SceneKit were not executed.
 
-The macOS job on 2026-10-12 failed before this change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. The new macOS job builds `AoriApp` and runs `swift test`.
+The macOS job on 2026-10-12 failed before the mesh change. `Synchronization.Mutex` needs macOS 15. The deployment target is macOS 14. The name `SpeechTranscriber` also clashes with an Apple class. This change replaces both. Run 38262709300 then passed `swift test` and `swift build --product AoriApp` on `macos-latest`. The app was not launched.
