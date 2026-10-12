@@ -174,14 +174,9 @@ enum FaceRaster {
         guard let image = image(pixels: pixels, width: width, height: height) else {
             return
         }
-        guard let context = NSGraphicsContext.current?.cgContext else {
-            return
-        }
-        context.saveGState()
-        context.translateBy(x: bounds.minX, y: bounds.maxY)
-        context.scaleBy(x: bounds.width / CGFloat(width), y: -bounds.height / CGFloat(height))
-        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
-        context.restoreGState()
+        // The buffer is top-left RGBA. Row 0 is the top of the character.
+        let nsImage = NSImage(cgImage: image, size: NSSize(width: width, height: height))
+        nsImage.draw(in: bounds, from: .zero, operation: .sourceOver, fraction: 1)
     }
 }
 
