@@ -189,6 +189,19 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertFalse(activity.endpoint([Float](repeating: 0, count: 800)))
     }
 
+    func testRuntimeMetricsLogFpsLatencyAndMemory() {
+        let fps = RuntimeMetrics.framesPerSecond(frameMilliseconds: 16.67)
+        XCTAssertEqual(fps, 1000 / 16.67, accuracy: 0.01)
+        XCTAssertEqual(RuntimeMetrics.framesPerSecond(frameMilliseconds: 0), 0)
+        let lines = RuntimeMetrics.lines(
+            RuntimeSample(framesPerSecond: fps, latencyMilliseconds: 12.5, memoryMegabytes: 40)
+        )
+        XCTAssertEqual(lines[0], "aori_fps=59.99")
+        XCTAssertEqual(lines[1], "aori_latency_ms=12.50")
+        XCTAssertEqual(lines[2], "aori_memory_mb=40.00")
+        XCTAssertGreaterThan(RuntimeMetrics.memoryMegabytes(), 0)
+    }
+
     func testFrameLogIsJson() throws {
         let line = AoriLog.frame(milliseconds: 8.21)
         let data = Data(line.utf8)

@@ -137,6 +137,8 @@ A search field matches chat lines and memory notes by words. All nine directorie
 
 A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
 
+The screenshot path also logs `aori_fps`, `aori_latency_ms`, and `aori_memory_mb`. The FPS value is one captured frame. On macOS the same values go to `os_log` and one signpost.
+
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
 When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. SceneKit samples the color texture on that file. The camera now frames the head and shoulders. Run 38369523526 saved the older frame. That frame shows the upper body. It does not show a clear face.

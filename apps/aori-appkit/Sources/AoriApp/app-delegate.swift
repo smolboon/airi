@@ -36,6 +36,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var embeddingStore: EmbeddingMemoryStore?
     private var settingsWindow: SettingsWindowController?
     private let synthesizer = AppleSpeechSynthesizer()
+    private var turnLatencyMilliseconds = 0.0
     private let transcriber = AppleSpeechTranscriber()
     private var companionPolicy = CompanionWindowPolicy.standard
     private var alwaysOnTopItem: NSMenuItem?
@@ -241,6 +242,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let milliseconds = Date().timeIntervalSince(started) * 1000
         logLine(AoriLog.frame(milliseconds: milliseconds))
         logLine(String(format: "aori_frame_ms=%.2f", milliseconds))
+        let sample = RuntimeSample(
+            framesPerSecond: RuntimeMetrics.framesPerSecond(frameMilliseconds: milliseconds),
+            latencyMilliseconds: turnLatencyMilliseconds,
+            memoryMegabytes: RuntimeMetrics.memoryMegabytes()
+        )
+        for line in RuntimeMetrics.lines(sample) {
+            logLine(line)
+        }
+        RuntimeSignpost.record(sample)
         let path = ProcessInfo.processInfo.environment["AORI_FRAMEBUFFER_PATH"] ?? "/tmp/aori-framebuffer.png"
         do {
             try png.write(to: URL(fileURLWithPath: path))
@@ -713,7 +723,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         model.setDraft(heard)
+        let turnStarted = Date()
         await model.send()
+        turnLatencyMilliseconds = Date().timeIntervalSince(turnStarted) * 1000
         let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         let channel = ChatChannelFlag.kind(raw: ProcessInfo.processInfo.environment["AORI_CHAT_CHANNEL"])
