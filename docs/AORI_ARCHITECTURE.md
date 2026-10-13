@@ -22,6 +22,8 @@ Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_bytes=30500`
 
 `EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `LocalEmbedding`. `LocalEmbedding` hashes words. It is not a neural model. No Core ML model is bundled.
 
+Run 38348280149 logged `aori_memory_source=endpoint`, `aori_vision_interval_ms=1000`, and `aori_vision_max_ticks=2`. Both ticks used `aori_vision_source=screen`. The mock reply was `Mock vision from CI.`.
+
 ## Voice turn
 
 The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.

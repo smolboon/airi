@@ -176,13 +176,13 @@ Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_resul
 
 The ticker is off until `AORI_VISION_TICKER` is `1`. The interval is at least 1000 ms. The maximum tick count is 8. The companion window shows an orange Vision badge while the ticker is on. A denied capture still uses `AORI_VISION_PNG`. The screenshot path does not call `CGRequestScreenCaptureAccess`.
 
-Run 38301336719 logged one granted capture before the ticker. The source was `screen`. The byte count was 30500. The mock reply was `Mock vision from CI.`. That mock does not read the pixels.
+Run 38348280149 logged `aori_vision_ticker=on`, two screen ticks, and `aori_vision_ticker=stopped`. The interval was 1000 ms. The maximum was 2. The mock reply was `Mock vision from CI.`. That mock does not read the pixels.
 
 ### Milestone 7, embeddings memory
 
 `EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses a hashing embedder.
 
-That embedder is not a neural model. No Core ML model is bundled.
+That embedder is not a neural model. No Core ML model is bundled. Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
 
 ### Milestone 8, the rest of AIRI
 

@@ -94,7 +94,7 @@ cargo test -p aori-face
 cargo check -p aori-gpui
 ```
 
-The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./scripts/assemble-app.sh`, `./scripts/screenshot-app.sh`, and `./scripts/capture-gpui-window.sh`. The screenshot script sets `AORI_SCREENSHOT=1` and starts `scripts/mock-chat-server.py`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it. The screenshot script also sets `AORI_VISION_TICKER=1` and `AORI_MEMORY_DB`. Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_reply=Mock vision from CI.`.
+The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./scripts/assemble-app.sh`, `./scripts/screenshot-app.sh`, and `./scripts/capture-gpui-window.sh`. The screenshot script sets `AORI_SCREENSHOT=1` and starts `scripts/mock-chat-server.py`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it. The screenshot script also sets `AORI_VISION_TICKER=1` and `AORI_MEMORY_DB`. Run 38348280149 logged `aori_memory_recall=I like tea` and `aori_vision_ticker=stopped`.
 
 ## Limits
 

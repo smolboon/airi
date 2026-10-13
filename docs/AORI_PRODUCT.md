@@ -36,6 +36,8 @@ Memory notes with vectors live in SQLite. Cosine recall adds the closest notes t
 
 The Memory window lists the notes. Delete removes the selected note.
 
+Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete. The ticker logged two screen captures and `aori_vision_ticker=stopped`. The companion window showed an orange Vision badge.
+
 ## Not in this app
 
 Cubism moc3, JavaScript plugins, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
