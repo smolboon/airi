@@ -5,6 +5,7 @@ menu:
   quit: 退出 Aori
   newChat: 新聊天
   openVRM: 打开 VRM…
+  memory: 记忆
   showMainWindow: 显示主窗口
   showCompanion: 显示同伴
   hideCompanion: 隐藏同伴

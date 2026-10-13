@@ -657,6 +657,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine("aori_i18n=fallback")
         }
         logLine("aori_locale=\(choice)")
+        logLine("aori_menu_memory=\(AoriCopy.memory)")
         logLine("aori_locale_proof=\(loaded.proof)")
         if persist {
             try? localeStore.save(id: choice)

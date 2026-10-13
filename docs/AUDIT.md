@@ -33,7 +33,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Continuous integration and build | 4 | Run 38359062380 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
 | Documentation | 4 | The product, architecture, port, and audit notes match run 38359062380. Each note names a gap. They do not cover the whole AIRI product. |
 | Accessibility | 4 | Run 38359815442 logged `aori_caption=Mock reply from CI.` and `aori_voiceover=running`. The app posts that line as an announcement. VoiceOver starts after the app exits. The log does not record that audio. |
-| Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The Memory menu key is English only. |
+| Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The shipped locales now have `menu.memory`. A macOS log has not shown `aori_menu_memory=記憶` yet. |
 | Performance and operability | 3 | The frame line is `{"event":"frame","ms":2.47}`. The ticker waited 1000 ms and then stopped. There is no broader telemetry product. |
 
 ## What works in code
@@ -123,7 +123,7 @@ Documentation is 4. These notes match that run. They do not cover the whole AIRI
 
 Accessibility is 4. Run 38359815442 logged `aori_caption=Mock reply from CI.`. VoiceOver starts after the app exits. The log does not record that audio.
 
-Internationalization is 3. The log printed `aori_locale=ja`. The Memory menu key is English only. Crowdin owns the other locales.
+Internationalization is 3. The log printed `aori_locale=ja`. The shipped locales now have `menu.memory`. A macOS log has not shown `aori_menu_memory=記憶` yet. Other AIRI pages stay on Crowdin.
 
 Performance is 3. One frame line is present. There is no broader telemetry product.
 

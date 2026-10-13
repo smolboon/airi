@@ -176,6 +176,7 @@ need = [
     "aori_stt=",
     "aori_llm=",
     "aori_locale=ja",
+    "aori_menu_memory=記憶",
     "aori_locale_menu=loaded",
     "aori_stt_engine=whisper",
     "aori_stt=Hello papa",

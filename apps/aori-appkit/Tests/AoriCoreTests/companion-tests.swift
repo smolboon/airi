@@ -196,13 +196,18 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertTrue(loaded.allSatisfy(\.directoryExists))
         XCTAssertTrue(loaded.allSatisfy { !$0.proof.isEmpty })
         let japanese = try XCTUnwrap(loaded.first { $0.id == "ja" })
+        XCTAssertEqual(LocaleTable.parse(japanese.menuText ?? "").values["menu.memory"], "記憶")
         XCTAssertEqual(LocaleTable.parse(japanese.menuText ?? "").values["menu.showCompanion"], "コンパニオンを表示")
         XCTAssertEqual(LocaleTable.parse(japanese.menuText ?? "").values["menu.clickThrough"], "クリックを透過")
         XCTAssertTrue(japanese.proof.contains("設定"))
         for item in loaded where item.id != "en" {
-            let value = LocaleTable.parse(item.menuText ?? "").values["menu.showCompanion"]
+            let values = LocaleTable.parse(item.menuText ?? "").values
+            let value = values["menu.showCompanion"]
             XCTAssertNotEqual(value, "Show Companion")
             XCTAssertFalse(value?.isEmpty ?? true)
+            let memory = values["menu.memory"]
+            XCTAssertNotEqual(memory, "Memory")
+            XCTAssertFalse(memory?.isEmpty ?? true)
         }
         let english = try XCTUnwrap(loaded.first { $0.id == "en" })
         XCTAssertEqual(LocaleTable.parse(english.menuText ?? "").values["menu.showCompanion"], "Show Companion")

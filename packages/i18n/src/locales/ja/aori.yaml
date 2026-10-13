@@ -5,6 +5,7 @@ menu:
   quit: Aori を終了
   newChat: 新規チャット
   openVRM: VRM を開く…
+  memory: 記憶
   showMainWindow: メインウインドウを表示
   showCompanion: コンパニオンを表示
   hideCompanion: コンパニオンを隠す

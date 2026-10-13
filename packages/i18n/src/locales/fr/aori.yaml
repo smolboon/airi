@@ -5,6 +5,7 @@ menu:
   quit: Quitter Aori
   newChat: Nouvelle discussion
   openVRM: Ouvrir un VRM…
+  memory: Mémoire
   showMainWindow: Afficher la fenêtre principale
   showCompanion: Afficher le compagnon
   hideCompanion: Masquer le compagnon
