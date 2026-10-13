@@ -139,7 +139,7 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. SceneKit samples the color texture on that file. A macOS job has not saved that image yet. Run 38357544156 shows the checker head.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. SceneKit samples the color texture on that file. Run 38369523526 saved that image. The frame shows the upper body. It does not show a clear face.
 
 `scripts/capture-gpui-window.sh` runs `AoriSceneKit` and writes `build/aori-gpui-window.png`. The portrait time is 1.6 seconds. The mouth morph is open. Blink is off at that time. This checkout did not run that tool.
 

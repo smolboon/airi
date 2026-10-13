@@ -21,19 +21,19 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | --- | --- | --- |
 | Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, and most integrations are absent. Run 38355635403 ran one `.js` plugin in JavaScriptCore. |
 | Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
-| Platform integration | 3 | Run 38357544156 launched the sandboxed app and granted screen recording. Keychain and the microphone probe ran. The log says `aori_stt_auth=unknown`. |
-| User interface and interaction | 4 | Run 38357544156 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. A macOS capture of that window is not in a launch log. Full provider catalogs are absent. |
-| Graphics and character rendering | 4 | Run 38357544156 shows a flat character. The hair is above the blue body. The mouth is open in the companion window and in the framebuffer. The GPUI window shows the checker head. The sample file is now Butter, a CC0 VRM with a color texture. A macOS SceneKit image is not saved yet. Cubism Core stays out of this MIT repo. |
-| Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa inside the sandbox. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
+| Platform integration | 3 | Run 38369523526 launched the sandboxed app. The log says `aori_stt_auth=unknown`. Speech permission is not granted on the runner. |
+| User interface and interaction | 4 | Run 38369523526 captured the Settings window. The page list names scene, providers, modules, the character card, memory, data, connection, models, and system. Full provider catalogs are absent. |
+| Graphics and character rendering | 4 | Run 38369523526 saved a SceneKit image of Butter. The image shows a teal and orange upper body. It does not show a clear face. Cubism, MMD, and Spine are absent. |
+| Audio, speech input, and speech output | 4 | Run 38369523526 logged `aori_mic_utterance=speech` and `aori_viseme_source=audio`. `AORI_MIC_WAV` fed that mark. A phoneme recognizer is absent. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
 | Security, secrets, and privacy | 4 | Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, `aori_bookmark=ok`, and `aori_keychain=roundtrip`. Screen capture uses permission. CI still stages files in the app container. |
-| Data persistence | 4 | Run 38359062380 logged `aori_embed_recall=tea` and `aori_memory_recall=I like tea`. Chat, settings, the persona, and the locale id are in SQLite. A macOS log has not shown `aori_store=sqlite` yet. pgvector stays out. |
+| Data persistence | 4 | Run 38369523526 logged `aori_store=sqlite` and `aori_embed_recall=tea`. Chat, settings, the persona, and the locale id are in that file. pgvector stays out. |
 | Error handling and recovery | 4 | `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover the retry. A delta blocks the second try. This run did not hit a provider error. |
 | Testing | 4 | Linux passed 72 tests. macOS passed 73 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded MiniLM recall, delete, and two vision ticks. |
-| Continuous integration and build | 4 | Run 38359062380 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
-| Documentation | 4 | The product, architecture, port, and audit notes match run 38359062380. Each note names a gap. They do not cover the whole AIRI product. |
+| Continuous integration and build | 4 | Run 38369523526 passed the Linux job and the macOS job. The job saved the SceneKit image and the Settings window. This is not CI for the whole AIRI product. |
+| Documentation | 4 | The product, architecture, port, and audit notes match run 38369523526. Each note names a gap. They do not cover the whole AIRI product. |
 | Accessibility | 4 | Run 38359815442 logged `aori_caption=Mock reply from CI.` and `aori_voiceover=running`. The app posts that line as an announcement. VoiceOver starts after the app exits. The log does not record that audio. |
-| Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The shipped locales now have `menu.memory`. A macOS log has not shown `aori_menu_memory=記憶` yet. |
+| Internationalization | 4 | Run 38369523526 logged `aori_locale=ja` and `aori_menu_memory=記憶`. Other AIRI pages stay on Crowdin. |
 | Performance and operability | 3 | The frame line is `{"event":"frame","ms":2.47}`. The ticker waited 1000 ms and then stopped. There is no broader telemetry product. |
 
 ## What works in code
@@ -73,7 +73,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Tool calls and the integrations. Run 38355635403 ran one `.js` plugin. Tool calls stay out.
 - A vision ticker that stays on after the rate limit. The screenshot path stops at the configured maximum.
 - pgvector. Run 38359062380 logged `aori_embed_recall=tea`. Word search remains in the chat panel.
-- A spoken microphone utterance. The last log says `aori_mic_utterance=silence`. `AORI_MIC_WAV` feeds a recorded WAV through that mark. A macOS log has not shown speech yet.
+- A live microphone grant. Run 38369523526 logged `aori_mic_utterance=speech` from `AORI_MIC_WAV`. The runner did not grant Speech permission.
 - VoiceOver audio. Run 38359815442 logged `aori_caption=Mock reply from CI.`. VoiceOver starts after the app exits. The log does not record that audio.
 - Cloud key sync. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. A Developer ID profile is absent.
 
@@ -87,9 +87,9 @@ The companion window shows a flat character. The hair is above the blue body. Th
 
 Run 38354362753 logged `aori_sandbox=on` and then failed to read the checkout. The signed copy in that run named a checkout path exception. The ad-hoc sandbox ignored it. Run 38357544156 removed that exception. CI still stages plugins, locales, and the model in the app container.
 
-This session did not launch the app on this Linux machine. Speech authorization stayed unknown. The microphone mark is silence. The flat character is not a Cubism moc3 model.
+This session did not launch the app on this Linux machine. Run 38369523526 did launch it on macOS. Speech authorization stayed unknown. The flat character is not a Cubism moc3 model.
 
-The score table above uses runs 38359062380 and 38359815442. Six rows are 3 because a central gap remains. Ten rows are 4 because the milestone behavior is strong. No row is 5.
+The score table above uses run 38369523526. Four rows are 3 because a central gap remains. Twelve rows are 4 because the milestone behavior is strong. No row is 5.
 
 ## Gap to the next score
 
@@ -99,19 +99,19 @@ Product scope is 3. Games, Cubism moc3, and most integrations are absent. One `.
 
 Architecture is 4. The app modules are named. Games, the hosted API, and the integrations stay outside this port.
 
-Platform integration is 3. Run 38357544156 logged `aori_stt_auth=unknown`. Speech permission is not granted on the runner.
+Platform integration is 3. Run 38369523526 logged `aori_stt_auth=unknown`. Speech permission is not granted on the runner.
 
-User interface is 4. The chat, the companion, and the Memory window are captured. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. A macOS capture of that window is not in a launch log. Full provider catalogs are absent.
+User interface is 4. Run 38369523526 captured the Settings window. The page list names the nine areas. Full provider catalogs are absent.
 
-Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws Butter and samples its color texture. A macOS job has not saved that image yet. The last GPUI window is a checker head.
+Graphics is 4. Run 38369523526 saved a SceneKit image of Butter. The frame shows the upper body. It does not show a clear face. Cubism, MMD, and Spine are absent.
 
-Audio is 3. whisper.cpp printed Hello papa. The last log says `aori_mic_utterance=silence`. Visemes now come from PCM frames. `AORI_MIC_WAV` feeds a recorded WAV through the mic mark. A macOS log has not shown `aori_mic_utterance=speech` yet.
+Audio is 4. Run 38369523526 logged `aori_mic_utterance=speech` and `aori_viseme_source=audio`. `AORI_MIC_WAV` fed that mark. A phoneme recognizer is absent.
 
 Networking is 3. The mock reply does not read pixels. Other chat protocols are absent.
 
 Security is 4. The signature has no checkout path exception. The log says `aori_bookmark=ok`. A Developer ID profile is absent. CI still stages files in the app container.
 
-Data persistence is 4. macOS ranked `tea please` closer to `I like tea` than to `The cat is orange`. Chat, settings, the persona, and the locale id now use SQLite. pgvector stays out. A macOS log has not shown `aori_store=sqlite` yet.
+Data persistence is 4. Run 38369523526 logged `aori_store=sqlite` and `aori_embed_recall=tea`. The locale id is in the same file. pgvector stays out.
 
 Error handling is 4. Unit tests cover one retry. This launch did not hit a provider error.
 
@@ -123,12 +123,12 @@ Documentation is 4. These notes match that run. They do not cover the whole AIRI
 
 Accessibility is 4. Run 38359815442 logged `aori_caption=Mock reply from CI.`. VoiceOver starts after the app exits. The log does not record that audio.
 
-Internationalization is 3. The log printed `aori_locale=ja`. The shipped locales now have `menu.memory`. A macOS log has not shown `aori_menu_memory=記憶` yet. Other AIRI pages stay on Crowdin.
+Internationalization is 4. Run 38369523526 logged `aori_menu_memory=記憶`. Other AIRI pages stay on Crowdin.
 
 Performance is 3. One frame line is present. There is no broader telemetry product.
 
 ## Next milestones
 
-The plan is in `docs/APPKIT_PORT.md`. A spoken microphone utterance and VoiceOver captions remain open. Milestone 4 keeps the flat rig because Cubism Core is proprietary.
+The plan is in `docs/APPKIT_PORT.md`. A live Speech grant and VoiceOver audio remain open. The CI mark uses `AORI_MIC_WAV`. Milestone 4 keeps the flat rig because Cubism Core is proprietary.
 
 Milestone 5 can run a `.js` file in JavaScriptCore. Milestone 6 has an opt-in vision ticker. Milestone 7 has SQLite recall and a converted MiniLM file. Games stay out.
