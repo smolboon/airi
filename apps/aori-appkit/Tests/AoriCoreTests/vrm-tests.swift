@@ -164,6 +164,43 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertFalse(AoriCopy.statusItem.isEmpty)
     }
 
+    func testAvatarPoseOpensTheMouthAndBlinksTheEyes() throws {
+        let portrait = VRMAvatarPose.portrait
+        XCTAssertEqual(portrait.blink, 0)
+        XCTAssertEqual(portrait.mouthOpen, 0.8)
+        XCTAssertGreaterThan(abs(portrait.yaw), 0.05)
+        XCTAssertGreaterThan(abs(portrait.pitch), 0.01)
+        let still = VRMAvatarPose(
+            time: MotionPolicy.screenshotTime,
+            mouthOpen: 0.8,
+            viseme: "a",
+            reduceMotion: true,
+            emotion: .neutral
+        )
+        XCTAssertEqual(still.yaw, 0)
+        XCTAssertEqual(still.pitch, 0)
+        XCTAssertEqual(still.blink, 0)
+        let blink = VRMAvatarPose(
+            time: 0.1,
+            mouthOpen: 0,
+            viseme: "sil",
+            reduceMotion: false,
+            emotion: .neutral
+        )
+        XCTAssertEqual(blink.blink, 1)
+        let url = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Sources/AoriApp/Resources/aori-sample.vrm")
+        let scene = try VRMSceneReader.read(Data(contentsOf: url))
+        let open = portrait.weights(in: scene)
+        XCTAssertTrue(open.contains(where: { $0.mesh == 0 && $0.morph == 0 && $0.weight > 0.5 }))
+        let shut = blink.weights(in: scene)
+        XCTAssertTrue(shut.contains(where: { $0.mesh == 0 && $0.morph == 4 && $0.weight == 1 }))
+        XCTAssertTrue(shut.contains(where: { $0.mesh == 1 && $0.weight == 1 }))
+    }
+
     func testStandardCompanionStyle() {
         let style = CompanionWindowPolicy.standard.style()
         XCTAssertTrue(style.floating)

@@ -516,7 +516,7 @@ mod tests {
     );
     assert!(open.chunks(4).any(|pixel| pixel[3] == 0));
     assert!(open.chunks(4).any(|pixel| {
-      pixel[0] > 80 && (pixel[1] as u16) * 2 < pixel[0] as u16 && pixel[3] == 255
+      pixel[0] > 80 && pixel[1] < pixel[0] && pixel[3] == 255
     }));
     let eye_row = average_row(&open, 160, |pixel| pixel[0] < 50 && pixel[1] < 50 && pixel[3] == 255);
     assert!(eye_row < 110.0, "eyes sit above the center, row {eye_row}");

@@ -65,6 +65,19 @@ targets.append(
         ]
     )
 )
+products.append(.executable(name: "AoriSceneKit", targets: ["AoriSceneKit"]))
+targets.append(
+    .executableTarget(
+        name: "AoriSceneKit",
+        dependencies: ["AoriCore"],
+        linkerSettings: [
+            .linkedFramework("AppKit"),
+            .linkedFramework("SceneKit"),
+            .linkedFramework("Metal"),
+            .linkedFramework("ImageIO"),
+        ]
+    )
+)
 #endif
 
 let package = Package(

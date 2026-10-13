@@ -103,7 +103,7 @@ Platform integration is 3. Run 38357544156 logged `aori_stt_auth=unknown`. Speec
 
 User interface is 4. The chat, the companion, and the Memory window are captured. Settings are thinner than AIRI.
 
-Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. The GPUI window is a checker head.
+Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws the sample VRM. A macOS job has not saved that image yet. The last GPUI window is a checker head.
 
 Audio is 3. whisper.cpp printed Hello papa. The log says `aori_mic_utterance=silence`. Visemes come from a word list.
 

@@ -33,6 +33,8 @@ On macOS:
 
 The GPUI window is separate. From `rust`, run `cargo run -p aori-gpui`. It paints the lit sample raster. Before that command, set `AORI_GPUI_PNG` to a PNG path. The command writes the raster and exits. Set `AORI_GPUI_EXIT_MS` to quit the interactive window after that many milliseconds. It does not join the AppKit chat.
 
+On macOS, `swift build --product AoriSceneKit` builds the SceneKit portrait. Run `.build/debug/AoriSceneKit build/aori-scenekit.png Sources/AoriApp/Resources/aori-sample.vrm`. The tool prints `aori_scenekit=vrm`. Materials use the base color. They do not sample the skin texture.
+
 In Xcode, open `Package.swift` and run the AoriApp scheme. You can also open `AoriAppKit.xcodeproj` and run the Aori scheme. The script bundle is `Aori.app`. Its executable is `AoriApp`. The Xcode product name is `Aori`.
 
 Optional environment variables:
@@ -67,6 +69,7 @@ apps/aori-appkit/
 ├── Sources/AoriCore/         # Chat, secrets, VRM bytes, window policy
 ├── Sources/AoriProviders/    # OpenAI-compatible streaming client
 ├── Sources/AoriApp/          # AppKit, speech, raster blit (macOS only)
+├── Sources/AoriSceneKit/     # SceneKit VRM portrait (macOS only)
 ├── rust/aori-face/           # Skin, light, depth raster, layered avatar, sample glTF read
 ├── rust/aori-gpui/           # Separate GPUI window
 ├── plugins/aori-greeting/    # Sample Manifest v2 command list

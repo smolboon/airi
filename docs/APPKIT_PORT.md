@@ -83,7 +83,7 @@ Use these Apple APIs for the port:
 
 Do not use SwiftUI for the window shell. A later control can be SwiftUI only when AppKit cannot express it.
 
-Do not use SceneKit. AppKit blits the raster from `aori-face`.
+`AoriSceneKit` is a macOS tool. It builds SceneKit meshes from `VRMSceneReader`. Blink, idle yaw, and the mouth morph come from `VRMAvatarPose`. Materials use the base color. They do not sample the skin texture. AppKit still blits the `aori-face` raster in the companion window.
 
 Zig is not a dependency. The mesh routine is small, so it lives in Rust. Add Zig when a routine is smaller there than in Rust.
 
@@ -93,7 +93,7 @@ GPUI 0.2.2 owns its run loop. Zed pull request 63077 adds an embedded macOS loop
 
 Do not use `WKWebView` in milestone 1. If a native Cubism renderer cannot ship, a later milestone can host Live2D in `WKWebView`. That bridge is the last option, not the default.
 
-RealityKit loads USDZ and Reality files. It does not load VRM. A USDZ conversion is a separate decision.
+RealityKit loads USDZ and Reality files. It does not load VRM. The VRM portrait uses SceneKit.
 
 ## Package layout
 
@@ -103,6 +103,7 @@ apps/aori-appkit/
 ├── Sources/AoriProviders/   # OpenAI-compatible client
 ├── Sources/AoriApp/         # AppKit shell, speech, raster blit
 ├── rust/aori-face/          # Skin, depth raster, and the sample glTF read
+├── Sources/AoriSceneKit/    # SceneKit VRM portrait (macOS only)
 ├── rust/aori-gpui/          # Separate GPUI window for the same head
 ├── plugins/aori-greeting/   # Sample Manifest v2 command list
 └── Tests/                   # XCTest for the core modules
@@ -132,7 +133,9 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The Linux job in run 38295099387 checked that PNG. The macOS job opened the window, and that window still shows the checker head.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The skin texture is one solid color. Run 38357544156 shows the checker head.
+
+`scripts/capture-gpui-window.sh` runs `AoriSceneKit` and writes `build/aori-gpui-window.png`. The portrait time is 1.6 seconds. The mouth morph is open. Blink is off at that time. This checkout did not run that tool.
 
 `AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key, or the model name local, uses a local template and logs `aori_llm=local`. A key with any other model calls the provider and logs `aori_llm=sent` and `aori_llm_reply`.
 

@@ -57,14 +57,10 @@ def png(width, height, pixels):
     return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header) + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b"")
 
 
-def checker(width, height, cell):
+def solid(width, height, color):
     pixels = bytearray()
-    for y in range(height):
-        for x in range(width):
-            if ((x // cell) + (y // cell)) % 2 == 0:
-                pixels.extend((255, 214, 196, 255))
-            else:
-                pixels.extend((214, 64, 112, 255))
+    for _ in range(width * height):
+        pixels.extend(color)
     return png(width, height, pixels)
 
 
@@ -243,7 +239,7 @@ def main():
     eye_uvs = [uv_of(position, left_center if position[0] < 0 else right_center) for position in eye_positions]
     head_joints, head_weights = head_skin(len(head_positions))
     eye_joints, eye_weights = eye_skin(eye_positions, len(left_positions))
-    texture = checker(64, 64, 8)
+    texture = solid(64, 64, (255, 214, 196, 255))
     rest = (0.0, 0.0, 0.0, 1.0)
     # World positions: hips 0, spine 0.02, neck 0.05, head 0.17, eyes at the eye centers.
     binds = [
