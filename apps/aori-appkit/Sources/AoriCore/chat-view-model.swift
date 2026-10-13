@@ -29,6 +29,7 @@ public final class ChatViewModel {
     public private(set) var configuration: ProviderConfiguration
     public private(set) var persona: CompanionPersona
     public private(set) var memory: UserMemory
+    public private(set) var recalledSummary = "none"
     public private(set) var vrmScene: VRMScene?
     public private(set) var modelBytes: Data?
     public private(set) var mouthLevel: Double = 0
@@ -38,18 +39,25 @@ public final class ChatViewModel {
     public var onTranscriptChange: (@MainActor () -> Void)?
 
     private let client: any ChatCompletionClient
+    private let embeddingMemory: EmbeddingMemoryStore?
+    private let textEmbedding: (any TextEmbedding)?
     private var showsModelTitle = false
+    private var recalledLines: [String] = []
 
     public init(
         client: any ChatCompletionClient,
         configuration: ProviderConfiguration,
         persona: CompanionPersona = .standard,
-        memory: UserMemory = .empty
+        memory: UserMemory = .empty,
+        embeddingMemory: EmbeddingMemoryStore? = nil,
+        textEmbedding: (any TextEmbedding)? = nil
     ) {
         self.client = client
         self.configuration = configuration
         self.persona = persona
         self.memory = memory
+        self.embeddingMemory = embeddingMemory
+        self.textEmbedding = textEmbedding
         presentation.title = persona.name
     }
 
@@ -168,8 +176,10 @@ public final class ChatViewModel {
 
         draft = ""
         if let note = MemoryCapture.note(from: text), memory.remember(note) {
+            await storeEmbedding(note)
             onProfileChange?()
         }
+        await recall(for: text)
         messages.append(ChatMessage(role: .user, content: text))
         var assistant = ChatMessage(role: .assistant, content: "")
         messages.append(assistant)
@@ -227,11 +237,35 @@ public final class ChatViewModel {
     }
 
     private func requestMessages() -> [ChatMessage] {
-        let systemPrompt = CompanionPrompt.system(persona: persona, memory: memory)
+        var systemPrompt = CompanionPrompt.system(persona: persona, memory: memory)
+        let related = MemoryRecall.prompt(lines: recalledLines)
+        if !related.isEmpty {
+            systemPrompt += "\n\(related)"
+        }
         var items = [ChatMessage(role: .system, content: systemPrompt)]
         let history = messages.dropLast()
         items.append(contentsOf: history)
         return items
+    }
+
+    private func storeEmbedding(_ text: String) async {
+        guard let embeddingMemory, let textEmbedding else {
+            return
+        }
+        let outcome = await textEmbedding.embed(text, configuration: configuration)
+        embeddingMemory.insert(text: text, vector: outcome.vector.values, now: Date())
+    }
+
+    private func recall(for text: String) async {
+        guard let embeddingMemory, let textEmbedding else {
+            recalledLines = []
+            recalledSummary = "none"
+            return
+        }
+        let outcome = await textEmbedding.embed(text, configuration: configuration)
+        let hits = embeddingMemory.recall(query: outcome.vector.values, limit: 3)
+        recalledLines = hits.map(\.text)
+        recalledSummary = recalledLines.first ?? "none"
     }
 
     private func publishMessages() {

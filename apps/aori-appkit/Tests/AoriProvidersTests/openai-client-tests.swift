@@ -123,6 +123,34 @@ final class OpenAICompatibleClientTests: XCTestCase {
         XCTAssertFalse(body.contains("test-key"))
     }
 
+    func testEmbeddingEndpointAndLocalFallback() async throws {
+        let vector = LocalEmbedding.embed("I like tea").values
+        let payload = try JSONSerialization.data(withJSONObject: [
+            "data": [["embedding": vector.map { Double($0) }]],
+        ])
+        let transport = ScriptedTransport(status: 200, chunks: [payload])
+        let client = OpenAICompatibleEmbeddingClient(transport: transport)
+        let settings = configuration(apiKey: "test-key")
+        let decoded = try await client.embed(text: "I like tea", configuration: settings)
+        XCTAssertEqual(decoded.values, vector)
+        let request = try XCTUnwrap(transport.requests().first)
+        XCTAssertEqual(request.url.absoluteString, "https://example.test/v1/embeddings")
+        XCTAssertEqual(request.headers["Authorization"], "Bearer test-key")
+        let body = String(data: request.body, encoding: .utf8) ?? ""
+        XCTAssertTrue(body.contains("I like tea"))
+        XCTAssertFalse(body.contains("test-key"))
+
+        let failing = ScriptedTransport(status: 500, chunks: [Data("down".utf8)])
+        let fallback = EmbeddingFallback(transport: failing)
+        let outcome = await fallback.embed("I like tea", configuration: settings)
+        XCTAssertEqual(outcome.source, .local)
+        XCTAssertEqual(outcome.vector.values, vector)
+
+        let blank = configuration(apiKey: "")
+        let local = await EmbeddingFallback().embed("I like tea", configuration: blank)
+        XCTAssertEqual(local.source, .local)
+    }
+
     func testTransportCanBeConstructedWithoutARequest() {
         _ = URLSessionHTTPTransport()
     }

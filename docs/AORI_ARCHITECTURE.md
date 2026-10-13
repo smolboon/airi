@@ -18,6 +18,10 @@ This host does not run JavaScript. The macOS App Sandbox stays off. Run 38298286
 
 Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_bytes=30500`. The reply was `Mock vision from CI.`. That mock returns a fixed string. It does not describe the frame. The denied fixture path did not run in that job.
 
+`VisionTickerPolicy` keeps screen vision off until `AORI_VISION_TICKER` is `1`. The interval cannot be shorter than 1000 ms. The tick count cannot pass 8. The companion window shows an orange Vision badge while the ticker is on.
+
+`EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `LocalEmbedding`. `LocalEmbedding` hashes words. It is not a neural model. No Core ML model is bundled.
+
 ## Voice turn
 
 The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.

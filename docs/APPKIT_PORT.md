@@ -54,7 +54,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Speech output | provider TTS and Web Speech | `AVSpeechSynthesizer` | Add provider TTS after the Apple voice works |
 | Speech input | hearing store | Speech framework | Add Sherpa later for offline models |
 | Persona | stage prompts | Name and personality in Settings | Richer character cards later |
-| Long-term memory | stage pages, Telegram, pgvector | Local notes from "remember that" | Topic recall and companion-written notes later |
+| Long-term memory | stage pages, Telegram, pgvector | SQLite cosine recall | This is not pgvector. The local embedder is a hash |
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
 | Idle motion | character modules | Blink, neck sway, head sway, and eye look | Richer clips later |
 | Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
@@ -65,7 +65,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Plugins | `plugin-sdk` | Manifest v2 host | Command list inside the native grant. No JavaScript |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
-| Vision and games | stage modules, integrations | One screen read | Games stay absent. No vision ticker |
+| Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Games stay absent |
 
 ## Native mapping
 
@@ -172,21 +172,25 @@ The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
 
-### Milestone 6, one screen read
+### Milestone 6, screen vision ticker
 
-The screenshot path calls `CGPreflightScreenCaptureAccess`. When the result is granted, `SCScreenshotManager` captures one display. When the result is denied, the path does not capture. `AORI_VISION_PNG` is the fixture. `OpenAICompatibleClient` posts the frame as an `image_url` on the chat completions endpoint. The prompt is the AIRI `screen:interpret` workload.
+The ticker is off until `AORI_VISION_TICKER` is `1`. The interval is at least 1000 ms. The maximum tick count is 8. The companion window shows an orange Vision badge while the ticker is on. A denied capture still uses `AORI_VISION_PNG`. The screenshot path does not call `CGRequestScreenCaptureAccess`.
 
-The screenshot path does not call `CGRequestScreenCaptureAccess`. A dialog can stall a headless job. This read is not a vision ticker. Games stay absent.
+Run 38301336719 logged one granted capture before the ticker. The source was `screen`. The byte count was 30500. The mock reply was `Mock vision from CI.`. That mock does not read the pixels.
 
-Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_capture=png`. The source was `screen`. The byte count was 30500. The mock reply was `Mock vision from CI.`. That job did not use the fixture.
+### Milestone 7, embeddings memory
 
-### Milestone 7, the rest of AIRI
+`EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses a hashing embedder.
+
+That embedder is not a neural model. No Core ML model is bundled.
+
+### Milestone 8, the rest of AIRI
 
 Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 63 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+The work ran on Linux. `swift test` passed 67 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
 
 `AORI_GPUI_PNG` wrote a lit PNG on this machine in an earlier session. This checkout did not launch the Mac app. Run 38290795770 launched `AoriApp` on `macos-latest`, posted the click, called the mock, and opened the GPUI window. The Linux job in that run passed 49 tests and saved the GPUI PNG.
 

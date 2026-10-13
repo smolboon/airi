@@ -35,7 +35,7 @@ jobs:
         with:
           toolchain: "1.99.0"
       - name: Install GPUI system libraries
-        run: sudo apt-get update && sudo apt-get install -y g++ pkg-config libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
+        run: sudo apt-get update && sudo apt-get install -y g++ pkg-config libsqlite3-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
       - name: Test
         run: swift test
       - name: Test the face library
@@ -104,6 +104,7 @@ jobs:
             apps/aori-appkit/build/aori-window.png
             apps/aori-appkit/build/aori-launch.log
             apps/aori-appkit/build/aori-chat-window.png
+            apps/aori-appkit/build/aori-memory-window.png
             apps/aori-appkit/build/aori-speech.wav
             apps/aori-appkit/build/aori-visemes.log
             apps/aori-appkit/build/aori-gpui-window.png

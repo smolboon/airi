@@ -35,6 +35,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
     private var companionWindow: CompanionWindowController?
+    private var memoryWindow: MemoryWindowController?
+    private var embeddingStore: EmbeddingMemoryStore?
     private var settingsWindow: SettingsWindowController?
     private let synthesizer = AppleSpeechSynthesizer()
     private let transcriber = AppleSpeechTranscriber()
@@ -74,11 +76,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = StatusItemController(target: self)
         let configuration = loadConfiguration()
         let profile = loadProfile()
+        let embeddingStore = try? EmbeddingMemoryStore(fileURL: AoriFiles.memoryURL())
+        self.embeddingStore = embeddingStore
         let model = ChatViewModel(
             client: RoutingChatClient(),
             configuration: configuration,
             persona: profile.persona,
-            memory: profile.memory
+            memory: profile.memory,
+            embeddingMemory: embeddingStore,
+            textEmbedding: EmbeddingFallback()
         )
         self.model = model
         if let launchStatus {
@@ -189,7 +195,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine("aori_mic=\(mic)")
             await self.synthesizer.speak("Hello papa")
             await self.runFixtureTurn()
-            await self.runVisionTurn()
+            await self.runMemoryProof()
+            await self.runVisionTicker()
             logLine("aori_turn=done")
         }
         Timer.scheduledTimer(withTimeInterval: 80, repeats: false) { _ in
@@ -670,6 +677,66 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @objc func showMemory(_ sender: Any?) {
+        guard let embeddingStore else {
+            model?.setStatus("The memory database did not open.")
+            return
+        }
+        if memoryWindow == nil {
+            memoryWindow = MemoryWindowController(store: embeddingStore)
+        }
+        memoryWindow?.show()
+    }
+
+    private func runMemoryProof() async {
+        guard let embeddingStore, let model else {
+            logLine("aori_memory_source=unavailable")
+            logLine("aori_memory_recall=none")
+            return
+        }
+        let embedding = EmbeddingFallback()
+        let tea = await embedding.embed("I like tea", configuration: model.configuration)
+        let cat = await embedding.embed("The cat is orange", configuration: model.configuration)
+        logLine("aori_memory_source=\(tea.source.rawValue)")
+        _ = embeddingStore.insert(text: "I like tea", vector: tea.vector.values, now: Date(timeIntervalSince1970: 1))
+        _ = embeddingStore.insert(text: "The cat is orange", vector: cat.vector.values, now: Date(timeIntervalSince1970: 2))
+        let query = await embedding.embed("tea please", configuration: model.configuration)
+        let hits = embeddingStore.recall(query: query.vector.values, limit: 1)
+        logLine("aori_memory_recall=\(hits.first?.text ?? "none")")
+        let prompt = MemoryRecall.prompt(lines: hits.map(\.text))
+        logLine(prompt.contains("I like tea") ? "aori_memory_prompt=I like tea" : "aori_memory_prompt=none")
+        let window = MemoryWindowController(store: embeddingStore)
+        memoryWindow = window
+        window.show()
+        logLine("aori_memory_window=open")
+        logLine("aori_memory_rows=\(embeddingStore.list().count)")
+        logLine(window.deleteFirst() ? "aori_memory_delete=ok" : "aori_memory_delete=miss")
+        logLine("aori_memory_rows=\(embeddingStore.list().count)")
+    }
+
+    private func runVisionTicker() async {
+        let policy = VisionTickerPolicy.resolve(environment: ProcessInfo.processInfo.environment)
+        companionWindow?.setVisionIndicator(policy.enabled)
+        logLine("aori_vision_ticker=\(policy.enabled ? "on" : "off")")
+        logLine("aori_vision_indicator=\(policy.enabled ? "on" : "off")")
+        logLine("aori_vision_interval_ms=\(policy.intervalMilliseconds)")
+        logLine("aori_vision_max_ticks=\(policy.maximumTicks)")
+        guard policy.enabled else {
+            return
+        }
+        var tick = 1
+        while policy.allows(tick: tick) {
+            logLine("aori_vision_tick=\(tick)")
+            await runVisionTurn()
+            let next = tick + 1
+            if policy.allows(tick: next) {
+                try? await Task.sleep(for: .milliseconds(policy.intervalMilliseconds))
+            }
+            tick = next
+        }
+        logLine("aori_vision_ticker=stopped")
+    }
+
     private func runVisionTurn() async {
         var permission = ScreenCaptureSession.preflight()
         // NOTICE:
@@ -892,6 +959,16 @@ private enum AoriFiles {
 
     static func localeURL() -> URL {
         directory().appendingPathComponent("locale.json")
+    }
+
+    static func memoryURL() -> URL {
+        if let path = ProcessInfo.processInfo.environment["AORI_MEMORY_DB"] {
+            let trimmed = path.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                return URL(fileURLWithPath: trimmed)
+            }
+        }
+        return directory().appendingPathComponent("memory.sqlite")
     }
 }
 

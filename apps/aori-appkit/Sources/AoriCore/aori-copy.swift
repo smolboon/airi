@@ -22,6 +22,7 @@ public enum AoriCopy {
     public static var quit: String { text("menu.quit", fallback: "Quit Aori") }
     public static var newChat: String { text("menu.newChat", fallback: "New Chat") }
     public static var openVRM: String { text("menu.openVRM", fallback: "Open VRM…") }
+    public static var memory: String { text("menu.memory", fallback: "Memory") }
     public static var showMainWindow: String { text("menu.showMainWindow", fallback: "Show Main Window") }
     public static var showCompanion: String { text("menu.showCompanion", fallback: "Show Companion") }
     public static var hideCompanion: String { text("menu.hideCompanion", fallback: "Hide Companion") }

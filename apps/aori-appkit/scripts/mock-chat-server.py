@@ -1,11 +1,43 @@
 #!/usr/bin/env python3
-"""OpenAI-compatible mock. A text body and an image body return different replies."""
+"""OpenAI-compatible mock. Chat text, vision images, and embeddings use one token."""
 
+import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HOST = "127.0.0.1"
 PORT = 8765
 TOKEN = "Bearer ci-mock-key"
+
+
+def local_embedding(text):
+    dims = 32
+    buckets = [0.0] * dims
+    for raw in text.lower().split():
+        cleaned = "".join(ch for ch in raw if "a" <= ch <= "z")
+        if not cleaned:
+            continue
+        hash_value = 2166136261
+        for ch in cleaned:
+            hash_value ^= ord(ch)
+            hash_value = (hash_value * 16777619) & 0xFFFFFFFF
+        buckets[hash_value % dims] += 1.0
+    norm = sum(value * value for value in buckets) ** 0.5
+    if norm == 0.0:
+        return buckets
+    return [value / norm for value in buckets]
+
+
+def embedding_body(payload):
+    text = ""
+    try:
+        body = json.loads(payload.decode("utf-8"))
+        raw = body.get("input", "")
+        if isinstance(raw, str):
+            text = raw
+    except json.JSONDecodeError:
+        text = ""
+    encoded = json.dumps({"data": [{"embedding": local_embedding(text)}]}).encode()
+    return encoded
 
 
 def reply_for(payload):
@@ -30,7 +62,11 @@ class Handler(BaseHTTPRequestHandler):
             body = b'{"error":"unauthorized"}'
             self._send(401, "application/json", body)
             return
-        if not self.path.split("?", 1)[0].rstrip("/").endswith("/chat/completions"):
+        path = self.path.split("?", 1)[0].rstrip("/")
+        if path.endswith("/embeddings"):
+            self._send(200, "application/json", embedding_body(payload))
+            return
+        if not path.endswith("/chat/completions"):
             body = b'{"error":"not found"}'
             self._send(404, "application/json", body)
             return

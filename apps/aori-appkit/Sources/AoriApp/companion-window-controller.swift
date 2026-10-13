@@ -74,6 +74,10 @@ final class CompanionWindowController: NSWindowController {
         characterView.holdMouseIgnore = hold
     }
 
+    func setVisionIndicator(_ visible: Bool) {
+        characterView.setVisionIndicator(visible)
+    }
+
     func refresh() {
         characterView.apply(
             presentation: model.presentation,

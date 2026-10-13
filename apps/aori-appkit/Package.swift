@@ -8,9 +8,19 @@ var products: [Product] = [
     .library(name: "AoriProviders", targets: ["AoriProviders"]),
 ]
 
-var targets: [Target] = [
+var coreDependencies: [Target.Dependency] = []
+#if os(Linux)
+coreDependencies.append("CSQLite")
+#endif
+
+var targets: [Target] = []
+#if os(Linux)
+targets.append(.systemLibrary(name: "CSQLite"))
+#endif
+targets.append(contentsOf: [
     .target(
         name: "AoriCore",
+        dependencies: coreDependencies,
         resources: [
             .copy("Resources/aori.yaml"),
         ]
@@ -18,7 +28,7 @@ var targets: [Target] = [
     .target(name: "AoriProviders", dependencies: ["AoriCore"]),
     .testTarget(name: "AoriCoreTests", dependencies: ["AoriCore"]),
     .testTarget(name: "AoriProvidersTests", dependencies: ["AoriProviders"]),
-]
+])
 
 #if os(macOS)
 products.append(.executable(name: "AoriApp", targets: ["AoriApp"]))

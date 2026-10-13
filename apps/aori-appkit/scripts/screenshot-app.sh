@@ -9,7 +9,8 @@ wav="$PWD/build/aori-speech.wav"
 visemes="$PWD/build/aori-visemes.log"
 vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
-rm -f "$frame" "$window" "$chat" "$wav" "$visemes"
+memory_png="$PWD/build/aori-memory-window.png"
+rm -f "$frame" "$window" "$chat" "$wav" "$visemes" "$memory_png" "$PWD/build/aori-memory.sqlite"
 mkdir -p build
 python3 - <<'PY'
 import pathlib
@@ -73,6 +74,10 @@ AORI_SCREENSHOT=1 \
     AORI_AVATAR=live2d \
     AORI_PLUGINS="$PWD/plugins/aori-greeting" \
     AORI_VISION_PNG="$PWD/build/aori-vision-fixture.png" \
+    AORI_VISION_TICKER=1 \
+    AORI_VISION_INTERVAL_MS=1000 \
+    AORI_VISION_MAX_TICKS=2 \
+    AORI_MEMORY_DB="$PWD/build/aori-memory.sqlite" \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >"$log" 2>&1 &
@@ -152,6 +157,17 @@ need = [
     "aori_vision_workload=screen:interpret",
     "aori_vision=sent",
     "aori_vision_reply=Mock vision from CI.",
+    "aori_vision_ticker=on",
+    "aori_vision_ticker=stopped",
+    "aori_vision_indicator=on",
+    "aori_vision_interval_ms=1000",
+    "aori_vision_tick=1",
+    "aori_vision_tick=2",
+    "aori_memory_source=endpoint",
+    "aori_memory_recall=I like tea",
+    "aori_memory_prompt=I like tea",
+    "aori_memory_window=open",
+    "aori_memory_delete=ok",
     "aori_hit_corner=pass",
     "aori_hit_body=keep",
     "aori_ignores_mouse=true",
@@ -180,6 +196,9 @@ if not source or source[-1] not in {"aori_vision_source=screen", "aori_vision_so
     missing.append("aori_vision_source")
 if source and permission and source[-1] == "aori_vision_source=screen" and permission[-1] != "aori_vision_permission=granted":
     missing.append("aori_vision_source_without_permission")
+rows = [line.strip() for line in text.splitlines() if line.startswith("aori_memory_rows=")]
+if not rows or rows[-1] != "aori_memory_rows=1":
+    missing.append("aori_memory_rows")
 bytes_line = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_bytes=")]
 if not bytes_line:
     missing.append("aori_vision_bytes")
@@ -201,10 +220,15 @@ chatid="$(build/window-id main || true)"
 if [ -n "$chatid" ]; then
     screencapture -l "$chatid" "$chat" || true
 fi
+memid="$(build/window-id memory || true)"
+if [ -n "$memid" ]; then
+    screencapture -l "$memid" "$memory_png" || true
+fi
 kill "$pid" 2>/dev/null || true
 wait "$pid" 2>/dev/null || true
 test -s "$window"
 test -s "$chat"
+test -s "$memory_png"
 voiceover="unavailable"
 if open -g -a VoiceOver >/dev/null 2>&1; then
     sleep 8

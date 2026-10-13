@@ -26,10 +26,16 @@ The app reads an AIRI Manifest v2 file named `extension.airi.json`. The host gra
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 
-The screenshot path asks ScreenCaptureKit for one frame. When permission is denied, the app sends a PNG fixture through the OpenAI-compatible client. The workload is `screen:interpret`. The app does not run a vision ticker. A granted capture sends that frame to the configured provider.
+The screenshot path asks ScreenCaptureKit for one frame. When permission is denied, the app sends a PNG fixture through the OpenAI-compatible client. The workload is `screen:interpret`. A granted capture sends that frame to the configured provider. The mock does not read the pixels.
 
-Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_source=screen`. The PNG was 30500 bytes. The mock reply was `Mock vision from CI.`. The mock does not read the pixels. The chat reply stayed `Mock reply from CI.`.
+Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_source=screen`. The PNG was 30500 bytes. The mock reply was `Mock vision from CI.`. The chat reply stayed `Mock reply from CI.`.
+
+Screen vision is off until `AORI_VISION_TICKER` is `1`. The interval is at least 1000 ms. The tick count stops at the configured maximum, and that maximum is at most 8. An orange Vision badge shows while the ticker is on. The screenshot path does not open the permission dialog.
+
+Memory notes with vectors live in SQLite. Cosine recall adds the closest notes to the chat system prompt. When an API key is set, the app calls the OpenAI embeddings endpoint. When that call fails, a hashing embedder is the fallback. That embedder is not a neural model. No Core ML model is bundled.
+
+The Memory window lists the notes. Delete removes the selected note.
 
 ## Not in this app
 
-Cubism moc3, JavaScript plugins, a vision ticker, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
+Cubism moc3, JavaScript plugins, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.

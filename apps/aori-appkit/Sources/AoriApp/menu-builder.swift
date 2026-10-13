@@ -25,6 +25,7 @@ enum MenuBuilder {
         let fileMenu = NSMenu(title: "File")
         bind(fileMenu.addItem(withTitle: AoriCopy.newChat, action: #selector(AppDelegate.newChat(_:)), keyEquivalent: "n"), target: target)
         bind(fileMenu.addItem(withTitle: AoriCopy.openVRM, action: #selector(AppDelegate.openVRM(_:)), keyEquivalent: "o"), target: target)
+        bind(fileMenu.addItem(withTitle: AoriCopy.memory, action: #selector(AppDelegate.showMemory(_:)), keyEquivalent: ""), target: target)
         fileMenu.addItem(.separator())
         fileMenu.addItem(withTitle: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
         let fileItem = NSMenuItem()

@@ -25,6 +25,10 @@ public struct ProviderConfiguration: Equatable, Sendable {
         baseURL.appendingPathComponent("chat").appendingPathComponent("completions")
     }
 
+    public var embeddingsURL: URL {
+        baseURL.appendingPathComponent("embeddings")
+    }
+
     /// Describes the configuration without the API key.
     public var redactedDescription: String {
         "model=\(model) baseURL=\(baseURL.absoluteString) keySource=\(keySource.rawValue)"

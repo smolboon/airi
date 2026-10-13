@@ -16,6 +16,8 @@ When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The
 
 `AORI_VISION_PNG` is a PNG fixture. When screen capture is denied, the screenshot path sends that file. A granted capture sends one display frame. The request uses the chat provider. The workload is `screen:interpret`. The path does not open a permission dialog.
 
+`AORI_VISION_TICKER=1` turns the ticker on. The default is off. The interval is at least 1000 ms. The tick count stops at 8. An orange Vision badge shows on the companion while the ticker is on. File, Memory opens the note list.
+
 You can open another `.vrm` file. A separate GPUI window paints the lit sample raster. That window is not the AppKit app. Clear pixels on the companion window pass clicks through. Opaque pixels and the caption keep the click. The screenshot path posts one click onto a window titled Aori Behind.
 
 ## How to use it
@@ -36,6 +38,10 @@ Optional environment variables:
 - `AORI_AVATAR` with the value `live2d` selects the flat character. The default is the VRM.
 - `AORI_PLUGINS` is a plugin directory. The sample path is `plugins/aori-greeting`.
 - `AORI_VISION_PNG` is a PNG file. When screen capture is denied, the screenshot path sends this file.
+- `AORI_VISION_TICKER=1` turns the ticker on. The default is off.
+- `AORI_VISION_INTERVAL_MS` is the gap. Values below 1000 become 1000.
+- `AORI_VISION_MAX_TICKS` limits the ticks. The cap is 8.
+- `AORI_MEMORY_DB` is the SQLite file.
 - `AORI_OPENAI_BASE_URL` or `OPENAI_BASE_URL`
 - `AORI_OPENAI_MODEL` or `OPENAI_MODEL`
 - `OPENAI_API_KEY` when `AORI_OPENAI_API_KEY` is absent
@@ -48,7 +54,7 @@ Use it to work on the native macOS companion. Use it to run the milestone 1 shel
 
 ## When not to use it
 
-Do not use it for Cubism moc3 models, JavaScript plugins, a vision ticker, or games. Do not use it for vector memory. The saved facts are a short list. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
+Do not use it for Cubism moc3 models, JavaScript plugins, or games. Do not use it as a neural memory or as pgvector. The local embedder is a hash. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 
@@ -88,12 +94,14 @@ cargo test -p aori-face
 cargo check -p aori-gpui
 ```
 
-The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./scripts/assemble-app.sh`, `./scripts/screenshot-app.sh`, and `./scripts/capture-gpui-window.sh`. The screenshot script sets `AORI_SCREENSHOT=1` and starts `scripts/mock-chat-server.py`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it. Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_reply=Mock vision from CI.`.
+The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./scripts/assemble-app.sh`, `./scripts/screenshot-app.sh`, and `./scripts/capture-gpui-window.sh`. The screenshot script sets `AORI_SCREENSHOT=1` and starts `scripts/mock-chat-server.py`. The app writes `build/aori-framebuffer.png`, speaks a short line, and writes `build/aori-speech.wav`. The window stays open so `screencapture` can grab it. The screenshot script also sets `AORI_VISION_TICKER=1` and `AORI_MEMORY_DB`. Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_reply=Mock vision from CI.`.
 
 ## Limits
 
 The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
+
+Embedding notes live in `memory.sqlite`. The local embedder is a hash. It is not a neural model. No Core ML model is bundled.
 
 Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.

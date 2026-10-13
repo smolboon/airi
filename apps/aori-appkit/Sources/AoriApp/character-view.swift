@@ -13,6 +13,7 @@ final class CharacterView: NSView {
     private let caption = NSVisualEffectView()
     private let titleLabel = NSTextField(labelWithString: "Aori")
     private let subtitleLabel = NSTextField(wrappingLabelWithString: "")
+    private let visionBadge = NSTextField(labelWithString: "Vision")
     // The timer is created on the main run loop and invalidated in deinit.
     private nonisolated(unsafe) var timer: Timer?
     private var speaking = false
@@ -161,6 +162,16 @@ final class CharacterView: NSView {
         caption.addSubview(titleLabel)
         caption.addSubview(subtitleLabel)
         addSubview(caption)
+        visionBadge.font = .systemFont(ofSize: 12, weight: .bold)
+        visionBadge.textColor = .white
+        visionBadge.alignment = .center
+        visionBadge.wantsLayer = true
+        visionBadge.layer?.backgroundColor = NSColor.systemOrange.cgColor
+        visionBadge.layer?.cornerRadius = 6
+        visionBadge.isHidden = true
+        visionBadge.setAccessibilityLabel("Screen vision is on")
+        visionBadge.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(visionBadge)
 
         NSLayoutConstraint.activate([
             caption.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
@@ -175,7 +186,16 @@ final class CharacterView: NSView {
             subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
             subtitleLabel.bottomAnchor.constraint(equalTo: caption.bottomAnchor, constant: -8),
+
+            visionBadge.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            visionBadge.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            visionBadge.widthAnchor.constraint(greaterThanOrEqualToConstant: 64),
+            visionBadge.heightAnchor.constraint(equalToConstant: 22),
         ])
+    }
+
+    func setVisionIndicator(_ visible: Bool) {
+        visionBadge.isHidden = !visible
     }
 
     private func applyBackground() {
