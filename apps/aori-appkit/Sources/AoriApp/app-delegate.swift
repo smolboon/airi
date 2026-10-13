@@ -221,6 +221,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self.writeFramebuffer()
             let mouth = self.model?.mouthLevel ?? 0
             logLine(mouth > 0.2 ? "aori_window_mouth=open" : "aori_window_mouth=line")
+            self.showSettings(nil)
+            self.settingsWindow?.window?.orderFrontRegardless()
+            logLine("aori_settings_window=open")
             logLine("aori_turn=done")
         }
         Timer.scheduledTimer(withTimeInterval: 80, repeats: false) { _ in

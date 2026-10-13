@@ -16,8 +16,9 @@ visemes="$box/aori-visemes.log"
 vrm="$box/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
 memory_png="$PWD/build/aori-memory-window.png"
+settings_png="$PWD/build/aori-settings-window.png"
 memory_db="$box/aori-memory.sqlite"
-rm -f "$window" "$chat" "$memory_png"
+rm -f "$window" "$chat" "$memory_png" "$settings_png"
 mkdir -p build
 cp -R plugins/. "$box/plugins/"
 cp -RL "../../packages/i18n/src/locales/." "$box/locales/"
@@ -177,6 +178,8 @@ need = [
     "aori_llm=",
     "aori_locale=ja",
     "aori_menu_memory=記憶",
+    "aori_store=sqlite",
+    "aori_settings_window=open",
     "aori_locale_menu=loaded",
     "aori_stt_engine=whisper",
     "aori_stt=Hello papa",
@@ -272,11 +275,16 @@ memid="$(build/window-id memory || true)"
 if [ -n "$memid" ]; then
     screencapture -l "$memid" "$memory_png" || true
 fi
+setid="$(build/window-id settings || true)"
+if [ -n "$setid" ]; then
+    screencapture -l "$setid" "$settings_png" || true
+fi
 kill "$pid" 2>/dev/null || true
 wait "$pid" 2>/dev/null || true
 test -s "$window"
 test -s "$chat"
 test -s "$memory_png"
+test -s "$settings_png"
 voiceover="unavailable"
 if open -g -a VoiceOver >/dev/null 2>&1; then
     sleep 8

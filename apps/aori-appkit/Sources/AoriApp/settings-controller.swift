@@ -34,7 +34,7 @@ final class SettingsWindowController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        window.title = "Settings"
+        window.title = "Aori Settings"
         super.init(window: window)
         build()
         settingsLog("aori_settings=provider,voice,model,persona,memory")

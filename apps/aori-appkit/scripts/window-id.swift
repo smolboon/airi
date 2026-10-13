@@ -27,6 +27,9 @@ guard let chosen = matches.first(where: { item in
     if role == "memory" {
         return title == "Aori Memory"
     }
+    if role == "settings" {
+        return title == "Aori Settings"
+    }
     if role == "gpui" {
         let gpuiOwner = owner.range(of: "gpui", options: .caseInsensitive) != nil
         return title.contains("GPUI") || gpuiOwner

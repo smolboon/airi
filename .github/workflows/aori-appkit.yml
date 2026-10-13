@@ -109,3 +109,4 @@ jobs:
             apps/aori-appkit/build/aori-visemes.log
             apps/aori-appkit/build/aori-gpui-window.png
             apps/aori-appkit/build/aori-gpui.log
+            apps/aori-appkit/build/aori-settings-window.png
