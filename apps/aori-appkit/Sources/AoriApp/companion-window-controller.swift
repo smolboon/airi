@@ -74,6 +74,10 @@ final class CompanionWindowController: NSWindowController {
         characterView.holdMouseIgnore = hold
     }
 
+    func setSpeechCaption(_ text: String) {
+        characterView.setSpeechCaption(text)
+    }
+
     func setVisionIndicator(_ visible: Bool) {
         characterView.setVisionIndicator(visible)
     }

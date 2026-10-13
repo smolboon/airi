@@ -32,7 +32,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Testing | 4 | Linux passed 71 tests. macOS passed 72 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded recall, delete, and two vision ticks. |
 | Continuous integration and build | 4 | Run 38357544156 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
 | Documentation | 4 | The product, architecture, port, and audit notes match run 38357544156. Each note names a gap. They do not cover the whole AIRI product. |
-| Accessibility | 3 | The log has live labels and `aori_ax_press=Send message`. The log says `aori_voiceover=running`. The log has no spoken captions. |
+| Accessibility | 3 | The log has live labels and `aori_ax_press=Send message`. The log says `aori_voiceover=running`. The app posts the spoken line. A macOS launch has not logged `aori_caption`. |
 | Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The Memory menu key is English only. |
 | Performance and operability | 3 | The frame line is `{"event":"frame","ms":2.47}`. The ticker waited 1000 ms and then stopped. There is no broader telemetry product. |
 
@@ -74,7 +74,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - A vision ticker that stays on after the rate limit. The screenshot path stops at the configured maximum.
 - pgvector. The bundled Core ML file is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`. Word search remains in the chat panel.
 - A spoken microphone utterance. Run 38295099387 logged `aori_mic_utterance=silence`.
-- VoiceOver captions. The process was running. The log has no spoken line.
+- A proven VoiceOver caption. The app posts the spoken line and logs `aori_caption`. A macOS launch has not logged that line.
 - Cloud key sync. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. A Developer ID profile is absent.
 
 ## What this session ran
@@ -121,7 +121,7 @@ Continuous integration is 4. Run 38357544156 passed. This is not CI for the whol
 
 Documentation is 4. These notes match that run. They do not cover the whole AIRI product.
 
-Accessibility is 3. The log says `aori_voiceover=running`. The log has no spoken caption.
+Accessibility is 3. The app posts the spoken line. A macOS launch has not logged `aori_caption`.
 
 Internationalization is 3. The log printed `aori_locale=ja`. The Memory menu key is English only. Crowdin owns the other locales.
 

@@ -152,7 +152,7 @@ The log also says `aori_click_through=delivered`, `aori_llm_reply=Mock reply fro
 
 ### Milestone 2 follow-up
 
-A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 stays in a later milestone.
+A spoken microphone utterance is still open. The app posts the spoken line as a VoiceOver announcement. A macOS launch has not logged `aori_caption`. Cubism moc3 stays in a later milestone.
 
 The assembled app is sandboxed. The entitlements are the app sandbox, outgoing network, the microphone, user-selected files, and app-scoped bookmarks. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy has no checkout path exception.
 

@@ -196,6 +196,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine(KeychainProbe.line(store: self.secrets))
             let mic = self.transcriber.probeMicrophone()
             logLine("aori_mic=\(mic)")
+            self.announceSpeech("Hello papa")
             await self.synthesizer.speak("Hello papa")
             await self.runFixtureTurn()
             await self.runMemoryProof()
@@ -593,8 +594,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         Task {
+            announceSpeech(text)
             await synthesizer.speak(text)
         }
+    }
+
+    private func announceSpeech(_ text: String) {
+        logLine(SpeechCaption.line(for: text))
+        mainWindow?.setSpeechCaption(text)
+        companionWindow?.setSpeechCaption(text)
     }
 
     private func initialLocale() -> String {
@@ -675,6 +683,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         guard !heard.isEmpty, let model else {
             logLine("aori_llm=skipped")
+            announceSpeech("I am here.")
             await synthesizer.speak("I am here.")
             return
         }
@@ -684,6 +693,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         if let reply = model.textForSpeech() {
             logLine("aori_llm_reply=\(reply)")
+            announceSpeech(reply)
             await synthesizer.speak(reply)
         }
     }
@@ -917,6 +927,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let usesLocal = self.model?.configuration.apiKey.isEmpty != false || self.model?.configuration.model == "local"
             logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
             if !reply.isEmpty, case .speak = self.turn.acceptReply(reply) {
+                self.announceSpeech(reply)
                 await self.synthesizer.speak(reply)
             }
             self.turn.finishSpeech()

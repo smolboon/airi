@@ -147,6 +147,10 @@ final class ChatPanelController: NSViewController {
         draftField.stringValue = text
     }
 
+    func setSpeechCaption(_ text: String) {
+        statusLabel.setAccessibilityValue(text)
+    }
+
     func setListening(_ listening: Bool) {
         listenButton.title = listening ? "Stop" : "Listen"
     }

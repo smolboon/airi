@@ -71,6 +71,11 @@ final class MainWindowController: NSWindowController {
         chatPanel.setDraft(text)
     }
 
+    func setSpeechCaption(_ text: String) {
+        characterView.setSpeechCaption(text)
+        chatPanel.setSpeechCaption(text)
+    }
+
     func setListening(_ listening: Bool) {
         chatPanel.setListening(listening)
     }

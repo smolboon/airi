@@ -45,5 +45,7 @@ final class OnDeviceTests: XCTestCase {
         XCTAssertTrue(AccessibilityCopy.proof.contains("Companion character"))
         XCTAssertTrue(AccessibilityCopy.proof.contains("Companion window"))
         XCTAssertTrue(AccessibilityCopy.proof.contains("Chat window"))
+        XCTAssertEqual(SpeechCaption.line(for: "Mock reply from CI."), "aori_caption=Mock reply from CI.")
+        XCTAssertEqual(SpeechCaption.line(for: "  \n"), "aori_caption=empty")
     }
 }

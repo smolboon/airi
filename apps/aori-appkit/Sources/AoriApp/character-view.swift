@@ -194,6 +194,18 @@ final class CharacterView: NSView {
         ])
     }
 
+    func setSpeechCaption(_ text: String) {
+        setAccessibilityValue(text)
+        NSAccessibility.post(
+            element: self,
+            notification: .announcementRequested,
+            userInfo: [
+                .announcement: text,
+                .priority: NSNumber(value: NSAccessibilityPriorityLevel.high.rawValue),
+            ]
+        )
+    }
+
     func setVisionIndicator(_ visible: Bool) {
         visionBadge.isHidden = !visible
     }
