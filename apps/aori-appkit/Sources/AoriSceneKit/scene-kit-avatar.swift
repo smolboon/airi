@@ -42,7 +42,11 @@ enum SceneKitAvatar {
 
         let camera = SCNNode()
         camera.name = "camera"
-        camera.camera = SCNCamera()
+        let lens = SCNCamera()
+        lens.fieldOfView = 28
+        lens.zNear = 0.01
+        lens.zFar = 20
+        camera.camera = lens
         let frame = frame(of: vrm)
         camera.position = SCNVector3(frame.x, frame.y, frame.distance)
         camera.look(at: SCNVector3(frame.x, frame.lookY, frame.z))
@@ -84,9 +88,11 @@ enum SceneKitAvatar {
             return (0, 0.15, 0, 0.1, 1.4)
         }
         let height = max(0.2, maxY - minY)
-        let lookY = maxY - height * 0.12
-        let span = max(height * 0.35, maxX - minX)
-        let distance = max(0.45, maxZ + span * 0.9)
+        let lookY = maxY - height * 0.16
+        let viewHeight = max(0.25, height * 0.38)
+        let half = viewHeight * 0.5
+        let fov = 28 * Float.pi / 180
+        let distance = half / tan(fov * 0.5) + max(0, maxZ)
         return ((minX + maxX) * 0.5, lookY, (minZ + maxZ) * 0.5, lookY, distance)
     }
 
