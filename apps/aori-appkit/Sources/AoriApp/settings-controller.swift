@@ -184,6 +184,7 @@ final class SettingsWindowController: NSWindowController {
             modelField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             keyField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             memoryPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            pageLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ])
         keyField.setAccessibilityLabel(AccessibilityCopy.apiKey)
     }
