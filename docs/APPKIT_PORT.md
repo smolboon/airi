@@ -145,7 +145,9 @@ When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Se
 
 `AORI_SCREENSHOT=1` writes a framebuffer PNG, then speaks "Hello papa" and records that PCM. The job runs voice activity on that WAV. When Speech permission is missing, it runs whisper.cpp on that WAV. The log line is `aori_stt_auth=whisper`. A grant logs `aori_stt_auth=authorized`. An empty transcript does not invent text. A non-empty transcript goes to chat. An empty API key, or the model name local, uses a local template and logs `aori_llm=local`. A key with any other model calls the provider and logs `aori_llm=sent` and `aori_llm_reply`.
 
-The screenshot script starts a mock server on 127.0.0.1 port 8765. It sets the key, the base URL, and the model name mock. The mock returns the text Mock reply from CI.
+The screenshot script starts a mock server on 127.0.0.1 port 8765. It sets the key, the base URL, and the model name mock. The mock returns the text Mock reply from CI. A vision call must carry a PNG. The mock decodes that PNG. A bad image returns an error.
+
+`AORI_CHAT_CHANNEL=telegram` posts the reply to a sendMessage URL on that mock. The default channel stays the provider chat. CI sets the flag. A launch without the flag does not post.
 
 The screenshot path posts one click through the companion window. A window titled Aori Behind counts that click. The log says delivered only when that window receives the click. Clear pixels set `ignoresMouseEvents`. Opaque pixels and the caption keep the click. The job also probes the microphone and a Keychain probe account. A short capture logs `aori_mic_utterance` as no-device, silence, or speech.
 

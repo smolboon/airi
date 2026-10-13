@@ -36,6 +36,8 @@ jobs:
           toolchain: "1.99.0"
       - name: Install GPUI system libraries
         run: sudo apt-get update && sudo apt-get install -y g++ pkg-config libsqlite3-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
+      - name: Check the vision mock
+        run: python3 scripts/test-mock-vision.py
       - name: Test
         run: swift test
       - name: Test the face library

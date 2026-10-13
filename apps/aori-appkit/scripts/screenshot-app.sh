@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 cd "$(dirname "$0")/.."
+python3 scripts/test-mock-vision.py
 app="build/Aori.app/Contents/MacOS/AoriApp"
 # The ad-hoc sandbox does not honor the checkout path exception.
 # Inputs and outputs for this launch live in the app container.
@@ -96,6 +97,10 @@ AORI_SCREENSHOT=1 \
     AORI_OPENAI_API_KEY=ci-mock-key \
     AORI_OPENAI_BASE_URL=http://127.0.0.1:8765/v1 \
     AORI_OPENAI_MODEL=mock \
+    AORI_CHAT_CHANNEL=telegram \
+    AORI_TELEGRAM_URL=http://127.0.0.1:8765 \
+    AORI_TELEGRAM_TOKEN=ci-token \
+    AORI_TELEGRAM_CHAT=ci \
     AORI_LOCALE=ja \
     AORI_LOCALES_ROOT="$box/locales" \
     AORI_FRAMEBUFFER_PATH="$frame" \
@@ -187,6 +192,8 @@ need = [
     "aori_llm=sent",
     "aori_llm_reply=Mock reply from CI.",
     "aori_emotion=",
+    "aori_chat_channel=telegram",
+    "aori_telegram=sent",
     "aori_click_through=on",
     "aori_click_through=delivered",
     "aori_avatar=live2d",

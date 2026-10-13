@@ -51,6 +51,8 @@ Optional environment variables:
 - `AORI_OPENAI_BASE_URL` or `OPENAI_BASE_URL`
 - `AORI_OPENAI_MODEL` or `OPENAI_MODEL`
 - `OPENAI_API_KEY` when `AORI_OPENAI_API_KEY` is absent
+- `AORI_CHAT_CHANNEL=telegram` also posts the reply to a sendMessage URL. The default is the provider chat.
+- `AORI_TELEGRAM_URL`, `AORI_TELEGRAM_TOKEN`, and `AORI_TELEGRAM_CHAT` name that URL.
 
 The default base URL is `https://api.openai.com/v1`. The default model is `gpt-4o-mini`.
 

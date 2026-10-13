@@ -716,12 +716,47 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         await model.send()
         let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
+        let channel = ChatChannelFlag.kind(raw: ProcessInfo.processInfo.environment["AORI_CHAT_CHANNEL"])
+        logLine("aori_chat_channel=\(channel.rawValue)")
         if let reply = model.textForSpeech() {
             let emotion = CompanionEmotion.infer(from: reply)
             logLine("aori_llm_reply=\(reply)")
             logLine("aori_emotion=\(emotion.rawValue)")
+            if channel == .telegram {
+                await postTelegram(reply)
+            }
             announceSpeech(reply)
             await synthesizer.speak(reply)
+        }
+    }
+
+    private func postTelegram(_ text: String) async {
+        let env = ProcessInfo.processInfo.environment
+        guard let message = TelegramSend.make(
+            token: env["AORI_TELEGRAM_TOKEN"] ?? "",
+            chatID: env["AORI_TELEGRAM_CHAT"] ?? "",
+            text: text
+        ) else {
+            logLine("aori_telegram=skipped")
+            return
+        }
+        let root = env["AORI_TELEGRAM_URL"] ?? ""
+        let joined = root.hasSuffix("/") ? root + message.path : root + "/" + message.path
+        guard let url = URL(string: joined) else {
+            logLine("aori_telegram=skipped")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = message.body
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            let ok = status == 200 && String(decoding: data, as: UTF8.self).contains("\"ok\":true")
+            logLine(ok ? "aori_telegram=sent" : "aori_telegram=error")
+        } catch {
+            logLine("aori_telegram=error")
         }
     }
 
