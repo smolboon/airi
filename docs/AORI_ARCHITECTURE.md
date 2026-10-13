@@ -4,7 +4,7 @@ Aori splits the native app into three Swift modules, one macOS SceneKit tool, an
 
 ## Modules
 
-`AoriCore` owns chat state, the persona, memory notes, WAV helpers, the locale catalog, and the local reply. `AoriProviders` owns the OpenAI-compatible stream. `AoriApp` owns AppKit windows, Speech, AVFoundation, and the Keychain. `RoutingChatClient` picks the local reply when the key is empty or the model is `local`. A key sends the same messages to the remote provider.
+`AoriCore` owns chat state, the persona, memory notes, WAV helpers, the locale catalog, and the local reply. `SQLiteCompanionStore` stores the locale id in `companion.sqlite`. `AoriProviders` owns the OpenAI-compatible stream. `AoriApp` owns AppKit windows, Speech, AVFoundation, and the Keychain. `RoutingChatClient` picks the local reply when the key is empty or the model is `local`. A key sends the same messages to the remote provider.
 
 `aori-face` reads the sample glTF, skins positions and normals, and rasterizes RGBA. A Lambert term uses one fixed light plus ambient. `aori-gpui` is a separate binary. `AORI_GPUI_PNG` makes that binary write one lit raster and exit. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. Run 38295099387 opened that window.
 

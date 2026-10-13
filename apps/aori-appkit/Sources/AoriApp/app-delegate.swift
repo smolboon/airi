@@ -29,7 +29,6 @@ enum AoriMain {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let secrets = KeychainSecretStore(service: AoriSecrets.keychainService)
     private let records = SQLiteCompanionStore.open(fileURL: AoriFiles.databaseURL())
-    private let localeStore = FileLocalePreferenceStore(fileURL: AoriFiles.localeURL())
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
     private var companionWindow: CompanionWindowController?
@@ -626,7 +625,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let env = ProcessInfo.processInfo.environment["AORI_LOCALE"], LocaleCatalog.ids.contains(env) {
             return env
         }
-        if let saved = try? localeStore.load(), LocaleCatalog.ids.contains(saved) {
+        if let saved = try? records.loadLocale(), LocaleCatalog.ids.contains(saved) {
             return saved
         }
         return "en"
@@ -663,7 +662,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logLine("aori_menu_memory=\(AoriCopy.memory)")
         logLine("aori_locale_proof=\(loaded.proof)")
         if persist {
-            try? localeStore.save(id: choice)
+            try? records.saveLocale(id: choice)
         }
         installMenu()
     }
@@ -1001,10 +1000,6 @@ private enum AoriFiles {
 
     static func databaseURL() -> URL {
         directory().appendingPathComponent("companion.sqlite")
-    }
-
-    static func localeURL() -> URL {
-        directory().appendingPathComponent("locale.json")
     }
 
     static func memoryURL() -> URL {

@@ -12,7 +12,7 @@ Speak uses `AVSpeechSynthesizer`. Visemes come from the audio level and the zero
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file.
 
-Chat, provider settings, and the persona are stored in `companion.sqlite`. The first open copies the old JSON files. The locale id stays in `locale.json`. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
+Chat, provider settings, the persona, and the locale id are stored in `companion.sqlite`. The first open copies the old JSON files. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
 `AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied.
 
@@ -107,7 +107,9 @@ The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./script
 
 Cubism Core is proprietary. Live2D does not publish it for this MIT repo. The flat native rig stays.
 
-The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
+The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Chat, settings, the persona, and the locale id are stored in `companion.sqlite`.
+
+The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Mouth presets come from PCM frames.
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
 

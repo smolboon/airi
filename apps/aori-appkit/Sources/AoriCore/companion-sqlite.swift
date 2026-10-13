@@ -22,7 +22,7 @@ public enum CompanionStoreError: Error, Equatable, Sendable, CustomStringConvert
     }
 }
 
-/// Chat, provider settings, and the persona in one SQLite file.
+/// Chat, provider settings, the persona, and the locale id in one SQLite file.
 public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Sendable {
     private let lock = NSLock()
     private var database: OpaquePointer?
@@ -100,6 +100,20 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         try write(settings)
     }
 
+    public func loadLocale() throws -> String {
+        try requireOpen()
+        lock.lock()
+        defer { lock.unlock() }
+        return try readLocale() ?? "en"
+    }
+
+    public func saveLocale(id: String) throws {
+        try requireOpen()
+        lock.lock()
+        defer { lock.unlock() }
+        try writeLocale(id)
+    }
+
     private func open(path: String) throws {
         var handle: OpaquePointer?
         let flags = SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX
@@ -135,6 +149,10 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
                 text TEXT NOT NULL,
                 created_at REAL NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS locale (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                locale TEXT NOT NULL
+            );
             """
         )
         try? execute("ALTER TABLE settings ADD COLUMN provider TEXT NOT NULL DEFAULT 'openai'")
@@ -143,7 +161,7 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
 
     // NOTICE:
     // The first open copies JSON into SQLite when the tables are empty.
-    // Older builds wrote companion.json, chat.json, and settings.json.
+    // Older builds wrote companion.json, chat.json, settings.json, and locale.json.
     // Those files live next to companion.sqlite.
     // Remove this import when those files are gone from Application Support.
     private func importJSON(in directory: URL) -> [String] {
@@ -172,6 +190,14 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
                 try? write(settings)
                 try? FileManager.default.removeItem(at: settingsURL)
                 names.append("settings")
+            }
+        }
+        let localeURL = directory.appendingPathComponent("locale.json")
+        if FileManager.default.fileExists(atPath: localeURL.path), (try? readLocale()) == nil {
+            if let id = try? FileLocalePreferenceStore(fileURL: localeURL).load() {
+                try? writeLocale(id)
+                try? FileManager.default.removeItem(at: localeURL)
+                names.append("locale")
             }
         }
         return names
@@ -290,6 +316,33 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         } catch {
             try? execute("ROLLBACK")
             throw error
+        }
+    }
+
+    private func readLocale() throws -> String? {
+        let sql = "SELECT locale FROM locale WHERE id = 1"
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
+            throw CompanionStoreError.queryFailed(errorMessage())
+        }
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_step(statement) == SQLITE_ROW else {
+            return nil
+        }
+        let id = columnText(statement, 0)
+        return id.isEmpty ? nil : id
+    }
+
+    private func writeLocale(_ id: String) throws {
+        let sql = "INSERT INTO locale (id, locale) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET locale = excluded.locale"
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
+            throw CompanionStoreError.queryFailed(errorMessage())
+        }
+        defer { sqlite3_finalize(statement) }
+        bind(id, at: 1, statement: statement)
+        guard sqlite3_step(statement) == SQLITE_DONE else {
+            throw CompanionStoreError.queryFailed(errorMessage())
         }
     }
 

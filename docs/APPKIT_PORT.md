@@ -129,7 +129,7 @@ Mouth presets come from the TTS buffer. Each 20 ms window uses RMS and the zero-
 
 `AORI_SPEECH_WAV` stores the PCM that `AVSpeechSynthesizer.write` returned. The macOS job checks that the WAV is not silent and that the viseme log has more than one preset. This checkout did not play that audio.
 
-Chat, provider settings, and the persona are stored in `companion.sqlite`. The first open copies `chat.json`, `settings.json`, and `companion.json` when those tables are empty. The locale id stays in `locale.json`. SwiftData does not run in Linux `swift test`.
+Chat, provider settings, the persona, and the locale id are stored in `companion.sqlite`. The first open copies `chat.json`, `settings.json`, `companion.json`, and `locale.json` when those tables are empty. SwiftData does not run in Linux `swift test`.
 
 A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` have Aori menu keys. The View menu lists the locale ids. A failed stream retries once before any text arrives. After a text delta, it does not retry. The status line says "Trying again." during that retry.
 
