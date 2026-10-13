@@ -28,7 +28,7 @@ Run 38357544156 logged `aori_memory_source=endpoint` and `aori_window_mouth=open
 
 ## Voice turn
 
-The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.
+The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. That grant logs `aori_stt_auth=authorized`. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli` and the log line is `aori_stt_auth=whisper`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.
 
 A non-empty line becomes the user message. The local template answers when the key is empty or the model is `local`. The reply is spoken. That path logs `aori_llm=local`. A key with any other model calls the provider. That path logs `aori_llm=sent` and `aori_llm_reply`.
 

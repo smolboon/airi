@@ -173,6 +173,13 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertTrue(miss.notes.isEmpty)
     }
 
+    func testSpeechAuthLogNamesTheGrantOrWhisper() {
+        XCTAssertEqual(SpeechAuthLog.line(permission: .granted, whisperAvailable: true), "aori_stt_auth=authorized")
+        XCTAssertEqual(SpeechAuthLog.line(permission: .unknown, whisperAvailable: true), "aori_stt_auth=whisper")
+        XCTAssertEqual(SpeechAuthLog.line(permission: .denied, whisperAvailable: true), "aori_stt_auth=whisper")
+        XCTAssertEqual(SpeechAuthLog.line(permission: .denied, whisperAvailable: false), "aori_stt_auth=denied")
+    }
+
     func testVoiceActivityFindsAQuietTail() {
         let activity = VoiceActivity(threshold: 0.05, silenceSeconds: 0.3, sampleRate: 1_000)
         var samples = [Float](repeating: 0.2, count: 400)

@@ -235,6 +235,9 @@ ax = [line for line in text.splitlines() if line.startswith("aori_ax=")]
 ax_labels = ["Chat transcript", "Companion character", "Send message", "Companion window", "Chat window"]
 if not ax or any(label not in ax[-1] for label in ax_labels):
     missing.append("aori_ax")
+auth = [line.strip() for line in text.splitlines() if line.startswith("aori_stt_auth=")]
+if not auth or auth[-1] not in {"aori_stt_auth=authorized", "aori_stt_auth=whisper"}:
+    missing.append("aori_stt_auth")
 utterance = [line.strip() for line in text.splitlines() if line.startswith("aori_mic_utterance=")]
 if not utterance or utterance[-1] != "aori_mic_utterance=speech":
     missing.append("aori_mic_utterance")

@@ -7,6 +7,19 @@ public enum SpeechPermission: String, Equatable, Sendable {
     case restricted
 }
 
+public enum SpeechAuthLog {
+    /// `authorized` when Speech grants access. `whisper` when the local model runs instead.
+    public static func line(permission: SpeechPermission, whisperAvailable: Bool) -> String {
+        if permission == .granted {
+            return "aori_stt_auth=authorized"
+        }
+        if whisperAvailable {
+            return "aori_stt_auth=whisper"
+        }
+        return "aori_stt_auth=\(permission.rawValue)"
+    }
+}
+
 public enum SpeechSessionError: Error, Equatable, Sendable, CustomStringConvertible {
     case recognizerUnavailable
     case microphoneUnavailable
