@@ -77,7 +77,7 @@ AORI_SCREENSHOT=1 \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
     AORI_AVATAR=live2d \
-    AORI_PLUGINS="$PWD/plugins/aori-greeting" \
+    AORI_PLUGINS="$PWD/plugins" \
     AORI_VISION_PNG="$PWD/build/aori-vision-fixture.png" \
     AORI_VISION_TICKER=1 \
     AORI_VISION_INTERVAL_MS=1000 \
@@ -159,6 +159,8 @@ need = [
     "aori_plugin_call=aori.companion.greeting",
     "aori_plugin_result=Plugin greeting.",
     "aori_plugin_denied=aori.files.read",
+    "aori_plugin=loaded id=aori-js",
+    "aori_plugin_js=greeting=Plugin greeting. files=denied",
     "aori_vision_workload=screen:interpret",
     "aori_vision=sent",
     "aori_vision_reply=Mock vision from CI.",

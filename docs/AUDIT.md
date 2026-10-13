@@ -19,7 +19,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 
 | Area | Score | Evidence |
 | --- | --- | --- |
-| Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, JavaScript plugins, and most integrations are absent. A score of 4 needs strong parity. This row does not have it. |
+| Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, and most integrations are absent. JavaScriptCore is in the host. Run 38348280149 did not run it. |
 | Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
 | Platform integration | 3 | Run 38348280149 built the app and granted screen recording. Keychain and the microphone probe ran. Speech authorization stayed unknown. The process is not sandboxed. |
 | User interface and interaction | 4 | Run 38348280149 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. The Memory window has a Delete button. Settings are thinner than AIRI. |
@@ -50,7 +50,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Speech buttons that call `AVSpeechSynthesizer` and `SFSpeechRecognizer`.
 - An original CC0 VRM 0 humanoid. Bones include hips, spine, neck, head, both eyes, and both arms. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
 - When `AORI_AVATAR` is `live2d`, the companion draws a flat layered character. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust samples motion3.json curves. The art is original. Run 38298286037 showed it in the companion window.
-- A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38301336719 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The host does not run JavaScript.
+- A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38301336719 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. A `.js` file can run in JavaScriptCore. The script calls `aori.call`.
 - One opt-in vision ticker. Run 38348280149 logged `aori_vision_ticker=on`, two `aori_vision_source=screen` ticks, `aori_vision_interval_ms=1000`, and `aori_vision_ticker=stopped`. The companion window shows an orange Vision badge. The mock does not read the pixels.
 - SQLite embedding memory. Run 38348280149 logged `aori_memory_source=endpoint`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The local embedder is a hash. No Core ML model is bundled.
 - Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel.
@@ -70,7 +70,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Model-written greetings, topic recall, and notes the companion writes.
 - Cubism moc3, MMD, and Spine. The flat character uses Live2D parameter ids. It does not load a moc3 file.
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
-- Tool calls, JavaScript plugins, and the integrations. The native host reads a command list. It does not run JavaScript.
+- Tool calls and the integrations. JavaScriptCore can run a `.js` plugin. Run 38348280149 did not run that plugin.
 - A vision ticker that stays on after the rate limit. The screenshot path stops at the configured maximum.
 - A neural sentence embedder and pgvector. The app stores endpoint vectors or hash vectors in SQLite. Word search remains in the chat panel.
 - A spoken microphone utterance. Run 38295099387 logged `aori_mic_utterance=silence`.

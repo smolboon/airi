@@ -170,7 +170,9 @@ If the license allows it, a native Cubism renderer can replace these layers. `WK
 
 The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the AIRI range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
 
-The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory. A `.js`, `.mjs`, or `.cjs` file is rejected, and the host does not embed Electron. This grant is not the macOS App Sandbox. The process sandbox is a separate control.
+The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory.
+
+A `.js` file runs in JavaScriptCore. The script can call `aori.call`. A call outside the grant returns denied. A `.mjs` or `.cjs` file is rejected. The host does not embed Electron. This grant is not the macOS App Sandbox.
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
 

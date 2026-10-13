@@ -2,6 +2,24 @@ import Foundation
 import XCTest
 @testable import AoriCore
 
+private struct GrantScriptRuntime: PluginScriptRuntime {
+    func evaluate(source _: String, grant: PluginPermissions) -> String {
+        let greeting = PluginScriptBridge.call(
+            grant: grant,
+            area: "capabilities",
+            action: "snapshot",
+            key: "aori.companion.greeting"
+        )
+        let files = PluginScriptBridge.call(
+            grant: grant,
+            area: "capabilities",
+            action: "snapshot",
+            key: "aori.files.read"
+        )
+        return "greeting=\(greeting) files=\(files)"
+    }
+}
+
 final class PluginHostTests: XCTestCase {
     func testSampleGreetingIsGrantedAndFileReadIsDenied() throws {
         let directory = appKitRoot().appendingPathComponent("plugins/aori-greeting")
@@ -99,6 +117,53 @@ final class PluginHostTests: XCTestCase {
 
         try FileManager.default.removeItem(at: parent)
     }
+
+    func testJavaScriptUsesTheGrantAndHidesTheSource() throws {
+        let parent = FileManager.default.temporaryDirectory
+            .appendingPathComponent("aori-plugin-js-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
+        let source = """
+        var greeting = aori.call("capabilities", "snapshot", "aori.companion.greeting");
+        var files = aori.call("capabilities", "snapshot", "aori.files.read");
+        "greeting=" + greeting + " files=" + files;
+        """
+        try Data(source.utf8).write(to: parent.appendingPathComponent("main.js"))
+        try manifest(entrypoints: "{ \"node\": \"./main.js\" }").write(to: parent.appendingPathComponent("extension.airi.json"))
+
+        let unavailable = PluginHost.run(directory: parent, scriptRuntime: nil)
+        XCTAssertEqual(unavailable.lines, [
+            "aori_plugin=loaded id=aori-greeting",
+            "aori_plugin_js=unavailable",
+        ])
+
+        let report = PluginHost.run(directory: parent, scriptRuntime: GrantScriptRuntime())
+        XCTAssertEqual(report.lines, [
+            "aori_plugin=loaded id=aori-greeting",
+            "aori_plugin_js=greeting=Plugin greeting. files=denied",
+        ])
+        XCTAssertFalse(report.lines.joined(separator: "\n").contains("aori.call"))
+        try FileManager.default.removeItem(at: parent)
+    }
+
+    func testSampleJavaScriptPluginMatchesTheGrant() {
+        let directory = appKitRoot().appendingPathComponent("plugins/aori-js")
+        let report = PluginHost.run(directory: directory, scriptRuntime: GrantScriptRuntime())
+        XCTAssertEqual(report.lines, [
+            "aori_plugin=loaded id=aori-js",
+            "aori_plugin_js=greeting=Plugin greeting. files=denied",
+        ])
+    }
+
+    #if canImport(JavaScriptCore)
+    func testJavaScriptCoreRunsThePermissionedCall() {
+        let directory = appKitRoot().appendingPathComponent("plugins/aori-js")
+        let report = PluginHost.run(directory: directory, scriptRuntime: JavaScriptCorePluginRuntime())
+        XCTAssertEqual(report.lines, [
+            "aori_plugin=loaded id=aori-js",
+            "aori_plugin_js=greeting=Plugin greeting. files=denied",
+        ])
+    }
+    #endif
 
     func testHostRangeAndBooleanVersionFail() throws {
         let package = try makePackage(manifest: manifest(airi: "^2.0.0"))

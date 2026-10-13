@@ -29,6 +29,7 @@ export default defineConfig({
     'apps/stage-pocket/android/**',
     'apps/aori-appkit/.build/**',
     'apps/aori-appkit/build/**',
+    'apps/aori-appkit/plugins/**',
     'apps/aori-appkit/rust/target/**',
     '**/drizzle/**',
     '**/.astro/**',

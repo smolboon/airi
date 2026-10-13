@@ -12,7 +12,9 @@ Speak uses `AVSpeechSynthesizer`. A small word list picks phoneme visemes. Other
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file. Chat history, provider settings, and the locale choice are saved next to the persona file. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
 
-`AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied. The host does not run JavaScript.
+`AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied.
+
+A `.js` plugin runs in JavaScriptCore when that framework is present. `plugins/aori-js` calls `aori.call`. The file call returns denied. Linux logs `aori_plugin_js=unavailable`.
 
 `AORI_VISION_PNG` is a PNG fixture. When screen capture is denied, the screenshot path sends that file. A granted capture sends one display frame. The request uses the chat provider. The workload is `screen:interpret`. The path does not open a permission dialog.
 

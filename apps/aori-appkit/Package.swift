@@ -9,8 +9,12 @@ var products: [Product] = [
 ]
 
 var coreDependencies: [Target.Dependency] = []
+var coreLinker: [LinkerSetting] = []
 #if os(Linux)
 coreDependencies.append("CSQLite")
+#endif
+#if os(macOS)
+coreLinker.append(.linkedFramework("JavaScriptCore"))
 #endif
 
 var targets: [Target] = []
@@ -23,7 +27,8 @@ targets.append(contentsOf: [
         dependencies: coreDependencies,
         resources: [
             .copy("Resources/aori.yaml"),
-        ]
+        ],
+        linkerSettings: coreLinker
     ),
     .target(name: "AoriProviders", dependencies: ["AoriCore"]),
     .testTarget(name: "AoriCoreTests", dependencies: ["AoriCore"]),
@@ -47,6 +52,7 @@ targets.append(
             .linkedFramework("ScreenCaptureKit"),
             .linkedFramework("CoreGraphics"),
             .linkedFramework("ImageIO"),
+            .linkedFramework("JavaScriptCore"),
             // The static library is produced by `cargo build -p aori-face`.
             .unsafeFlags(["-L", "rust/target/debug", "-laori_face"]),
         ]

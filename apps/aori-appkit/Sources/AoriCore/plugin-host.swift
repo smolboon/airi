@@ -4,23 +4,39 @@ public struct PluginRunReport: Equatable, Sendable {
     public var lines: [String]
 }
 
-/// Reads Manifest v2 and runs a command list inside the host grant.
-/// The host does not run JavaScript.
+/// Reads Manifest v2 and runs a command list or a JavaScript file inside the host grant.
+/// JavaScript runs only through JavaScriptCore. The script can call `aori.call`.
 public enum PluginHost {
     public static let airiVersion = "0.1.0"
     static let greetingKey = "aori.companion.greeting"
     static let greetingText = "Plugin greeting."
 
     public static func run(directory: URL, airiVersion: String = PluginHost.airiVersion) -> PluginRunReport {
+        run(directory: directory, airiVersion: airiVersion, scriptRuntime: defaultScriptRuntime())
+    }
+
+    static func run(
+        directory: URL,
+        airiVersion: String = PluginHost.airiVersion,
+        scriptRuntime: (any PluginScriptRuntime)?
+    ) -> PluginRunReport {
         let roots = packageRoots(in: directory)
         if roots.isEmpty {
             return PluginRunReport(lines: ["aori_plugin=none"])
         }
         var lines: [String] = []
         for root in roots {
-            lines.append(contentsOf: runPackage(root, airiVersion: airiVersion))
+            lines.append(contentsOf: runPackage(root, airiVersion: airiVersion, scriptRuntime: scriptRuntime))
         }
         return PluginRunReport(lines: lines)
+    }
+
+    static func defaultScriptRuntime() -> (any PluginScriptRuntime)? {
+        #if canImport(JavaScriptCore)
+        return JavaScriptCorePluginRuntime()
+        #else
+        return nil
+        #endif
     }
 
     /// Host ceiling. A plugin receives the overlap of this grant and its request.
@@ -34,7 +50,11 @@ public enum PluginHost {
         )
     }
 
-    private static func runPackage(_ root: URL, airiVersion: String) -> [String] {
+    private static func runPackage(
+        _ root: URL,
+        airiVersion: String,
+        scriptRuntime: (any PluginScriptRuntime)?
+    ) -> [String] {
         let manifestURL = root.appendingPathComponent("extension.airi.json")
         guard let data = try? Data(contentsOf: manifestURL) else {
             return ["aori_plugin=error"]
@@ -51,16 +71,19 @@ public enum PluginHost {
         guard let relative = entrypoint(in: manifest) else {
             return ["aori_plugin=error"]
         }
-        if isScript(relative) {
+        guard let file = resolve(relative, under: root) else {
             return ["aori_plugin=error"]
         }
-        guard let file = resolve(relative, under: root) else {
+        let grant = PluginPermissions.intersect(manifest.permissions, ceiling())
+        if isJavaScript(relative) {
+            return runJavaScript(file: file, manifest: manifest, grant: grant, runtime: scriptRuntime)
+        }
+        if isRejectedScript(relative) {
             return ["aori_plugin=error"]
         }
         guard let commands = try? Data(contentsOf: file), let calls = parseCalls(commands) else {
             return ["aori_plugin=error"]
         }
-        let grant = PluginPermissions.intersect(manifest.permissions, ceiling())
         var lines = ["aori_plugin=loaded id=\(manifest.id)"]
         for call in calls.prefix(32) {
             let allowed = PluginPermissions.allows(grant, area: call.area, action: call.action, key: call.key)
@@ -73,6 +96,26 @@ public enum PluginHost {
             }
         }
         return lines
+    }
+
+    private static func runJavaScript(
+        file: URL,
+        manifest: PluginManifest,
+        grant: PluginPermissions,
+        runtime: (any PluginScriptRuntime)?
+    ) -> [String] {
+        guard let source = try? String(contentsOf: file, encoding: .utf8), source.utf8.count <= 64_000 else {
+            return ["aori_plugin=error"]
+        }
+        let loaded = "aori_plugin=loaded id=\(manifest.id)"
+        guard let runtime else {
+            return [loaded, "aori_plugin_js=unavailable"]
+        }
+        let value = token(runtime.evaluate(source: source, grant: grant))
+        if value.isEmpty || value == "error" {
+            return [loaded, "aori_plugin_js=error"]
+        }
+        return [loaded, "aori_plugin_js=\(value)"]
     }
 
     private static func capabilityValue(key: String, action: String) -> String? {
@@ -107,9 +150,13 @@ public enum PluginHost {
         return manifest.entrypoints["default"]
     }
 
-    private static func isScript(_ relative: String) -> Bool {
+    private static func isJavaScript(_ relative: String) -> Bool {
+        relative.lowercased().hasSuffix(".js")
+    }
+
+    private static func isRejectedScript(_ relative: String) -> Bool {
         let lower = relative.lowercased()
-        return lower.hasSuffix(".js") || lower.hasSuffix(".mjs") || lower.hasSuffix(".cjs")
+        return lower.hasSuffix(".mjs") || lower.hasSuffix(".cjs")
     }
 
     private static func resolve(_ relative: String, under root: URL) -> URL? {

@@ -1,0 +1,25 @@
+{
+  "manifestVersion": 2,
+  "kind": "manifest.extension.airi.moeru.ai",
+  "id": "aori-js",
+  "version": "1.0.0",
+  "engines": {
+    "airi": "*",
+    "runtimes": ["node"]
+  },
+  "entrypoints": {
+    "node": "./main.js"
+  },
+  "permissions": {
+    "capabilities": [
+      {
+        "key": "aori.companion.greeting",
+        "actions": ["snapshot"]
+      },
+      {
+        "key": "aori.files.read",
+        "actions": ["snapshot"]
+      }
+    ]
+  }
+}

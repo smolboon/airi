@@ -12,7 +12,7 @@ Aori splits the native app into three Swift modules and two Rust crates. `AoriCo
 
 `PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting and for `aori.files.read`. The greeting returns `Plugin greeting.`. The file call is denied.
 
-This host does not run JavaScript. The macOS App Sandbox stays off. Run 38298286037 logged `aori_plugin_result=Plugin greeting.` and `aori_plugin_denied=aori.files.read`.
+A `.js` file runs in JavaScriptCore through `aori.call`. The signed app enables the macOS App Sandbox. Run 38298286037 logged `aori_plugin_result=Plugin greeting.` and `aori_plugin_denied=aori.files.read`.
 
 `VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.
 
