@@ -33,6 +33,9 @@ public enum CoreMLFeatures {
     }
 
     public static func bundledModelURL() -> URL? {
+        if let url = BundledFile.url(name: "aori-embed", extension: "mlmodel") {
+            return url
+        }
         if let url = Bundle.module.url(forResource: "aori-embed", withExtension: "mlmodel") {
             return url
         }

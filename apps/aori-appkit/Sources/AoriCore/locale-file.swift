@@ -54,7 +54,7 @@ public enum LocaleFile {
     /// Loads the English menu table. The app bundle copy comes from `packages/i18n`.
     public static func englishMenu() -> String? {
         var urls: [URL] = []
-        if let url = Bundle.module.url(forResource: "aori", withExtension: "yaml") {
+        if let url = BundledFile.url(name: "aori", extension: "yaml") {
             urls.append(url)
         }
         if let url = Bundle.main.url(forResource: "aori", withExtension: "yaml") {
@@ -67,6 +67,11 @@ public enum LocaleFile {
             if let text = try? String(contentsOf: url, encoding: .utf8), text.contains("showCompanion") {
                 return text
             }
+        }
+        if let url = Bundle.module.url(forResource: "aori", withExtension: "yaml"),
+           let text = try? String(contentsOf: url, encoding: .utf8),
+           text.contains("showCompanion") {
+            return text
         }
         return nil
     }
