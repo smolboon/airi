@@ -220,6 +220,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try png.write(to: URL(fileURLWithPath: path))
         } catch {
+            logLine("aori_frame_write=failed")
             model?.setStatus("The screenshot frame was not written. \(String(describing: error))")
         }
     }

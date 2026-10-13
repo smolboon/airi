@@ -2,16 +2,25 @@
 set -eu
 cd "$(dirname "$0")/.."
 app="build/Aori.app/Contents/MacOS/AoriApp"
-frame="$PWD/build/aori-framebuffer.png"
+# The ad-hoc sandbox does not honor the checkout path exception.
+# Inputs and outputs for this launch live in the app container.
+box="$HOME/Library/Containers/ai.moeru.aori.appkit/Data/tmp/aori-ci"
+rm -rf "$box"
+mkdir -p "$box/plugins" "$box/locales"
+frame="$box/aori-framebuffer.png"
 window="$PWD/build/aori-window.png"
 log="$PWD/build/aori-launch.log"
-wav="$PWD/build/aori-speech.wav"
-visemes="$PWD/build/aori-visemes.log"
-vrm="$PWD/Sources/AoriApp/Resources/aori-sample.vrm"
+wav="$box/aori-speech.wav"
+visemes="$box/aori-visemes.log"
+vrm="$box/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
 memory_png="$PWD/build/aori-memory-window.png"
-rm -f "$frame" "$window" "$chat" "$wav" "$visemes" "$memory_png" "$PWD/build/aori-memory.sqlite"
+memory_db="$box/aori-memory.sqlite"
+rm -f "$window" "$chat" "$memory_png"
 mkdir -p build
+cp -R plugins/. "$box/plugins/"
+cp -RL "../../packages/i18n/src/locales/." "$box/locales/"
+cp "Sources/AoriApp/Resources/aori-sample.vrm" "$vrm"
 python3 - <<'PY'
 import pathlib
 png = bytes.fromhex(
@@ -20,6 +29,7 @@ png = bytes.fromhex(
 )
 pathlib.Path("build/aori-vision-fixture.png").write_bytes(png)
 PY
+cp build/aori-vision-fixture.png "$box/aori-vision-fixture.png"
 python3 scripts/mock-chat-server.py &
 mock_pid=$!
 cleanup() {
@@ -65,24 +75,28 @@ fi
 if [ -x "$PWD/build/Aori.app/Contents/MacOS/whisper-cli" ]; then
     AORI_WHISPER_BIN="$PWD/build/Aori.app/Contents/MacOS/whisper-cli"
 fi
+if [ -n "${AORI_WHISPER_MODEL:-}" ] && [ -f "$AORI_WHISPER_MODEL" ]; then
+    cp "$AORI_WHISPER_MODEL" "$box/whisper-model.bin"
+    AORI_WHISPER_MODEL="$box/whisper-model.bin"
+fi
 cp build/aori-sign.log "$log"
 AORI_SCREENSHOT=1 \
     AORI_OPENAI_API_KEY=ci-mock-key \
     AORI_OPENAI_BASE_URL=http://127.0.0.1:8765/v1 \
     AORI_OPENAI_MODEL=mock \
     AORI_LOCALE=ja \
-    AORI_LOCALES_ROOT="$PWD/../../packages/i18n/src/locales" \
+    AORI_LOCALES_ROOT="$box/locales" \
     AORI_FRAMEBUFFER_PATH="$frame" \
     AORI_SPEECH_WAV="$wav" \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
     AORI_AVATAR=live2d \
-    AORI_PLUGINS="$PWD/plugins" \
-    AORI_VISION_PNG="$PWD/build/aori-vision-fixture.png" \
+    AORI_PLUGINS="$box/plugins" \
+    AORI_VISION_PNG="$box/aori-vision-fixture.png" \
     AORI_VISION_TICKER=1 \
     AORI_VISION_INTERVAL_MS=1000 \
     AORI_VISION_MAX_TICKS=2 \
-    AORI_MEMORY_DB="$PWD/build/aori-memory.sqlite" \
+    AORI_MEMORY_DB="$memory_db" \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
     "$app" >>"$log" 2>&1 &
