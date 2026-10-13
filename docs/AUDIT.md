@@ -27,11 +27,11 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa inside the sandbox. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
 | Security, secrets, and privacy | 4 | Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, `aori_bookmark=ok`, and `aori_keychain=roundtrip`. Screen capture uses permission. CI still stages files in the app container. |
-| Data persistence | 3 | SQLite recalled `I like tea` and the delete left one row. JSON files still store chat, settings, locale, and the persona. The bundled file is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`. This is not pgvector. |
+| Data persistence | 4 | Run 38359062380 logged `aori_embed_recall=tea` and `aori_memory_recall=I like tea`. JSON files still store chat, settings, locale, and the persona. pgvector stays out. |
 | Error handling and recovery | 4 | `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover the retry. A delta blocks the second try. This run did not hit a provider error. |
-| Testing | 4 | Linux passed 71 tests. macOS passed 72 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded recall, delete, and two vision ticks. |
-| Continuous integration and build | 4 | Run 38357544156 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
-| Documentation | 4 | The product, architecture, port, and audit notes match run 38357544156. Each note names a gap. They do not cover the whole AIRI product. |
+| Testing | 4 | Linux passed 72 tests. macOS passed 73 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded MiniLM recall, delete, and two vision ticks. |
+| Continuous integration and build | 4 | Run 38359062380 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
+| Documentation | 4 | The product, architecture, port, and audit notes match run 38359062380. Each note names a gap. They do not cover the whole AIRI product. |
 | Accessibility | 3 | The log has live labels and `aori_ax_press=Send message`. The log says `aori_voiceover=running`. The app posts the spoken line. A macOS launch has not logged `aori_caption`. |
 | Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The Memory menu key is English only. |
 | Performance and operability | 3 | The frame line is `{"event":"frame","ms":2.47}`. The ticker waited 1000 ms and then stopped. There is no broader telemetry product. |
@@ -52,7 +52,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - When `AORI_AVATAR` is `live2d`, the companion draws a flat layered character. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust samples motion3.json curves. The art is original. Run 38298286037 showed it in the companion window.
 - A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38355635403 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same run logged `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 - One opt-in vision ticker. Run 38355635403 logged `aori_vision_ticker=on`, two `aori_vision_source=screen` ticks, `aori_vision_interval_ms=1000`, and `aori_vision_ticker=stopped`. The companion window shows an orange Vision badge. The mock does not read the pixels.
-- SQLite embedding memory. Run 38355635403 logged `aori_memory_source=endpoint`, `aori_embed_coreml=ok`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The bundled file is now a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`.
+- SQLite embedding memory. Run 38359062380 logged `aori_memory_source=endpoint`, `aori_embed_coreml=ok`, `aori_embed_recall=tea`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The bundled file is a conversion of all-MiniLM-L6-v2.
 - Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel.
 - A hands-free turn. Voice activity ends an utterance. The next step sends that text. The reply is spoken. A Speak press is not part of that path.
 - An on-device transcript from whisper.cpp when Speech permission is missing. Run 38290795770 logged `aori_stt=Hello papa`.
@@ -72,16 +72,16 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
 - Tool calls and the integrations. Run 38355635403 ran one `.js` plugin. Tool calls stay out.
 - A vision ticker that stays on after the rate limit. The screenshot path stops at the configured maximum.
-- pgvector. The bundled Core ML file is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`. Word search remains in the chat panel.
+- pgvector. Run 38359062380 logged `aori_embed_recall=tea`. Word search remains in the chat panel. JSON files still store chat, settings, locale, and the persona.
 - A spoken microphone utterance. Run 38295099387 logged `aori_mic_utterance=silence`.
 - A proven VoiceOver caption. The app posts the spoken line and logs `aori_caption`. A macOS launch has not logged that line.
 - Cloud key sync. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. A Developer ID profile is absent.
 
 ## What this session ran
 
-The Linux job in run 38357544156 passed 71 tests with 0 failures. The macOS job passed 72 tests. `cargo test -p aori-face` passed 18 tests.
+The Linux job in run 38359062380 passed 72 tests with 0 failures. The macOS job passed 73 tests. `cargo test -p aori-face` passed 18 tests.
 
-Run 38357544156 launched the sandboxed app on `macos-latest`. The log says `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. It also says `aori_window_mouth=open`, `aori_plugin_js=greeting=Plugin greeting. files=denied`, and `aori_stt=Hello papa`. Both vision ticks used `aori_vision_source=screen`. The mock does not read the pixels.
+Run 38359062380 launched the sandboxed app on `macos-latest`. The log says `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. It also says `aori_embed_recall=tea`, `aori_window_mouth=open`, and `aori_stt=Hello papa`. Both vision ticks used `aori_vision_source=screen`. The mock does not read the pixels.
 
 The companion window shows a flat character. The hair is above the blue body. The mouth is open in that window and in the framebuffer. The orange Vision badge is on. The Memory window shows `The cat is orange`.
 
@@ -89,7 +89,7 @@ Run 38354362753 logged `aori_sandbox=on` and then failed to read the checkout. T
 
 This session did not launch the app on this Linux machine. Speech authorization stayed unknown. The microphone mark is silence. The flat character is not a Cubism moc3 model.
 
-The score table above uses run 38357544156. Eight rows are 3 because a central gap remains. Eight rows are 4 because the milestone behavior is strong. No row is 5.
+The score table above uses run 38359062380. Seven rows are 3 because a central gap remains. Nine rows are 4 because the milestone behavior is strong. No row is 5.
 
 ## Gap to the next score
 
@@ -111,7 +111,7 @@ Networking is 3. The mock reply does not read pixels. Other chat protocols are a
 
 Security is 4. The signature has no checkout path exception. The log says `aori_bookmark=ok`. A Developer ID profile is absent. CI still stages files in the app container.
 
-Data persistence is 3. JSON files still store chat, settings, locale, and the persona. A macOS launch has not logged `aori_embed_recall=tea`. pgvector stays out.
+Data persistence is 4. macOS ranked `tea please` closer to `I like tea` than to `The cat is orange`. JSON files still store chat, settings, locale, and the persona. pgvector stays out.
 
 Error handling is 4. Unit tests cover one retry. This launch did not hit a provider error.
 

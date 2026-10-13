@@ -34,7 +34,7 @@ Screen vision is off until `AORI_VISION_TICKER` is `1`. The interval is at least
 
 Memory notes with vectors live in SQLite. Cosine recall adds the closest notes to the chat system prompt. When an API key is set, the app calls the OpenAI embeddings endpoint. When that call fails, the app uses a bundled Core ML network.
 
-That network is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`.
+That network is a conversion of all-MiniLM-L6-v2. The license is Apache-2.0. Run 38359062380 logged `aori_embed_recall=tea`.
 
 The Memory window lists the notes. Delete removes the selected note.
 

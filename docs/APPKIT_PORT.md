@@ -190,7 +190,7 @@ Run 38355635403 logged `aori_vision_ticker=on`, two screen ticks, and `aori_visi
 
 That file is a Core ML conversion of all-MiniLM-L6-v2. The license is Apache-2.0. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash.
 
-Linux ranked the reference vectors. `tea please` is closer to `I like tea` than to `The cat is orange`. A macOS launch has not logged `aori_embed_recall=tea`. Run 38355635403 logged `aori_memory_recall=I like tea` on the hash endpoint. The Memory window then showed `The cat is orange` after the delete.
+Run 38359062380 logged `aori_embed_recall=tea`. `tea please` is closer to `I like tea` than to `The cat is orange`. The Memory window then showed `The cat is orange` after the delete.
 
 ### Milestone 8, the rest of AIRI
 

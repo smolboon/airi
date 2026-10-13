@@ -20,7 +20,7 @@ Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_bytes=30500`
 
 `VisionTickerPolicy` keeps screen vision off until `AORI_VISION_TICKER` is `1`. The interval cannot be shorter than 1000 ms. The tick count cannot pass 8. The companion window shows an orange Vision badge while the ticker is on.
 
-`EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `aori-minilm.mlmodel`. That file is a Core ML conversion of all-MiniLM-L6-v2. When Linux cannot run Core ML, that path reports unavailable. Linux ranked the published reference vectors.
+`EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `aori-minilm.mlmodel`. That file is a Core ML conversion of all-MiniLM-L6-v2. When Linux cannot run Core ML, that path reports unavailable. Run 38359062380 logged `aori_embed_recall=tea`.
 
 Run 38357544156 logged `aori_memory_source=endpoint` and `aori_window_mouth=open`. Both vision ticks used the screen. The mock reply was `Mock vision from CI.`.
 
