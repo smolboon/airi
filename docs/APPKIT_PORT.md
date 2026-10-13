@@ -123,7 +123,9 @@ The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded charac
 
 `aori-face` applies morphs, skins those bones, skins the normals, and fills a depth buffer. A directional light shades each pixel. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
 
-Known words use a small ARPAbet list. hello becomes HH EH L OW. papa becomes P AA P AH. Those symbols map to the mouth presets. Other words use the letter map. Playback time advances the units at about 12 per second. RMS still scales the open vowel. This list is not a phoneme recognizer.
+Mouth presets come from the TTS buffer. Each 20 ms window uses RMS and the zero-crossing rate. A quiet window is silence. A soft flat window is a closure. A loud low rate is an open vowel.
+
+`AORI_MIC_WAV` feeds one recorded WAV through the same speech mark as the microphone. A loud file marks speech. A quiet file marks silence.
 
 `AORI_SPEECH_WAV` stores the PCM that `AVSpeechSynthesizer.write` returned. The macOS job checks that the WAV is not silent and that the viseme log has more than one preset. This checkout did not play that audio.
 

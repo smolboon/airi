@@ -134,7 +134,7 @@ final class CharacterAndWindowTests: XCTestCase {
         )
         XCTAssertEqual(
             PhonemeTimeline.symbols(in: "Hello papa"),
-            ["HH", "EH", "L", "OW", "P", "AA", "P", "AH"]
+            ["h", "e", "l", "l", "o", "p", "a", "p", "a"]
         )
         XCTAssertTrue(PhonemeTimeline.visemes(in: "Hi").contains(.i))
         let phrase = VisemeTimeline.presets(in: "Hello papa")

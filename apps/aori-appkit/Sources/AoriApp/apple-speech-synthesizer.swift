@@ -16,7 +16,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
     private var engineReady = false
     private var synthesisDone = false
     private var pendingBuffers = 0
-    private var spokenText = ""
     private var playedFrames = 0
     private var sampleRate = 22_050.0
     private var recorded: [Float] = []
@@ -35,7 +34,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         synthesizer.delegate = self
         synthesisDone = false
         pendingBuffers = 0
-        spokenText = trimmed
         playedFrames = 0
         sampleRate = 22_050
         recorded = []
@@ -90,9 +88,7 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         if buffer.format.sampleRate > 0 {
             sampleRate = buffer.format.sampleRate
         }
-        let start = sampleRate > 0 ? Double(playedFrames) / sampleRate : 0
-        let span = sampleRate > 0 ? Double(buffer.frameLength) / sampleRate : 0
-        for preset in VisemeTimeline.presets(in: spokenText, from: start, to: start + span) {
+        for preset in AudioViseme.presets(samples: samples, sampleRate: sampleRate) {
             note(viseme: preset.rawValue)
         }
         playedFrames += Int(buffer.frameLength)
@@ -177,7 +173,8 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
                 try? Data(body.utf8).write(to: URL(fileURLWithPath: path))
                 logLine("aori_visemes=\(visemes.joined(separator: ","))")
             }
-            let symbols = PhonemeTimeline.symbols(in: spokenText)
+            let symbols = AudioViseme.phonemes(samples: recorded, sampleRate: sampleRate)
+            logLine("aori_viseme_source=audio")
             logLine("aori_phonemes=\(symbols.joined(separator: ","))")
             keptArtifact = true
         }
@@ -213,27 +210,6 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
             return 0
         }
         return SpeechLevel.mouthOpen(samples: samples(of: pcm))
-    }
-
-    nonisolated func speechSynthesizer(
-        _ synthesizer: AVSpeechSynthesizer,
-        willSpeakRangeOfSpeechString characterRange: NSRange,
-        utterance: AVSpeechUtterance
-    ) {
-        let text = utterance.speechString as NSString
-        guard characterRange.location != NSNotFound, characterRange.location < text.length else {
-            return
-        }
-        let unit = text.character(at: characterRange.location)
-        let preset: String
-        if let scalar = UnicodeScalar(UInt32(unit)) {
-            preset = VisemeMap.preset(for: Character(scalar)).rawValue
-        } else {
-            preset = Viseme.sil.rawValue
-        }
-        Task { @MainActor in
-            self.note(viseme: preset)
-        }
     }
 
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {

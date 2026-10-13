@@ -73,15 +73,6 @@ public enum PhonemeMap {
     }
 }
 
-public enum PhonemeLexicon {
-    /// Known words become ARPAbet symbols. Other words stay on the letter map.
-    public static let words: [String: [String]] = [
-        "hello": ["HH", "EH", "L", "OW"],
-        "papa": ["P", "AA", "P", "AH"],
-        "here": ["HH", "IH", "R"],
-    ]
-}
-
 public enum SpeechUnit: Equatable, Sendable {
     case phoneme(String)
     case letter(Character)
@@ -91,11 +82,7 @@ public enum PhonemeTimeline {
     public static func units(in phrase: String) -> [SpeechUnit] {
         var result: [SpeechUnit] = []
         for word in words(in: phrase) {
-            if let phonemes = PhonemeLexicon.words[word] {
-                result.append(contentsOf: phonemes.map { .phoneme($0) })
-            } else {
-                result.append(contentsOf: word.map { .letter($0) })
-            }
+            result.append(contentsOf: word.map { .letter($0) })
         }
         return result
     }

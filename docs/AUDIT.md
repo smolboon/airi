@@ -105,7 +105,7 @@ User interface is 4. The chat, the companion, and the Memory window are captured
 
 Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws the sample VRM. A macOS job has not saved that image yet. The last GPUI window is a checker head.
 
-Audio is 3. whisper.cpp printed Hello papa. The log says `aori_mic_utterance=silence`. Visemes come from a word list.
+Audio is 3. whisper.cpp printed Hello papa. The last log says `aori_mic_utterance=silence`. Visemes now come from PCM frames. `AORI_MIC_WAV` feeds a recorded WAV through the mic mark. A macOS log has not shown `aori_mic_utterance=speech` yet.
 
 Networking is 3. The mock reply does not read pixels. Other chat protocols are absent.
 

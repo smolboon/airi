@@ -76,6 +76,11 @@ final class AppleSpeechTranscriber: NSObject, VoiceTranscriber, @unchecked Senda
     /// Reads a short buffer. The mark is no-device, silence, or speech.
     @MainActor
     func captureUtterance(seconds: Double = 0.4) -> String {
+        if let path = ProcessInfo.processInfo.environment["AORI_MIC_WAV"], !path.isEmpty,
+           let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
+            Self.micLog("aori_mic_source=wav")
+            return MicUtterance.mark(wav: data)
+        }
         let box = MarkBox()
         let waiter = DispatchSemaphore(value: 0)
         DispatchQueue.global(qos: .userInitiated).async {

@@ -11,6 +11,7 @@ frame="$box/aori-framebuffer.png"
 window="$PWD/build/aori-window.png"
 log="$PWD/build/aori-launch.log"
 wav="$box/aori-speech.wav"
+micwav="$box/aori-mic.wav"
 visemes="$box/aori-visemes.log"
 vrm="$box/aori-sample.vrm"
 chat="$PWD/build/aori-chat-window.png"
@@ -30,6 +31,16 @@ png = bytes.fromhex(
 pathlib.Path("build/aori-vision-fixture.png").write_bytes(png)
 PY
 cp build/aori-vision-fixture.png "$box/aori-vision-fixture.png"
+python3 - "$micwav" <<'PY'
+import math, pathlib, struct, sys
+path = pathlib.Path(sys.argv[1])
+rate = 16000
+count = 4800
+samples = [int(max(-32767, min(32767, round(0.3 * math.sin(2 * math.pi * 200 * index / rate) * 32767)))) for index in range(count)]
+pcm = struct.pack("<" + "h" * count, *samples)
+header = struct.pack("<4sI4s4sIHHIIHH4sI", b"RIFF", 36 + len(pcm), b"WAVE", b"fmt ", 16, 1, 1, rate, rate * 2, 2, 16, b"data", len(pcm))
+path.write_bytes(header + pcm)
+PY
 python3 scripts/mock-chat-server.py &
 mock_pid=$!
 cleanup() {
@@ -88,6 +99,7 @@ AORI_SCREENSHOT=1 \
     AORI_LOCALES_ROOT="$box/locales" \
     AORI_FRAMEBUFFER_PATH="$frame" \
     AORI_SPEECH_WAV="$wav" \
+    AORI_MIC_WAV="$micwav" \
     AORI_VISEME_LOG="$visemes" \
     AORI_VRM_PATH="$vrm" \
     AORI_AVATAR=live2d \
@@ -148,15 +160,18 @@ import pathlib, sys
 lines = [line.strip() for line in pathlib.Path(sys.argv[1]).read_text().splitlines() if line.strip()]
 unique = set(lines)
 print("aori_viseme_presets=" + ",".join(sorted(unique)))
-needed = {"e", "o", "a", "pp"}
-sys.exit(0 if needed.issubset(unique) else 1)
+allowed = {"a", "i", "u", "e", "o", "pp", "sil"}
+if not lines or any(line not in allowed for line in lines) or unique <= {"sil"}:
+    sys.exit(1)
 PY
 python3 - "$log" <<'PY'
 import pathlib, sys
 text = pathlib.Path(sys.argv[1]).read_text()
 need = [
     '"event":"frame"',
-    "aori_phonemes=HH,EH,L,OW,P,AA,P,AH",
+    "aori_viseme_source=audio",
+    "aori_phonemes=",
+    "aori_mic_source=wav",
     "aori_vad=speech",
     "aori_stt=",
     "aori_llm=",
@@ -215,8 +230,7 @@ ax_labels = ["Chat transcript", "Companion character", "Send message", "Companio
 if not ax or any(label not in ax[-1] for label in ax_labels):
     missing.append("aori_ax")
 utterance = [line.strip() for line in text.splitlines() if line.startswith("aori_mic_utterance=")]
-allowed = {"aori_mic_utterance=no-device", "aori_mic_utterance=silence", "aori_mic_utterance=speech"}
-if not utterance or utterance[-1] not in allowed:
+if not utterance or utterance[-1] != "aori_mic_utterance=speech":
     missing.append("aori_mic_utterance")
 permission = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_permission=")]
 source = [line.strip() for line in text.splitlines() if line.startswith("aori_vision_source=")]
