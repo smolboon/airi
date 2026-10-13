@@ -37,6 +37,11 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertTrue(speaking)
     }
 
+    func testProviderProbeNamesTheStatus() {
+        XCTAssertEqual(ProviderProbe.headerName, "X-Aori-Probe")
+        XCTAssertEqual(ProviderProbe.line(status: 500), "aori_provider_error=500")
+    }
+
     func testFailureKeepsPartialText() async throws {
         let client = PartialChatClient()
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

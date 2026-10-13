@@ -79,6 +79,12 @@ def chat_result(payload):
     return 200, "text/event-stream", body
 
 
+def probe_status(header):
+    if header == "error":
+        return 500
+    return None
+
+
 def telegram_result(payload):
     try:
         body = json.loads(payload.decode("utf-8"))
@@ -102,6 +108,9 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get("Authorization", "") != TOKEN:
             body = b'{"error":"unauthorized"}'
             self._send(401, "application/json", body)
+            return
+        if probe_status(self.headers.get("X-Aori-Probe", "")) == 500:
+            self._send(500, "application/json", b'{"error":"probe"}')
             return
         if path.endswith("/embeddings"):
             self._send(200, "application/json", embedding_body(payload))

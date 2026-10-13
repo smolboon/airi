@@ -26,6 +26,15 @@ public enum ChatProviderError: Error, Equatable, Sendable, CustomStringConvertib
     }
 }
 
+public enum ProviderProbe {
+    public static let headerName = "X-Aori-Probe"
+    public static let headerValue = "error"
+
+    public static func line(status: Int) -> String {
+        "aori_provider_error=\(status)"
+    }
+}
+
 public enum SecretRedaction {
     public static func redact(_ text: String, secret: String) -> String {
         guard !secret.isEmpty else {

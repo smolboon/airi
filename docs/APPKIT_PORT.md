@@ -151,6 +151,8 @@ The screenshot script starts a mock server on 127.0.0.1 port 8765. It sets the k
 
 `AORI_CHAT_CHANNEL=telegram` posts the reply to a sendMessage URL on that mock. The default channel stays the provider chat. CI sets the flag. A launch without the flag does not post.
 
+`AORI_PROVIDER_PROBE=1` sends one chat call with the header `X-Aori-Probe`. The mock returns HTTP 500. The log line is `aori_provider_error=500`. The next chat call still returns the mock reply.
+
 The screenshot path posts one click through the companion window. A window titled Aori Behind counts that click. The log says delivered only when that window receives the click. Clear pixels set `ignoresMouseEvents`. Opaque pixels and the caption keep the click. The job also probes the microphone and a Keychain probe account. A short capture logs `aori_mic_utterance` as no-device, silence, or speech.
 
 The same path reads live accessibility labels and logs `aori_ax`. It presses the Send message control and logs `aori_ax_press`. After the captures, the script tries to start VoiceOver and logs running or unavailable.

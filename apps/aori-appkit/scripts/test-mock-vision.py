@@ -40,4 +40,8 @@ assert sent == 200, sent
 assert b'"ok":true' in body
 empty, _, _ = module.telegram_result(b'{"chat_id":"ci","text":""}')
 assert empty == 400, empty
+assert module.probe_status("error") == 500
+assert module.probe_status("") is None
+status, _, body = module.chat_result(chat)
+assert status == 200 and b"Mock reply from CI." in body
 print("aori_mock_vision=ok")

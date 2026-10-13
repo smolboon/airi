@@ -723,6 +723,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         model.setDraft(heard)
+        await probeProviderError()
         let turnStarted = Date()
         await model.send()
         turnLatencyMilliseconds = Date().timeIntervalSince(turnStarted) * 1000
@@ -739,6 +740,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             announceSpeech(reply)
             await synthesizer.speak(reply)
+        }
+    }
+
+    private func probeProviderError() async {
+        let env = ProcessInfo.processInfo.environment
+        guard env["AORI_PROVIDER_PROBE"] == "1" else {
+            return
+        }
+        let root = env["AORI_OPENAI_BASE_URL"] ?? ""
+        let joined = root.hasSuffix("/") ? root + "chat/completions" : root + "/chat/completions"
+        guard let url = URL(string: joined) else {
+            logLine("aori_provider_error=skipped")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(env["AORI_OPENAI_API_KEY"] ?? "")", forHTTPHeaderField: "Authorization")
+        request.setValue(ProviderProbe.headerValue, forHTTPHeaderField: ProviderProbe.headerName)
+        request.httpBody = Data("{\"probe\":true}".utf8)
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            logLine(ProviderProbe.line(status: status))
+        } catch {
+            logLine("aori_provider_error=transport")
         }
     }
 
