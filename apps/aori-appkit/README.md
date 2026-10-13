@@ -106,7 +106,7 @@ The flat character is not a Cubism moc3 model. The sample is an original CC0 hum
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
 
-The assembled app is sandboxed. Outgoing network and the microphone have entitlements. Screen capture uses the screen recording permission. The signed copy can read the checkout path.
+The assembled app is sandboxed. Outgoing network and the microphone have entitlements. Screen capture uses the screen recording permission. Run 38355635403 logged `aori_sandbox=on`. The checkout path exception did not open the checkout.
 
 Embedding notes live in `memory.sqlite`. The local fallback is `aori-embed.mlmodel`. The weights are a fixed draw. Linux reports that path as unavailable.
 

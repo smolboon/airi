@@ -12,7 +12,7 @@ Aori splits the native app into three Swift modules and two Rust crates. `AoriCo
 
 `PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting and for `aori.files.read`. The greeting returns `Plugin greeting.`. The file call is denied.
 
-A `.js` file runs in JavaScriptCore through `aori.call`. The signed app enables the macOS App Sandbox. Run 38298286037 logged `aori_plugin_result=Plugin greeting.` and `aori_plugin_denied=aori.files.read`.
+A `.js` file runs in JavaScriptCore through `aori.call`. Run 38355635403 logged `aori_sandbox=on` and `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
 `VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.
 
@@ -22,7 +22,7 @@ Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_bytes=30500`
 
 `EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `aori-embed.mlmodel`. That file is a linear Core ML network. The weights are a fixed draw, not a trained sentence model. Linux cannot run Core ML, so that path reports unavailable.
 
-Run 38348280149 logged `aori_memory_source=endpoint`, `aori_vision_interval_ms=1000`, and `aori_vision_max_ticks=2`. Both ticks used `aori_vision_source=screen`. The mock reply was `Mock vision from CI.`.
+Run 38355635403 logged `aori_memory_source=endpoint` and `aori_embed_coreml=ok`. Both vision ticks used the screen. The mock reply was `Mock vision from CI.`.
 
 ## Voice turn
 

@@ -154,7 +154,9 @@ The log also says `aori_click_through=delivered`, `aori_llm_reply=Mock reply fro
 
 A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 stays in a later milestone.
 
-The assembled app is sandboxed. The entitlements are `com.apple.security.app-sandbox`, `com.apple.security.network.client`, and `com.apple.security.device.audio-input`. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy also allows the checkout path so CI can read plugins and write build files. That path exception is not an App Store profile.
+The assembled app is sandboxed. The entitlements are `com.apple.security.app-sandbox`, `com.apple.security.network.client`, and `com.apple.security.device.audio-input`. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy names a checkout path exception. Run 38354362753 showed that the ad-hoc sandbox ignored it.
+
+Run 38355635403 staged CI files in the app container. The log says `aori_sandbox=on`. That path exception is not an App Store profile.
 
 ### Milestone 3, memory that lasts
 
@@ -174,19 +176,19 @@ The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint
 
 A `.js` file runs in JavaScriptCore. The script can call `aori.call`. A call outside the grant returns denied. A `.mjs` or `.cjs` file is rejected. The host does not embed Electron. This grant is not the macOS App Sandbox.
 
-Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
+Run 38355635403 logged `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
 ### Milestone 6, screen vision ticker
 
 The ticker is off until `AORI_VISION_TICKER` is `1`. The interval is at least 1000 ms. The maximum tick count is 8. The companion window shows an orange Vision badge while the ticker is on. A denied capture still uses `AORI_VISION_PNG`. The screenshot path does not call `CGRequestScreenCaptureAccess`.
 
-Run 38348280149 logged `aori_vision_ticker=on`, two screen ticks, and `aori_vision_ticker=stopped`. The interval was 1000 ms. The maximum was 2. The mock reply was `Mock vision from CI.`. That mock does not read the pixels.
+Run 38355635403 logged `aori_vision_ticker=on`, two screen ticks, and `aori_vision_ticker=stopped`. The interval was 1000 ms. The maximum was 2. The mock reply was `Mock vision from CI.`. That mock does not read the pixels.
 
 ### Milestone 7, embeddings memory
 
 `EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses `aori-embed.mlmodel`.
 
-That file is a linear Core ML network with fixed weights. It is not a trained sentence model. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash. Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
+That file is a linear Core ML network with fixed weights. It is not a trained sentence model. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash. Run 38355635403 logged `aori_embed_coreml=ok` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
 
 ### Milestone 8, the rest of AIRI
 
@@ -194,7 +196,7 @@ Add games, character cards, cloud provider sync, and the remaining chat protocol
 
 ## What this checkout did not run
 
-The work ran on Linux. `swift test` passed 67 tests with 0 failures on Swift 6.0.3. `cargo test -p aori-face` passed 18 tests with Rust 1.99.0. A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms.
+Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.
 
 `AORI_GPUI_PNG` wrote a lit PNG on this machine in an earlier session. This checkout did not launch the Mac app. Run 38290795770 launched `AoriApp` on `macos-latest`, posted the click, called the mock, and opened the GPUI window. The Linux job in that run passed 49 tests and saved the GPUI PNG.
 
