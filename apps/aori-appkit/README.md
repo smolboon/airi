@@ -100,6 +100,8 @@ The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./script
 
 ## Limits
 
+Cubism Core is proprietary. Live2D does not publish it for this MIT repo. The flat native rig stays.
+
 The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Persona and memory notes are stored in `companion.json`. Chat text is stored in `chat.json`. The base URL and the model are stored in `settings.json`. The locale id is stored in `locale.json`. The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Known words use an ARPAbet list. That list is not a phoneme recognizer.
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.

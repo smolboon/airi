@@ -162,9 +162,9 @@ Keep the milestone 1 notes. Add recall by topic. Add notes the companion writes 
 
 ### Milestone 4, Live2D
 
-When `AORI_AVATAR` is `live2d`, the companion window draws flat layers. The parameters use Live2D ids. Rust samples motion3.json curves. The art is original. Cubism Core and moc3 stay out. `WKWebView` stays out.
+When `AORI_AVATAR` is `live2d`, the companion window draws flat layers. The parameters use Live2D ids. Rust samples motion3.json curves. The art is original. `WKWebView` stays out.
 
-If the license allows it, a native Cubism renderer can replace these layers. `WKWebView` stays the last option.
+The Live2D Cubism Core library is proprietary. Live2D does not publish that library on GitHub (https://docs.live2d.com/en/cubism-sdk-manual/cubism-core/). This repository uses the MIT license. The proprietary terms block Core code under that license (https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html). This checkout does not add Cubism Core. The flat native rig stays.
 
 ### Milestone 5, plugins
 

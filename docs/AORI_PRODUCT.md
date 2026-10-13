@@ -40,4 +40,4 @@ Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I l
 
 ## Not in this app
 
-Cubism moc3, tool calls, and cloud memory are not in this app. The plan is in `docs/APPKIT_PORT.md`.
+Cubism moc3, tool calls, and cloud memory are not in this app. Cubism Core is proprietary and is not published for this MIT repo. The flat native rig stays. The plan is in `docs/APPKIT_PORT.md`.
