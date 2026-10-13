@@ -38,7 +38,7 @@ That network is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vec
 
 The Memory window lists the notes. Delete removes the selected note.
 
-Run 38355635403 logged `aori_sandbox=on`, `aori_plugin_js=greeting=Plugin greeting. files=denied`, and `aori_embed_coreml=ok`. The Memory window then showed `The cat is orange` after the delete. The companion window showed an orange Vision badge.
+Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. The companion window mouth is open. The Memory window then showed `The cat is orange` after the delete. The companion window showed an orange Vision badge.
 
 ## Not in this app
 

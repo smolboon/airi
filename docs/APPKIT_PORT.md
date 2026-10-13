@@ -54,7 +54,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Speech output | provider TTS and Web Speech | `AVSpeechSynthesizer` | Add provider TTS after the Apple voice works |
 | Speech input | hearing store | Speech framework | Add Sherpa later for offline models |
 | Persona | stage prompts | Name and personality in Settings | Richer character cards later |
-| Long-term memory | stage pages, Telegram, pgvector | SQLite cosine recall | This is not pgvector. The local file is a fixed linear Core ML layer |
+| Long-term memory | stage pages, Telegram, pgvector | SQLite cosine recall | pgvector stays out. The local file is converted MiniLM |
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
 | Idle motion | character modules | Blink, neck sway, head sway, and eye look | Richer clips later |
 | Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
@@ -62,7 +62,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | VRM mesh | `stage-ui-three` | Original CC0 VRM 0 humanoid, loaded from a file | Downloaded characters stay out |
 | Live2D | `stage-ui-live2d` | Flat layers | Live2D parameter ids and motion3.json curves. Not Cubism moc3 |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
-| Plugins | `plugin-sdk` | Manifest v2 host | Command list inside the native grant. No JavaScript |
+| Plugins | `plugin-sdk` | Manifest v2 host and one JavaScriptCore script | The grant is `aori.companion.*`. A `.mjs` file is rejected |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
 | Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Games stay absent |
@@ -154,9 +154,9 @@ The log also says `aori_click_through=delivered`, `aori_llm_reply=Mock reply fro
 
 A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 stays in a later milestone.
 
-The assembled app is sandboxed. The entitlements are `com.apple.security.app-sandbox`, `com.apple.security.network.client`, and `com.apple.security.device.audio-input`. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy names a checkout path exception. Run 38354362753 showed that the ad-hoc sandbox ignored it.
+The assembled app is sandboxed. The entitlements are the app sandbox, outgoing network, the microphone, user-selected files, and app-scoped bookmarks. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy has no checkout path exception.
 
-Run 38355635403 staged CI files in the app container. The log says `aori_sandbox=on`. That path exception is not an App Store profile.
+Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. CI still stages files in the app container. The same run logged `aori_window_mouth=open`. The companion window mouth is open. A Developer ID profile is absent.
 
 ### Milestone 3, memory that lasts
 

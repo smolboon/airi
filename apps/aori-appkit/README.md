@@ -106,8 +106,8 @@ The flat character is not a Cubism moc3 model. The sample is an original CC0 hum
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
 
-The assembled app is sandboxed. Outgoing network and the microphone have entitlements. Screen capture uses the screen recording permission. Run 38355635403 logged `aori_sandbox=on`. The checkout path exception did not open the checkout.
+The assembled app is sandboxed. Outgoing network, the microphone, and app-scoped bookmarks have entitlements. Screen capture uses the screen recording permission. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. CI still stages files in the app container.
 
 Embedding notes live in `memory.sqlite`. The local fallback is `aori-minilm.mlmodel`. That file is a conversion of all-MiniLM-L6-v2. The license is Apache-2.0. Linux reports that path as unavailable.
 
-Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.
+Every locale directory under `packages/i18n` has Aori menu keys. The Memory key is English only. The local reply is a template. It is not a neural model. The whisper model file is not in git.
