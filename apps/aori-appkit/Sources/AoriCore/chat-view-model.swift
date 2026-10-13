@@ -94,6 +94,12 @@ public final class ChatViewModel {
         publish()
     }
 
+    public func forget(noteID: UUID) {
+        memory.notes.removeAll { $0.id == noteID }
+        onProfileChange?()
+        publish()
+    }
+
     public func updatePersona(_ persona: CompanionPersona) {
         let name = persona.name.trimmingCharacters(in: .whitespacesAndNewlines)
         self.persona = CompanionPersona(

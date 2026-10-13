@@ -78,6 +78,10 @@ final class CompanionBehaviorTests: XCTestCase {
         let stored = ProviderSettings(baseURL: "https://example.test/v1", model: "demo")
         try settings.save(stored)
         XCTAssertEqual(try settings.load(), stored)
+        let oldJSON = #"{"baseURL":"https://example.test/v1","model":"demo"}"#.data(using: .utf8) ?? Data()
+        let decoded = try JSONDecoder().decode(ProviderSettings.self, from: oldJSON)
+        XCTAssertEqual(decoded.provider, "openai")
+        XCTAssertEqual(decoded.voice, "")
         try FileManager.default.removeItem(at: directory)
     }
 

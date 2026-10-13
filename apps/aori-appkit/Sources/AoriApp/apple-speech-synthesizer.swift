@@ -7,6 +7,7 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
     var onSpeakingChanged: ((Bool) -> Void)?
     var onMouthLevel: ((Double) -> Void)?
     var onViseme: ((String) -> Void)?
+    var voiceIdentifier = ""
 
     private let synthesizer = AVSpeechSynthesizer()
     private let engine = AVAudioEngine()
@@ -42,7 +43,9 @@ final class AppleSpeechSynthesizer: NSObject, AVSpeechSynthesizerDelegate, Speec
         artifactsWritten = false
         onSpeakingChanged?(true)
         let utterance = AVSpeechUtterance(string: trimmed)
-        if let voice = AVSpeechSynthesisVoice(language: "en-US") {
+        if !voiceIdentifier.isEmpty, let voice = AVSpeechSynthesisVoice(identifier: voiceIdentifier) {
+            utterance.voice = voice
+        } else if let voice = AVSpeechSynthesisVoice(language: "en-US") {
             utterance.voice = voice
         }
         let utteranceID = ObjectIdentifier(utterance)

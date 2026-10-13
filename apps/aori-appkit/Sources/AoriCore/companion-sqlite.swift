@@ -121,7 +121,9 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY CHECK (id = 1),
                 base_url TEXT NOT NULL,
-                model TEXT NOT NULL
+                model TEXT NOT NULL,
+                provider TEXT NOT NULL DEFAULT 'openai',
+                voice TEXT NOT NULL DEFAULT ''
             );
             CREATE TABLE IF NOT EXISTS persona (
                 id INTEGER PRIMARY KEY CHECK (id = 1),
@@ -135,6 +137,8 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
             );
             """
         )
+        try? execute("ALTER TABLE settings ADD COLUMN provider TEXT NOT NULL DEFAULT 'openai'")
+        try? execute("ALTER TABLE settings ADD COLUMN voice TEXT NOT NULL DEFAULT ''")
     }
 
     // NOTICE:
@@ -242,7 +246,7 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
     }
 
     private func readSettings() throws -> ProviderSettings? {
-        let sql = "SELECT base_url, model FROM settings WHERE id = 1"
+        let sql = "SELECT base_url, model, provider, voice FROM settings WHERE id = 1"
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
             throw CompanionStoreError.queryFailed(errorMessage())
@@ -251,7 +255,12 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         guard sqlite3_step(statement) == SQLITE_ROW else {
             return nil
         }
-        return ProviderSettings(baseURL: columnText(statement, 0), model: columnText(statement, 1))
+        return ProviderSettings(
+            baseURL: columnText(statement, 0),
+            model: columnText(statement, 1),
+            provider: columnText(statement, 2),
+            voice: columnText(statement, 3)
+        )
     }
 
     private func write(_ profile: CompanionProfile) throws {
@@ -285,7 +294,7 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
     }
 
     private func write(_ settings: ProviderSettings) throws {
-        let sql = "INSERT INTO settings (id, base_url, model) VALUES (1, ?, ?) ON CONFLICT(id) DO UPDATE SET base_url = excluded.base_url, model = excluded.model"
+        let sql = "INSERT INTO settings (id, base_url, model, provider, voice) VALUES (1, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET base_url = excluded.base_url, model = excluded.model, provider = excluded.provider, voice = excluded.voice"
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
             throw CompanionStoreError.queryFailed(errorMessage())
@@ -293,6 +302,8 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         defer { sqlite3_finalize(statement) }
         bind(settings.baseURL, at: 1, statement: statement)
         bind(settings.model, at: 2, statement: statement)
+        bind(settings.provider, at: 3, statement: statement)
+        bind(settings.voice, at: 4, statement: statement)
         guard sqlite3_step(statement) == SQLITE_DONE else {
             throw CompanionStoreError.queryFailed(errorMessage())
         }

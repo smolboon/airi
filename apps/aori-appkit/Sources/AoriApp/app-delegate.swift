@@ -112,6 +112,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             records: records
         )
         settingsWindow.onSave = { [weak self] configuration in
+            self?.synthesizer.voiceIdentifier = (try? self?.records.loadSettings())?.voice ?? ""
             self?.model?.updateConfiguration(configuration)
             let source = configuration.keySource.rawValue
             self?.model?.setStatus("Saved the provider configuration. Key source: \(source).")
@@ -119,6 +120,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow.onSavePersona = { [weak self] persona in
             self?.model?.updatePersona(persona)
         }
+        settingsWindow.onDeleteNote = { [weak self] id in
+            self?.model?.forget(noteID: id)
+            if let notes = self?.model?.memory.notes {
+                self?.settingsWindow?.showNotes(notes)
+            }
+        }
+        settingsWindow.showNotes(profile.memory.notes)
+        synthesizer.voiceIdentifier = (try? records.loadSettings())?.voice ?? ""
         self.settingsWindow = settingsWindow
 
         model.onChange = { [weak self] in
@@ -127,6 +136,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         model.onProfileChange = { [weak self] in
             self?.saveProfile()
+            if let notes = self?.model?.memory.notes {
+                self?.settingsWindow?.showNotes(notes)
+            }
         }
         model.onTranscriptChange = { [weak self] in
             self?.saveTranscript()
@@ -329,7 +341,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard let model else {
             return
         }
-        settingsWindow?.refresh(configuration: model.configuration, persona: model.persona)
+        settingsWindow?.refresh(configuration: model.configuration, persona: model.persona, notes: model.memory.notes)
         settingsWindow?.showWindow(sender)
     }
 

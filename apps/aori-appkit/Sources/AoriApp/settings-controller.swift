@@ -1,18 +1,24 @@
 import AppKit
 import AoriCore
+import AVFoundation
 
 @MainActor
 final class SettingsWindowController: NSWindowController {
     private let secrets: KeychainSecretStore
     private let nameField = NSTextField(string: "")
     private let personalityField = NSTextField(string: "")
+    private let providerPopup = NSPopUpButton()
+    private let voicePopup = NSPopUpButton()
     private let baseField = NSTextField(string: "")
     private let modelField = NSTextField(string: "")
     private let keyField = NSSecureTextField(string: "")
+    private let memoryPopup = NSPopUpButton()
     private let sourceLabel = NSTextField(wrappingLabelWithString: "")
     var onSave: ((ProviderConfiguration) -> Void)?
     var onSavePersona: ((CompanionPersona) -> Void)?
+    var onDeleteNote: ((UUID) -> Void)?
     private let records: SQLiteCompanionStore
+    private var notes: [MemoryNote] = []
 
     init(
         secrets: KeychainSecretStore,
@@ -23,7 +29,7 @@ final class SettingsWindowController: NSWindowController {
         self.secrets = secrets
         self.records = records
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 420),
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 640),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
@@ -31,7 +37,8 @@ final class SettingsWindowController: NSWindowController {
         window.title = "Settings"
         super.init(window: window)
         build()
-        refresh(configuration: configuration, persona: persona)
+        settingsLog("aori_settings=provider,voice,model,persona,memory")
+        refresh(configuration: configuration, persona: persona, notes: [])
         window.center()
     }
 
@@ -40,13 +47,31 @@ final class SettingsWindowController: NSWindowController {
         nil
     }
 
-    func refresh(configuration: ProviderConfiguration, persona: CompanionPersona) {
+    func refresh(configuration: ProviderConfiguration, persona: CompanionPersona, notes: [MemoryNote]) {
         nameField.stringValue = persona.name
         personalityField.stringValue = persona.personality
         baseField.stringValue = configuration.baseURL.absoluteString
         modelField.stringValue = configuration.model
+        let stored = try? records.loadSettings()
+        select(popup: providerPopup, value: stored?.provider ?? "openai")
+        select(popup: voicePopup, value: stored?.voice ?? "")
+        showNotes(notes)
         keyField.placeholderString = configuration.apiKey.isEmpty ? "API key" : "Saved. Type a new key to replace it."
-        sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown. Say remember that ... in chat to store a fact."
+        sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown."
+    }
+
+    func showNotes(_ notes: [MemoryNote]) {
+        self.notes = notes
+        memoryPopup.removeAllItems()
+        if notes.isEmpty {
+            memoryPopup.addItem(withTitle: "No saved facts")
+            memoryPopup.lastItem?.representedObject = ""
+            return
+        }
+        for note in notes {
+            memoryPopup.addItem(withTitle: note.text)
+            memoryPopup.lastItem?.representedObject = note.id.uuidString
+        }
     }
 
     private func build() {
@@ -55,34 +80,60 @@ final class SettingsWindowController: NSWindowController {
 
         let nameLabel = NSTextField(labelWithString: "Name")
         let personalityLabel = NSTextField(labelWithString: "Personality")
+        let providerLabel = NSTextField(labelWithString: "Provider")
+        let voiceLabel = NSTextField(labelWithString: "Voice")
         let baseLabel = NSTextField(labelWithString: "Base URL")
         let modelLabel = NSTextField(labelWithString: "Model")
         let keyLabel = NSTextField(labelWithString: "API key")
-        sourceLabel.maximumNumberOfLines = 4
+        let memoryLabel = NSTextField(labelWithString: "Saved facts")
+        sourceLabel.maximumNumberOfLines = 3
         sourceLabel.textColor = .secondaryLabelColor
+
+        providerPopup.addItem(withTitle: "OpenAI-compatible")
+        providerPopup.lastItem?.representedObject = "openai"
+        providerPopup.setAccessibilityLabel("Provider")
+
+        voicePopup.addItem(withTitle: "System default")
+        voicePopup.lastItem?.representedObject = ""
+        for voice in AVSpeechSynthesisVoice.speechVoices() {
+            voicePopup.addItem(withTitle: "\(voice.name) (\(voice.language))")
+            voicePopup.lastItem?.representedObject = voice.identifier
+        }
+        voicePopup.setAccessibilityLabel("Voice")
+
+        memoryPopup.setAccessibilityLabel("Saved facts")
 
         let save = NSButton(title: "Save", target: self, action: #selector(save))
         save.bezelStyle = .rounded
         save.keyEquivalent = "\r"
         let remove = NSButton(title: "Remove Key", target: self, action: #selector(removeKey))
         remove.bezelStyle = .rounded
+        let deleteNote = NSButton(title: "Delete Fact", target: self, action: #selector(deleteFact))
+        deleteNote.bezelStyle = .rounded
+        deleteNote.setAccessibilityLabel("Delete saved fact")
 
         let stack = NSStackView(views: [
             nameLabel, nameField,
             personalityLabel, personalityField,
+            providerLabel, providerPopup,
+            voiceLabel, voicePopup,
             baseLabel, baseField,
             modelLabel, modelField,
             keyLabel, keyField,
             sourceLabel,
-            NSStackView(views: [save, remove]),
+            memoryLabel, memoryPopup,
+            NSStackView(views: [save, remove, deleteNote]),
         ])
         stack.orientation = .vertical
         stack.alignment = .leading
         stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
-        baseField.translatesAutoresizingMaskIntoConstraints = false
-        modelField.translatesAutoresizingMaskIntoConstraints = false
-        keyField.translatesAutoresizingMaskIntoConstraints = false
+        for field in [nameField, personalityField, baseField, modelField, keyField] {
+            field.translatesAutoresizingMaskIntoConstraints = false
+        }
+        providerPopup.translatesAutoresizingMaskIntoConstraints = false
+        voicePopup.translatesAutoresizingMaskIntoConstraints = false
+        memoryPopup.translatesAutoresizingMaskIntoConstraints = false
         root.addSubview(stack)
 
         NSLayoutConstraint.activate([
@@ -91,9 +142,12 @@ final class SettingsWindowController: NSWindowController {
             stack.topAnchor.constraint(equalTo: root.topAnchor, constant: 16),
             nameField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             personalityField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            providerPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            voicePopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             baseField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             modelField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             keyField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            memoryPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ])
         keyField.setAccessibilityLabel(AccessibilityCopy.apiKey)
     }
@@ -103,7 +157,7 @@ final class SettingsWindowController: NSWindowController {
             let configuration = try persist(removeKey: false)
             onSavePersona?(currentPersona())
             onSave?(configuration)
-            refresh(configuration: configuration, persona: currentPersona())
+            refresh(configuration: configuration, persona: currentPersona(), notes: notes)
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }
@@ -115,10 +169,18 @@ final class SettingsWindowController: NSWindowController {
             keyField.stringValue = ""
             let configuration = try persist(removeKey: true)
             onSave?(configuration)
-            refresh(configuration: configuration, persona: currentPersona())
+            refresh(configuration: configuration, persona: currentPersona(), notes: notes)
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }
+    }
+
+    @objc private func deleteFact() {
+        let value = memoryPopup.selectedItem?.representedObject as? String ?? ""
+        guard let id = UUID(uuidString: value) else {
+            return
+        }
+        onDeleteNote?(id)
     }
 
     private func persist(removeKey: Bool) throws -> ProviderConfiguration {
@@ -137,7 +199,9 @@ final class SettingsWindowController: NSWindowController {
         if !modelName.isEmpty {
             settings.model = modelName
         }
-        if !settings.baseURL.isEmpty || !settings.model.isEmpty {
+        settings.provider = memoryValue(providerPopup, fallback: "openai")
+        settings.voice = memoryValue(voicePopup, fallback: "")
+        if !settings.baseURL.isEmpty || !settings.model.isEmpty || !settings.voice.isEmpty {
             try records.saveSettings(settings)
         }
         let typedKey = keyField.stringValue
@@ -160,4 +224,27 @@ final class SettingsWindowController: NSWindowController {
             personality: personalityField.stringValue
         )
     }
+
+    private func select(popup: NSPopUpButton, value: String) {
+        for item in popup.itemArray {
+            let stored = item.representedObject as? String ?? ""
+            if stored == value {
+                popup.select(item)
+                return
+            }
+        }
+        popup.selectItem(at: 0)
+    }
+
+    private func memoryValue(_ popup: NSPopUpButton, fallback: String) -> String {
+        popup.selectedItem?.representedObject as? String ?? fallback
+    }
+}
+
+private func settingsLog(_ line: String) {
+    guard let data = (line + "\n").data(using: .utf8) else {
+        return
+    }
+    FileHandle.standardOutput.write(data)
+    try? FileHandle.standardOutput.synchronize()
 }
