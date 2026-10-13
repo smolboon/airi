@@ -699,6 +699,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let tea = await embedding.embed("I like tea", configuration: model.configuration)
         let cat = await embedding.embed("The cat is orange", configuration: model.configuration)
         logLine("aori_memory_source=\(tea.source.rawValue)")
+        let localConfiguration = ProviderConfiguration(
+            baseURL: model.configuration.baseURL,
+            model: "local",
+            apiKey: "",
+            keySource: model.configuration.keySource
+        )
+        let local = await EmbeddingFallback().embed("I like tea", configuration: localConfiguration)
+        logLine(local.source == .coreml ? "aori_embed_coreml=ok" : "aori_embed_coreml=unavailable")
         _ = embeddingStore.insert(text: "I like tea", vector: tea.vector.values, now: Date(timeIntervalSince1970: 1))
         _ = embeddingStore.insert(text: "The cat is orange", vector: cat.vector.values, now: Date(timeIntervalSince1970: 2))
         let query = await embedding.embed("tea please", configuration: model.configuration)

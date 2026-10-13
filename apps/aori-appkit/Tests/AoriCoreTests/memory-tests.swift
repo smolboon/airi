@@ -3,6 +3,9 @@ import XCTest
 
 final class EmbeddingMemoryTests: XCTestCase {
     func testCosineRecallPrefersTheSharedWord() throws {
+        XCTAssertNotNil(CoreMLFeatures.bundledModelURL())
+        let tokens = CoreMLFeatures.tokens("I like tea")
+        XCTAssertEqual(tokens.count, CoreMLFeatures.count)
         let tea = LocalEmbedding.embed("I like tea")
         let query = LocalEmbedding.embed("tea please")
         let cat = LocalEmbedding.embed("The cat is orange")

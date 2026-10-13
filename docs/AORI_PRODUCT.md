@@ -32,7 +32,7 @@ Run 38301336719 logged `aori_vision_permission=granted` and `aori_vision_source=
 
 Screen vision is off until `AORI_VISION_TICKER` is `1`. The interval is at least 1000 ms. The tick count stops at the configured maximum, and that maximum is at most 8. An orange Vision badge shows while the ticker is on. The screenshot path does not open the permission dialog.
 
-Memory notes with vectors live in SQLite. Cosine recall adds the closest notes to the chat system prompt. When an API key is set, the app calls the OpenAI embeddings endpoint. When that call fails, a hashing embedder is the fallback. That embedder is not a neural model. No Core ML model is bundled.
+Memory notes with vectors live in SQLite. Cosine recall adds the closest notes to the chat system prompt. When an API key is set, the app calls the OpenAI embeddings endpoint. When that call fails, the app uses a bundled Core ML network. That network is a fixed 64-to-32 linear layer. It is not a trained sentence model.
 
 The Memory window lists the notes. Delete removes the selected note.
 

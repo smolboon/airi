@@ -143,12 +143,16 @@ final class OpenAICompatibleClientTests: XCTestCase {
         let failing = ScriptedTransport(status: 500, chunks: [Data("down".utf8)])
         let fallback = EmbeddingFallback(transport: failing)
         let outcome = await fallback.embed("I like tea", configuration: settings)
-        XCTAssertEqual(outcome.source, .local)
-        XCTAssertEqual(outcome.vector.values, vector)
+        XCTAssertNotEqual(outcome.vector.values, vector)
+        #if canImport(CoreML)
+        XCTAssertEqual(outcome.source, .coreml)
+        #else
+        XCTAssertEqual(outcome.source, .unavailable)
+        #endif
 
         let blank = configuration(apiKey: "")
         let local = await EmbeddingFallback().embed("I like tea", configuration: blank)
-        XCTAssertEqual(local.source, .local)
+        XCTAssertEqual(local.source, outcome.source)
     }
 
     func testTransportCanBeConstructedWithoutARequest() {

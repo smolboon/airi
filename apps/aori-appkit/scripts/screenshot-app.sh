@@ -171,6 +171,7 @@ need = [
     "aori_vision_tick=1",
     "aori_vision_tick=2",
     "aori_memory_source=endpoint",
+    "aori_embed_coreml=ok",
     "aori_memory_recall=I like tea",
     "aori_memory_prompt=I like tea",
     "aori_memory_window=open",

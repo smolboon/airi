@@ -20,7 +20,7 @@ Run 38301336719 logged `aori_vision_source=screen` and `aori_vision_bytes=30500`
 
 `VisionTickerPolicy` keeps screen vision off until `AORI_VISION_TICKER` is `1`. The interval cannot be shorter than 1000 ms. The tick count cannot pass 8. The companion window shows an orange Vision badge while the ticker is on.
 
-`EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `LocalEmbedding`. `LocalEmbedding` hashes words. It is not a neural model. No Core ML model is bundled.
+`EmbeddingMemoryStore` writes notes and float vectors to SQLite. `EmbeddingFallback` calls `/embeddings` when a key is set. A failed call uses `aori-embed.mlmodel`. That file is a linear Core ML network. The weights are a fixed draw, not a trained sentence model. Linux cannot run Core ML, so that path reports unavailable.
 
 Run 38348280149 logged `aori_memory_source=endpoint`, `aori_vision_interval_ms=1000`, and `aori_vision_max_ticks=2`. Both ticks used `aori_vision_source=screen`. The mock reply was `Mock vision from CI.`.
 

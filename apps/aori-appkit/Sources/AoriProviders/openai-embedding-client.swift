@@ -68,14 +68,19 @@ public struct OpenAICompatibleEmbeddingClient: Sendable {
 
 public struct EmbeddingFallback: TextEmbedding {
     private let transport: any HTTPTransport
+    private let modelURL: URL?
 
-    public init(transport: any HTTPTransport = URLSessionHTTPTransport()) {
+    public init(
+        transport: any HTTPTransport = URLSessionHTTPTransport(),
+        modelURL: URL? = CoreMLFeatures.bundledModelURL()
+    ) {
         self.transport = transport
+        self.modelURL = modelURL
     }
 
     public func embed(_ text: String, configuration: ProviderConfiguration) async -> EmbeddingOutcome {
         if configuration.apiKey.isEmpty || configuration.model == "local" {
-            return EmbeddingOutcome(vector: LocalEmbedding.embed(text), source: .local)
+            return local(text)
         }
         do {
             let vector = try await OpenAICompatibleEmbeddingClient(transport: transport).embed(
@@ -84,7 +89,17 @@ public struct EmbeddingFallback: TextEmbedding {
             )
             return EmbeddingOutcome(vector: vector, source: .endpoint)
         } catch {
-            return EmbeddingOutcome(vector: LocalEmbedding.embed(text), source: .local)
+            return local(text)
         }
+    }
+
+    private func local(_ text: String) -> EmbeddingOutcome {
+        if let vector = CoreMLTextEmbedding.embed(text: text, modelURL: modelURL) {
+            return EmbeddingOutcome(vector: vector, source: .coreml)
+        }
+        return EmbeddingOutcome(
+            vector: EmbeddingVector(values: [Float](repeating: 0, count: EmbeddingVector.dimensions)),
+            source: .unavailable
+        )
     }
 }

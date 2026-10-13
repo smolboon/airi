@@ -21,6 +21,8 @@ public struct EmbeddingVector: Equatable, Sendable {
 public enum EmbeddingSource: String, Equatable, Sendable {
     case endpoint
     case local
+    case coreml
+    case unavailable
 }
 
 public struct EmbeddingOutcome: Equatable, Sendable {

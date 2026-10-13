@@ -54,7 +54,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Speech output | provider TTS and Web Speech | `AVSpeechSynthesizer` | Add provider TTS after the Apple voice works |
 | Speech input | hearing store | Speech framework | Add Sherpa later for offline models |
 | Persona | stage prompts | Name and personality in Settings | Richer character cards later |
-| Long-term memory | stage pages, Telegram, pgvector | SQLite cosine recall | This is not pgvector. The local embedder is a hash |
+| Long-term memory | stage pages, Telegram, pgvector | SQLite cosine recall | This is not pgvector. The local file is a fixed linear Core ML layer |
 | Greeting | companion presence | A local line on launch, then Apple speech | A model-written greeting later |
 | Idle motion | character modules | Blink, neck sway, head sway, and eye look | Richer clips later |
 | Emotion | VRM expressions | glad, sorry, and wow change blend shapes | Richer expression maps later |
@@ -184,9 +184,9 @@ Run 38348280149 logged `aori_vision_ticker=on`, two screen ticks, and `aori_visi
 
 ### Milestone 7, embeddings memory
 
-`EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses a hashing embedder.
+`EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses `aori-embed.mlmodel`.
 
-That embedder is not a neural model. No Core ML model is bundled. Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
+That file is a linear Core ML network with fixed weights. It is not a trained sentence model. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash. Run 38348280149 logged `aori_memory_source=endpoint` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
 
 ### Milestone 8, the rest of AIRI
 
