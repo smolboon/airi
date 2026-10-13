@@ -21,8 +21,33 @@ Path("build/Aori.signed.entitlements").write_bytes(plistlib.dumps(base))
 PY
 whisper="${AORI_WHISPER_BIN:-}"
 if [ -n "$whisper" ] && [ -x "$whisper" ]; then
-    cp "$whisper" "$app/Contents/MacOS/whisper-cli"
-    codesign --force --sign - --entitlements AoriHelper.entitlements "$app/Contents/MacOS/whisper-cli"
+    mac="$app/Contents/MacOS"
+    cp "$whisper" "$mac/whisper-cli"
+    search="$(cd "$(dirname "$whisper")/.." && pwd)"
+    find "$search" \( -type f -o -type l \) \( -name '*.dylib' -o -name '*.metallib' \) -print | while IFS= read -r lib; do
+        cp -L "$lib" "$mac/$(basename "$lib")"
+    done
+    for file in "$mac/whisper-cli" "$mac"/*.dylib; do
+        if [ ! -f "$file" ]; then
+            continue
+        fi
+        base="$(basename "$file")"
+        case "$base" in
+            *.dylib) install_name_tool -id "@executable_path/$base" "$file" ;;
+        esac
+        otool -L "$file" | awk 'NR>1 { print $1 }' | while IFS= read -r dep; do
+            case "$dep" in
+                /usr/lib/*|/System/*) continue ;;
+            esac
+            name="$(basename "$dep")"
+            if [ -f "$mac/$name" ]; then
+                install_name_tool -change "$dep" "@executable_path/$name" "$file"
+            fi
+        done
+    done
+    find "$mac" -maxdepth 1 -name '*.dylib' -type f -exec codesign --force --sign - {} \;
+    codesign --force --sign - --entitlements AoriHelper.entitlements "$mac/whisper-cli"
+    echo "aori_whisper_dylibs=bundled"
 fi
 codesign --force --sign - --entitlements build/Aori.signed.entitlements "$app"
 codesign -d --entitlements :- "$app" > build/aori-entitlements.plist

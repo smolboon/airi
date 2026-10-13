@@ -237,6 +237,9 @@ else:
 print("aori_log_missing=" + ",".join(missing))
 sys.exit(0 if not missing else 1)
 PY
+cp "$frame" build/aori-framebuffer.png
+cp "$wav" build/aori-speech.wav
+cp "$visemes" build/aori-visemes.log
 sleep 1
 cp scripts/window-id.swift /tmp/aori-window-id.swift
 swiftc -o build/window-id /tmp/aori-window-id.swift
