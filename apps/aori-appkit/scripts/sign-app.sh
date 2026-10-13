@@ -6,19 +6,8 @@ if [ ! -d "$app" ]; then
     echo "Assemble the app before signing it."
     exit 1
 fi
-root="$(cd ../.. && pwd)"
 mkdir -p build
-python3 - "$root" <<'PY'
-import os
-import plistlib
-import sys
-from pathlib import Path
-
-root = sys.argv[1]
-base = plistlib.loads(Path("Aori.entitlements").read_bytes())
-base["com.apple.security.temporary-exception.files.absolute-path.read-write"] = [root]
-Path("build/Aori.signed.entitlements").write_bytes(plistlib.dumps(base))
-PY
+cp Aori.entitlements build/Aori.signed.entitlements
 whisper="${AORI_WHISPER_BIN:-}"
 if [ -n "$whisper" ] && [ -x "$whisper" ]; then
     mac="$app/Contents/MacOS"
@@ -66,6 +55,8 @@ required = [
     "com.apple.security.app-sandbox",
     "com.apple.security.network.client",
     "com.apple.security.device.audio-input",
+    "com.apple.security.files.bookmarks.app-scope",
+    "com.apple.security.files.user-selected.read-write",
 ]
 missing = [key for key in required if data.get(key) is not True]
 if missing:
@@ -74,11 +65,10 @@ if missing:
 if "com.apple.security.screen-capture" in data:
     print("aori_sandbox_screen=fake-entitlement")
     sys.exit(1)
-paths = data.get("com.apple.security.temporary-exception.files.absolute-path.read-write")
-if not isinstance(paths, list) or not paths:
-    print("aori_sandbox_exception=missing")
+if "com.apple.security.temporary-exception.files.absolute-path.read-write" in data:
+    print("aori_sandbox_exception=checkout")
     sys.exit(1)
-print("aori_sandbox_entitlements=app-sandbox,network.client,audio-input")
+print("aori_sandbox_entitlements=app-sandbox,network.client,audio-input,bookmarks")
 print("aori_sandbox_screen=tcc")
-print("aori_sandbox_exception=checkout")
+print("aori_sandbox_exception=absent")
 PY

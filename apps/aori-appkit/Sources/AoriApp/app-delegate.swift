@@ -169,10 +169,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             logLine("aori_plugin=none")
             return
         }
-        let report = PluginHost.run(directory: URL(fileURLWithPath: trimmed))
+        let directory = URL(fileURLWithPath: trimmed, isDirectory: true)
+        let report = PluginHost.run(directory: directory)
         for line in report.lines {
             logLine(line)
         }
+        logLine(ScopedBookmark.prove(directory: directory))
     }
 
     private func presentScreenshot() {
@@ -338,6 +340,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard panel.runModal() == .OK, let url = panel.url else {
             return
         }
+        ScopedBookmark.store(url: url, name: "vrm.bookmark")
         do {
             let data = try Data(contentsOf: url)
             let scene = try VRMSceneReader.read(data)

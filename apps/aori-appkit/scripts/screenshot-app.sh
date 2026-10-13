@@ -199,9 +199,10 @@ need = [
     "leftLowerArm",
     "aori_turn=done",
     "aori_sandbox=on",
-    "aori_sandbox_entitlements=app-sandbox,network.client,audio-input",
+    "aori_sandbox_entitlements=app-sandbox,network.client,audio-input,bookmarks",
     "aori_sandbox_screen=tcc",
-    "aori_sandbox_exception=checkout",
+    "aori_sandbox_exception=absent",
+    "aori_bookmark=ok",
 ]
 missing = [item for item in need if item not in text]
 if any(line.strip() == "aori_stt=empty" for line in text.splitlines()):
