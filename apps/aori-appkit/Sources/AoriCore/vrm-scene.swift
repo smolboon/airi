@@ -16,6 +16,16 @@ public struct VRMVec3: Equatable, Sendable {
     }
 }
 
+public struct VRMVec2: Equatable, Sendable {
+    public var u: Float
+    public var v: Float
+
+    public init(u: Float, v: Float) {
+        self.u = u
+        self.v = v
+    }
+}
+
 public struct VRMColor: Equatable, Sendable {
     public var red: Float
     public var green: Float
@@ -49,6 +59,8 @@ public struct VRMMesh: Equatable, Sendable {
     public var indices: [UInt32]
     public var color: VRMColor
     public var morphs: [VRMMorph]
+    public var uvs: [VRMVec2]
+    public var texturePNG: Data
 
     public init(
         name: String,
@@ -56,7 +68,9 @@ public struct VRMMesh: Equatable, Sendable {
         normals: [VRMVec3],
         indices: [UInt32],
         color: VRMColor,
-        morphs: [VRMMorph]
+        morphs: [VRMMorph],
+        uvs: [VRMVec2] = [],
+        texturePNG: Data = Data()
     ) {
         self.name = name
         self.positions = positions
@@ -64,6 +78,8 @@ public struct VRMMesh: Equatable, Sendable {
         self.indices = indices
         self.color = color
         self.morphs = morphs
+        self.uvs = uvs
+        self.texturePNG = texturePNG
     }
 }
 
@@ -274,7 +290,15 @@ public enum VRMSceneReader {
                 indices = Array(UInt32(0)..<UInt32(positions.count))
             }
             let materialIndex = primitive?["material"]?.int ?? 0
-            let color = color(of: materials.indices.contains(materialIndex) ? materials[materialIndex] : nil)
+            let material = materials.indices.contains(materialIndex) ? materials[materialIndex] : nil
+            let color = color(of: material)
+            let uvs: [VRMVec2]
+            if let uvIndex = attributes?["TEXCOORD_0"]?.int {
+                uvs = (try? readVec2(json: json, bin: bin, accessor: uvIndex)) ?? []
+            } else {
+                uvs = []
+            }
+            let texturePNG = texturePNG(json: json, bin: bin, material: material)
             let targetNames = mesh["extras"]?["targetNames"]?.array.compactMap(\.string) ?? []
             let targets = primitive?["targets"]?.array ?? []
             var morphs: [VRMMorph] = []
@@ -293,7 +317,9 @@ public enum VRMSceneReader {
                 normals: normals,
                 indices: indices,
                 color: color,
-                morphs: morphs
+                morphs: morphs,
+                uvs: uvs,
+                texturePNG: texturePNG
             )
         }
     }
@@ -341,6 +367,42 @@ public enum VRMSceneReader {
             blue: Float(factor[2].double ?? 1),
             alpha: Float(factor.count > 3 ? (factor[3].double ?? 1) : 1)
         )
+    }
+
+    private static func texturePNG(json: JSONValue, bin: Data, material: JSONValue?) -> Data {
+        guard let textureIndex = material?["pbrMetallicRoughness"]?["baseColorTexture"]?["index"]?.int else {
+            return Data()
+        }
+        let textures = json["textures"]?.array ?? []
+        guard textures.indices.contains(textureIndex), let source = textures[textureIndex]["source"]?.int else {
+            return Data()
+        }
+        let images = json["images"]?.array ?? []
+        guard images.indices.contains(source), let viewIndex = images[source]["bufferView"]?.int else {
+            return Data()
+        }
+        let views = json["bufferViews"]?.array ?? []
+        guard views.indices.contains(viewIndex) else {
+            return Data()
+        }
+        let offset = views[viewIndex]["byteOffset"]?.int ?? 0
+        let length = views[viewIndex]["byteLength"]?.int ?? 0
+        guard length > 8, offset >= 0, offset + length <= bin.count else {
+            return Data()
+        }
+        return bin.subdata(in: offset..<(offset + length))
+    }
+
+    private static func readVec2(json: JSONValue, bin: Data, accessor: Int) throws -> [VRMVec2] {
+        let floats = try readFloats(json: json, bin: bin, accessor: accessor, components: 2)
+        var vectors: [VRMVec2] = []
+        vectors.reserveCapacity(floats.count / 2)
+        var index = 0
+        while index + 1 < floats.count {
+            vectors.append(VRMVec2(u: floats[index], v: floats[index + 1]))
+            index += 2
+        }
+        return vectors
     }
 
     private static func readVec3(json: JSONValue, bin: Data, accessor: Int) throws -> [VRMVec3] {

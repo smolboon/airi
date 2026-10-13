@@ -119,7 +119,9 @@ The companion window is transparent, draggable, and able to stay above other app
 
 ### Milestone 2, this change
 
-The sample file is an original CC0 VRM 0 humanoid. It is not a downloaded character. Bones are hips, spine, neck, head, both eyes, and both arms. Skin weights use unsigned bytes. The idle clip sways the neck and the head, turns the eyes, and rotates the lower arms. A blink clip targets the eye bones. Look-at adds yaw and pitch on those eye bones. See `Resources/LICENSE.txt`.
+The sample file is Butter, a VRM 0 humanoid by Polygonal Mind. The license is CC0. The source is the 100 Avatars repository. The file includes a color texture. The license text is in `Resources/LICENSE.txt`.
+
+The file has blink and vowel blend shapes. It has no eye bones and no idle clip.
 
 `aori-face` applies morphs, skins those bones, skins the normals, and fills a depth buffer. A directional light shades each pixel. AppKit blits that image. `AORI_VRM_PATH` loads that file with `VRMSceneReader`, the same reader as Open VRM.
 
@@ -137,7 +139,7 @@ A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max 
 
 A status item lists the companion, the main window, Settings, and Quit. Those titles come from the English yaml when the file loads.
 
-When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. The skin texture is one solid color. Run 38357544156 shows the checker head.
+When `AORI_GPUI_PNG` is set, the GPUI binary writes one lit raster and exits. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. The interactive window paints that same raster. It does not hear TTS buffers. SceneKit samples the color texture on that file. A macOS job has not saved that image yet. Run 38357544156 shows the checker head.
 
 `scripts/capture-gpui-window.sh` runs `AoriSceneKit` and writes `build/aori-gpui-window.png`. The portrait time is 1.6 seconds. The mouth morph is open. Blink is off at that time. This checkout did not run that tool.
 

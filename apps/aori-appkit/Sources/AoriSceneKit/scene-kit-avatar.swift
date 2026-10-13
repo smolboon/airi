@@ -36,19 +36,16 @@ enum SceneKitAvatar {
             let node = SCNNode(geometry: geometry(mesh: mesh, morphIndex: nil))
             node.name = mesh.name
             apply(weights: index < weights.count ? weights[index] : [], mesh: mesh, node: node)
-            if followsHead(mesh.name) {
-                head.addChildNode(node)
-            } else {
-                scene.rootNode.addChildNode(node)
-            }
+            head.addChildNode(node)
         }
         scene.rootNode.addChildNode(head)
 
         let camera = SCNNode()
         camera.name = "camera"
         camera.camera = SCNCamera()
-        camera.position = SCNVector3(0, 0.15, 1.4)
-        camera.look(at: SCNVector3(0, 0.1, 0))
+        let frame = frame(of: vrm)
+        camera.position = SCNVector3(frame.x, frame.y, frame.distance)
+        camera.look(at: SCNVector3(frame.x, frame.lookY, frame.z))
         scene.rootNode.addChildNode(camera)
 
         let key = SCNNode()
@@ -66,9 +63,31 @@ enum SceneKitAvatar {
         return scene
     }
 
-    private static func followsHead(_ name: String) -> Bool {
-        let lower = name.lowercased()
-        return lower.contains("head") || lower.contains("eye")
+    private static func frame(of vrm: VRMScene) -> (x: Float, y: Float, z: Float, lookY: Float, distance: Float) {
+        var minX = Float.greatestFiniteMagnitude
+        var maxX = -Float.greatestFiniteMagnitude
+        var minY = Float.greatestFiniteMagnitude
+        var maxY = -Float.greatestFiniteMagnitude
+        var minZ = Float.greatestFiniteMagnitude
+        var maxZ = -Float.greatestFiniteMagnitude
+        for mesh in vrm.meshes {
+            for position in mesh.positions {
+                minX = min(minX, position.x)
+                maxX = max(maxX, position.x)
+                minY = min(minY, position.y)
+                maxY = max(maxY, position.y)
+                minZ = min(minZ, position.z)
+                maxZ = max(maxZ, position.z)
+            }
+        }
+        if minY > maxY {
+            return (0, 0.15, 0, 0.1, 1.4)
+        }
+        let height = max(0.2, maxY - minY)
+        let lookY = maxY - height * 0.12
+        let span = max(height * 0.35, maxX - minX)
+        let distance = max(0.45, maxZ + span * 0.9)
+        return ((minX + maxX) * 0.5, lookY, (minZ + maxZ) * 0.5, lookY, distance)
     }
 
     private static func weightGrid(vrm: VRMScene, pose: VRMAvatarPose) -> [[CGFloat]] {
@@ -111,10 +130,14 @@ enum SceneKitAvatar {
             }
             return SCNVector3(0, 0, 1)
         }
-        let sources = [
+        var sources = [
             SCNGeometrySource(vertices: vectors),
             SCNGeometrySource(normals: normals),
         ]
+        if mesh.uvs.count == vectors.count {
+            let coordinates = mesh.uvs.map { CGPoint(x: CGFloat($0.u), y: CGFloat(1 - $0.v)) }
+            sources.append(SCNGeometrySource(textureCoordinates: coordinates))
+        }
         let indexData = mesh.indices.withUnsafeBufferPointer { Data(buffer: $0) }
         let element = SCNGeometryElement(
             data: indexData,
@@ -125,12 +148,16 @@ enum SceneKitAvatar {
         let geometry = SCNGeometry(sources: sources, elements: [element])
         let material = SCNMaterial()
         material.lightingModel = .blinn
-        material.diffuse.contents = NSColor(
-            srgbRed: CGFloat(mesh.color.red),
-            green: CGFloat(mesh.color.green),
-            blue: CGFloat(mesh.color.blue),
-            alpha: CGFloat(mesh.color.alpha)
-        )
+        if let image = NSImage(data: mesh.texturePNG), !mesh.texturePNG.isEmpty {
+            material.diffuse.contents = image
+        } else {
+            material.diffuse.contents = NSColor(
+                srgbRed: CGFloat(mesh.color.red),
+                green: CGFloat(mesh.color.green),
+                blue: CGFloat(mesh.color.blue),
+                alpha: CGFloat(mesh.color.alpha)
+            )
+        }
         material.locksAmbientWithDiffuse = true
         material.isDoubleSided = true
         geometry.materials = [material]

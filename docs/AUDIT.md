@@ -23,7 +23,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
 | Platform integration | 3 | Run 38357544156 launched the sandboxed app and granted screen recording. Keychain and the microphone probe ran. The log says `aori_stt_auth=unknown`. |
 | User interface and interaction | 4 | Run 38357544156 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. Settings lists provider, voice, model, persona, and saved facts. A macOS capture of that window is not in a launch log. The rest of the AIRI settings pages are absent. |
-| Graphics and character rendering | 4 | Run 38357544156 shows a flat character. The hair is above the blue body. The mouth is open in the companion window and in the framebuffer. The GPUI window shows the checker head. Cubism Core stays out of this MIT repo. |
+| Graphics and character rendering | 4 | Run 38357544156 shows a flat character. The hair is above the blue body. The mouth is open in the companion window and in the framebuffer. The GPUI window shows the checker head. The sample file is now Butter, a CC0 VRM with a color texture. A macOS SceneKit image is not saved yet. Cubism Core stays out of this MIT repo. |
 | Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa inside the sandbox. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
 | Security, secrets, and privacy | 4 | Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, `aori_bookmark=ok`, and `aori_keychain=roundtrip`. Screen capture uses permission. CI still stages files in the app container. |
@@ -48,7 +48,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Streaming OpenAI-compatible chat, including split SSE events.
 - API keys from the environment or `KeychainSecretStore`. Error text redacts the key.
 - Speech buttons that call `AVSpeechSynthesizer` and `SFSpeechRecognizer`.
-- An original CC0 VRM 0 humanoid. Bones include hips, spine, neck, head, both eyes, and both arms. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
+- Butter, a CC0 VRM 0 humanoid by Polygonal Mind. The file has a color texture, blink, and vowel blend shapes. It has no eye bones. Rust skins it and fills a depth buffer. AppKit blits that image. `AORI_VRM_PATH` uses the same reader as Open VRM.
 - When `AORI_AVATAR` is `live2d`, the companion draws a flat layered character. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust samples motion3.json curves. The art is original. Run 38298286037 showed it in the companion window.
 - A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38355635403 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same run logged `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 - One opt-in vision ticker. Run 38355635403 logged `aori_vision_ticker=on`, two `aori_vision_source=screen` ticks, `aori_vision_interval_ms=1000`, and `aori_vision_ticker=stopped`. The companion window shows an orange Vision badge. The mock does not read the pixels.
@@ -66,7 +66,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 ## What is stubbed
 
 - A phoneme recognizer. Visemes come from RMS and zero crossings. That is not a recognizer.
-- Downloaded character files. The sample humanoid is original and CC0.
+- Other downloaded characters. The sample is Butter, a CC0 VRM by Polygonal Mind.
 - Model-written greetings, topic recall, and notes the companion writes.
 - Cubism moc3, MMD, and Spine. The flat character uses Live2D parameter ids. It does not load a moc3 file.
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
@@ -103,7 +103,7 @@ Platform integration is 3. Run 38357544156 logged `aori_stt_auth=unknown`. Speec
 
 User interface is 4. The chat, the companion, and the Memory window are captured. Settings now lists provider, voice, model, persona, and saved facts. A macOS capture of that window is not in a launch log. The rest of the AIRI settings pages are absent.
 
-Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws the sample VRM. A macOS job has not saved that image yet. The last GPUI window is a checker head.
+Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws Butter and samples its color texture. A macOS job has not saved that image yet. The last GPUI window is a checker head.
 
 Audio is 3. whisper.cpp printed Hello papa. The last log says `aori_mic_utterance=silence`. Visemes now come from PCM frames. `AORI_MIC_WAV` feeds a recorded WAV through the mic mark. A macOS log has not shown `aori_mic_utterance=speech` yet.
 

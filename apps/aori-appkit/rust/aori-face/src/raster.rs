@@ -55,6 +55,7 @@ pub fn render_frame(
   }
   let mut depth = vec![f32::INFINITY; (width as usize) * (height as usize)];
   let meshes = deformed_surface(scene, pose);
+  let frame = frame_of(&meshes);
   for (mesh_index, posed) in meshes.iter().enumerate() {
     let Some(mesh) = scene.meshes.get(mesh_index) else {
       continue;
@@ -71,7 +72,7 @@ pub fn render_frame(
         continue;
       }
       let uvs = ids.map(|id| mesh.uvs.get(id).copied().unwrap_or([0.0, 0.0]));
-      let projected = ids.map(|id| project(posed.positions[id], width as f32, height as f32));
+      let projected = ids.map(|id| project(posed.positions[id], width as f32, height as f32, frame));
       let normals = ids.map(|id| {
         posed.normals.get(id).copied().unwrap_or(Vec3 {
           x: 0.0,
@@ -219,18 +220,54 @@ fn morph_weight(
   }
 }
 
+#[derive(Clone, Copy)]
+struct Frame {
+  center_x: f32,
+  center_y: f32,
+  fit: f32,
+}
+
+fn frame_of(meshes: &[PosedSurface]) -> Frame {
+  let mut min_x = f32::MAX;
+  let mut max_x = f32::MIN;
+  let mut min_y = f32::MAX;
+  let mut max_y = f32::MIN;
+  for posed in meshes {
+    for position in &posed.positions {
+      min_x = min_x.min(position.x);
+      max_x = max_x.max(position.x);
+      min_y = min_y.min(position.y);
+      max_y = max_y.max(position.y);
+    }
+  }
+  let span = (max_x - min_x).max(max_y - min_y);
+  if !span.is_finite() || span <= 1.2 {
+    return Frame {
+      center_x: 0.0,
+      center_y: 0.2,
+      fit: 1.0,
+    };
+  }
+  Frame {
+    center_x: (min_x + max_x) * 0.5,
+    center_y: (min_y + max_y) * 0.5,
+    fit: 1.2 / span,
+  }
+}
+
 fn project(
   position: Vec3,
   width: f32,
   height: f32,
+  frame: Frame,
 ) -> [f32; 3] {
   let scale = width.min(height) * 0.9;
   let origin_x = width * 0.5;
   let origin_y = height * 0.5;
   let camera_depth = (2.2 - position.z).max(0.05);
-  let factor = 1.6 / camera_depth * scale;
-  let x = origin_x + position.x * factor;
-  let y_up = origin_y + (position.y - 0.2) * factor;
+  let factor = 1.6 / camera_depth * scale * frame.fit;
+  let x = origin_x + (position.x - frame.center_x) * factor;
+  let y_up = origin_y + (position.y - frame.center_y) * factor;
   [x, (height - 1.0) - y_up, camera_depth]
 }
 

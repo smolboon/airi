@@ -91,17 +91,20 @@ final class CharacterAndWindowTests: XCTestCase {
             .deletingLastPathComponent()
             .appendingPathComponent("Sources/AoriApp/Resources/aori-sample.vrm")
         let scene = try VRMSceneReader.read(Data(contentsOf: url))
-        XCTAssertEqual(scene.document.title, "Aori Sample")
+        XCTAssertEqual(scene.document.title, "Butter")
         XCTAssertGreaterThan(scene.vertexCount, 20)
         XCTAssertFalse(scene.meshes[0].morphs.isEmpty)
-        let happy = FaceDriver.morphWeights(
+        XCTAssertFalse(scene.meshes[0].uvs.isEmpty)
+        XCTAssertGreaterThan(scene.meshes[0].texturePNG.count, 1000)
+        XCTAssertEqual(scene.meshes[0].texturePNG.prefix(8), Data([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]))
+        let vowelA = FaceDriver.morphWeights(
             blendShapes: scene.blendShapes,
-            emotion: .happy,
+            emotion: .neutral,
             mouthOpen: 0.5,
-            blink: 0
+            blink: 0,
+            viseme: "a"
         )
-        XCTAssertTrue(happy.contains(where: { $0.morph == 1 && $0.weight == 1 }))
-        XCTAssertTrue(happy.contains(where: { $0.morph == 0 && abs($0.weight - 0.5) < 0.001 }))
+        XCTAssertTrue(vowelA.contains(where: { abs($0.weight - 0.5) < 0.001 }))
         let vowelI = FaceDriver.morphWeights(
             blendShapes: scene.blendShapes,
             emotion: .neutral,
@@ -109,8 +112,11 @@ final class CharacterAndWindowTests: XCTestCase {
             blink: 0,
             viseme: "i"
         )
-        XCTAssertFalse(vowelI.contains(where: { $0.morph == 0 }))
-        XCTAssertTrue(vowelI.contains(where: { $0.morph == 5 && abs($0.weight - 0.5) < 0.001 }))
+        let aKeys = Set(vowelA.map { "\($0.mesh):\($0.morph)" })
+        let iKeys = Set(vowelI.map { "\($0.mesh):\($0.morph)" })
+        XCTAssertFalse(aKeys.isEmpty)
+        XCTAssertFalse(iKeys.isEmpty)
+        XCTAssertTrue(aKeys.isDisjoint(with: iKeys))
         let presentation = CharacterPresentation.placeholder.applying(scene)
         XCTAssertFalse(presentation.usesPlaceholderMesh)
         XCTAssertEqual(SpeechLevel.mouthOpen(samples: [Float](repeating: 0, count: 8)), 0)
@@ -120,18 +126,15 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(text.contains("inverseBindMatrices"))
         XCTAssertTrue(text.contains("baseColorTexture"))
         XCTAssertTrue(text.contains("JOINTS_0"))
-        XCTAssertTrue(text.contains("\"name\":\"idle\""))
-        XCTAssertTrue(text.contains("\"name\":\"blink\""))
-        XCTAssertTrue(text.contains("\"bone\":\"hips\""))
-        XCTAssertTrue(text.contains("\"bone\":\"head\""))
-        XCTAssertTrue(text.contains("\"bone\":\"leftEye\""))
-        XCTAssertTrue(text.contains("\"bone\":\"rightEye\""))
-        XCTAssertTrue(text.contains("5121"))
+        XCTAssertTrue(text.lowercased().contains("blink"))
+        XCTAssertTrue(text.contains("\"bone\": \"hips\""))
+        XCTAssertTrue(text.contains("\"bone\": \"head\""))
+        XCTAssertTrue(text.contains("CC0"))
         let bones = try VRMHumanoidReader.bones(in: bytes)
-        XCTAssertEqual(
-            bones.map(\.name),
-            ["hips", "spine", "neck", "head", "leftEye", "rightEye", "leftShoulder", "leftUpperArm", "leftLowerArm", "rightShoulder", "rightUpperArm", "rightLowerArm"]
-        )
+        let names = bones.map(\.name)
+        XCTAssertTrue(names.contains("hips"))
+        XCTAssertTrue(names.contains("head"))
+        XCTAssertTrue(names.contains("leftLowerArm"))
         XCTAssertEqual(
             PhonemeTimeline.symbols(in: "Hello papa"),
             ["h", "e", "l", "l", "o", "p", "a", "p", "a"]
@@ -195,10 +198,9 @@ final class CharacterAndWindowTests: XCTestCase {
             .appendingPathComponent("Sources/AoriApp/Resources/aori-sample.vrm")
         let scene = try VRMSceneReader.read(Data(contentsOf: url))
         let open = portrait.weights(in: scene)
-        XCTAssertTrue(open.contains(where: { $0.mesh == 0 && $0.morph == 0 && $0.weight > 0.5 }))
+        XCTAssertTrue(open.contains(where: { $0.weight > 0.5 }))
         let shut = blink.weights(in: scene)
-        XCTAssertTrue(shut.contains(where: { $0.mesh == 0 && $0.morph == 4 && $0.weight == 1 }))
-        XCTAssertTrue(shut.contains(where: { $0.mesh == 1 && $0.weight == 1 }))
+        XCTAssertTrue(shut.contains(where: { $0.weight == 1 }))
     }
 
     func testStandardCompanionStyle() {

@@ -8,7 +8,7 @@ The app opens a main window and a transparent companion window. The companion wi
 
 Settings stores a name, a personality, one provider, a voice, a model, and saved facts. Say "remember that" in chat to store a fact. The provider list has one entry. Other providers are absent. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
-Speak uses `AVSpeechSynthesizer`. Visemes come from the audio level and the zero-crossing rate. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is an original CC0 VRM humanoid with a texture, arms, and eye look-at. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
+Speak uses `AVSpeechSynthesizer`. Visemes come from the audio level and the zero-crossing rate. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is Butter, a CC0 VRM by Polygonal Mind, with a color texture. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file.
 
@@ -107,7 +107,7 @@ The macOS CI job also runs `xcodebuild`, `./scripts/fetch-whisper.sh`, `./script
 
 Cubism Core is proprietary. Live2D does not publish it for this MIT repo. The flat native rig stays.
 
-The flat character is not a Cubism moc3 model. The sample is an original CC0 humanoid, not a downloaded character. Chat, settings, the persona, and the locale id are stored in `companion.sqlite`.
+The flat character is not a Cubism moc3 model. The sample is Butter, a downloaded CC0 VRM by Polygonal Mind. Chat, settings, the persona, and the locale id are stored in `companion.sqlite`.
 
 The Linux URLSession path buffers the HTTP body. The macOS path reads the body in chunks. Speech permission strings are in `Info.plist`. Run the assembled app so macOS can read them. Mouth presets come from PCM frames.
 

@@ -14,7 +14,7 @@ Animates is a separate product from Animation Inc. The site at animates.ai says 
 
 ## This milestone
 
-The character is an original CC0 humanoid. Rust skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat can call an OpenAI-compatible provider. When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
+The sample character is Butter, a CC0 VRM by Polygonal Mind. Rust skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat can call an OpenAI-compatible provider. When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
 
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 

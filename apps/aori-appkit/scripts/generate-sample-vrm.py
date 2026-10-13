@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the CC0 sample VRM used by the native companion."""
+"""Write a small generated VRM. The shipped sample is Butter, not this file."""
 
 import json
 import math
@@ -488,7 +488,7 @@ def main():
     header = struct.pack("<III", 0x46546C67, 2, length)
     json_chunk = struct.pack("<II", len(json_bytes), 0x4E4F534A) + json_bytes
     bin_chunk = struct.pack("<II", len(blob), 0x004E4942) + blob
-    destination = Path(__file__).resolve().parents[1] / "Sources" / "AoriApp" / "Resources" / "aori-sample.vrm"
+    destination = Path(__file__).resolve().parents[1] / "build" / "generated-sample.vrm"
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(header + json_chunk + bin_chunk)
     print(destination, destination.stat().st_size)

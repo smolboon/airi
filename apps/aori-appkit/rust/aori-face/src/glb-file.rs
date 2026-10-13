@@ -136,6 +136,7 @@ fn read_meshes(
         .unwrap_or_else(|| format!("morph{target_index}"));
       morphs.push(FaceMorph { name, deltas });
     }
+    apply_blend_shape_names(json, index, &mut morphs);
     let name = mesh
       .get("name")
       .and_then(Value::as_str)
@@ -343,6 +344,47 @@ fn node_parents(nodes: Option<&Vec<Value>>) -> Vec<Option<usize>> {
     }
   }
   parents
+}
+
+fn apply_blend_shape_names(json: &Value, mesh_index: usize, morphs: &mut [FaceMorph]) {
+  let Some(groups) = json
+    .pointer("/extensions/VRM/blendShapeMaster/blendShapeGroups")
+    .and_then(Value::as_array)
+  else {
+    return;
+  };
+  for group in groups {
+    let preset = group.get("presetName").and_then(Value::as_str).unwrap_or("");
+    let fallback = group.get("name").and_then(Value::as_str).unwrap_or("");
+    let label = if preset.is_empty() || preset == "unknown" {
+      fallback
+    } else {
+      preset
+    };
+    if label.is_empty() {
+      continue;
+    }
+    let Some(binds) = group.get("binds").and_then(Value::as_array) else {
+      continue;
+    };
+    for bind in binds {
+      let Some(mesh) = bind.get("mesh").and_then(json_usize) else {
+        continue;
+      };
+      let Some(morph_index) = bind.get("index").and_then(json_usize) else {
+        continue;
+      };
+      if mesh != mesh_index {
+        continue;
+      }
+      let Some(morph) = morphs.get_mut(morph_index) else {
+        continue;
+      };
+      if morph.name.starts_with("morph") || morph.name.is_empty() {
+        morph.name = label.to_string();
+      }
+    }
+  }
 }
 
 fn texture_of(

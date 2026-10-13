@@ -1,6 +1,6 @@
-Aori Sample is an original low-poly VRM humanoid made for this app.
-It is not a downloaded character. The hips, spine, neck, head, eye, and arm bones are part of that model.
-The idle clip, the blink clip, the UVs, and the checker texture are part of the same model.
-
-The model and this file are dedicated to the public domain under the CC0 1.0 Universal license.
+Butter is a VRM 0 humanoid by Polygonal Mind.
+The file name in the source repository is 100Avatars_083_Butter.vrm.
+The source repository is https://github.com/PolygonalMind/100Avatars
+The license in the file is CC0 1.0 Universal.
 https://creativecommons.org/publicdomain/zero/1.0/
+This app did not make the mesh or the texture.
