@@ -135,7 +135,7 @@ Chat, provider settings, the persona, and the locale id are stored in `companion
 
 A search field matches chat lines and memory notes by words. All nine directories under `packages/i18n/src/locales` have Aori menu keys. The View menu lists the locale ids. A failed stream retries once before any text arrives. After a text delta, it does not retry. The status line says "Trying again." during that retry.
 
-A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms. The test fails when the median is 33 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
+A debug build rendered 20 frames at 280 by 380. The median was 3.30 ms. The max was 3.56 ms. The test fails when the median is 50 ms or more. `AoriLog.frame` writes a JSON line with the event name and the frame time.
 
 The screenshot path also logs `aori_fps`, `aori_latency_ms`, and `aori_memory_mb`. The FPS value is one captured frame. On macOS the same values go to `os_log` and one signpost.
 
