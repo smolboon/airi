@@ -198,6 +198,7 @@ need = [
     "aori_mic=",
     "leftLowerArm",
     "aori_turn=done",
+    "aori_window_mouth=open",
     "aori_sandbox=on",
     "aori_sandbox_entitlements=app-sandbox,network.client,audio-input,bookmarks",
     "aori_sandbox_screen=tcc",

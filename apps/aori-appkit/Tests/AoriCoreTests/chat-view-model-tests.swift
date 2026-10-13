@@ -20,6 +20,23 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(recorded.first?.first?.content, ChatPrompt.companion)
     }
 
+    func testHoldSpeechPoseRestoresTheOpenMouth() async {
+        let model = await ChatViewModel(client: ScriptedChatClient(events: [.finished]), configuration: testConfiguration())
+        await model.setMouthLevel(0.8)
+        await model.setViseme("o")
+        await model.setViseme("pp")
+        await model.setSpeaking(false)
+        let closed = await model.mouthLevel
+        XCTAssertEqual(closed, 0)
+        await model.holdSpeechPose()
+        let mouth = await model.mouthLevel
+        let viseme = await model.viseme
+        let speaking = await model.isSpeaking
+        XCTAssertGreaterThan(mouth, 0.2)
+        XCTAssertEqual(viseme, "o")
+        XCTAssertTrue(speaking)
+    }
+
     func testFailureKeepsPartialText() async throws {
         let client = PartialChatClient()
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

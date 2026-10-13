@@ -34,6 +34,8 @@ public final class ChatViewModel {
     public private(set) var modelBytes: Data?
     public private(set) var mouthLevel: Double = 0
     public private(set) var viseme = "a"
+    private var peakMouth = 0.0
+    private var lastOpenViseme = "a"
     public var onChange: (@MainActor () -> Void)?
     public var onProfileChange: (@MainActor () -> Void)?
     public var onTranscriptChange: (@MainActor () -> Void)?
@@ -138,12 +140,26 @@ public final class ChatViewModel {
 
     public func setMouthLevel(_ level: Double) {
         mouthLevel = min(1, max(0, level))
+        if mouthLevel > peakMouth {
+            peakMouth = mouthLevel
+        }
         publish()
     }
 
     public func setViseme(_ viseme: String) {
         let next = viseme.trimmingCharacters(in: .whitespacesAndNewlines)
         self.viseme = next.isEmpty ? "sil" : next
+        if self.viseme != "sil", self.viseme != "pp" {
+            lastOpenViseme = self.viseme
+        }
+        publish()
+    }
+
+    /// Puts the last open speech mouth back after playback clears it.
+    public func holdSpeechPose() {
+        isSpeaking = true
+        mouthLevel = peakMouth > 0.08 ? peakMouth : 1
+        viseme = lastOpenViseme
         publish()
     }
 

@@ -200,6 +200,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             await self.runFixtureTurn()
             await self.runMemoryProof()
             await self.runVisionTicker()
+            self.model?.holdSpeechPose()
+            self.mainWindow?.refresh()
+            self.companionWindow?.refresh()
+            self.writeFramebuffer()
+            let mouth = self.model?.mouthLevel ?? 0
+            logLine(mouth > 0.2 ? "aori_window_mouth=open" : "aori_window_mouth=line")
             logLine("aori_turn=done")
         }
         Timer.scheduledTimer(withTimeInterval: 80, repeats: false) { _ in
