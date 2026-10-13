@@ -36,17 +36,23 @@ final class AoriScriptApi: NSObject, AoriScriptExports {
     }
 }
 
+final class ScriptFailure: @unchecked Sendable {
+    var failed = false
+}
+
 struct JavaScriptCorePluginRuntime: PluginScriptRuntime {
     func evaluate(source: String, grant: PluginPermissions) -> String {
-        let context = JSContext()
-        var failed = false
+        guard let context = JSContext() else {
+            return "error"
+        }
+        let flag = ScriptFailure()
         context.exceptionHandler = { _, _ in
-            failed = true
+            flag.failed = true
         }
         let api = AoriScriptApi(grant: grant)
         context.setObject(api, forKeyedSubscript: "aori" as NSString)
         let value = context.evaluateScript(source)
-        if failed {
+        if flag.failed {
             return "error"
         }
         let text = value?.toString() ?? ""
