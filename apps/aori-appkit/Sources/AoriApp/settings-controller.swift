@@ -13,12 +13,16 @@ final class SettingsWindowController: NSWindowController {
     private let modelField = NSTextField(string: "")
     private let keyField = NSSecureTextField(string: "")
     private let memoryPopup = NSPopUpButton()
+    private let pageLabel = NSTextField(wrappingLabelWithString: "")
     private let sourceLabel = NSTextField(wrappingLabelWithString: "")
     var onSave: ((ProviderConfiguration) -> Void)?
     var onSavePersona: ((CompanionPersona) -> Void)?
     var onDeleteNote: ((UUID) -> Void)?
     private let records: SQLiteCompanionStore
     private var notes: [MemoryNote] = []
+    private var messageCount = 0
+    private var localeID = "en"
+    private var presentation = CharacterPresentation.placeholder
 
     init(
         secrets: KeychainSecretStore,
@@ -29,7 +33,7 @@ final class SettingsWindowController: NSWindowController {
         self.secrets = secrets
         self.records = records
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 640),
+            contentRect: NSRect(x: 0, y: 0, width: 520, height: 820),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
@@ -38,6 +42,7 @@ final class SettingsWindowController: NSWindowController {
         super.init(window: window)
         build()
         settingsLog("aori_settings=provider,voice,model,persona,memory")
+        settingsLog("aori_settings_pages=\(SettingsPages.ids.joined(separator: ","))")
         refresh(configuration: configuration, persona: persona, notes: [])
         window.center()
     }
@@ -47,7 +52,17 @@ final class SettingsWindowController: NSWindowController {
         nil
     }
 
-    func refresh(configuration: ProviderConfiguration, persona: CompanionPersona, notes: [MemoryNote]) {
+    func refresh(
+        configuration: ProviderConfiguration,
+        persona: CompanionPersona,
+        notes: [MemoryNote],
+        messageCount: Int = 0,
+        locale: String = "en",
+        presentation: CharacterPresentation = .placeholder
+    ) {
+        self.messageCount = messageCount
+        self.localeID = locale
+        self.presentation = presentation
         nameField.stringValue = persona.name
         personalityField.stringValue = persona.personality
         baseField.stringValue = configuration.baseURL.absoluteString
@@ -58,6 +73,22 @@ final class SettingsWindowController: NSWindowController {
         showNotes(notes)
         keyField.placeholderString = configuration.apiKey.isEmpty ? "API key" : "Saved. Type a new key to replace it."
         sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown."
+        let avatar = AvatarKind.resolve(ProcessInfo.processInfo.environment["AORI_AVATAR"]) == .layered ? "live2d" : "vrm"
+        let voice = voicePopup.titleOfSelectedItem ?? "System default"
+        pageLabel.stringValue = SettingsPages.report(
+            sceneTitle: presentation.title,
+            sceneDetail: presentation.subtitle,
+            avatar: avatar,
+            provider: stored?.provider ?? "openai",
+            messageCount: messageCount,
+            noteCount: notes.count,
+            locale: locale,
+            model: configuration.model,
+            voice: voice,
+            keySource: configuration.keySource.rawValue,
+            baseURL: configuration.baseURL.absoluteString,
+            personaName: persona.name
+        )
     }
 
     func showNotes(_ notes: [MemoryNote]) {
@@ -86,6 +117,10 @@ final class SettingsWindowController: NSWindowController {
         let modelLabel = NSTextField(labelWithString: "Model")
         let keyLabel = NSTextField(labelWithString: "API key")
         let memoryLabel = NSTextField(labelWithString: "Saved facts")
+        let pagesLabel = NSTextField(labelWithString: "Pages")
+        pageLabel.maximumNumberOfLines = 12
+        pageLabel.textColor = .secondaryLabelColor
+        pageLabel.setAccessibilityLabel("Settings pages")
         sourceLabel.maximumNumberOfLines = 3
         sourceLabel.textColor = .secondaryLabelColor
 
@@ -113,6 +148,7 @@ final class SettingsWindowController: NSWindowController {
         deleteNote.setAccessibilityLabel("Delete saved fact")
 
         let stack = NSStackView(views: [
+            pagesLabel, pageLabel,
             nameLabel, nameField,
             personalityLabel, personalityField,
             providerLabel, providerPopup,
@@ -157,7 +193,14 @@ final class SettingsWindowController: NSWindowController {
             let configuration = try persist(removeKey: false)
             onSavePersona?(currentPersona())
             onSave?(configuration)
-            refresh(configuration: configuration, persona: currentPersona(), notes: notes)
+            refresh(
+                configuration: configuration,
+                persona: currentPersona(),
+                notes: notes,
+                messageCount: messageCount,
+                locale: localeID,
+                presentation: presentation
+            )
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }
@@ -169,7 +212,14 @@ final class SettingsWindowController: NSWindowController {
             keyField.stringValue = ""
             let configuration = try persist(removeKey: true)
             onSave?(configuration)
-            refresh(configuration: configuration, persona: currentPersona(), notes: notes)
+            refresh(
+                configuration: configuration,
+                persona: currentPersona(),
+                notes: notes,
+                messageCount: messageCount,
+                locale: localeID,
+                presentation: presentation
+            )
         } catch {
             sourceLabel.stringValue = String(describing: error)
         }

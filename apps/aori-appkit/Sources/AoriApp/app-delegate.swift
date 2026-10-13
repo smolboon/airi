@@ -343,7 +343,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard let model else {
             return
         }
-        settingsWindow?.refresh(configuration: model.configuration, persona: model.persona, notes: model.memory.notes)
+        settingsWindow?.refresh(
+            configuration: model.configuration,
+            persona: model.persona,
+            notes: model.memory.notes,
+            messageCount: model.messages.count,
+            locale: localeID,
+            presentation: model.presentation
+        )
         settingsWindow?.showWindow(sender)
     }
 

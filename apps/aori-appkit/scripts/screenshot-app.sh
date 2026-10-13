@@ -180,6 +180,7 @@ need = [
     "aori_menu_memory=記憶",
     "aori_store=sqlite",
     "aori_settings_window=open",
+    "aori_settings_pages=scene,providers,modules,card,memory,data,connection,models,system",
     "aori_locale_menu=loaded",
     "aori_stt_engine=whisper",
     "aori_stt=Hello papa",

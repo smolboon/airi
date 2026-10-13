@@ -22,7 +22,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, and most integrations are absent. Run 38355635403 ran one `.js` plugin in JavaScriptCore. |
 | Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
 | Platform integration | 3 | Run 38357544156 launched the sandboxed app and granted screen recording. Keychain and the microphone probe ran. The log says `aori_stt_auth=unknown`. |
-| User interface and interaction | 4 | Run 38357544156 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. Settings lists provider, voice, model, persona, and saved facts. A macOS capture of that window is not in a launch log. The rest of the AIRI settings pages are absent. |
+| User interface and interaction | 4 | Run 38357544156 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. A macOS capture of that window is not in a launch log. Full provider catalogs are absent. |
 | Graphics and character rendering | 4 | Run 38357544156 shows a flat character. The hair is above the blue body. The mouth is open in the companion window and in the framebuffer. The GPUI window shows the checker head. The sample file is now Butter, a CC0 VRM with a color texture. A macOS SceneKit image is not saved yet. Cubism Core stays out of this MIT repo. |
 | Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa inside the sandbox. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
@@ -101,7 +101,7 @@ Architecture is 4. The app modules are named. Games, the hosted API, and the int
 
 Platform integration is 3. Run 38357544156 logged `aori_stt_auth=unknown`. Speech permission is not granted on the runner.
 
-User interface is 4. The chat, the companion, and the Memory window are captured. Settings now lists provider, voice, model, persona, and saved facts. A macOS capture of that window is not in a launch log. The rest of the AIRI settings pages are absent.
+User interface is 4. The chat, the companion, and the Memory window are captured. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. A macOS capture of that window is not in a launch log. Full provider catalogs are absent.
 
 Graphics is 4. The companion window mouth is open. Cubism moc3, MMD, and Spine are absent. `AoriSceneKit` draws Butter and samples its color texture. A macOS job has not saved that image yet. The last GPUI window is a checker head.
 
