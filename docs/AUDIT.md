@@ -1,6 +1,6 @@
 # Aori AppKit audit
 
-Audit date: 2026-10-12. Scope: `apps/aori-appkit` milestones 1 and 2, and `docs/APPKIT_PORT.md`. Aori is the native app. Project AIRI is the upstream product.
+Audit date: 2026-10-13. Scope: `apps/aori-appkit` and `docs/APPKIT_PORT.md`. Aori is the native app. Project AIRI is the upstream product.
 
 Scores use 0 to 5.
 
@@ -13,26 +13,28 @@ Scores use 0 to 5.
 
 The scores judge the native port, not the Vue apps. The long-term aim is above 4.5 in every area. This file does not use a 10-point scale.
 
+A row is 4 only when the milestone behavior is strong. A central gap keeps the row at 3. No row is 5, because the Vue apps, games, and integrations are still outside this port.
+
 ## Scores
 
 | Area | Score | Evidence |
 | --- | --- | --- |
-| Product scope and feature parity | 4 | Run 38348280149 shows a flat character and an orange Vision badge. The chat shows Hello papa and Mock reply from CI. The log recalls `I like tea`, then the Memory window shows `The cat is orange`. The ticker sent two screen frames and stopped. A neural embedder, Cubism moc3, JavaScript plugins, and games are absent. |
-| Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. `VisionRequest` lives in `AoriCore`. ScreenCaptureKit stays in the app target. `AoriCore` and `AoriProviders` do not import AppKit. GPUI is still a second binary. |
-| Platform integration | 4 | Run 38348280149 built the Xcode project and opened the GPUI window. The log says `aori_vision_permission=granted`, `aori_vision_ticker=on`, and `aori_memory_window=open`. Speech authorization stayed unknown. |
-| User interface and interaction | 4 | Run 38348280149 captured the chat, the companion, and the Memory window. The chat shows the greeting, Hello papa, and Mock reply from CI. The Memory window shows `The cat is orange` and a Delete button. The log says `aori_click_through=delivered`. |
-| Graphics and character rendering | 4 | Run 38348280149 shows a flat character in the companion window. The hair is above the blue body. An orange Vision badge sits on that window. This is not a Cubism moc3 model. The GPUI window still shows the checker head. |
-| Audio, speech input, and speech output | 4 | Run 38348280149 logged `aori_mic_utterance=silence`. whisper.cpp printed Hello papa. Speech authorization stayed unknown. Visemes still come from a word list. |
-| Networking and model providers | 4 | Run 38348280149 logged `aori_memory_source=endpoint` and `aori_vision_reply=Mock vision from CI.`. The chat reply stayed `Mock reply from CI.`. The mock does not read the image. Other chat protocols are absent. |
-| Security, secrets, and privacy | 4 | The log says `aori_keychain=roundtrip` for account `aori-keychain-probe`. That account is not the provider key. The plugin grant denies `aori.files.read`. Run 38348280149 sent two screen PNGs to the local mock. The log does not contain the images. The app is not sandboxed. |
-| Data persistence | 4 | SQLite stores embedding notes. Run 38348280149 recalled `I like tea` and deleted that row. `chat.json`, `settings.json`, `locale.json`, and `companion.json` still store the other records. This is not pgvector. The local embedder is a hash. |
-| Error handling and recovery | 4 | A failed stream retries once before any text. The status says "Trying again." A delta blocks the retry. `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover both paths. This run did not hit a provider error. |
-| Testing | 4 | The Linux job in run 38348280149 passed 67 tests with 0 failures. The macOS job passed 67 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded the memory recall, the delete, two vision ticks, and the Vision badge. |
-| Continuous integration and build | 4 | Run 38348280149 passed the Linux job and the macOS job. The macOS job saved the companion window, the Memory window, and the chat. The log says `aori_voiceover=running`. This is not CI for the whole AIRI product. |
-| Documentation | 4 | `docs/AORI_PRODUCT.md`, `docs/AORI_ARCHITECTURE.md`, `docs/APPKIT_PORT.md`, and this file match run 38348280149. They do not cover the whole AIRI product. |
-| Accessibility | 4 | Run 38348280149 logged the live labels and `aori_ax_press=Send message`. The log says `aori_voiceover=running`. The log has no spoken captions. |
-| Internationalization | 4 | Run 38348280149 printed `aori_locale=ja`, `aori_locale_menu=loaded`, and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The Memory menu key is English only. The rest of the product is not translated. |
-| Performance and operability | 4 | Run 38348280149 printed `{"event":"frame","ms":3.71}`. The vision ticker waited 1000 ms between two ticks and then stopped. There is no broader telemetry product. |
+| Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, JavaScript plugins, and most integrations are absent. A score of 4 needs strong parity. This row does not have it. |
+| Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
+| Platform integration | 3 | Run 38348280149 built the app and granted screen recording. Keychain and the microphone probe ran. Speech authorization stayed unknown. The process is not sandboxed. |
+| User interface and interaction | 4 | Run 38348280149 captured the chat, the companion, and the Memory window. Click-through logged `aori_click_through=delivered`. The Memory window has a Delete button. Settings are thinner than AIRI. |
+| Graphics and character rendering | 3 | Run 38348280149 shows a flat character. The hair is above the blue body. The GPUI window shows the checker head. The flat character is not a Cubism moc3 mesh. |
+| Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
+| Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
+| Security, secrets, and privacy | 3 | Keychain logged `aori_keychain=roundtrip`. The plugin grant denied `aori.files.read`. Two screen PNGs went to the local mock. The app is not sandboxed. |
+| Data persistence | 3 | SQLite recalled `I like tea` and the delete left one row. JSON files still store chat, settings, locale, and the persona. The local embedder is a hash. |
+| Error handling and recovery | 4 | `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover the retry. A delta blocks the second try. This run did not hit a provider error. |
+| Testing | 4 | Linux and macOS in run 38348280149 each passed 67 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded recall, delete, and two vision ticks. |
+| Continuous integration and build | 4 | Run 38348280149 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
+| Documentation | 4 | The product, architecture, port, and audit notes match run 38348280149. Each note names a gap. They do not cover the whole AIRI product. |
+| Accessibility | 3 | The log has live labels and `aori_ax_press=Send message`. The log says `aori_voiceover=running`. The log has no spoken captions. |
+| Internationalization | 3 | The log printed `aori_locale=ja` and `aori_locale_proof=設定…`. The menu dump includes クリックを透過. The Memory menu key is English only. |
+| Performance and operability | 3 | The frame line is `{"event":"frame","ms":3.71}`. The ticker waited 1000 ms and then stopped. There is no broader telemetry product. |
 
 ## What works in code
 
@@ -90,6 +92,8 @@ The companion window shows a flat character with the hair above the blue body. T
 The microphone mark is silence. The log has no spoken caption. Speech authorization stayed unknown. The flat character is not a Cubism moc3 model.
 
 The plugin host is a command list. JavaScript stays out. The macOS App Sandbox stays off.
+
+The score table above uses the same run. Ten rows are 3 because a central gap remains. Six rows are 4 because the milestone behavior is strong. No row is 5.
 
 ## Next milestones
 
