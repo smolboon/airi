@@ -27,7 +27,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa inside the sandbox. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
 | Security, secrets, and privacy | 3 | Run 38355635403 logged `aori_sandbox=on` and `aori_keychain=roundtrip`. Screen capture uses permission. The checkout path exception did not open the checkout. CI staged files in the app container. |
-| Data persistence | 3 | SQLite recalled `I like tea` and the delete left one row. The log says `aori_embed_coreml=ok`. JSON files still store chat, settings, locale, and the persona. The local model is a fixed linear layer. This is not pgvector. |
+| Data persistence | 3 | SQLite recalled `I like tea` and the delete left one row. JSON files still store chat, settings, locale, and the persona. The bundled file is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`. This is not pgvector. |
 | Error handling and recovery | 4 | `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover the retry. A delta blocks the second try. This run did not hit a provider error. |
 | Testing | 4 | Linux passed 70 tests. macOS passed 71 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded recall, delete, and two vision ticks. |
 | Continuous integration and build | 4 | Run 38355635403 passed the Linux job and the macOS job. The macOS job saved the companion, the Memory window, and the chat. This is not CI for the whole AIRI product. |
@@ -52,7 +52,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - When `AORI_AVATAR` is `live2d`, the companion draws a flat layered character. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust samples motion3.json curves. The art is original. Run 38298286037 showed it in the companion window.
 - A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38355635403 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same run logged `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 - One opt-in vision ticker. Run 38355635403 logged `aori_vision_ticker=on`, two `aori_vision_source=screen` ticks, `aori_vision_interval_ms=1000`, and `aori_vision_ticker=stopped`. The companion window shows an orange Vision badge. The mock does not read the pixels.
-- SQLite embedding memory. Run 38355635403 logged `aori_memory_source=endpoint`, `aori_embed_coreml=ok`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The local file is a fixed linear Core ML layer. It is not a trained sentence model.
+- SQLite embedding memory. Run 38355635403 logged `aori_memory_source=endpoint`, `aori_embed_coreml=ok`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The bundled file is now a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`.
 - Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel.
 - A hands-free turn. Voice activity ends an utterance. The next step sends that text. The reply is spoken. A Speak press is not part of that path.
 - An on-device transcript from whisper.cpp when Speech permission is missing. Run 38290795770 logged `aori_stt=Hello papa`.
@@ -72,7 +72,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Provider TTS, Sherpa, and every chat protocol except chat completions.
 - Tool calls and the integrations. Run 38355635403 ran one `.js` plugin. Tool calls stay out.
 - A vision ticker that stays on after the rate limit. The screenshot path stops at the configured maximum.
-- A trained sentence embedder and pgvector. The bundled Core ML file is a fixed linear layer. Word search remains in the chat panel.
+- pgvector. The bundled Core ML file is a conversion of all-MiniLM-L6-v2. Linux ranked the reference vectors. A macOS launch has not logged `aori_embed_recall=tea`. Word search remains in the chat panel.
 - A spoken microphone utterance. Run 38295099387 logged `aori_mic_utterance=silence`.
 - VoiceOver captions. The process was running. The log has no spoken line.
 - Cloud key sync. Run 38355635403 logged `aori_sandbox=on`. The checkout path exception did not open the checkout.
@@ -95,4 +95,4 @@ The score table above uses run 38355635403. Ten rows are 3 because a central gap
 
 The plan is in `docs/APPKIT_PORT.md`. A spoken microphone utterance and VoiceOver captions remain open. Milestone 4 keeps the flat rig because Cubism Core is proprietary.
 
-Milestone 5 can run a `.js` file in JavaScriptCore. Milestone 6 has an opt-in vision ticker. Milestone 7 has SQLite recall and a fixed linear Core ML file. Games stay out.
+Milestone 5 can run a `.js` file in JavaScriptCore. Milestone 6 has an opt-in vision ticker. Milestone 7 has SQLite recall and a converted MiniLM file. Games stay out.

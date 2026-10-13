@@ -715,8 +715,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             apiKey: "",
             keySource: model.configuration.keySource
         )
-        let local = await EmbeddingFallback().embed("I like tea", configuration: localConfiguration)
-        logLine(local.source == .coreml ? "aori_embed_coreml=ok" : "aori_embed_coreml=unavailable")
+        let localTea = await EmbeddingFallback().embed("I like tea", configuration: localConfiguration)
+        let localQuery = await EmbeddingFallback().embed("tea please", configuration: localConfiguration)
+        let localCat = await EmbeddingFallback().embed("The cat is orange", configuration: localConfiguration)
+        let teaScore = CosineSimilarity.score(localQuery.vector.values, localTea.vector.values)
+        let catScore = CosineSimilarity.score(localQuery.vector.values, localCat.vector.values)
+        let ranked = localTea.source == .coreml && localQuery.source == .coreml && teaScore > catScore
+        logLine(localTea.source == .coreml ? "aori_embed_coreml=ok" : "aori_embed_coreml=unavailable")
+        logLine(ranked ? "aori_embed_recall=tea" : "aori_embed_recall=miss")
         _ = embeddingStore.insert(text: "I like tea", vector: tea.vector.values, now: Date(timeIntervalSince1970: 1))
         _ = embeddingStore.insert(text: "The cat is orange", vector: cat.vector.values, now: Date(timeIntervalSince1970: 2))
         let query = await embedding.embed("tea please", configuration: model.configuration)

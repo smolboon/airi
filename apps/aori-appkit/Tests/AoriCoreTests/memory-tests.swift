@@ -4,8 +4,7 @@ import XCTest
 final class EmbeddingMemoryTests: XCTestCase {
     func testCosineRecallPrefersTheSharedWord() throws {
         XCTAssertNotNil(CoreMLFeatures.bundledModelURL())
-        let tokens = CoreMLFeatures.tokens("I like tea")
-        XCTAssertEqual(tokens.count, CoreMLFeatures.count)
+        XCTAssertEqual(CosineSimilarity.score([1, 0], [1, 0, 0]), 0)
         let tea = LocalEmbedding.embed("I like tea")
         let query = LocalEmbedding.embed("tea please")
         let cat = LocalEmbedding.embed("The cat is orange")
@@ -29,6 +28,41 @@ final class EmbeddingMemoryTests: XCTestCase {
         let prompt = MemoryRecall.prompt(lines: hits.map(\.text))
         XCTAssertTrue(prompt.contains("I like tea"))
         XCTAssertEqual(MemoryRecall.prompt(lines: []), "")
+    }
+
+    func testMiniLMReferenceRanksTeaAboveTheCat() throws {
+        let referenceURL = try XCTUnwrap(CoreMLFeatures.bundledReferenceURL())
+        let vocabularyURL = try XCTUnwrap(CoreMLFeatures.bundledVocabularyURL())
+        let rows = try JSONDecoder().decode([MiniLMReferenceRow].self, from: Data(contentsOf: referenceURL))
+        let byText = Dictionary(uniqueKeysWithValues: rows.map { ($0.text, $0) })
+        let query = try XCTUnwrap(byText["tea please"])
+        let tea = try XCTUnwrap(byText["I like tea"])
+        let cat = try XCTUnwrap(byText["The cat is orange"])
+        let comma = try XCTUnwrap(byText["tea, please"])
+        XCTAssertEqual(query.values.count, EmbeddingVector.sentenceDimensions)
+        XCTAssertGreaterThan(CosineSimilarity.score(query.values, tea.values), 0.5)
+        XCTAssertLessThan(CosineSimilarity.score(query.values, cat.values), 0.2)
+        XCTAssertGreaterThan(
+            CosineSimilarity.score(query.values, tea.values),
+            CosineSimilarity.score(query.values, cat.values)
+        )
+
+        let vocabulary = WordPieceTokenizer.vocabulary(at: vocabularyURL)
+        XCTAssertEqual(vocabulary["[CLS]"], WordPieceTokenizer.clsID)
+        XCTAssertEqual(vocabulary["tea"], 5572)
+        for row in [query, tea, cat, comma] {
+            let encoded = WordPieceTokenizer.encode(row.text, vocabulary: vocabulary)
+            let prefix = encoded.ids.prefix(row.ids.count).map { Int($0) }
+            XCTAssertEqual(prefix, row.ids)
+            XCTAssertEqual(encoded.mask[row.ids.count - 1], 1)
+            XCTAssertEqual(encoded.mask[row.ids.count], 0)
+        }
+
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("aori-memory-\(UUID().uuidString).sqlite")
+        let store = try EmbeddingMemoryStore(fileURL: url)
+        XCTAssertTrue(store.insert(text: "wide note", vector: tea.values, now: Date(timeIntervalSince1970: 1)))
+        XCTAssertFalse(store.insert(text: "odd", vector: [Float](repeating: 1, count: 16), now: Date()))
+        XCTAssertEqual(store.recall(query: query.values, limit: 1).map(\.text), ["wide note"])
     }
 
     func testChatInjectsARecalledMemory() async throws {
@@ -82,6 +116,12 @@ final class VisionTickerPolicyTests: XCTestCase {
         ])
         XCTAssertEqual(huge.maximumTicks, VisionTickerPolicy.maximumAllowedTicks)
     }
+}
+
+private struct MiniLMReferenceRow: Decodable {
+    var text: String
+    var ids: [Int]
+    var values: [Float]
 }
 
 private final class RecordingChatClient: ChatCompletionClient, @unchecked Sendable {

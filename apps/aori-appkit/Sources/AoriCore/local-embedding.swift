@@ -2,19 +2,16 @@ import Foundation
 
 public struct EmbeddingVector: Equatable, Sendable {
     public static let dimensions = 32
+    public static let sentenceDimensions = 384
 
     public var values: [Float]
 
     public init(values: [Float]) {
-        if values.count == Self.dimensions {
-            self.values = values
-            return
-        }
-        var padded = Array(values.prefix(Self.dimensions))
-        if padded.count < Self.dimensions {
-            padded.append(contentsOf: repeatElement(0, count: Self.dimensions - padded.count))
-        }
-        self.values = padded
+        self.values = values
+    }
+
+    public static func isStoredLength(_ count: Int) -> Bool {
+        count == dimensions || count == sentenceDimensions
     }
 }
 
@@ -83,10 +80,10 @@ public struct LocalTextEmbedding: TextEmbedding {
 
 public enum CosineSimilarity {
     public static func score(_ left: [Float], _ right: [Float]) -> Float {
-        let count = min(left.count, right.count)
-        guard count > 0 else {
+        guard left.count == right.count, !left.isEmpty else {
             return 0
         }
+        let count = left.count
         var dot: Float = 0
         var leftNorm: Float = 0
         var rightNorm: Float = 0

@@ -1,47 +1,29 @@
 import Foundation
 
-/// Character features for the bundled linear Core ML network.
-/// The network is not a trained sentence transformer.
+/// Locations for the bundled MiniLM sentence model.
 public enum CoreMLFeatures {
-    public static let count = 64
-
-    public static func tokens(_ text: String) -> [Float] {
-        var buckets = [Float](repeating: 0, count: count)
-        let letters = text.lowercased().filter { character in
-            guard let ascii = character.asciiValue else {
-                return false
-            }
-            return ascii >= 97 && ascii <= 122
-        }
-        var previous: UInt8?
-        for byte in letters.utf8 {
-            buckets[Int(byte - 97)] += 1
-            if let previous {
-                buckets[26 + Int((previous &+ byte) % 38)] += 1
-            }
-            previous = byte
-        }
-        var sum: Float = 0
-        for value in buckets {
-            sum += value * value
-        }
-        let norm = sqrt(sum)
-        guard norm > 0 else {
-            return buckets
-        }
-        return buckets.map { $0 / norm }
+    public static func bundledModelURL() -> URL? {
+        bundled(name: "aori-minilm", extension: "mlmodel")
     }
 
-    public static func bundledModelURL() -> URL? {
-        if let url = BundledFile.url(name: "aori-embed", extension: "mlmodel") {
+    public static func bundledVocabularyURL() -> URL? {
+        bundled(name: "aori-minilm-vocab", extension: "txt")
+    }
+
+    public static func bundledReferenceURL() -> URL? {
+        bundled(name: "aori-minilm-reference", extension: "json")
+    }
+
+    private static func bundled(name: String, extension ext: String) -> URL? {
+        if let url = BundledFile.url(name: name, extension: ext) {
             return url
         }
-        if let url = Bundle.module.url(forResource: "aori-embed", withExtension: "mlmodel") {
+        if let url = Bundle.module.url(forResource: name, withExtension: ext) {
             return url
         }
         return Bundle.module.url(
-            forResource: "aori-embed",
-            withExtension: "mlmodel",
+            forResource: name,
+            withExtension: ext,
             subdirectory: "Resources"
         )
     }

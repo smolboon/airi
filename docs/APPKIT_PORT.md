@@ -186,9 +186,11 @@ Run 38355635403 logged `aori_vision_ticker=on`, two screen ticks, and `aori_visi
 
 ### Milestone 7, embeddings memory
 
-`EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses `aori-embed.mlmodel`.
+`EmbeddingMemoryStore` keeps notes and vectors in SQLite. Recall uses cosine similarity. The closest notes enter the chat system prompt. The Memory window lists the notes and can delete one. When a key is set, the app calls the embeddings endpoint. A failed call uses `aori-minilm.mlmodel`.
 
-That file is a linear Core ML network with fixed weights. It is not a trained sentence model. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash. Run 38355635403 logged `aori_embed_coreml=ok` and `aori_memory_recall=I like tea`. The Memory window then showed `The cat is orange` after the delete.
+That file is a Core ML conversion of all-MiniLM-L6-v2. The license is Apache-2.0. The word hash stays in the cosine test and in the CI mock. The app fallback does not call the hash.
+
+Linux ranked the reference vectors. `tea please` is closer to `I like tea` than to `The cat is orange`. A macOS launch has not logged `aori_embed_recall=tea`. Run 38355635403 logged `aori_memory_recall=I like tea` on the hash endpoint. The Memory window then showed `The cat is orange` after the delete.
 
 ### Milestone 8, the rest of AIRI
 

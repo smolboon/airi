@@ -56,7 +56,7 @@ Use it to work on the native macOS companion. Use it to run the milestone 1 shel
 
 ## When not to use it
 
-Do not use it for Cubism moc3 models or games. Do not use it as pgvector. The bundled Core ML file is a fixed linear layer. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
+Do not use it for Cubism moc3 models or games. Do not use it as pgvector. The bundled Core ML file is a conversion of all-MiniLM-L6-v2. Use Stage Web or Stage Tamagotchi for the other features. Do not commit an API key.
 
 ## Layout
 
@@ -108,6 +108,6 @@ The GPUI binary paints the lit raster. It does not hear speech. The on-device mo
 
 The assembled app is sandboxed. Outgoing network and the microphone have entitlements. Screen capture uses the screen recording permission. Run 38355635403 logged `aori_sandbox=on`. The checkout path exception did not open the checkout.
 
-Embedding notes live in `memory.sqlite`. The local fallback is `aori-embed.mlmodel`. The weights are a fixed draw. Linux reports that path as unavailable.
+Embedding notes live in `memory.sqlite`. The local fallback is `aori-minilm.mlmodel`. That file is a conversion of all-MiniLM-L6-v2. The license is Apache-2.0. Linux reports that path as unavailable.
 
 Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.

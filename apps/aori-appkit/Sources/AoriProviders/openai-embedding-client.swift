@@ -59,7 +59,7 @@ public struct OpenAICompatibleEmbeddingClient: Sendable {
         let values = raw.compactMap { item -> Float? in
             (item as? NSNumber)?.floatValue
         }
-        guard values.count == EmbeddingVector.dimensions else {
+        guard EmbeddingVector.isStoredLength(values.count) else {
             throw ChatProviderError.malformedResponse("The embeddings vector has the wrong length.")
         }
         return EmbeddingVector(values: values)
@@ -69,13 +69,16 @@ public struct OpenAICompatibleEmbeddingClient: Sendable {
 public struct EmbeddingFallback: TextEmbedding {
     private let transport: any HTTPTransport
     private let modelURL: URL?
+    private let vocabularyURL: URL?
 
     public init(
         transport: any HTTPTransport = URLSessionHTTPTransport(),
-        modelURL: URL? = CoreMLFeatures.bundledModelURL()
+        modelURL: URL? = CoreMLFeatures.bundledModelURL(),
+        vocabularyURL: URL? = CoreMLFeatures.bundledVocabularyURL()
     ) {
         self.transport = transport
         self.modelURL = modelURL
+        self.vocabularyURL = vocabularyURL
     }
 
     public func embed(_ text: String, configuration: ProviderConfiguration) async -> EmbeddingOutcome {
@@ -94,7 +97,7 @@ public struct EmbeddingFallback: TextEmbedding {
     }
 
     private func local(_ text: String) -> EmbeddingOutcome {
-        if let vector = CoreMLTextEmbedding.embed(text: text, modelURL: modelURL) {
+        if let vector = CoreMLTextEmbedding.embed(text: text, modelURL: modelURL, vocabularyURL: vocabularyURL) {
             return EmbeddingOutcome(vector: vector, source: .coreml)
         }
         return EmbeddingOutcome(

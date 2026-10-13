@@ -71,7 +71,7 @@ public final class EmbeddingMemoryStore: @unchecked Sendable {
     @discardableResult
     public func insert(text: String, vector: [Float], now: Date, id: UUID = UUID()) -> Bool {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, vector.count == EmbeddingVector.dimensions else {
+        guard !trimmed.isEmpty, EmbeddingVector.isStoredLength(vector.count) else {
             return false
         }
         let key = trimmed.lowercased()

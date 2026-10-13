@@ -29,7 +29,10 @@ targets.append(contentsOf: [
         dependencies: coreDependencies,
         resources: [
             .copy("Resources/aori.yaml"),
-            .copy("Resources/aori-embed.mlmodel"),
+            .copy("Resources/aori-minilm.mlmodel"),
+            .copy("Resources/aori-minilm-vocab.txt"),
+            .copy("Resources/aori-minilm-reference.json"),
+            .copy("Resources/aori-minilm-license.txt"),
         ],
         linkerSettings: coreLinker
     ),

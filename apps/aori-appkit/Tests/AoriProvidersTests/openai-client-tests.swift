@@ -153,6 +153,13 @@ final class OpenAICompatibleClientTests: XCTestCase {
         let blank = configuration(apiKey: "")
         let local = await EmbeddingFallback().embed("I like tea", configuration: blank)
         XCTAssertEqual(local.source, outcome.source)
+
+        let wide = [Double](repeating: 0.01, count: EmbeddingVector.sentenceDimensions)
+        let widePayload = try JSONSerialization.data(withJSONObject: [
+            "data": [["embedding": wide]],
+        ])
+        let wideVector = try OpenAICompatibleEmbeddingClient.vector(from: widePayload)
+        XCTAssertEqual(wideVector.values.count, EmbeddingVector.sentenceDimensions)
     }
 
     func testTransportCanBeConstructedWithoutARequest() {
