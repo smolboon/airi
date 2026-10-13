@@ -186,6 +186,7 @@ need = [
     "aori_stt=Hello papa",
     "aori_llm=sent",
     "aori_llm_reply=Mock reply from CI.",
+    "aori_emotion=",
     "aori_click_through=on",
     "aori_click_through=delivered",
     "aori_avatar=live2d",

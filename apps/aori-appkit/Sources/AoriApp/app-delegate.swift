@@ -716,7 +716,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         if let reply = model.textForSpeech() {
+            let emotion = CompanionEmotion.infer(from: reply)
             logLine("aori_llm_reply=\(reply)")
+            logLine("aori_emotion=\(emotion.rawValue)")
             announceSpeech(reply)
             await synthesizer.speak(reply)
         }

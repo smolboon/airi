@@ -43,13 +43,14 @@ enum SceneKitAvatar {
         let camera = SCNNode()
         camera.name = "camera"
         let lens = SCNCamera()
-        lens.fieldOfView = 28
+        let positions = vrm.meshes.flatMap(\.positions)
+        let frame = PortraitCamera.frame(positions: positions)
+        lens.fieldOfView = CGFloat(frame.fieldOfView)
         lens.zNear = 0.01
         lens.zFar = 20
         camera.camera = lens
-        let frame = frame(of: vrm)
-        camera.position = SCNVector3(frame.x, frame.y, frame.distance)
-        camera.look(at: SCNVector3(frame.x, frame.lookY, frame.z))
+        camera.position = SCNVector3(frame.lookX, frame.lookY, frame.cameraZ)
+        camera.look(at: SCNVector3(frame.lookX, frame.lookY, frame.lookZ))
         scene.rootNode.addChildNode(camera)
 
         let key = SCNNode()
@@ -65,35 +66,6 @@ enum SceneKitAvatar {
         fill.light?.intensity = 500
         scene.rootNode.addChildNode(fill)
         return scene
-    }
-
-    private static func frame(of vrm: VRMScene) -> (x: Float, y: Float, z: Float, lookY: Float, distance: Float) {
-        var minX = Float.greatestFiniteMagnitude
-        var maxX = -Float.greatestFiniteMagnitude
-        var minY = Float.greatestFiniteMagnitude
-        var maxY = -Float.greatestFiniteMagnitude
-        var minZ = Float.greatestFiniteMagnitude
-        var maxZ = -Float.greatestFiniteMagnitude
-        for mesh in vrm.meshes {
-            for position in mesh.positions {
-                minX = min(minX, position.x)
-                maxX = max(maxX, position.x)
-                minY = min(minY, position.y)
-                maxY = max(maxY, position.y)
-                minZ = min(minZ, position.z)
-                maxZ = max(maxZ, position.z)
-            }
-        }
-        if minY > maxY {
-            return (0, 0.15, 0, 0.1, 1.4)
-        }
-        let height = max(0.2, maxY - minY)
-        let lookY = maxY - height * 0.16
-        let viewHeight = max(0.25, height * 0.38)
-        let half = viewHeight * 0.5
-        let fov = 28 * Float.pi / 180
-        let distance = half / tan(fov * 0.5) + max(0, maxZ)
-        return ((minX + maxX) * 0.5, lookY, (minZ + maxZ) * 0.5, lookY, distance)
     }
 
     private static func weightGrid(vrm: VRMScene, pose: VRMAvatarPose) -> [[CGFloat]] {

@@ -203,6 +203,62 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(shut.contains(where: { $0.weight == 1 }))
     }
 
+    func testReplySentimentChangesTheFace() throws {
+        let scene = try VRMSceneReader.read(Data(contentsOf: sampleVRM()))
+        let neutral = VRMAvatarPose.face(emotion: .neutral)
+        let happy = VRMAvatarPose.face(emotion: .happy)
+        let sad = VRMAvatarPose.face(emotion: .sad)
+        let surprised = VRMAvatarPose.face(emotion: .surprised)
+        XCTAssertEqual(neutral.yaw, 0)
+        XCTAssertEqual(neutral.pitch, 0)
+        XCTAssertLessThan(happy.pitch, 0)
+        XCTAssertGreaterThan(sad.pitch, 0)
+        let neutralKeys = morphKeys(neutral.weights(in: scene))
+        XCTAssertFalse(morphKeys(happy.weights(in: scene)).subtracting(neutralKeys).isEmpty)
+        XCTAssertFalse(morphKeys(sad.weights(in: scene)).subtracting(neutralKeys).isEmpty)
+        XCTAssertFalse(morphKeys(surprised.weights(in: scene)).subtracting(neutralKeys).isEmpty)
+        let joy = VRMBlendShape(
+            name: "Joy",
+            preset: "joy",
+            binds: [VRMBlendBind(mesh: 0, morph: 3, weight: 100)]
+        )
+        let withJoy = VRMScene(document: scene.document, meshes: scene.meshes, blendShapes: scene.blendShapes + [joy])
+        let glad = VRMAvatarPose.face(emotion: .happy).weights(in: withJoy)
+        XCTAssertTrue(glad.contains(where: { $0.morph == 3 && $0.weight == 1 }))
+        XCTAssertEqual(CompanionEmotion.infer(from: "I am glad."), .happy)
+        XCTAssertEqual(CompanionEmotion.infer(from: "I am sorry."), .sad)
+        XCTAssertEqual(CompanionEmotion.infer(from: "Wow, that is new."), .surprised)
+    }
+
+    func testPortraitCameraFramesTheHead() throws {
+        let scene = try VRMSceneReader.read(Data(contentsOf: sampleVRM()))
+        let positions = scene.meshes.flatMap(\.positions)
+        let frame = PortraitCamera.frame(positions: positions)
+        let maxY = positions.map(\.y).max() ?? 0
+        let minY = positions.map(\.y).min() ?? 0
+        let height = maxY - minY
+        let top = frame.lookY + frame.viewHalf
+        let bottom = frame.lookY - frame.viewHalf
+        XCTAssertGreaterThan(top, maxY)
+        XCTAssertLessThan(bottom, maxY - height * 0.2)
+        XCTAssertGreaterThan(bottom, minY + height * 0.4)
+        let maxZ = positions.map(\.z).max() ?? 0
+        XCTAssertGreaterThan(frame.cameraZ, maxZ + 0.2)
+        XCTAssertGreaterThan(frame.lookY, maxY - height * 0.45)
+    }
+
+    private func sampleVRM() -> URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Sources/AoriApp/Resources/aori-sample.vrm")
+    }
+
+    private func morphKeys(_ weights: [MorphWeight]) -> Set<String> {
+        Set(weights.map { "\($0.mesh):\($0.morph)" })
+    }
+
     func testStandardCompanionStyle() {
         let style = CompanionWindowPolicy.standard.style()
         XCTAssertTrue(style.floating)
