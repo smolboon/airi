@@ -28,9 +28,7 @@ enum AoriMain {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let secrets = KeychainSecretStore(service: AoriSecrets.keychainService)
-    private let profileStore = FileCompanionProfileStore(fileURL: AoriFiles.profileURL())
-    private let transcriptStore = FileChatTranscriptStore(fileURL: AoriFiles.chatURL())
-    private let settingsStore = FileProviderSettingsStore(fileURL: AoriFiles.settingsURL())
+    private let records = SQLiteCompanionStore.open(fileURL: AoriFiles.databaseURL())
     private let localeStore = FileLocalePreferenceStore(fileURL: AoriFiles.localeURL())
     private var model: ChatViewModel?
     private var mainWindow: MainWindowController?
@@ -74,6 +72,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func launch() {
         logLine(SandboxReport.line(environment: ProcessInfo.processInfo.environment))
+        logLine("aori_store=sqlite")
+        if !records.migrated.isEmpty {
+            logLine("aori_store_migrated=\(records.migrated.joined(separator: ","))")
+        }
         statusItem = StatusItemController(target: self)
         let configuration = loadConfiguration()
         let profile = loadProfile()
@@ -107,7 +109,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             secrets: secrets,
             configuration: configuration,
             persona: profile.persona,
-            settingsFileURL: AoriFiles.settingsURL()
+            records: records
         )
         settingsWindow.onSave = { [weak self] configuration in
             self?.model?.updateConfiguration(configuration)
@@ -139,7 +141,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.model?.setViseme(name)
         }
         loadSampleModel(into: model)
-        if let saved = try? transcriptStore.load(), !saved.isEmpty {
+        if let saved = try? records.loadMessages(), !saved.isEmpty {
             model.replaceMessages(saved)
         }
 
@@ -264,7 +266,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func loadProfile() -> CompanionProfile {
         do {
-            return try profileStore.load()
+            return try records.load()
         } catch {
             launchStatus = String(describing: error)
             return .standard
@@ -277,7 +279,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         let profile = CompanionProfile(persona: model.persona, memory: model.memory)
         do {
-            try profileStore.save(profile)
+            try records.save(profile)
         } catch {
             model.setStatus("The companion configuration was not saved. \(String(describing: error))")
         }
@@ -288,14 +290,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         do {
-            try transcriptStore.save(model.messages)
+            try records.saveMessages(model.messages)
         } catch {
             model.setStatus("The chat history was not saved. \(String(describing: error))")
         }
     }
 
     private func loadConfiguration() -> ProviderConfiguration {
-        let stored = try? settingsStore.load()
+        let stored = try? records.loadSettings()
         let resolver = ProviderConfigurationResolver(
             environment: ProcessInfo.processInfo.environment,
             secretStore: secrets,
@@ -981,16 +983,8 @@ private enum AoriFiles {
             .appendingPathComponent("Aori", isDirectory: true)
     }
 
-    static func profileURL() -> URL {
-        directory().appendingPathComponent("companion.json")
-    }
-
-    static func chatURL() -> URL {
-        directory().appendingPathComponent("chat.json")
-    }
-
-    static func settingsURL() -> URL {
-        directory().appendingPathComponent("settings.json")
+    static func databaseURL() -> URL {
+        directory().appendingPathComponent("companion.sqlite")
     }
 
     static func localeURL() -> URL {

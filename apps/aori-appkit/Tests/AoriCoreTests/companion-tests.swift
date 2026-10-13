@@ -81,6 +81,47 @@ final class CompanionBehaviorTests: XCTestCase {
         try FileManager.default.removeItem(at: directory)
     }
 
+    func testSQLiteImportsJSONOnce() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("aori-sqlite-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        var memory = UserMemory.empty
+        XCTAssertTrue(memory.remember("I like tea", now: Date(timeIntervalSince1970: 20)))
+        let profile = CompanionProfile(
+            persona: CompanionPersona(name: "Nova", personality: "Stay calm."),
+            memory: memory
+        )
+        let profileURL = directory.appendingPathComponent("companion.json")
+        try FileCompanionProfileStore(fileURL: profileURL).save(profile)
+        let message = ChatMessage(
+            id: UUID(uuidString: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee") ?? UUID(),
+            role: .user,
+            content: "Hello",
+            createdAt: Date(timeIntervalSince1970: 10)
+        )
+        let chatURL = directory.appendingPathComponent("chat.json")
+        try FileChatTranscriptStore(fileURL: chatURL).save([message])
+        let settingsURL = directory.appendingPathComponent("settings.json")
+        let stored = ProviderSettings(baseURL: "https://example.test/v1", model: "demo")
+        try FileProviderSettingsStore(fileURL: settingsURL).save(stored)
+        let expectedProfile = try FileCompanionProfileStore(fileURL: profileURL).load()
+        let expectedMessages = try FileChatTranscriptStore(fileURL: chatURL).load()
+        let database = directory.appendingPathComponent("companion.sqlite")
+        let store = try SQLiteCompanionStore(fileURL: database)
+        XCTAssertEqual(store.migrated, ["persona", "chat", "settings"])
+        XCTAssertEqual(try store.load(), expectedProfile)
+        XCTAssertEqual(try store.loadMessages(), expectedMessages)
+        XCTAssertEqual(try store.loadSettings(), stored)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: profileURL.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: chatURL.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: settingsURL.path))
+        let again = try SQLiteCompanionStore(fileURL: database)
+        XCTAssertTrue(again.migrated.isEmpty)
+        XCTAssertEqual(try again.loadMessages(), expectedMessages)
+        XCTAssertEqual(try again.load(), expectedProfile)
+        try FileManager.default.removeItem(at: directory)
+    }
+
     func testEnglishMenuComesFromPackagesI18n() throws {
         let source = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

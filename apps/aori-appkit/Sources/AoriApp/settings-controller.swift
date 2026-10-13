@@ -12,16 +12,16 @@ final class SettingsWindowController: NSWindowController {
     private let sourceLabel = NSTextField(wrappingLabelWithString: "")
     var onSave: ((ProviderConfiguration) -> Void)?
     var onSavePersona: ((CompanionPersona) -> Void)?
-    private let settingsFileURL: URL
+    private let records: SQLiteCompanionStore
 
     init(
         secrets: KeychainSecretStore,
         configuration: ProviderConfiguration,
         persona: CompanionPersona,
-        settingsFileURL: URL
+        records: SQLiteCompanionStore
     ) {
         self.secrets = secrets
-        self.settingsFileURL = settingsFileURL
+        self.records = records
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 420),
             styleMask: [.titled, .closable],
@@ -130,8 +130,7 @@ final class SettingsWindowController: NSWindowController {
         if !modelName.isEmpty {
             UserDefaults.standard.set(modelName, forKey: AoriPreferences.modelKey)
         }
-        let store = FileProviderSettingsStore(fileURL: settingsFileURL)
-        var settings = (try? store.load()) ?? ProviderSettings(baseURL: "", model: "")
+        var settings = (try? records.loadSettings()) ?? ProviderSettings(baseURL: "", model: "")
         if !base.isEmpty {
             settings.baseURL = base
         }
@@ -139,7 +138,7 @@ final class SettingsWindowController: NSWindowController {
             settings.model = modelName
         }
         if !settings.baseURL.isEmpty || !settings.model.isEmpty {
-            try store.save(settings)
+            try records.saveSettings(settings)
         }
         let typedKey = keyField.stringValue
         if !removeKey, !typedKey.isEmpty {
