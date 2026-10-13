@@ -26,7 +26,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Graphics and character rendering | 3 | Run 38348280149 shows a flat character. The hair is above the blue body. The GPUI window shows the checker head. The flat character is not a Cubism moc3 mesh. |
 | Audio, speech input, and speech output | 3 | whisper.cpp printed Hello papa. The log says `aori_speech_rms=0.1532`. The log says `aori_mic_utterance=silence`. Visemes come from a word list. |
 | Networking and model providers | 3 | The same run used chat completions for text, vision, and embeddings. The mock does not read pixels. Other chat protocols are absent. |
-| Security, secrets, and privacy | 3 | Keychain logged `aori_keychain=roundtrip`. The plugin grant denied `aori.files.read`. Two screen PNGs went to the local mock. The app is not sandboxed. |
+| Security, secrets, and privacy | 3 | Keychain logged `aori_keychain=roundtrip`. The plugin grant denied `aori.files.read`. The signed app enables the sandbox, network client, and microphone. Run 38348280149 was not sandboxed. Screen capture uses permission, not an entitlement. |
 | Data persistence | 3 | SQLite recalled `I like tea` and the delete left one row. JSON files still store chat, settings, locale, and the persona. The local embedder is a hash. |
 | Error handling and recovery | 4 | `testFailureKeepsPartialText` and `testRetryOnceBeforeAnyText` cover the retry. A delta blocks the second try. This run did not hit a provider error. |
 | Testing | 4 | Linux and macOS in run 38348280149 each passed 67 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded recall, delete, and two vision ticks. |
@@ -75,7 +75,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - A neural sentence embedder and pgvector. The app stores endpoint vectors or hash vectors in SQLite. Word search remains in the chat panel.
 - A spoken microphone utterance. Run 38295099387 logged `aori_mic_utterance=silence`.
 - VoiceOver captions. The process was running. The log has no spoken line.
-- Cloud key sync and a sandbox.
+- Cloud key sync. The sandbox is signed, and run 38348280149 did not prove it.
 
 ## What this session ran
 

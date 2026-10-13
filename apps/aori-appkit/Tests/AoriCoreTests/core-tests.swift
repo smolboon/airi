@@ -34,6 +34,17 @@ final class UTF8StreamDecoderTests: XCTestCase {
     }
 }
 
+final class SandboxReportTests: XCTestCase {
+    func testReadsTheContainerId() {
+        XCTAssertEqual(SandboxReport.line(environment: [:]), "aori_sandbox=off")
+        XCTAssertEqual(
+            SandboxReport.line(environment: ["APP_SANDBOX_CONTAINER_ID": "ai.moeru.aori.appkit"]),
+            "aori_sandbox=on"
+        )
+        XCTAssertEqual(SandboxReport.line(environment: ["APP_SANDBOX_CONTAINER_ID": "  "]), "aori_sandbox=off")
+    }
+}
+
 final class SecretRedactionTests: XCTestCase {
     func testRedactsAndClips() {
         XCTAssertEqual(SecretRedaction.redact("token sk-test leaked", secret: "sk-test"), "token [redacted] leaked")

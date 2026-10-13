@@ -102,6 +102,8 @@ The flat character is not a Cubism moc3 model. The sample is an original CC0 hum
 
 The GPUI binary paints the lit raster. It does not hear speech. The on-device model in CI is `ggml-base.en.bin`.
 
+The assembled app is sandboxed. Outgoing network and the microphone have entitlements. Screen capture uses the screen recording permission. The signed copy can read the checkout path.
+
 Embedding notes live in `memory.sqlite`. The local embedder is a hash. It is not a neural model. No Core ML model is bundled.
 
 Every locale directory under `packages/i18n` has Aori menu keys. The local reply is a template. It is not a neural model. The whisper model file is not in git.

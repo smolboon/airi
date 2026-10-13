@@ -61,6 +61,11 @@ if [ -f build/whisper.env ]; then
     . ./build/whisper.env
     set +a
 fi
+./scripts/sign-app.sh > build/aori-sign.log
+if [ -x "$PWD/build/Aori.app/Contents/MacOS/whisper-cli" ]; then
+    AORI_WHISPER_BIN="$PWD/build/Aori.app/Contents/MacOS/whisper-cli"
+fi
+cp build/aori-sign.log "$log"
 AORI_SCREENSHOT=1 \
     AORI_OPENAI_API_KEY=ci-mock-key \
     AORI_OPENAI_BASE_URL=http://127.0.0.1:8765/v1 \
@@ -80,7 +85,7 @@ AORI_SCREENSHOT=1 \
     AORI_MEMORY_DB="$PWD/build/aori-memory.sqlite" \
     AORI_WHISPER_BIN="${AORI_WHISPER_BIN:-}" \
     AORI_WHISPER_MODEL="${AORI_WHISPER_MODEL:-}" \
-    "$app" >"$log" 2>&1 &
+    "$app" >>"$log" 2>&1 &
 pid=$!
 ready=0
 i=0
@@ -176,6 +181,10 @@ need = [
     "aori_mic=",
     "leftLowerArm",
     "aori_turn=done",
+    "aori_sandbox=on",
+    "aori_sandbox_entitlements=app-sandbox,network.client,audio-input",
+    "aori_sandbox_screen=tcc",
+    "aori_sandbox_exception=checkout",
 ]
 missing = [item for item in need if item not in text]
 if any(line.strip() == "aori_stt=empty" for line in text.splitlines()):

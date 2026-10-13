@@ -18,4 +18,5 @@ cp -L "../../packages/i18n/src/locales/en/aori.yaml" "$app_dir/Contents/Resource
 rm -rf "$app_dir/Contents/Resources/locales"
 cp -RL "../../packages/i18n/src/locales" "$app_dir/Contents/Resources/locales"
 chmod +x "$app_dir/Contents/MacOS/AoriApp"
+./scripts/sign-app.sh
 printf 'Assembled %s\n' "$app_dir"

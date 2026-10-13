@@ -73,6 +73,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func launch() {
+        logLine(SandboxReport.line(environment: ProcessInfo.processInfo.environment))
         statusItem = StatusItemController(target: self)
         let configuration = loadConfiguration()
         let profile = loadProfile()

@@ -152,7 +152,9 @@ The log also says `aori_click_through=delivered`, `aori_llm_reply=Mock reply fro
 
 ### Milestone 2 follow-up
 
-A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 and the sandbox stay in later milestones.
+A spoken microphone utterance and VoiceOver captions are still open. Cubism moc3 stays in a later milestone.
+
+The assembled app is sandboxed. The entitlements are `com.apple.security.app-sandbox`, `com.apple.security.network.client`, and `com.apple.security.device.audio-input`. Screen capture has no sandbox entitlement. ScreenCaptureKit uses the screen recording permission. The signed copy also allows the checkout path so CI can read plugins and write build files. That path exception is not an App Store profile.
 
 ### Milestone 3, memory that lasts
 
@@ -168,7 +170,7 @@ If the license allows it, a native Cubism renderer can replace these layers. `WK
 
 The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the AIRI range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
 
-The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory. A `.js`, `.mjs`, or `.cjs` file is rejected, and the host does not embed Electron. This grant is not the macOS App Sandbox. The process stays unsandboxed.
+The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory. A `.js`, `.mjs`, or `.cjs` file is rejected, and the host does not embed Electron. This grant is not the macOS App Sandbox. The process sandbox is a separate control.
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same log says `aori_avatar=live2d`, `aori_click_through=delivered`, and `aori_llm_reply=Mock reply from CI.`. The frame line is `{"event":"frame","ms":5.51}`. The microphone mark is `silence`. The log says `aori_voiceover=running`.
 
