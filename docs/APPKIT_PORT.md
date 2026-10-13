@@ -83,7 +83,9 @@ Use these Apple APIs for the port:
 
 Do not use SwiftUI for the window shell. A later control can be SwiftUI only when AppKit cannot express it.
 
-`AoriSceneKit` is a macOS tool. It builds SceneKit meshes from `VRMSceneReader`. The camera frames the head and shoulders and sits on the front of the model. `VRMAvatarPose` sets the mouth morph. Reply text sets happy, sad, or surprised. Butter has no joy blend shape. The pose uses a vowel or blink shape as a stand-in. Materials sample the color texture. AppKit still blits the `aori-face` raster in the companion window.
+`AoriSceneKit` is a macOS tool. It builds SceneKit meshes from `VRMSceneReader`. The camera frames the head and shoulders and sits on the front of the model. The hair edges can leave the frame. `VRMAvatarPose` sets the mouth morph. Reply text sets happy, sad, or surprised.
+
+Butter has no joy blend shape. The pose uses a vowel or blink shape as a stand-in. Materials sample the color texture. AppKit still blits the `aori-face` raster in the companion window.
 
 Zig is not a dependency. The mesh routine is small, so it lives in Rust. Add Zig when a routine is smaller there than in Rust.
 

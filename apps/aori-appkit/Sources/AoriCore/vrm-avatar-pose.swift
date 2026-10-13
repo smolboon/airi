@@ -183,9 +183,6 @@ public struct PortraitFrame: Equatable, Sendable {
 }
 
 public enum PortraitCamera {
-    /// Width divided by height of the SceneKit portrait.
-    public static let aspect: Float = 280 / 380
-
     /// Frames a head-and-shoulders view. The camera sits on +Z.
     public static func frame(positions: [VRMVec3], fieldOfView: Float = 26) -> PortraitFrame {
         var minY = Float.greatestFiniteMagnitude
@@ -202,24 +199,19 @@ public enum PortraitCamera {
         var sumX: Float = 0
         var sumZ: Float = 0
         var count: Float = 0
-        var headMinX = Float.greatestFiniteMagnitude
-        var headMaxX = -Float.greatestFiniteMagnitude
         for position in positions where position.y >= headCut {
             sumX += position.x
             sumZ += position.z
             count += 1
-            headMinX = min(headMinX, position.x)
-            headMaxX = max(headMaxX, position.x)
         }
         let lookX = count > 0 ? sumX / count : 0
         let lookZ = count > 0 ? sumZ / count : 0
-        let headHalfWidth = count > 0 ? max(0.05, (headMaxX - headMinX) * 0.5 + height * 0.02) : 0.2
-        let halfFromWidth = headHalfWidth / aspect
-        let top = maxY + height * 0.05
-        let shoulderBottom = maxY - height * 0.32
-        let halfFromHeight = max(0.05, (top - shoulderBottom) * 0.5)
-        let half = max(halfFromWidth, halfFromHeight)
-        let lookY = top - half
+        // The head is wide. Fitting that width pulls the torso into the frame.
+        // The portrait keeps the face large and lets the hair edges leave the frame.
+        let top = maxY + height * 0.04
+        let shoulderBottom = maxY - height * 0.28
+        let half = max(0.05, (top - shoulderBottom) * 0.5)
+        let lookY = (top + shoulderBottom) * 0.5
         let fov = Double(fieldOfView) * .pi / 180
         let distance = Double(half) / tan(fov * 0.5)
         return PortraitFrame(
