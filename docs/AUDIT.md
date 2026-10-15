@@ -81,7 +81,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 
 The Linux job in run 38359062380 passed 72 tests with 0 failures. The macOS job passed 73 tests. `cargo test -p aori-face` passed 18 tests.
 
-Run 38359062380 launched the sandboxed app on `macos-latest`. The log says `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. It also says `aori_embed_recall=tea`, `aori_window_mouth=open`, and `aori_stt=Hello papa`. Both vision ticks used `aori_vision_source=screen`. The mock does not read the pixels.
+Run 38359062380 launched the sandboxed app on `macos-latest`. The log says `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_bookmark=ok`. It also says `aori_embed_recall=tea`, `aori_window_mouth=open`, and `aori_stt=Hello papa`. Both vision ticks used `aori_vision_source=screen`. That mock did not read the pixels. Run 38377354859 uses a mock that decodes the PNG.
 
 The companion window shows a flat character. The hair is above the blue body. The mouth is open in that window and in the framebuffer. The orange Vision badge is on. The Memory window shows `The cat is orange`.
 
@@ -117,9 +117,9 @@ Error handling is 4. Run 38377354859 logged `aori_provider_error=500` and still 
 
 Testing is 4. The suite covers this app. It does not cover the whole AIRI product.
 
-Continuous integration is 4. Run 38357544156 passed. This is not CI for the whole AIRI product.
+Continuous integration is 4. Run 38377354859 passed the Linux job and the macOS job. This is not CI for the whole AIRI product.
 
-Documentation is 4. These notes match that run. They do not cover the whole AIRI product.
+Documentation is 4. These notes match run 38377354859. They do not cover the whole AIRI product.
 
 Accessibility is 4. Run 38359815442 logged `aori_caption=Mock reply from CI.`. VoiceOver starts after the app exits. The log does not record that audio.
 
