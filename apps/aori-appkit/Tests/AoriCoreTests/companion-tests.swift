@@ -178,6 +178,36 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(SpeechAuthLog.line(permission: .unknown, whisperAvailable: true), "aori_stt_auth=whisper")
         XCTAssertEqual(SpeechAuthLog.line(permission: .denied, whisperAvailable: true), "aori_stt_auth=whisper")
         XCTAssertEqual(SpeechAuthLog.line(permission: .denied, whisperAvailable: false), "aori_stt_auth=denied")
+        XCTAssertEqual(SpeechRoute.engine(permission: .granted, whisperAvailable: true), .speech)
+        XCTAssertEqual(
+            SpeechRoute.transcript(
+                permission: .granted,
+                whisperAvailable: true,
+                speechText: "from speech",
+                whisperText: "from whisper"
+            ),
+            "from speech"
+        )
+        XCTAssertEqual(SpeechRoute.engine(permission: .denied, whisperAvailable: true), .whisper)
+        XCTAssertEqual(
+            SpeechRoute.transcript(
+                permission: .denied,
+                whisperAvailable: true,
+                speechText: "from speech",
+                whisperText: "from whisper"
+            ),
+            "from whisper"
+        )
+        XCTAssertEqual(SpeechRoute.engine(permission: .unknown, whisperAvailable: false), .missing)
+        XCTAssertEqual(
+            SpeechRoute.transcript(
+                permission: .unknown,
+                whisperAvailable: false,
+                speechText: "from speech",
+                whisperText: "from whisper"
+            ),
+            ""
+        )
     }
 
     func testVoiceActivityFindsAQuietTail() {

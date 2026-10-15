@@ -20,6 +20,42 @@ public enum SpeechAuthLog {
     }
 }
 
+public enum SpeechEngineKind: String, Equatable, Sendable {
+    case speech
+    case whisper
+    case missing
+}
+
+public enum SpeechRoute {
+    /// Granted Speech stays on the Speech engine. Whisper runs only when Speech is not granted.
+    public static func engine(permission: SpeechPermission, whisperAvailable: Bool) -> SpeechEngineKind {
+        if permission == .granted {
+            return .speech
+        }
+        if whisperAvailable {
+            return .whisper
+        }
+        return .missing
+    }
+
+    /// Granted Speech returns the Speech transcript.
+    public static func transcript(
+        permission: SpeechPermission,
+        whisperAvailable: Bool,
+        speechText: String,
+        whisperText: String
+    ) -> String {
+        switch engine(permission: permission, whisperAvailable: whisperAvailable) {
+        case .speech:
+            return speechText
+        case .whisper:
+            return whisperText
+        case .missing:
+            return ""
+        }
+    }
+}
+
 public enum SpeechSessionError: Error, Equatable, Sendable, CustomStringConvertible {
     case recognizerUnavailable
     case microphoneUnavailable

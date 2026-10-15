@@ -696,15 +696,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logLine(activity.containsSpeech(decoded.samples) ? "aori_vad=speech" : "aori_vad=silence")
         let status = await transcriber.authorization(timeout: 5)
         let whisper = OnDeviceRecognizer.fromEnvironment()
-        logLine(SpeechAuthLog.line(permission: status, whisperAvailable: whisper != nil && status != .granted))
+        let route = SpeechRoute.engine(permission: status, whisperAvailable: whisper != nil)
+        logLine(SpeechAuthLog.line(permission: status, whisperAvailable: whisper != nil))
         let text: String
-        if status == .granted {
+        switch route {
+        case .speech:
             logLine("aori_stt_engine=speech")
             text = await transcriber.transcribeFile(at: URL(fileURLWithPath: path))
-        } else if let whisper {
+        case .whisper:
             logLine("aori_stt_engine=whisper")
-            text = (try? whisper.transcribe(wavPath: path)) ?? ""
-        } else {
+            text = (try? whisper?.transcribe(wavPath: path)) ?? ""
+        case .missing:
             logLine("aori_stt_engine=missing")
             text = ""
         }
