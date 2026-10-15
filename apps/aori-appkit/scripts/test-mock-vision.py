@@ -44,4 +44,11 @@ assert module.probe_status("error") == 500
 assert module.probe_status("") is None
 status, _, body = module.chat_result(chat)
 assert status == 200 and b"Mock reply from CI." in body
+status, _, body = module.chat_result(chat, "happy")
+assert status == 200 and b"I am glad." in body and b"Mock reply from CI." not in body
+status, _, body = module.chat_result(chat, "sad")
+assert status == 200 and b"I am sorry." in body
+status, _, body = module.chat_result(chat, "surprised")
+assert status == 200 and b"Wow." in body
+assert module.expression_reply("") is None
 print("aori_mock_vision=ok")

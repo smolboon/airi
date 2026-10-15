@@ -62,9 +62,21 @@ def vision_png(payload):
     return b""
 
 
-def chat_result(payload):
+def expression_reply(header):
+    replies = {
+        "happy": "I am glad.",
+        "sad": "I am sorry.",
+        "surprised": "Wow.",
+    }
+    return replies.get(header)
+
+
+def chat_result(payload, expression=""):
     image = vision_png(payload)
-    if image is None:
+    forced = expression_reply(expression)
+    if forced and image is None:
+        content = forced
+    elif image is None:
         content = "Mock reply from CI."
     elif image.startswith(PNG_MAGIC):
         content = "Mock vision from CI."
@@ -119,7 +131,7 @@ class Handler(BaseHTTPRequestHandler):
             body = b'{"error":"not found"}'
             self._send(404, "application/json", body)
             return
-        status, content_type, body = chat_result(payload)
+        status, content_type, body = chat_result(payload, self.headers.get("X-Aori-Expression", ""))
         self._send(status, content_type, body)
 
     def _send(self, status, content_type, body):
