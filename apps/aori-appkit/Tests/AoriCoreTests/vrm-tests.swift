@@ -230,6 +230,33 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertEqual(CompanionEmotion.infer(from: "Wow, that is new."), .surprised)
     }
 
+    func testFacePortraitMovesTheMouth() throws {
+        let scene = try VRMSceneReader.read(Data(contentsOf: faceVRM()))
+        XCTAssertEqual(scene.document.title, "Aori Face")
+        let names = Set(scene.meshes.map(\.name))
+        XCTAssertTrue(names.contains("eyes"))
+        XCTAssertTrue(names.contains("nose"))
+        XCTAssertTrue(names.contains("mouth"))
+        let bytes = try Data(contentsOf: faceVRM())
+        XCTAssertTrue(String(decoding: bytes, as: UTF8.self).contains("CC0"))
+        let mouthIndex = try XCTUnwrap(scene.meshes.firstIndex { $0.name == "mouth" })
+        let happy = cornerY(scene: scene, mesh: mouthIndex, vertex: 0, emotion: .happy)
+        let sad = cornerY(scene: scene, mesh: mouthIndex, vertex: 0, emotion: .sad)
+        let neutral = cornerY(scene: scene, mesh: mouthIndex, vertex: 0, emotion: .neutral)
+        let surprised = cornerY(scene: scene, mesh: mouthIndex, vertex: 7, emotion: .surprised)
+        let rest = cornerY(scene: scene, mesh: mouthIndex, vertex: 7, emotion: .neutral)
+        XCTAssertGreaterThan(happy, neutral + 0.03)
+        XCTAssertLessThan(sad, neutral - 0.03)
+        XCTAssertGreaterThan(surprised, rest + 0.02)
+        let frame = PortraitCamera.frame(positions: scene.meshes.flatMap(\.positions))
+        let eye = try XCTUnwrap(scene.meshes.first { $0.name == "eyes" }?.positions.first)
+        let mouth = scene.meshes[mouthIndex].positions[0]
+        XCTAssertGreaterThan(eye.y, frame.lookY - frame.viewHalf)
+        XCTAssertLessThan(eye.y, frame.lookY + frame.viewHalf)
+        XCTAssertGreaterThan(mouth.y, frame.lookY - frame.viewHalf)
+        XCTAssertLessThan(mouth.y, frame.lookY + frame.viewHalf)
+    }
+
     func testPortraitCameraFramesTheHead() throws {
         let scene = try VRMSceneReader.read(Data(contentsOf: sampleVRM()))
         let positions = scene.meshes.flatMap(\.positions)
@@ -240,11 +267,33 @@ final class CharacterAndWindowTests: XCTestCase {
         let top = frame.lookY + frame.viewHalf
         let bottom = frame.lookY - frame.viewHalf
         XCTAssertGreaterThan(top, maxY)
-        XCTAssertLessThan(bottom, maxY - height * 0.2)
-        XCTAssertGreaterThan(bottom, minY + height * 0.4)
+        XCTAssertLessThan(bottom, maxY - height * 0.5)
+        XCTAssertGreaterThan(bottom, minY + height * 0.25)
         let maxZ = positions.map(\.z).max() ?? 0
         XCTAssertGreaterThan(frame.cameraZ, maxZ + 0.2)
         XCTAssertGreaterThan(frame.lookY, maxY - height * 0.45)
+    }
+
+    private func faceVRM() -> URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Sources/AoriApp/Resources/aori-face.vrm")
+    }
+
+    private func cornerY(scene: VRMScene, mesh meshIndex: Int, vertex: Int, emotion: CompanionEmotion) -> Float {
+        let mesh = scene.meshes[meshIndex]
+        var position = mesh.positions[vertex]
+        for weight in VRMAvatarPose.face(emotion: emotion).weights(in: scene) where weight.mesh == meshIndex {
+            let delta = mesh.morphs[weight.morph].positionDeltas[vertex]
+            position = VRMVec3(
+                x: position.x + delta.x * Float(weight.weight),
+                y: position.y + delta.y * Float(weight.weight),
+                z: position.z + delta.z * Float(weight.weight)
+            )
+        }
+        return position.y
     }
 
     private func sampleVRM() -> URL {

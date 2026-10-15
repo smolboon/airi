@@ -197,19 +197,19 @@ public enum PortraitCamera {
         let height = max(0.2, maxY - minY)
         let headCut = maxY - height * 0.22
         var sumX: Float = 0
-        var sumZ: Float = 0
         var count: Float = 0
+        var frontZ = -Float.greatestFiniteMagnitude
         for position in positions where position.y >= headCut {
             sumX += position.x
-            sumZ += position.z
+            frontZ = max(frontZ, position.z)
             count += 1
         }
         let lookX = count > 0 ? sumX / count : 0
-        let lookZ = count > 0 ? sumZ / count : 0
-        // The head is wide. Fitting that width pulls the torso into the frame.
-        // The portrait keeps the face large and lets the hair edges leave the frame.
-        let top = maxY + height * 0.04
-        let shoulderBottom = maxY - height * 0.28
+        // The face is the front surface. An average Z sits inside the head.
+        let lookZ = count > 0 ? frontZ : 0
+        // The face sits in the upper body. A tighter crop hides the eyes and the mouth.
+        let top = maxY + height * 0.02
+        let shoulderBottom = maxY - height * 0.62
         let half = max(0.05, (top - shoulderBottom) * 0.5)
         let lookY = (top + shoulderBottom) * 0.5
         let fov = Double(fieldOfView) * .pi / 180

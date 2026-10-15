@@ -15,7 +15,7 @@ if [ -f "$launch" ]; then
         emotion=$found
     fi
 fi
-"$bin" "$out" "$PWD/Sources/AoriApp/Resources/aori-sample.vrm" "$emotion" >"$log" 2>&1
+"$bin" "$out" "$PWD/Sources/AoriApp/Resources/aori-face.vrm" "$emotion" >"$log" 2>&1
 test -s "$out"
 grep -q "aori_scenekit=vrm" "$log"
 grep -q "aori_scenekit_face=head" "$log"
