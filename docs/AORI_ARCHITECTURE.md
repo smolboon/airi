@@ -8,7 +8,9 @@ Aori splits the native app into three Swift modules, one macOS SceneKit tool, an
 
 `aori-face` reads the sample glTF, skins positions and normals, and rasterizes RGBA. A Lambert term uses one fixed light plus ambient. `aori-gpui` is a separate binary. `AORI_GPUI_PNG` makes that binary write one lit raster and exit. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. Run 38295099387 opened that window.
 
-`AoriSceneKit` builds the same sample meshes in SceneKit. The camera frames the head and shoulders. Reply text sets happy, sad, or surprised. Materials sample the color texture when the file has one. Run 38369523526 saved the older frame. That frame shows the upper body.
+`AoriSceneKit` builds the same sample meshes in SceneKit. The camera frames the head and shoulders. Reply text sets happy, sad, or surprised. Butter has vowel and blink shapes only. Those stand in for joy, sorrow, and surprise.
+
+Run 38377354859 saved that image. The head fills the upper frame. The reply inferred neutral, so the portrait emotion is neutral. It does not show eyes, a nose, or a mouth. Materials sample the color texture when the file has one.
 
 `aori-face` also draws a flat layered character. `AORI_AVATAR=live2d` selects it in the companion window. The parameters are Live2D ids. The crate samples motion3.json curves. It does not read moc3. Run 38295099387 showed that character in the companion window.
 
