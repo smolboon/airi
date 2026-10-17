@@ -697,7 +697,7 @@ async function main() {
       (_target, snapshot) => !String(snapshot.route || '').includes('/chat'),
     )
     const mainTarget = mainTargetMatch.target
-    pushSnapshot('main-target-initial', mainTargetMatch.snapshot as unknown as Record<string, unknown>)
+    pushSnapshot('main-target-initial', castUnknown<(Record<string, unknown>)>(mainTargetMatch.snapshot))
     addTimeline('main-target-ready', {
       title: mainTarget.title,
       url: mainTarget.url,
@@ -849,7 +849,7 @@ async function main() {
         (target, snapshot) => isChatSurfaceTarget(target, snapshot),
       )
       const chatTarget = chatTargetMatch.target
-      pushSnapshot('chat-target-initial', chatTargetMatch.snapshot as unknown as Record<string, unknown>)
+      pushSnapshot('chat-target-initial', castUnknown<(Record<string, unknown>)>(chatTargetMatch.snapshot))
       addTimeline('chat-target-ready', {
         title: chatTarget.title,
         url: chatTarget.url,
@@ -1330,3 +1330,7 @@ main()
   .finally(() => {
     exit(exitCode)
   })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

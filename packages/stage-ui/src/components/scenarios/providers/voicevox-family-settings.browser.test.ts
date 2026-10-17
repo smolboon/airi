@@ -104,6 +104,7 @@ describe('voicevox family settings', () => {
   // No code validated these providers. `SpeechProviderSettings` loads the
   // catalogue only for a `configured` provider. The store reaches its
   // listed-provider sweep only through `resetProviderSettings`. An engine takes
+
   // no API key, so its configuration always equalled the schema defaults, and
   // `shouldListProvider` kept it out of that sweep.
   //
@@ -158,6 +159,7 @@ describe('voicevox family settings', () => {
   // `validateProviderConfig` is a synchronized action. A follower posts its
   // arguments to the leader. The caller built them with `{ ...credentials.value }`,
   // which leaves every nested value a Vue reactive proxy. `structuredClone`
+
   // rejects a proxy. A flat credential pair survived that check, so only the
   // VOICEVOX family failed, through `voiceSettings`.
   //

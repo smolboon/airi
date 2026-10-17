@@ -10,8 +10,8 @@ animations:
 dialogs:
   onboarding:
     official:
-      title: AIRI 公式プロバイダー
-    title: AIRI へようこそ！
+      title: Aori 公式プロバイダー
+    title: Aori へようこそ！
     description: まず最初のAIプロバイダーを設定しましょう。
     selectProvider: AIプロバイダーを選択
     configureProvider: 設定 {provider}
@@ -35,13 +35,13 @@ dialogs:
     retry: 再試行
     credentialsSafeLabel: API キーや認証情報を安全に保管してください！
     credentialsSafeLocal: >-
-      AIRI はお使いの PC 上で完全ローカルに動作するため、AI/LLM プロバイダーの認証情報を収集することは一切ありません。ただし、API キーは機密情報ですので、安全に管理し第三者と共有しないでください。
+      Aori はお使いの PC 上で完全ローカルに動作するため、AI/LLM プロバイダーの認証情報を収集することは一切ありません。ただし、API キーは機密情報ですので、安全に管理し第三者と共有しないでください。
     credentialsSafeOpenSource: >-
-      AIRI は {github} 上のオープンソースプロジェクトです。認証情報の取り扱いを確認したい場合は、ソースコードをご覧ください。
+      Aori は {github} 上のオープンソースプロジェクトです。認証情報の取り扱いを確認したい場合は、ソースコードをご覧ください。
     enableChatCheck: >-
-      AIRI が利用可能な最初のチャットモデルに「ping」シグナルを送信して利用可能性をチェックすることを許可する
+      Aori が利用可能な最初のチャットモデルに「ping」シグナルを送信して利用可能性をチェックすることを許可する
     start: 始めましょう！
-    loginPrompt: 最高の体験を得るためにログインして AIRI 公式プロバイダーを使用してください。
+    loginPrompt: 最高の体験を得るためにログインして Aori 公式プロバイダーを使用してください。
     loginAction: ログイン
     setupWithoutSigningIn: 独自のプロバイダーを設定
     buyFlux: Flux を購入
@@ -55,7 +55,7 @@ dialogs:
       notificationsTitle: 通知
       notificationsDescription: リマインダーや重要なステータス更新を許可します。
       microphoneTitle: マイク
-      microphoneDescription: AIRI が音声入力と文字起こしにマイクを使用することを許可します。
+      microphoneDescription: Aori が音声入力と文字起こしにマイクを使用することを許可します。
       requestAction: アクセスをリクエスト
       optionalHint: これらの権限を許可しない場合でも続行できます。
       stateGranted: 許可済み
@@ -92,7 +92,7 @@ analytics:
   notice:
     title: 利用状況の分析
     description: >-
-      AIRI はアプリの使用状況を理解し安定性を向上させるため、匿名で利用状況データを収集します。個人データは一切収集されません。
+      Aori はアプリの使用状況を理解し安定性を向上させるため、匿名で利用状況データを収集します。個人データは一切収集されません。
     privacyPrefix: 閲覧
     privacyLink: プライバシーポリシー
     onboardingHint: 分析機能は 設定 > システム > 一般 でいつでもオフにできます。
@@ -139,7 +139,7 @@ live2d:
   theme-color-from-model:
     title: モデルから色を抽出
     description: >
-      現在レンダリング中のキャンバスからアクセントカラーを抽出します。色をクリックして AIRI に適用します。希望の色にならない場合は、モデルのポーズを変えて再度抽出をお試しください。
+      現在レンダリング中のキャンバスからアクセントカラーを抽出します。色をクリックして Aori に適用します。希望の色にならない場合は、モデルのポーズを変えて再度抽出をお試しください。
     button-extract:
       title: 抽出
   animation:
@@ -162,7 +162,7 @@ live2d:
       description: 外部タイマーを使用してまばたきアニメーションを強制します
     blink-mode:
       title: まばたきモード
-      description: 既存のモデルまばたき、または AIRI の強制まばたきタイマーを選択します。
+      description: 既存のモデルまばたき、または Aori の強制まばたきタイマーを選択します。
     idle-motion:
       title: アイドルモーション
       no-motion: 利用可能なモーションがありません
@@ -223,7 +223,7 @@ pages:
     connections:
       tab: 連携済みアカウント
       title: 連携済みアカウント
-      description: これらのプロバイダー経由で AIRI にログインします。連携を解除してアクセス権を取り消すか、再連携して別のアカウントに切り替えます。
+      description: これらのプロバイダー経由で Aori にログインします。連携を解除してアクセス権を取り消すか、再連携して別のアカウントに切り替えます。
       status:
         linked: 連携済み
         notLinked: 未連携
@@ -240,7 +240,7 @@ pages:
         listFailed: 連携済みアカウントを取得できませんでした。
         unlinkFailed: このアカウントの連携を解除できませんでした。
         linkFailed: 連携フローを開始できませんでした。
-        accountAlreadyLinkedToDifferentUser: この OAuth アカウントは別の AIRI アカウントにすでに連携されています。別のプロバイダーを選択するか、もう一方のアカウントから連携を解除してください。
+        accountAlreadyLinkedToDifferentUser: この OAuth アカウントは別の Aori アカウントにすでに連携されています。別のプロバイダーを選択するか、もう一方のアカウントから連携を解除してください。
         oauthCallbackFailed: この OAuth アカウントを接続できませんでした。再試行するか別のプロバイダーを選択してください。
         lastAccount: これは唯一のログイン方法です。連携を解除する前にパスワードを設定してください。
     security:
@@ -311,7 +311,7 @@ pages:
     delete: 削除
     delete_card: カードを削除
     delete_confirmation: このカードを削除してもよろしいですか？
-    description: AIRIキャラクターカードプリセットを使用する
+    description: AORIキャラクターカードプリセットを使用する
     description_label: 説明
     drop_here: アップロードするにはここにドラッグ
     create_card: 新しいカードを作成
@@ -381,7 +381,7 @@ pages:
       model: 発話/モデル
       voice: 発話/音声
     systemprompt: システムプロンプト
-    title: AIRIカード
+    title: AORIカード
     try_different_search: 別の検索ワードを試してください
     export: エクスポート
     exported: カードパックをエクスポートしました
@@ -390,13 +390,13 @@ pages:
     import_missing_file: カードパックに必須ファイルが不足しています
     import_invalid_file: 無効なカードパックファイルです
     upload: アップロード
-    upload_desc: ここをクリックするか AIRI カードパックをドラッグ＆ドロップしてインポートします
+    upload_desc: ここをクリックするか Aori カードパックをドラッグ＆ドロップしてインポートします
   memory:
     description: 記憶が保存され、整理される場所
     title: 記憶
   data:
     title: データ
-    description: AIRIデータの保存、エクスポート、およびリセットの管理
+    description: AORIデータの保存、エクスポート、およびリセットの管理
     sections:
       chats:
         title: チャット セッション
@@ -425,11 +425,11 @@ pages:
         delete: すべてのデータを削除
       desktop-folder:
         title: アプリデータフォルダを開く
-        description: ファイルマネージャーで AIRI のデータフォルダを開きます。
+        description: ファイルマネージャーで Aori のデータフォルダを開きます。
         open: フォルダを開く
       desktop:
         title: デスクトップの設定と状態をリセット
-        description: AIRIデスクトップの設定と実行時の状態を消去します。
+        description: AORIデスクトップの設定と実行時の状態を消去します。
         center: デスクトップウィンドウを画面中央に配置
         reset: デスクトップのデータをリセット
     confirmations:
@@ -524,7 +524,7 @@ pages:
           name: Nano Banana (プレビュー)
           description: Google AI Studio を使用して画像やリアクションをプレビューします。
       card:
-        description: AIRI が画像やグラフィックコンテンツを生成する方法を設定します。
+        description: Aori が画像やグラフィックコンテンツを生成する方法を設定します。
         comfyui_empty: ComfyUI ワークフローが設定されていません。設定 → プロバイダー → ComfyUI に移動してワークフローテンプレートを読み込んでください。
         exposed_fields: '{count} 個のフィールドが公開されています'
         open_on_replicate: Replicate で開く
@@ -603,7 +603,7 @@ pages:
     gaming-factorio:
       description: Factorioをプレイ！
       enable: Factorio連携を有効にする
-      enable-description: AIRIがFactorioゲームと通信できるようにする
+      enable-description: AORIがFactorioゲームと通信できるようにする
       server-address: サーバーアドレス
       server-address-description: FactorioサーバーのIPアドレスまたはホスト名
       server-address-placeholder: サーバーアドレスを入力 (例： localhostまたは192.168.1.100)
@@ -681,7 +681,7 @@ pages:
     messaging-discord:
       description: Discordでのチャットとボイスチャット
       enable: Discord連携を有効にする
-      enable-description: AIRIがDiscordを介して対話できるようにする
+      enable-description: AORIがDiscordを介して対話できるようにする
       token: ボットトークン
       token-description: あなたのDiscordボットトークン
       token-placeholder: Discordボットトークンを入力
@@ -738,7 +738,7 @@ pages:
     x:
       description: X / Twitterの閲覧と使用
       enable: X / Twitter連携を有効にする
-      enable-description: AIRIがX / Twitterと対話できるようにする
+      enable-description: AORIがX / Twitterと対話できるようにする
       api-key: APIキー
       api-key-description: あなたのX / Twitter APIキー
       api-key-placeholder: あなたのX / Twitter APIキーを入力
@@ -754,16 +754,16 @@ pages:
       configured: X / Twitterは適切に設定されています！
     web-search:
       title: Web 検索
-      description: AIRI が Web を検索して最新の情報を取得できるようにします
+      description: Aori が Web を検索して最新の情報を取得できるようにします
       enable: Web 検索を有効化
-      enable-description: 会話中に AIRI が Web 検索を行うことを許可します
+      enable-description: 会話中に Aori が Web 検索を行うことを許可します
       api-key: Tavily API キー
       api-key-description: Web 検索機能は Tavily によって提供されています。tavily.com で無料の API キーを取得できます。
       api-key-placeholder: Tavily API キーを入力
       configured: Web 検索を利用する準備が整いました！
     mcp-server:
       title: MCP サーバー
-      description: MCP サーバーを設定し、そのツールを AIRI に導入します。
+      description: MCP サーバーを設定し、そのツールを Aori に導入します。
       config-path: 設定ファイルのパス
       runtime-title: 実行ステータス
       empty: MCP サーバーがまだありません。下の「サーバーを追加」をクリックして作成するか、「JSON を編集」から設定を貼り付けてください。
@@ -1015,7 +1015,7 @@ pages:
     helpinfo:
       title: ここを初めて利用しますか？
       description: >
-        AIRIが正常に思考し動作するためには、少なくとも1つの{chat}プロバイダーの設定が必要です。 これはAIRIシステム内に存在するキャラクターの脳と考えることができます。
+        AORIが正常に思考し動作するためには、少なくとも1つの{chat}プロバイダーの設定が必要です。 これはAORIシステム内に存在するキャラクターの脳と考えることができます。
     explained:
       chat: テキスト生成モデルプロバイダー。例： OpenRouter, OpenAI, Ollama。
       Speech: 音声 (テキスト読み上げ) モデルプロバイダー。例： ElevenLabs, Azure Speech。
@@ -1116,7 +1116,7 @@ pages:
               description: 稼働中の ComfyUI のアドレス
           cors:
             title: CORS により要求がブロックされました
-            description: ComfyUI はデフォルトで他のアプリからのリクエストをブロックします。AIRI が接続できるようにするには、`--enable-cors-header "*"` フラグを付けて ComfyUI を起動する必要があります。
+            description: ComfyUI はデフォルトで他のアプリからのリクエストをブロックします。Aori が接続できるようにするには、`--enable-cors-header "*"` フラグを付けて ComfyUI を起動する必要があります。
           workflows:
             title: ワークフローテンプレート
             upload: ワークフローをアップロード
@@ -1127,7 +1127,7 @@ pages:
             remove: 削除
             config_snippet: アート設定スニペット
             copy_json: JSON をコピー
-            paste_hint: この内容を AIRI カードのアート設定に貼り付けることで、これらのノードを上書きできます。
+            paste_hint: この内容を Aori カードのアート設定に貼り付けることで、これらのノードを上書きできます。
           upload:
             prompt: workflow_api.json ファイルをドラッグ＆ドロップまたは選択
             invalid_json: 無効な JSON です
@@ -1288,13 +1288,13 @@ pages:
         description: Prompt API を使用すると、自然言語リクエストを Chrome の基盤モデルに送信できます。
       official:
         title: 公式プロバイダー
-        description: AIRI 公式の AI プロバイダー。
+        description: Aori 公式の AI プロバイダー。
         speech-title: 公式音声プロバイダー
-        speech-description: AIRI 公式のテキスト読み上げプロバイダー。
+        speech-description: Aori 公式のテキスト読み上げプロバイダー。
         speech-streaming-title: 公式リアルタイム (Streaming) 音声プロバイダー
-        speech-streaming-description: AIRI 公式の超低遅延テキスト読み上げプロバイダー (双方向 WebSocket)。
+        speech-streaming-description: Aori 公式の超低遅延テキスト読み上げプロバイダー (双方向 WebSocket)。
         transcription-title: 公式文字起こしプロバイダー
-        transcription-description: AIRI 公式の音声認識プロバイダー。
+        transcription-description: Aori 公式の音声認識プロバイダー。
       transcriptions:
         playground:
           title: 文字起こし実験場
@@ -1309,18 +1309,18 @@ pages:
       label: WebSocket サーバーアドレス
     server-hostname:
       label: Expose On Network
-      description: Choose whether the AIRI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: 認証トークン
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AIRI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
       placeholder: 自動生成
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
       refresh: 更新
-      image-alt: AIRI server channel connection QR code
+      image-alt: Aori server channel connection QR code
       candidates: 利用可能なアドレス
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
@@ -1330,7 +1330,7 @@ pages:
     qr-scan:
       title: クイック接続
       description: たまごっちから QR コードをスキャンしてすばやく接続します
-      instructions: カメラを AIRI 接続用 QR コードに向けてください。
+      instructions: カメラを Aori 接続用 QR コードに向けてください。
       action: スキャン
       success:
         title: 接続アドレスを保存しました
@@ -1416,8 +1416,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: AIRIグリーン
-              description: AIRIによって用意された、デフォルトの緑がかったテーマカラー！
+                color-1: AORIグリーン
+              description: AORIによって用意された、デフォルトの緑がかったテーマカラー！
               title: デフォルトカラー
             morandi:
               colors:
@@ -1518,7 +1518,7 @@ sections:
 theme:
   title: テーマ
   description: |
-    AIRIの基本テーマをライトモードまたはダークモードに切り替えます。
+    AORIの基本テーマをライトモードまたはダークモードに切り替えます。
 title: 設定
 voices: 音声
 vrm:

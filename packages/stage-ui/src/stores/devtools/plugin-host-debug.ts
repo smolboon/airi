@@ -32,6 +32,7 @@ export const usePluginHostInspectorStore = defineStore('devtools:plugin-host-deb
   // - Plugin-host IPC only exists in desktop (stage-tamagotchi main process).
   // - This store keeps UI code shared, and receives runtime-specific operations via `setBridge(...)`.
   //
+
   // In web/non-electron runtimes, bridge stays undefined and debug actions fail with a clear message.
   const bridge = ref<PluginHostDebugBridge>()
   const registry = ref<PluginRegistrySnapshot>()
@@ -78,6 +79,7 @@ export const usePluginHostInspectorStore = defineStore('devtools:plugin-host-deb
     // 3) Error normalization: stores user-facing error text for the debug page.
     //
     // Why debug store needs this:
+
     // - Debug actions are async IPC calls and may fail for runtime/setup reasons.
     // - A shared wrapper avoids duplicated try/catch/loading logic across each action.
     // - It gives deterministic UI behavior (same errors/spinner semantics for all commands).

@@ -30,15 +30,12 @@ export function themeColorFromPropertyOf(colorFromClass: string, property: strin
   }
 }
 
-export function themeColorFromValue(value: string | { light: string, dark: string }): () => Promise<string> {
+export function themeColorFromValue(value: string | { dark: string, light?: string }): () => Promise<string> {
   return async () => {
-    if (typeof value === 'string') {
+    if (typeof value === 'string')
       return value
-    }
-    else {
-      const { isDark: dark } = useTheme()
-      return dark.value ? value.dark : value.light
-    }
+
+    return value.dark
   }
 }
 
@@ -79,9 +76,8 @@ export function useBackgroundThemeColor({
       return waveThemeColor()
     }
 
-    if (selectedOption.value?.kind === BackgroundKind.Transparent) {
-      return isDark.value ? 'rgb(18 18 18 / 0)' : 'rgb(255 255 255 / 0)'
-    }
+    if (selectedOption.value?.kind === BackgroundKind.Transparent)
+      return 'rgb(18 18 18 / 0)'
 
     return sampledColor.value
   })

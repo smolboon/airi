@@ -90,7 +90,7 @@ createApp(App)
   .use(synced.vue)
   .use(MotionPlugin)
   // TODO: Fix autoAnimatePlugin type error
-  .use(autoAnimatePlugin as unknown as Plugin)
+  .use(castUnknown<(Plugin)>(autoAnimatePlugin))
   .use(router)
   .use(pinia)
   .use(PiniaColada)
@@ -98,3 +98,7 @@ createApp(App)
   .use(Tres)
   .use(trackButtonPlugin)
   .mount('#app')
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

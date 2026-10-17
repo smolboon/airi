@@ -126,6 +126,7 @@ export function useBlink() {
       // While an emote owns the eye area, the controller keeps advancing so a
       // blink interrupted mid-cycle cannot leave the lid stuck closed.
       // If the cycle started under suppression or was suppressed mid-blink,
+
       // hold the morph at 0 until the cycle completes so releasing suppression
       // cannot pop the eyelid into a partially closed pose.
       const blinkValue = isCycleSuppressed.value ? 0 : Math.sin(Math.PI * blinkProgress.value)
@@ -193,6 +194,7 @@ export function useIdleEyeSaccades() {
       // declare module 'three' {
       //   interface Object3D {
       //     setPointerCapture(pointerId: number): void
+
       //     releasePointerCapture(pointerId: number): void
       //     hasPointerCapture(pointerId: number): boolean
 
@@ -210,7 +212,7 @@ export function useIdleEyeSaccades() {
       // And in @tresjs/core v5, it uses the @pmndrs/pointer-events internally.
       // Somehow the Object3D from @types/three and the one augmented by @pmndrs/pointer-events are not compatible.
       // This needs to be fixed later.
-      vrm.lookAt.target = new Object3D() as unknown as Object3D
+      vrm.lookAt.target = castUnknown<(Object3D)>(new Object3D())
     }
 
     vrm.lookAt.target?.position.lerp(fixationTarget!, 1)
@@ -236,6 +238,7 @@ export function useIdleEyeSaccades() {
       // declare module 'three' {
       //   interface Object3D {
       //     setPointerCapture(pointerId: number): void
+
       //     releasePointerCapture(pointerId: number): void
       //     hasPointerCapture(pointerId: number): boolean
 
@@ -253,7 +256,7 @@ export function useIdleEyeSaccades() {
       // And in @tresjs/core v5, it uses the @pmndrs/pointer-events internally.
       // Somehow the Object3D from @types/three and the one augmented by @pmndrs/pointer-events are not compatible.
       // This needs to be fixed later.
-      vrm.lookAt.target = new Object3D() as unknown as Object3D
+      vrm.lookAt.target = castUnknown<(Object3D)>(new Object3D())
     }
 
     vrm.lookAt.target?.position.lerp(fixationTarget!, 1)
@@ -261,4 +264,8 @@ export function useIdleEyeSaccades() {
   }
 
   return { update, instantUpdate }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

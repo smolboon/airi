@@ -65,7 +65,7 @@ describe('home assistant client', () => {
     const transport = transportReturning([])
     const client = createHomeAssistantClient(transport)
 
-    await expect(client.callService({ domain: 'script', service: 'good_night', entityId: undefined as unknown as string }))
+    await expect(client.callService({ domain: 'script', service: 'good_night', entityId: castUnknown<(string)>(undefined) }))
       .rejects
       .toThrow('is not a valid Home Assistant entity id')
     expect(transport).not.toHaveBeenCalled()
@@ -214,3 +214,7 @@ describe('home assistant client', () => {
       .toThrow('Home Assistant returned an unexpected state for "light.kitchen".')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

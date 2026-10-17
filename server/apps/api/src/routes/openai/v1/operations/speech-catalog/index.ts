@@ -45,6 +45,7 @@ export function createSpeechCatalogOperation(deps: V1RouteDeps): SpeechCatalogOp
     // bundled JSON. The Redis cache + invalidation lives one layer down
     // in the router so route-level changes don't leak into the cache
     // contract. Recommended map stays in configKV so operators can edit it
+
     // without a deploy.
     //
     // No implicit fallback: an empty `?model=` is a client bug (the UI is
@@ -166,6 +167,7 @@ export function createSpeechCatalogOperation(deps: V1RouteDeps): SpeechCatalogOp
     // the streaming provider on. It tracks whether `UNSPEECH_UPSTREAM.streaming`
     // is configured at all — not whether `models[]` happens to be empty — so an
     // operator who has wired the upstream but not yet curated models still
+
     // surfaces the provider rather than silently hiding it.
     return Response.json({
       available: !!unspeech?.streaming?.baseURL,

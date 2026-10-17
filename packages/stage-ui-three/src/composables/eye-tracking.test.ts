@@ -75,7 +75,7 @@ describe('useVRMEyeFocusFor', () => {
     const focus = useVRMEyeFocusFor({
       cameraPosition: () => ({ x: 0, y: 0, z: -1 }),
       context: () => ({
-        raycaster: raycaster as unknown as Raycaster,
+        raycaster: castUnknown<(Raycaster)>(raycaster),
         camera: {
           near: 0.1,
         } as any,
@@ -90,3 +90,7 @@ describe('useVRMEyeFocusFor', () => {
     expect(raycaster.setFromCamera).toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -19,14 +19,14 @@ describe('store settings-general', () => {
     setActivePinia(pinia)
 
     store = {}
-    localStorageMock = {
+    localStorageMock = castUnknown<(Storage)>({
       getItem: vi.fn((key: string) => store[key] ?? null),
       setItem: vi.fn((key: string, value: string) => { store[key] = value }),
       removeItem: vi.fn((key: string) => { delete store[key] }),
       clear: vi.fn(() => { for (const key in store) delete store[key] }),
       length: 0,
       key: vi.fn(() => null),
-    } as unknown as Storage
+    })
 
     vi.stubGlobal('localStorage', localStorageMock)
   })
@@ -65,3 +65,7 @@ describe('store settings-general', () => {
     expect(resolvedLanguage).toBe('zh-Hant')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

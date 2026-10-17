@@ -1,3 +1,4 @@
+import aori from './aori.yaml'
 import base from './base.yaml'
 import docs from './docs'
 import server from './server'
@@ -6,6 +7,7 @@ import stage from './stage.yaml'
 import tamagotchi from './tamagotchi'
 
 export default {
+  aori,
   base,
   docs,
   server,

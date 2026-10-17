@@ -106,6 +106,10 @@ devenv.*
 target/
 crates/*/target/
 
+# Native Aori builds
+apps/aori-appkit/.build/
+apps/aori-appkit/build/
+
 # turborepo
 .turbo
 

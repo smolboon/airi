@@ -90,6 +90,7 @@ describe('chat broadcast utils', () => {
     // sub callback could not distinguish "this came from another instance"
     // from "this came from us via redis loopback". Without it the sender's
     // own peers received every message twice (once from in-process fanout,
+
     // once from the sub callback re-delivering the publish).
     //
     // We fixed this by requiring originInstanceId on every wire message and

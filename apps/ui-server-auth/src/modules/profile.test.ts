@@ -44,6 +44,7 @@ describe('ui-server-auth profile flow helpers', () => {
     // client builds the request via better-fetch, which decorates the
     // options with framework metadata (plugins, jsonParser, signal, etc.).
     // Pinning option fields ties the test to better-auth internals; the URL
+
     // and the parsed result are the behavioural contract we actually care
     // about.
     // better-fetch passes a URL object, not a string, so coerce before

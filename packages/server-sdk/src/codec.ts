@@ -3,7 +3,7 @@ import type { WebSocketBaseEvent, WebSocketEvent } from '@proj-airi/server-share
 import { parse, stringify } from 'superjson'
 import { check, objectWithRest, pipe, safeParse, string, unknown } from 'valibot'
 
-const invalidMessage = 'Invalid AIRI websocket message.'
+const invalidMessage = 'Invalid Aori websocket message.'
 
 const eventDataSchema = pipe(
   unknown(),

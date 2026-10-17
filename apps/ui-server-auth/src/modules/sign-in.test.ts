@@ -36,6 +36,7 @@ describe('ui-server-auth sign-in flow helpers', () => {
   // callback appends to redirectTo (password.mjs L65 generateId(24), L118
   // redirectCallback adds `?token=<token>`). When such a token-only URL
   // landed on /auth/sign-in (e.g. via a stale or misconfigured reset email),
+
   // the previous filter only stripped `provider`/`prompt` and treated any
   // remaining query as an OIDC handoff — synthesizing
   // /api/auth/oauth2/authorize?token=... and trapping the user on a 422.

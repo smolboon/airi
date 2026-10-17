@@ -197,12 +197,14 @@ export const useModelStore = defineStore('modelStore', () => {
   //       scenes with different lighting setups. But since the model
   //       is possible to have MeshToonMaterial, and MeshBasicMaterial
   //       without envMap to be able to inherit lighting from HDRI map,
+
   //       we will have to figure out a way to make this work to apply
   //       different directional light and other lighting setups
   //       for different environments.
   // WORKAROUND: To achieve the rendering style of Warudo for anime style
   //             Genshin Impact, or so called Cartoon style rendering with
   //             harsh shadows and bright highlights.
+
   // REVIEW: This is a temporary solution, and will be replaced with
   //         a more flexible lighting system in the future.
   const directionalLightIntensity = useLocalStorage('settings/stage-ui-three/scenes/scene/directional-light/intensity', 2.02)

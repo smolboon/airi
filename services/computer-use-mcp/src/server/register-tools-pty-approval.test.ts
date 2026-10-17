@@ -27,11 +27,11 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _schema: unknown, handler: ToolHandler) {
         handlers.set(name, handler)
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -49,7 +49,7 @@ describe('registerComputerUseTools: PTY approval bridge', () => {
 
   beforeEach(() => {
     pendingActions = new Map()
-    runtime = {
+    runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({ approvalMode: 'actions' }),
       stateManager: new RunStateManager(),
       session: {
@@ -94,7 +94,7 @@ describe('registerComputerUseTools: PTY approval bridge', () => {
         addOwnedWindow: vi.fn(),
       },
       taskMemory: {},
-    } as unknown as ComputerUseServerRuntime
+    })
     vi.clearAllMocks()
   })
 
@@ -391,3 +391,7 @@ describe('registerComputerUseTools: PTY approval bridge', () => {
     expect((runtime.browserDomBridge.triggerEvent as any)).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

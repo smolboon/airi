@@ -68,6 +68,7 @@ export const azureAdapter: TtsAdapter = {
     // because unspeech already maps the proprietary response shape to
     // `types.Voice` (full formats table, masterpiece preview URLs, locale
     // metadata). Calling unspeech also keeps a single integration point for
+
     // every other provider that could grow this way later.
     if (!ctx.region)
       throw createServiceUnavailableError('azure tts region not configured', 'AZURE_TTS_NOT_CONFIGURED')

@@ -5,7 +5,6 @@ import type {
   OnboardingStep,
   OnboardingStepGuard,
   OnboardingStepNextHandler,
-  OnboardingStepPrevHandler,
   ProviderConfigData,
 } from './types'
 
@@ -50,7 +49,7 @@ const {
 
 // Popular providers for first-time setup
 const popularProviders = computed(() => {
-  const popular = ['openai', 'azure-openai', 'anthropic', 'amazon-bedrock', 'google-generative-ai', 'groq', 'nvidia', 'openrouter-ai', 'ollama', 'deepseek', 'player2', 'openai-compatible']
+  const popular = ['openai', 'azure-openai', 'anthropic', 'amazon-bedrock', 'google-generative-ai', 'groq', 'nvidia', 'openrouter-ai', 'ollama', 'mlx-serve', 'tensorfold', 'deepseek', 'player2', 'openai-compatible']
   return allChatProvidersMetadata.value
     .filter(provider => popular.includes(provider.id))
     .sort((a, b) => popular.indexOf(a.id) - popular.indexOf(b.id))
@@ -73,10 +72,6 @@ const selectedProviderType = computed<ProviderMode>(() => {
 // Reset validation state when provider changes
 function selectProvider(provider: ProviderMetadata) {
   selectedProviderId.value = provider.id
-}
-
-const requestPreviousStep: OnboardingStepPrevHandler = () => {
-  return navigatePrevious()
 }
 
 const requestNextStep: OnboardingStepNextHandler = async (configData?: ProviderConfigData) => {
@@ -233,7 +228,7 @@ onMounted(() => {
         class="flex flex-1 flex-col"
         v-bind="currentStepProps"
         :on-next="requestNextStep"
-        :on-previous="requestPreviousStep"
+        :on-previous="navigatePrevious"
       />
     </Transition>
   </div>

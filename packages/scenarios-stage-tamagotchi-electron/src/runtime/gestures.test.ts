@@ -8,27 +8,27 @@ import { swipe } from './gestures'
 function createGestureTarget() {
   const send = vi.fn().mockResolvedValue({})
   const detach = vi.fn().mockResolvedValue(undefined)
-  const cdpSession = {
+  const cdpSession = castUnknown<(CDPSession)>({
     detach,
     send,
-  } as unknown as CDPSession
+  })
   const newCDPSession = vi.fn().mockResolvedValue(cdpSession)
-  const context = {
+  const context = castUnknown<(BrowserContext)>({
     newCDPSession,
-  } as unknown as BrowserContext
+  })
   const mouse = {
     move: vi.fn().mockResolvedValue(undefined),
     wheel: vi.fn().mockResolvedValue(undefined),
   }
-  const page = {
+  const page = castUnknown<(Page)>({
     context: () => context,
     mouse,
     waitForTimeout: vi.fn().mockResolvedValue(undefined),
-  } as unknown as Page
-  const target = {
+  })
+  const target = castUnknown<(Locator)>({
     boundingBox: vi.fn().mockResolvedValue({ x: 20, y: 40, width: 200, height: 80 }),
     page: () => page,
-  } as unknown as Locator
+  })
 
   return { detach, mouse, newCDPSession, page, send, target }
 }
@@ -213,3 +213,7 @@ describe('swipe', () => {
     })).rejects.toThrow('Cannot swipe an element without a visible bounding box.')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

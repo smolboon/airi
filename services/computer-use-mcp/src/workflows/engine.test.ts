@@ -24,7 +24,7 @@ function makeSuccessResult(text = 'ok'): CallToolResult {
 function makeApprovalRequiredResult(): CallToolResult {
   return {
     content: [{ type: 'text', text: 'Approval required for this action.' }],
-    structuredContent: { status: 'approval_required' } as unknown as CallToolResult['structuredContent'],
+    structuredContent: castUnknown<(CallToolResult['structuredContent'])>({ status: 'approval_required' }),
   }
 }
 
@@ -904,3 +904,7 @@ describe('workflow engine', () => {
     expect(executeAction).toHaveBeenCalledTimes(1)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -23,7 +23,7 @@ function createRouterConfig(overrides?: Partial<RouterConfig>): RouterConfig {
 }
 
 function createProviderCatalogService(routeModelId = 'auto'): ProviderCatalogService {
-  return {
+  return castUnknown<(ProviderCatalogService)>({
     syncAliasesFromRouterConfig: vi.fn(async () => []),
     resolveEnabledAlias: vi.fn(async () => ({
       id: 'alias-auto',
@@ -48,7 +48,7 @@ function createProviderCatalogService(routeModelId = 'auto'): ProviderCatalogSer
         updatedAt: new Date(),
       }],
     })),
-  } as unknown as ProviderCatalogService
+  })
 }
 
 describe('resolveOfficialAliyunNlsCredentials', () => {
@@ -170,3 +170,7 @@ describe('resolveOfficialAliyunNlsCredentials', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

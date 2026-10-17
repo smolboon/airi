@@ -28,6 +28,7 @@ export function useVRMEmote(vrm: VRMCore) {
   // transition fully settles. ownedExpressionNames() only reflects emotion
   // states registered *right now*, so if a caller calls removeEmotionState
   // (or replaces a state) for the departing emotion before its scheduled
+
   // reset fires, its morph would otherwise drop out of tracking and never
   // get the terminal zero write — leaving the avatar stuck in that
   // expression. This set survives such mutations across emotionStates.
@@ -159,6 +160,7 @@ export function useVRMEmote(vrm: VRMCore) {
       // animation-driven morphs) are left to their own controllers.
       //
       // Union with trackedExpressionNames rather than using
+
       // ownedExpressionNames() alone: a still-pending morph from an
       // emotion state removed since it was entered must keep being driven
       // toward 0, even though it is no longer "owned" by any registered
@@ -198,10 +200,10 @@ export function useVRMEmote(vrm: VRMCore) {
     setEmotion(emotionName, intensity)
 
     // Set timeout to reset to neutral
-    resetTimeout.value = setTimeout(() => {
+    resetTimeout.value = castUnknown<(number)>(setTimeout(() => {
       setEmotion('neutral')
       resetTimeout.value = undefined
-    }, ms) as unknown as number
+    }, ms))
   }
 
   // isEmoteActive's only consumer (VRMModel.vue) uses it to suppress
@@ -209,6 +211,7 @@ export function useVRMEmote(vrm: VRMCore) {
   // deform the eye region. Viseme mouth morphs (aa/ee/ih/oh/ou) never do,
   // so an emotion state driving only visemes — e.g. a custom mouth-only
   // state added via addEmotionState — must not suppress blinking just
+
   // because those (mouth-only) targets are nonzero.
   const hasNonzeroEyeAffectingTarget = (values: Map<string, number>): boolean =>
     Array.from(values.entries()).some(([name, val]) => val > 0.001 && !VISEME_NAMES.has(name.toLowerCase()))
@@ -379,4 +382,8 @@ export function useVRMEmote(vrm: VRMCore) {
     removeEmotionState,
     dispose,
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

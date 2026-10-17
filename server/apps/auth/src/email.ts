@@ -100,6 +100,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
   // RESEND_API_KEY is intentionally empty (e.g. local dev that never exercises
   // email flows). Calls to `send` will throw, which Better Auth surfaces.
   // Root cause summary: Resend's constructor logs but does not throw on empty
+
   // keys; explicit guard keeps the failure mode visible at the call site.
   // Source: node_modules/.pnpm/resend@*/node_modules/resend/dist/index.cjs
   // Removal condition: when we make RESEND_API_KEY required at env-parse time.

@@ -196,6 +196,7 @@ async function handleLoopStep(ctx: BotContext, chatCtx: ChatContext, incomingMes
   //   const shouldInterrupt = await shouldInterruptProcessing({
   //     processingTime,
   //     messageCount,
+
   //     currentMessages: chatCtx.messages,
   //     newMessages: unreadMessagesForThisChat,
   //     chatId: chatCtx.chatId,

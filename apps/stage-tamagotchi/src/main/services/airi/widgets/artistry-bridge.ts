@@ -314,6 +314,7 @@ async function handleArtistryTrigger(params: {
   // [BY DESIGN]: We only trigger a new generation if the fingerprint (mode + remixId + prompt)
   // has actually changed for this specific widget instance. This denotes our stance on the matter:
   // it serves as a critical safety guard against redundant, billable API calls triggered
+
   // by reactive UI loops or state synchronization "storms". While this prevents retrying
   // the exact same prompt on the same widget instance without a manual modification,
   // it protects users from unexpected credit consumption in a high-frequency reactive

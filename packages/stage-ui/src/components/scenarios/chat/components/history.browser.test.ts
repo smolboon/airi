@@ -169,7 +169,7 @@ describe('chat history', () => {
     await vi.waitFor(() => {
       const messageBubbles = Array.from(screen.container.querySelectorAll<HTMLElement>('.chat-message-item-container'))
       const replyBubble = messageBubbles.find(element => element.textContent?.includes('My follow-up'))
-      expect(replyBubble?.textContent).toContain('Replying to AIRI')
+      expect(replyBubble?.textContent).toContain('Replying to Aori')
       expect(replyBubble?.textContent).toContain('Earlier answer')
     })
   })
@@ -182,6 +182,7 @@ describe('chat history', () => {
   // flushed, so computed opacity stayed 0 and the conversation looked empty
   // after a successful send.
   //
+
   // Visible messages now start opaque and never keep both opacity utilities.
   it('paints on-screen desktop messages without an opacity-0 class', async () => {
     const screen = await render(ChatHistory, {
@@ -290,6 +291,7 @@ describe('chat history', () => {
   // absolutely positioned messages still start at the top. A short mobile history
   // therefore leaves most of the chat area empty below a newly sent message.
   //
+
   // We fixed this by bottom-aligning short virtualized content while preserving
   // the existing overflow direction for longer history.
   it('bottom-aligns a newly sent mobile message and its streaming placeholder', async () => {
@@ -782,6 +784,7 @@ describe('chat history', () => {
   // later event, even when the complete gesture was clearly vertical scrolling.
   //
   // The recognizer must wait for clear horizontal intent. It must lock a clear
+
   // vertical gesture out of reply handling for the rest of that wheel stream.
   it('keeps a diagonal vertical wheel stream available to chat scrolling', async () => {
     const message: ChatHistoryItem = {
@@ -878,6 +881,7 @@ describe('chat history', () => {
   // a position that the user directly controls.
   //
   // Momentum detection ends direct manipulation immediately. The reply uses the
+
   // last direct position, while the same return animation consumes the tail.
   it('returns a desktop message as soon as the wheel stream becomes momentum', async () => {
     const message: ChatHistoryItem = {
@@ -1018,6 +1022,7 @@ describe('chat history', () => {
   // this inference started the return while the gesture was still active.
   //
   // Every direct event in a wheel stream must update the message position. The
+
   // adaptive ending signal releases the gesture and starts the return.
   it('follows every partial desktop pan delta until the wheel stream becomes idle', async () => {
     const message: ChatHistoryItem = {
@@ -1086,6 +1091,7 @@ describe('chat history', () => {
   // release timer completed.
   //
   // The message must stay at its input position until the adaptive ending
+
   // signal. One return animation starts after release and never crosses the origin.
   it('keeps a desktop message at its direct position until the pan becomes idle', async () => {
     const message: ChatHistoryItem = {
@@ -1158,6 +1164,7 @@ describe('chat history', () => {
   // direct movement, so the message stops following the gesture before release.
   //
   // Every horizontal wheel event updates the adaptive release estimate. The
+
   // gesture can commit only after the resulting ending signal.
   it('keeps a desktop reply gesture active while meaningful pan input continues', async () => {
     const message: ChatHistoryItem = {
@@ -1210,6 +1217,7 @@ describe('chat history', () => {
   // the message look stuck even though the wheel events continued to arrive.
   //
   // Every raw delta updates the nonlinear mapping. The message continues to
+
   // move after the reply threshold instead of freezing at that point.
   it('keeps the desktop message moving with trackpad travel after the reply threshold', async () => {
     const message: ChatHistoryItem = {
@@ -1309,6 +1317,7 @@ describe('chat history', () => {
   // that the user cannot see and makes horizontal movement uneven.
   //
   // The primitive must keep every input delta, but it must publish only the
+
   // latest visible offset for each animation frame.
   it('coalesces trackpad offset updates into the next display frame', async () => {
     const message: ChatHistoryItem = {
@@ -1405,6 +1414,7 @@ describe('chat history', () => {
   // jumped to the threshold, then snapped to rest when a confirmed swipe returned
   // through the small vertical drift accumulated earlier in the gesture.
   //
+
   // The message now follows directed touch travel before intent is confirmed. Once
   // horizontal intent is confirmed, that decision lasts until the touch ends.
   it('keeps a mobile message attached to the finger before and after the intent threshold', async () => {
@@ -1547,6 +1557,7 @@ describe('chat history', () => {
   // cancellation and ignored all later movement from the same physical touch.
   //
   // The mobile gesture now follows the Touch Events stream. Pointer capture loss
+
   // does not terminate that stream, and touchcancel remains the cancellation signal.
   it('continues a mobile swipe after pointer capture is lost as reported in PR #2489', async () => {
     const message: ChatHistoryItem = {

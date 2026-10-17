@@ -254,6 +254,7 @@ export async function loadSpineZip(file: File | Blob | ArrayBuffer): Promise<Spi
   // Spine's Downloader has a heuristic for rawDataUris: if the value doesn't
   // contain ".", it treats it as a data: URI and calls atob(). In Electron,
   // blob URLs are `blob:null/<uuid>` (no dots), so the Downloader fails.
+
   // Even with data: URIs, Spine's atob-based decode can corrupt binary data.
   // We store raw decoded data (Uint8Array / string) alongside blob URLs and
   // monkey-patch the Downloader's download methods to serve from memory.

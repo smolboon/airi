@@ -37,15 +37,15 @@ function buildKeycodeMap(): Record<ShortcutKey, number> {
 
   for (let i = 0; i < 26; i++) {
     const letter = String.fromCharCode(65 + i)
-    map[`Key${letter}`] = (UiohookKey as unknown as Record<string, number>)[letter]
+    map[`Key${letter}`] = (castUnknown<(Record<string, number>)>(UiohookKey))[letter]
   }
 
   for (let i = 0; i <= 9; i++) {
-    map[`Digit${i}`] = (UiohookKey as unknown as Record<string, number>)[String(i)]
+    map[`Digit${i}`] = (castUnknown<(Record<string, number>)>(UiohookKey))[String(i)]
   }
 
   for (let i = 1; i <= 24; i++) {
-    map[`F${i}`] = (UiohookKey as unknown as Record<string, number>)[`F${i}`]
+    map[`F${i}`] = (castUnknown<(Record<string, number>)>(UiohookKey))[`F${i}`]
   }
 
   const named: Record<string, keyof typeof UiohookKey> = {
@@ -77,7 +77,7 @@ function buildKeycodeMap(): Record<ShortcutKey, number> {
     Slash: 'Slash',
   }
   for (const [w3c, uioName] of Object.entries(named))
-    map[w3c] = (UiohookKey as unknown as Record<string, number>)[uioName as string]
+    map[w3c] = (castUnknown<(Record<string, number>)>(UiohookKey))[uioName as string]
 
   return map
 }
@@ -314,4 +314,8 @@ export function createUiohookDriver(options: UiohookDriverOptions): UiohookDrive
   }
 
   return { tryRegister, unregisterById, unregisterAll, dispose }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

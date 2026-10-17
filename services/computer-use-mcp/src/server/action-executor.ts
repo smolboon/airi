@@ -705,7 +705,7 @@ export function createExecuteAction(runtime: ComputerUseServerRuntime): ExecuteA
       const outcome = explainActionOutcome({
         action: normalizedAction,
         succeeded: true,
-        terminalResult: normalizedAction.kind === 'terminal_exec' ? (backendResult as unknown as TerminalCommandResult) : undefined,
+        terminalResult: normalizedAction.kind === 'terminal_exec' ? (castUnknown<(TerminalCommandResult)>(backendResult)) : undefined,
         context,
       })
 
@@ -792,4 +792,8 @@ export function createExecuteAction(runtime: ComputerUseServerRuntime): ExecuteA
       })
     }
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

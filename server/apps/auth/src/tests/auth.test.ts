@@ -53,11 +53,11 @@ describe('createAuth', () => {
     ['ai.moeru.airi-pocket://auth/result', 'ai.moeru.airi-pocket://auth/result'],
   ])('delivers deletion result callbacks without replacing explicit destinations: %s', async (callbackURL, expected) => {
     const sendDeletion = vi.fn<(params: { to: string, url: string }) => Promise<void>>()
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'https://api.airi.test',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv, {
+    }), {
       send: vi.fn(),
       sendVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
@@ -99,11 +99,11 @@ describe('createAuth', () => {
     ['ai.moeru.airi-pocket://auth/result', 'ai.moeru.airi-pocket://auth/result'],
   ])('delivers verification result callbacks without replacing explicit destinations: %s', async (callbackURL, expected) => {
     const sendVerification = vi.fn<(params: { to: string, url: string }) => Promise<void>>()
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'https://api.airi.test',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv, {
+    }), {
       send: vi.fn(),
       sendVerification,
       sendPasswordReset: vi.fn(),
@@ -134,7 +134,7 @@ describe('createAuth', () => {
   })
 
   it('allows signed-in users to link OAuth accounts that use a different email', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -147,13 +147,13 @@ describe('createAuth', () => {
       AUTH_APPLE_PRIVATE_KEY_PEM: applePrivateKey,
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     expect(auth.options.account?.accountLinking?.allowDifferentEmails).toBe(true)
   })
 
   it('registers lastSeenAt as a server-managed Better Auth user field', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -161,7 +161,7 @@ describe('createAuth', () => {
       AUTH_GITHUB_CLIENT_SECRET: 'github-secret',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     expect(auth.options.user?.additionalFields?.lastSeenAt).toMatchObject({
       type: 'date',
@@ -178,7 +178,7 @@ describe('createAuth', () => {
   })
 
   it('asks social providers to show the account picker during OAuth authorization', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -191,7 +191,7 @@ describe('createAuth', () => {
       AUTH_APPLE_PRIVATE_KEY_PEM: applePrivateKey,
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     const google = auth.options.socialProviders?.google
     const github = auth.options.socialProviders?.github
@@ -202,7 +202,7 @@ describe('createAuth', () => {
   })
 
   it('does not register Apple when its optional credentials are absent', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -215,13 +215,13 @@ describe('createAuth', () => {
       AUTH_APPLE_PRIVATE_KEY_PEM: '',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     expect(auth.options.socialProviders?.apple).toBeUndefined()
   })
 
   it('does not register Apple when its optional credentials are incomplete', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -234,13 +234,13 @@ describe('createAuth', () => {
       AUTH_APPLE_PRIVATE_KEY_PEM: '',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     expect(auth.options.socialProviders?.apple).toBeUndefined()
   })
 
   it('configures Apple for web OAuth and native ID-token sign-in', async () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'http://localhost:3000',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -253,7 +253,7 @@ describe('createAuth', () => {
       AUTH_APPLE_PRIVATE_KEY_PEM: applePrivateKey,
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     const appleProvider = auth.options.socialProviders?.apple
     expect(typeof appleProvider).toBe('function')
@@ -314,8 +314,8 @@ describe('createAuth', () => {
   it('revokes external authorizations before deleting resource data', async () => {
     const calls: string[] = []
     const auth = createAuth(
-      {} as unknown as AuthDatabase,
-      {
+      castUnknown<(AuthDatabase)>({}),
+      castUnknown<(AuthEnv)>({
         PUBLIC_URL: 'http://localhost:3000',
         AUTH_GOOGLE_CLIENT_ID: 'google-client',
         AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -323,7 +323,7 @@ describe('createAuth', () => {
         AUTH_GITHUB_CLIENT_SECRET: 'github-secret',
         BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
         ADDITIONAL_TRUSTED_ORIGINS: [],
-      } as unknown as AuthEnv,
+      }),
       undefined,
       undefined,
       {
@@ -360,7 +360,7 @@ describe('createAuth', () => {
   })
 
   it('uses the Caddy public API origin as the Better Auth base URL', () => {
-    const auth = createAuth({} as unknown as AuthDatabase, {
+    const auth = createAuth(castUnknown<(AuthDatabase)>({}), castUnknown<(AuthEnv)>({
       PUBLIC_URL: 'https://api.airi.build',
       AUTH_GOOGLE_CLIENT_ID: 'google-client',
       AUTH_GOOGLE_CLIENT_SECRET: 'google-secret',
@@ -368,7 +368,7 @@ describe('createAuth', () => {
       AUTH_GITHUB_CLIENT_SECRET: 'github-secret',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret',
       ADDITIONAL_TRUSTED_ORIGINS: [],
-    } as unknown as AuthEnv)
+    }))
 
     expect(auth.options.baseURL).toBe('https://api.airi.build')
   })
@@ -571,3 +571,7 @@ describe('ensureDynamicFirstPartyRedirectUri', () => {
     expect(db.update).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

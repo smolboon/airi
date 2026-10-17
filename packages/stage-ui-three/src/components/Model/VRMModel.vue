@@ -97,16 +97,11 @@ import {
 } from './vrm-instance-cache'
 
 /*
-  * Props:
-  * - modelId: stable display model identity
-  * - modelSrc: model src string to load model asset
-  * - idleAnimation: animation src for model
-  * - loadAnimations: TBC
-  * - paused: if the animation is paused
-  * - nprIrrSH: Spherical Harmonics computed from the sky box, used for IBL
-  *
-  * - modelOffset: The placing offset of model (x, y, z)
-  * - modelRotationY: The rotation of the model (y-axis)
+ * Props: - modelId: stable display model identity - modelSrc: model src string to load model asset - idleAnimation: animation src for model - loadAnimations: TBC - paused: if the animation is paused - nprIrrSH: Spherical Harmonics computed from the sky box, used for IBL - modelOffset: The placing offset of
+*/
+
+/*
+ * model (x, y, z) - modelRotationY: The rotation of the model (y-axis)
 */
 const props = withDefaults(defineProps<{
   /** The context that owns `currentAudioSource`. */
@@ -137,6 +132,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   paused: false,
 })
+
 /*
   * Emits:
   * - model-core-loading-progress
@@ -152,6 +148,10 @@ const emit = defineEmits<{
   (e: 'error', value: unknown): void
   (e: 'loaded', value: string): void
 }>()
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
 
 const {
   audioContext,
@@ -283,7 +283,7 @@ function disposeDetachedVrm(detachedVrm?: VRM, detachedGroup?: Group) {
   detachedGroup?.removeFromParent()
 
   if (detachedVrm)
-    VRMUtils.deepDispose(detachedVrm.scene as unknown as Object3D)
+    VRMUtils.deepDispose(castUnknown<(Object3D)>(detachedVrm.scene))
 }
 
 function detachVrmGroup(detachedGroup?: Group) {
@@ -507,6 +507,7 @@ function bindManagedVrmInstanceRenderLoop() {
       // mouth morphs (skipVisemes), and once lip sync falls silent the emote
       // re-asserts its mouth targets over lip sync's zeroed weights. The
       // state machine keeps advancing either way, so emotion transitions and
+
       // the reset timeout stay in sync during long utterances.
       vrmEmote.value?.update(delta, { skipVisemes: isLipSyncActive })
     })
@@ -1018,6 +1019,7 @@ onMounted(async () => {
     // declare module 'three' {
     //   interface Object3D {
     //     setPointerCapture(pointerId: number): void
+
     //     releasePointerCapture(pointerId: number): void
     //     hasPointerCapture(pointerId: number): boolean
 
@@ -1035,7 +1037,7 @@ onMounted(async () => {
     // And in @tresjs/core v5, it uses the @pmndrs/pointer-events internally.
     // Somehow the Object3D from @types/three and the one augmented by @pmndrs/pointer-events are not compatible.
     // This needs to be fixed later.
-    updateNprShaderSetting(vrm.value?.scene as unknown as Object3D, {
+    updateNprShaderSetting(castUnknown<(Object3D)>(vrm.value?.scene), {
       mode,
       intensity: skyBoxIntensity.value,
       sh: nprIrrSH.value ?? null,

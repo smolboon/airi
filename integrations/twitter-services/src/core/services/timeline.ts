@@ -4,7 +4,7 @@ import type { Tweet } from './tweet'
 
 import { TWITTER_HOME_URL } from '../../constants'
 import { SELECTORS } from '../../parsers/selectors'
-import { TweetParser } from '../../parsers/tweet-parser'
+import { parseTimelineTweets } from '../../parsers/tweet-parser'
 import { logger } from '../../utils/logger'
 import { scrollToLoadMoreTweets } from '../utils/scroll-helper'
 
@@ -35,7 +35,7 @@ export function useTwitterTimelineServices(ctx: Context): TwitterService {
       }
 
       // Parse all tweets directly from the DOM using Playwright
-      const tweets = await TweetParser.parseTimelineTweets(ctx.page)
+      const tweets = await parseTimelineTweets(ctx.page)
 
       logger.timeline.log(`Found ${tweets.length} tweets in timeline`)
 

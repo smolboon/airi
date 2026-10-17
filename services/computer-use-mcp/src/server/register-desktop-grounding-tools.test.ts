@@ -27,12 +27,12 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _summary: string, _schema: unknown, handler: ToolHandler) {
         handlers.set(name, handler)
         return { disable: vi.fn() }
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -45,7 +45,7 @@ function createMockServer() {
 }
 
 function createRuntime() {
-  const runtime = {
+  const runtime = castUnknown<(ComputerUseServerRuntime)>({
     config: createTestConfig(),
     stateManager: new RunStateManager(),
     cdpBridgeManager: {
@@ -66,7 +66,7 @@ function createRuntime() {
       touch: vi.fn(),
       ensureControlledAppInForeground: vi.fn(),
     },
-  } as unknown as ComputerUseServerRuntime
+  })
 
   const executeAction = vi.fn().mockResolvedValue({
     content: [{ type: 'text', text: 'executed' }],
@@ -193,3 +193,7 @@ describe('registerDesktopGroundingTools', () => {
     expect(captureDesktopGroundingMock).toHaveBeenCalledOnce()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

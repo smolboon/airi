@@ -89,67 +89,60 @@ async function detectWebGPUInWorker(): Promise<boolean> {
 
 // Track which device was actually used (for reporting back to main thread)
 let resolvedDevice: 'webgpu' | 'wasm' | 'cpu' = 'webgpu'
+let speechTokenizer: Promise<PreTrainedTokenizer> | undefined
+let speechProcessor: Promise<Processor> | undefined
+let speechModel: Promise<PreTrainedModel> | undefined
 
-class AutomaticSpeechRecognitionPipeline {
-  static model_id: string | null = null
-  static tokenizer: Promise<PreTrainedTokenizer>
-  static processor: Promise<Processor>
-  static model: Promise<PreTrainedModel>
-
-  static async getInstance(progress_callback?: ProgressCallback, device: 'webgpu' | 'wasm' | 'cpu' = 'webgpu') {
-    this.model_id = MODEL_ID
-
-    // Auto-detect: if WebGPU was requested but unavailable, fall back to WASM
-    let actualDevice = device
-    if (device === 'webgpu') {
-      const hasWebGPU = await detectWebGPUInWorker()
-      if (!hasWebGPU) {
-        console.warn('[Whisper Worker] WebGPU not available, falling back to WASM')
-        actualDevice = 'wasm'
-      }
+async function getSpeechRecognitionPipeline(progress_callback?: ProgressCallback, device: 'webgpu' | 'wasm' | 'cpu' = 'webgpu') {
+  let actualDevice = device
+  if (device === 'webgpu') {
+    const hasWebGPU = await detectWebGPUInWorker()
+    if (!hasWebGPU) {
+      console.warn('[Whisper Worker] WebGPU not available, falling back to WASM')
+      actualDevice = 'wasm'
     }
-    resolvedDevice = actualDevice
-
-    this.tokenizer ??= AutoTokenizer.from_pretrained(this.model_id, {
-      progress_callback,
-    })
-
-    this.processor ??= AutoProcessor.from_pretrained(this.model_id, {
-      progress_callback,
-    })
-
-    // NOTICE: fp16 encoder may fail on some devices/browsers. Fall back to fp32
-    // if the initial load fails. Decoder fp16 is known broken (see Issue #989).
-    // https://github.com/huggingface/transformers.js/issues/989
-    this.model ??= (async () => {
-      try {
-        return await WhisperForConditionalGeneration.from_pretrained(this.model_id!, {
-          dtype: {
-            encoder_model: 'fp16',
-            decoder_model_merged: 'q4',
-          },
-          device: actualDevice,
-          progress_callback,
-        })
-      }
-      catch (error) {
-        console.warn(
-          '[Whisper Worker] fp16 encoder failed, falling back to fp32:',
-          errorMessageFromValue(error),
-        )
-        return await WhisperForConditionalGeneration.from_pretrained(this.model_id!, {
-          dtype: {
-            encoder_model: 'fp32',
-            decoder_model_merged: 'q4',
-          },
-          device: actualDevice,
-          progress_callback,
-        })
-      }
-    })()
-
-    return Promise.all([this.tokenizer, this.processor, this.model])
   }
+  resolvedDevice = actualDevice
+
+  const tokenizer = speechTokenizer ??= AutoTokenizer.from_pretrained(MODEL_ID, {
+    progress_callback,
+  })
+
+  const processor = speechProcessor ??= AutoProcessor.from_pretrained(MODEL_ID, {
+    progress_callback,
+  })
+
+  // NOTICE: fp16 encoder may fail on some devices/browsers. Fall back to fp32
+  // if the initial load fails. Decoder fp16 is known broken (see Issue #989).
+  // https://github.com/huggingface/transformers.js/issues/989
+  const model = speechModel ??= (async () => {
+    try {
+      return await WhisperForConditionalGeneration.from_pretrained(MODEL_ID, {
+        dtype: {
+          encoder_model: 'fp16',
+          decoder_model_merged: 'q4',
+        },
+        device: actualDevice,
+        progress_callback,
+      })
+    }
+    catch (error) {
+      console.warn(
+        '[Whisper Worker] fp16 encoder failed, falling back to fp32:',
+        errorMessageFromValue(error),
+      )
+      return await WhisperForConditionalGeneration.from_pretrained(MODEL_ID, {
+        dtype: {
+          encoder_model: 'fp32',
+          decoder_model_merged: 'q4',
+        },
+        device: actualDevice,
+        progress_callback,
+      })
+    }
+  })()
+
+  return Promise.all([tokenizer, processor, model])
 }
 
 /**
@@ -198,14 +191,6 @@ function markCancelled(targetRequestId: string): void {
   globalThis.postMessage(msg)
 }
 
-function isCancelled(requestId: string): boolean {
-  return cancelledRequestIds.has(requestId)
-}
-
-function clearCancelled(requestId: string): void {
-  cancelledRequestIds.delete(requestId)
-}
-
 function sendProgress(requestId: string, phase: 'download' | 'compile' | 'warmup' | 'inference', percent: number, message?: string, extra?: Record<string, unknown>): void {
   const msg: ProgressResponse = {
     type: 'progress',
@@ -249,7 +234,7 @@ async function loadModel(request: LoadModelRequest): Promise<void> {
   try {
     sendProgress(requestId, 'download', -1, 'Loading model...')
 
-    const [_tokenizer, _processor, model] = await AutomaticSpeechRecognitionPipeline.getInstance((x: any) => {
+    const [_tokenizer, _processor, model] = await getSpeechRecognitionPipeline((x: any) => {
       // Forward transformers.js progress events
       if (currentLoadRequestId) {
         if (x.status === 'progress') {
@@ -275,9 +260,9 @@ async function loadModel(request: LoadModelRequest): Promise<void> {
       max_new_tokens: 1,
     } as Record<string, unknown>)
 
-    if (isCancelled(requestId)) {
+    if (cancelledRequestIds.has(requestId)) {
       // Adapter already received a CANCELLED error; drop the stale result.
-      clearCancelled(requestId)
+      cancelledRequestIds.delete(requestId)
     }
     else {
       const ready: ModelReadyResponse = {
@@ -290,8 +275,8 @@ async function loadModel(request: LoadModelRequest): Promise<void> {
     }
   }
   catch (error) {
-    if (isCancelled(requestId))
-      clearCancelled(requestId)
+    if (cancelledRequestIds.has(requestId))
+      cancelledRequestIds.delete(requestId)
     else
       sendError(requestId, error, 'load')
   }
@@ -319,7 +304,7 @@ async function runInference(request: RunInferenceRequest<WhisperInput>): Promise
     sendProgress(requestId, 'inference', 0, 'Starting transcription...')
 
     const audioData = input.audioFloat32 ?? await base64ToFeatures(input.audio!)
-    const [tokenizer, processor, model] = await AutomaticSpeechRecognitionPipeline.getInstance()
+    const [tokenizer, processor, model] = await getSpeechRecognitionPipeline()
 
     let startTime: number | undefined
     let numTokens = 0
@@ -352,8 +337,8 @@ async function runInference(request: RunInferenceRequest<WhisperInput>): Promise
 
     const outputText = tokenizer.batch_decode(outputs as Tensor, { skip_special_tokens: true })
 
-    if (isCancelled(requestId)) {
-      clearCancelled(requestId)
+    if (cancelledRequestIds.has(requestId)) {
+      cancelledRequestIds.delete(requestId)
     }
     else {
       const result: InferenceResultResponse<WhisperOutput> = {
@@ -365,8 +350,8 @@ async function runInference(request: RunInferenceRequest<WhisperInput>): Promise
     }
   }
   catch (error) {
-    if (isCancelled(requestId))
-      clearCancelled(requestId)
+    if (cancelledRequestIds.has(requestId))
+      cancelledRequestIds.delete(requestId)
     else
       sendError(requestId, error, 'inference')
   }

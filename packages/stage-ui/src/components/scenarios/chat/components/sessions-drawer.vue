@@ -139,6 +139,7 @@ async function startNewSession() {
 // each batch so closing the drawer mid-load aborts cleanly instead of
 // continuing to hydrate sessions the user has navigated away from. Without
 // this, a session deleted from outside while the batch was running could be
+
 // re-added to `loadedSessions` as a phantom entry.
 let openGeneration = 0
 

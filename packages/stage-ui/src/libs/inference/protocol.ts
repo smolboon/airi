@@ -175,6 +175,7 @@ export function createRequestId(): string {
 // Firefox, Safari, and ONNX Runtime Web / transformers.js. Because we do not
 // own the GPUDevice (it is created internally by transformers.js / ORT-web),
 // we cannot attach a `device.lost` promise handler directly — string matching
+
 // on thrown errors is the only available detection signal.
 // References:
 //   - https://gpuweb.github.io/gpuweb/#gpudevicelostinfo

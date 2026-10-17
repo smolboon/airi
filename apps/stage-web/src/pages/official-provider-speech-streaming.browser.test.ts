@@ -130,6 +130,7 @@ describe('official streaming speech provider settings', () => {
   //
   // Before: fetch the catalog, then write providerConfig.value.model.
   //
+
   // We fixed this by waiting for authentication and initializing the provider.
   // The page now applies server availability before it loads model voices.
   it('initializes provider configuration before it applies the server default model', async () => {
@@ -156,6 +157,7 @@ describe('official streaming speech provider settings', () => {
   // so the public voice loader still saw an unconfigured provider and stopped.
   // The later configuration snapshot did not change any watcher dependency.
   //
+
   // Before: start voice loading while forceProviderConfigured is pending.
   //
   // We fixed this by awaiting the configuration action before publishing the
@@ -187,6 +189,7 @@ describe('official streaming speech provider settings', () => {
   //
   // Before: catalog.available === true converted a discovery failure to false.
   //
+
   // We fixed this by changing provider state only when discovery returns an
   // explicit availability value.
   it('preserves configured provider state when catalog discovery fails', async () => {

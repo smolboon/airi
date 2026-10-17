@@ -14,6 +14,7 @@ describe('createVoiceInputInteractionLifecycle', () => {
   // tear down the newly-started microphone consumers after the toggle is already enabled.
   //
   // Before: start and stop operations ran concurrently.
+
   // After: a start waits for the active stop operation before binding microphone consumers.
   /**
    * @example

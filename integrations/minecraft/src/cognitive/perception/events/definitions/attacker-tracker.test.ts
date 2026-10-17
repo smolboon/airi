@@ -9,6 +9,7 @@ import { damageTakenEvent } from './damage-taken'
 // crossbow/bow while the master (dssadg) stood next to it, the nearest entity was the master, so the
 // bot reported "主人你又打我!" and tried to retaliate against its own master instead of the mob.
 //
+
 // Fix: mineflayer emits entityHurt(victim, source) from the 1.20+ damage_event packet, where source
 // is the REAL attacker. recordAttacker captures it; inferDamageSource prefers it over the nearest-
 // entity guess.

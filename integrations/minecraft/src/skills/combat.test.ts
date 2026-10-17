@@ -6,6 +6,7 @@ import { shouldKeepWaitingForDrops } from './combat'
 //
 // collectNearbyDrops scanned for dropped items immediately after the kill and did `if (!drop) break`
 // — it gave up on the FIRST empty scan. But drop entities (mutton/wool) spawn a few hundred ms AFTER
+
 // the mob dies, so that first scan is almost always empty: the bot killed the sheep and reported
 // "生羊肉 0 块". The fix keeps polling within a grace window (this decision) so late drops are
 // collected, while still stopping promptly when nothing more appears or the hard deadline hits.

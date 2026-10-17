@@ -131,7 +131,7 @@ function makeMockClientWs(): MockClientWs {
     closeCode: undefined as number | undefined,
     closeReason: undefined as string | undefined,
   }
-  const ctx = {
+  const ctx = castUnknown<(WSContext)>({
     send: (data: string | ArrayBuffer | Buffer) => {
       sent.push({
         kind: typeof data === 'string' ? 'text' : 'binary',
@@ -148,7 +148,7 @@ function makeMockClientWs(): MockClientWs {
     raw: {} as any,
     protocol: '',
     url: null,
-  } as unknown as WSContext
+  })
 
   return {
     ctx,
@@ -427,3 +427,7 @@ describe('audio-speech-ws route', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

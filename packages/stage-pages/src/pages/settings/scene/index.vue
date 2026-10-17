@@ -59,6 +59,7 @@ function requestDeleteConfirmation(message: string): boolean {
   // Root cause: `no-alert` rejects direct `confirm(...)` calls before this page
   // has a shared confirmation-dialog primitive wired into the scene gallery flow.
   // Source/context: this component already used native confirm for scene delete.
+
   // Removal condition: replace with the shared modal confirmation component.
   const confirmAction = globalThis.confirm.bind(globalThis)
   return confirmAction(message)

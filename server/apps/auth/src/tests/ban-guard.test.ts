@@ -21,14 +21,14 @@ function createContext(user: { banned: boolean, banExpires: Date | null }) {
   const updateUser = vi.fn()
   return {
     updateUser,
-    context: {
+    context: castUnknown<(BanContext)>({
       context: {
         internalAdapter: {
           findUserById: vi.fn(async () => user),
           updateUser,
         },
       },
-    } as unknown as BanContext,
+    }),
   }
 }
 
@@ -148,3 +148,7 @@ describe('banGuard', () => {
     expect(updateUser).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

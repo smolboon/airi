@@ -26,6 +26,7 @@ describe('auth analytics', () => {
   // The analytics provider therefore counted one email signup as two unrelated persons.
   //
   // The anonymous UI milestone must use its own name. The identified server
+
   // event remains the only canonical `signup_completed` business fact.
   it('keeps anonymous signup UI completion separate from the canonical server signup fact', async () => {
     await expect(loadAnalyticsAdapter(async () => adapterMocks)).resolves.toBe(true)

@@ -139,6 +139,7 @@ export function createEnvelopeCrypto(options: CreateEnvelopeCryptoOptions) {
         // with the previous AES key derived from `LLM_ROUTER_MASTER_KEY_PREVIOUS`.
         // Both keys failing means the ciphertext is genuinely corrupt or
         // forged — surface the original (current-key) error so observability
+
         // attributes it to the active configuration, not the legacy one.
         try {
           return decryptWith(previousAesKey, iv, ct, tag, aadBytes)

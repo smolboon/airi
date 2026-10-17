@@ -17,7 +17,7 @@ function freshMasterKey(): Buffer {
 }
 
 function makeCounter(): Counter {
-  return { add: vi.fn() } as unknown as Counter
+  return castUnknown<(Counter)>({ add: vi.fn() })
 }
 
 function makeMetrics(): { metrics: GatewayMetrics, decryptFailures: Counter } {
@@ -89,6 +89,7 @@ describe('createKeyRotator', () => {
     // Silently skipping that key would mask config-poisoning attempts (an
     // attacker with configKV write access could overwrite a valid blob with
     // a junk blob to force the router to fall back). Per plan U3 test (3)
+
     // we surface as 503 DECRYPT_FAILED and increment the metric.
     const crypto = createEnvelopeCrypto({ masterKey: freshMasterKey() })
     const modelName = 'm'
@@ -162,3 +163,7 @@ describe('createKeyRotator', () => {
     expect(first.value?.plaintext.toString('utf8')).toBe('sk-x')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

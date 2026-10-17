@@ -124,6 +124,7 @@ export const useArtistryStore = defineStore('artistry', () => {
   // Sync active state when global state changes (e.g. from Settings page)
   // NOTICE: We only sync if the active state currently matches the global state (i.e. no card override is active),
   // OR we just sync anyway and let airi-card's watch override it again if a card is active.
+
   // The latter is simpler and more predictable.
   watch(globalProvider, val => activeProvider.value = val)
   watch(globalModel, val => activeModel.value = val)

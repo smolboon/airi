@@ -315,6 +315,7 @@ describe('speech synchronization', () => {
   // Before: a follower executed loadVoicesForProvider locally and published a
   // replaceState proposal.
   //
+
   // We fixed this by routing the action to the synchronization leader. The
   // leader publishes the result, and the follower only applies that snapshot.
   it('routes voice catalog loading through the leader', async () => {

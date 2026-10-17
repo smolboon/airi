@@ -17,6 +17,7 @@ describe('useLocalStorageManualReset', () => {
   // into the store. Pinia saw the reflection as a new direct mutation and
   // published another domain snapshot.
   //
+
   // We fixed this by making `listenToStorageChanges: false` one-way: state is
   // still persisted, but the storage ref cannot write back into live state.
   it('does not reflect persisted values when storage listening is disabled', async () => {

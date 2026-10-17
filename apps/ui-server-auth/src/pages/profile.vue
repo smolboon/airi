@@ -55,6 +55,7 @@ const passwordSuccess = shallowRef<string | null>(null)
 // (signed up via social provider). We send them through the standard
 // forgot-password email flow rather than exposing a direct setPassword
 // endpoint — re-using the link-based flow keeps server surface small and
+
 // gives us a fresh email-ownership proof at the moment of password set.
 const setPasswordLoading = shallowRef(false)
 const setPasswordError = shallowRef<string | null>(null)
@@ -67,6 +68,7 @@ const signOutError = shallowRef<string | null>(null)
 // set / provider URL or a Gravatar fallback URL. We detect the fallback by
 // URL prefix so the server doesn't need to ship a redundant `imageSource`
 // flag — gravatar URLs are stable enough that prefix-matching is fine.
+
 // See server/apps/auth/src/routes.ts for the server-side build.
 const GRAVATAR_AVATAR_PREFIX = 'https://www.gravatar.com/avatar/'
 const avatarUrl = computed(() => user.value?.image ?? null)
@@ -238,6 +240,7 @@ async function handleSendSetPasswordLink() {
     // happens to be served from the same origin in practice, but the
     // sibling stage-pages settings page is shared with the Tamagotchi
     // Electron renderer which loads from `file://` — keeping all
+
     // password-reset flows pinned to the API origin avoids that footgun
     // and makes it copy/paste-safe across surfaces.
     // Source: PR #1753 review (chatgpt-codex-connector P1).

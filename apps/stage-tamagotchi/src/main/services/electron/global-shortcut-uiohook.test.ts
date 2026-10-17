@@ -114,7 +114,7 @@ async function setupMocks() {
     }
     const driver = createUiohookDriver({
       broadcastTriggered,
-      logger: logger as unknown as Parameters<typeof createUiohookDriver>[0]['logger'],
+      logger: castUnknown<(Parameters<typeof createUiohookDriver>[0]['logger'])>(logger),
       platform: overrides.platform ?? 'darwin',
       sessionType: overrides.sessionType,
     })
@@ -366,3 +366,7 @@ describe('createUiohookDriver', () => {
     expect(broadcastTriggered).toHaveBeenNthCalledWith(3, 'a', 'up')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

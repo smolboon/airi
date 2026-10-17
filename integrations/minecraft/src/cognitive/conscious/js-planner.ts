@@ -598,7 +598,7 @@ async function callBotMethod(mineflayer: Mineflayer, method: string, rawArgs: un
   if (BOT_METHOD_DENYLIST.has(method))
     throw new Error(`botCall: method "${method}" is not allowed`)
 
-  const bot = mineflayer.bot as unknown as Record<string, unknown>
+  const bot = castUnknown<(Record<string, unknown>)>(mineflayer.bot)
   const fn = bot[method]
   if (typeof fn !== 'function')
     throw new TypeError(`botCall: bot.${method} is not a function`)
@@ -620,6 +620,7 @@ export function extractJavaScriptCandidate(input: string): string {
   // Prefer a fenced code block found ANYWHERE in the reply: chat-style models often add a short line
   // of reasoning before the code. The previous `^...$` anchoring only matched a reply that was nothing
   // but a fence, so any leading prose caused the entire prose+code to be executed as a script.
+
   // eslint-disable-next-line regexp/no-super-linear-backtracking
   const fenced = trimmed.match(/```(?:js|javascript|ts|typescript)?[^\S\r\n]*\r?\n?([\s\S]*?)```/i)
   if (fenced?.[1])
@@ -628,6 +629,7 @@ export function extractJavaScriptCandidate(input: string): string {
   // No fence: the model often wraps un-fenced code in a Chinese intro/outro line (e.g.
   // "好的,我来做:\n<code>\n这样就安全了"). Such a bare-word line is INSIDIOUS — CJK characters are
   // valid JS identifiers, so a line like "然后我去做盔甲" PARSES as an identifier expression, sails
+
   // past the syntax firewall, then throws "<那串中文> is not defined" at runtime (the real cause of the
   // "X is not defined" failures). Strip those leading/trailing prose lines so the real code runs.
   return stripEdgeProseLines(trimmed)
@@ -671,9 +673,11 @@ function stripEdgeProseLines(code: string): string {
 // NOTICE: Firewall between the LLM's natural-language space and the Minecraft action (JS) space.
 // The decision script is executed inside the sandbox as `return (async () => {\n<script>\n})()`
 // (see js-planner-worker.ts). When the model replies in prose instead of code, that prose lands on
+
 // line 2 and the isolate throws cryptic syntax errors ("Unexpected identifier 'me'", …), which fed a
 // death-spiral because the error handed back to the model never said "you wrote prose, not code".
 // We pre-compile with the SAME async wrapper (so top-level await/return are not false positives) to
+
 // detect non-code BEFORE wasting a sandbox turn, and turn it into a directive correction instead.
 // `new Function` only parses/compiles its body — it does NOT execute the candidate — so this is safe.
 function isSyntacticallyValidScript(candidate: string): boolean {
@@ -1071,6 +1075,7 @@ export class JavaScriptPlanner {
     // NOTICE: the sandbox binds `self` and `snapshot.self` straight from this snapshot (see the self
     // binding in js-planner-worker.ts), but the raw reflex self only carries `.location` for coords.
     // The LLM constantly writes self.pos.x / self.position.x, so alias pos/position -> location on the
+
     // isolate copy here — otherwise those reads are undefined and scripts crash with
     // "Cannot read properties of undefined (reading 'x')". (query.self() is a separate, .pos-shaped record.)
     // copyForIsolate freezes its result, so build a fresh aliased `self` rather than mutating in place.
@@ -1165,10 +1170,10 @@ export class JavaScriptPlanner {
   private buildQuerySeed(mineflayer: Mineflayer): QuerySeed {
     const query = createQueryRuntime(mineflayer)
     return copyForIsolate({
-      self: query.self() as unknown as Record<string, unknown>,
-      blocks: query.blocks().within(96).limit(500).list() as unknown as Array<Record<string, unknown>>,
-      entities: query.entities().within(128).limit(500).list() as unknown as Array<Record<string, unknown>>,
-      inventory: query.inventory().list() as unknown as Array<Record<string, unknown>>,
+      self: castUnknown<(Record<string, unknown>)>(query.self()),
+      blocks: castUnknown<(Array<Record<string, unknown>>)>(query.blocks().within(96).limit(500).list()),
+      entities: castUnknown<(Array<Record<string, unknown>>)>(query.entities().within(128).limit(500).list()),
+      inventory: castUnknown<(Array<Record<string, unknown>>)>(query.inventory().list()),
       craftable: query.craftable().uniq().list(),
       gaze: query.gaze({ range: 32 }) as unknown[],
     })
@@ -1500,4 +1505,8 @@ delete globalThis.__plannerLog
     const rendered = inspect(value, { depth: 1, breakLength: 120 })
     return rendered.length > 120 ? `${rendered.slice(0, 117)}...` : rendered
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

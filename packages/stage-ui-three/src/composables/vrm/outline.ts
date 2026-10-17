@@ -367,7 +367,7 @@ function patchBuiltInOutlineMaterial(material: MToonMaterial) {
 
   if (!patchedVertexShader) {
     console.warn(
-      '[AIRI] Failed to patch built-in MToon outline shader: expected shader anchors were not found.',
+      '[Aori] Failed to patch built-in MToon outline shader: expected shader anchors were not found.',
       material.name,
     )
     return false
@@ -387,6 +387,7 @@ function patchBuiltInOutlineMaterial(material: MToonMaterial) {
   // `lib/three-vrm-materials-mtoon.module.js`. The current patch depends on three stable anchors:
   // `#include <common>`, `#include <beginnormal_vertex>`, and the built-in outline block body.
   // We keep the original `onBeforeCompile` untouched so three-vrm can continue prepending its
+
   // define set; this patch only rewrites the stored vertex shader string and program cache key.
   material.vertexShader = patchedVertexShader
   material.needsUpdate = true
@@ -432,25 +433,13 @@ function resolveBuiltInOutlineMeshTarget(mesh: Mesh): VrmOutlineMeshTarget | und
 }
 
 // Runtime target scan
-function getVrmOutlineRuntimeState(vrm: VRM) {
-  return vrmOutlineRuntimeRegistry.get(vrm)
-}
-
-function setVrmOutlineRuntimeState(vrm: VRM, state: VrmOutlineRuntimeState) {
-  vrmOutlineRuntimeRegistry.set(vrm, state)
-}
-
-function clearVrmOutlineRuntime(vrm: VRM) {
-  vrmOutlineRuntimeRegistry.delete(vrm)
-}
-
 function findVrmOutlineMeshTarget({
   material,
   materialIndex,
   mesh,
   vrm,
 }: Pick<VrmMaterialHookContext, 'material' | 'materialIndex' | 'mesh' | 'vrm'>) {
-  const runtimeState = getVrmOutlineRuntimeState(vrm)
+  const runtimeState = vrmOutlineRuntimeRegistry.get(vrm)
   if (!runtimeState)
     return undefined
 
@@ -478,14 +467,14 @@ export function prepareVrmOutlineRuntime(vrm: VRM) {
     meshTargets.push(meshTarget)
   })
 
-  setVrmOutlineRuntimeState(vrm, { meshes: meshTargets })
+  vrmOutlineRuntimeRegistry.set(vrm, { meshes: meshTargets })
 }
 
 export function disposeVrmOutlineRuntime(vrm?: VRM) {
   if (!vrm)
     return
 
-  clearVrmOutlineRuntime(vrm)
+  vrmOutlineRuntimeRegistry.delete(vrm)
 }
 
 export function createVrmOutlineHook(): VrmHook {
@@ -508,7 +497,7 @@ export function createVrmOutlineHook(): VrmHook {
 
       if (!meshTarget.geometry.getAttribute(AIRI_OUTLINE_NORMAL_ATTRIBUTE_NAME)) {
         console.warn(
-          '[AIRI] Failed to patch built-in MToon outline shader: outlineNormal is missing on geometry.',
+          '[Aori] Failed to patch built-in MToon outline shader: outlineNormal is missing on geometry.',
           meshTarget.mesh.name,
         )
         return

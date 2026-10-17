@@ -222,6 +222,7 @@ describe('widgets tool helpers', () => {
       // some nested fields are optional.
       //
       // The fixed provider-facing schema keeps the root `windowSize` field required and
+
       // nullable, then requires every nested key while allowing optional constraints to
       // be expressed as `number | null`. That preserves the runtime behavior while
       // satisfying strict tool validators that compare `required` against `properties`.
@@ -278,6 +279,7 @@ describe('widgets tool helpers', () => {
         // to appear in `required`, even though the schema is valid Draft-07 JSON Schema.
         //
         // This test proves whether AIHubMix currently rejects the tool with the same provider-
+
         // side validation error reported in the bug report.
         const response = await runCurlJson<AihubmixErrorResponse>({
           method: 'POST',

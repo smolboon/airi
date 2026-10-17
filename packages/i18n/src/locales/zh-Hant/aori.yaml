@@ -1,0 +1,15 @@
+menu:
+  appName: Aori
+  about: 關於 Aori
+  settings: 設定…
+  quit: 結束 Aori
+  newChat: 新聊天
+  openVRM: 打開 VRM…
+  memory: 記憶
+  showMainWindow: 顯示主視窗
+  showCompanion: 顯示同伴
+  hideCompanion: 隱藏同伴
+  alwaysOnTop: 同伴永遠置頂
+  clickThrough: 點擊穿透
+  language: 語言
+  statusItem: Aori

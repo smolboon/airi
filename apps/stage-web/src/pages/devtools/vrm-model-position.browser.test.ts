@@ -33,12 +33,15 @@ describe('imported VRM view settings', () => {
     // The scene treats that URL change as a model switch and replaces the saved view settings.
     //
     // The selected display model ID is stable across reloads. The scene must use that ID
+
     // for model identity and keep the Blob URL only for resource loading.
     // A new model ID can arrive before its URL. The old load must not commit the new ID.
     // Existing installations only have the old runtime URL identity key. AIRI cannot
+
     // safely map that URL back to a persisted file after restart. The first new-version
     // load must reset once and establish a stable model ID for later reloads.
     // A reload also creates a new VRM group. The saved offset must be applied to that
+
     // group even when the store value does not change and its watcher does not run.
     // The old group must leave the scene before AIRI commits the replacement group.
     const pinia = createPinia()

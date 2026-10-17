@@ -70,7 +70,7 @@ function createMockBillingService(flux = 100): BillingService {
 }
 
 function createMockGenAiMetrics(): GenAiMetrics {
-  return {
+  return castUnknown<(GenAiMetrics)>({
     operationDuration: { record: vi.fn() },
     operationCount: { add: vi.fn() },
     tokenUsageInput: { add: vi.fn() },
@@ -78,7 +78,7 @@ function createMockGenAiMetrics(): GenAiMetrics {
     fluxConsumed: { add: vi.fn() },
     firstTokenDuration: { record: vi.fn() },
     streamInterrupted: { add: vi.fn() },
-  } as unknown as GenAiMetrics
+  })
 }
 
 function createMockConfigKV(overrides: Record<string, any> = {}): ConfigKVService {
@@ -203,7 +203,7 @@ function createMockProductEventService(): ProductEventService {
 }
 
 function createMockVoicePackService(impl?: Partial<VoicePackService>): VoicePackService {
-  return {
+  return castUnknown<(VoicePackService)>({
     listEnabled: vi.fn(async () => []),
     list: vi.fn(async () => []),
     create: vi.fn(),
@@ -212,7 +212,7 @@ function createMockVoicePackService(impl?: Partial<VoicePackService>): VoicePack
     findById: vi.fn(async () => null),
     findEnabledByVoiceId: vi.fn(async () => null),
     ...impl,
-  } as unknown as VoicePackService
+  })
 }
 
 function createMockProviderCatalogService(impl?: Partial<ProviderCatalogService>): ProviderCatalogService {
@@ -546,6 +546,7 @@ describe('v1CompletionsRoutes', () => {
     //
     // After: balance is drained to zero (`charged = balance`), the request
     // log is still written, and the next
+
     // request fails the pre-flight gate.
     it('non-streaming completion drains partial balance and logs the request (Issue: unpaid-usage-exploit)', async () => {
       const upstreamBody = JSON.stringify({
@@ -1710,6 +1711,7 @@ describe('v1CompletionsRoutes', () => {
     // *afterwards*. If `settle()` rejected (e.g. Redis blip on
     // INCRBY), the call site threw straight to `app.onError` and the
     // active span was never closed — OTel batched-span buffer leaked one
+
     // span per failed TTS billing event, and `recordRequestLog` was
     // skipped silently.
     //
@@ -1718,6 +1720,7 @@ describe('v1CompletionsRoutes', () => {
     // span.end() runs unconditionally, and the error propagates to the
     // global handler. recordRequestLog is still skipped (we can't log a
     // billing-failed request without a fluxConsumed value), but the
+
     // failure is now observable instead of hidden by a leaked span.
     it('tTS billing failure closes the span and surfaces error to onError (regression)', async () => {
       globalThis.fetch = vi.fn(async () => new Response(new Uint8Array([1]), {
@@ -3637,3 +3640,7 @@ it('rejects a Responses stream whose generation ID changes', async () => {
   await response.text().catch(() => undefined)
   await vi.waitFor(() => expect(harness.logs.logRequest).toHaveBeenCalledWith(expect.objectContaining({ status: 502, generationId: 'response-first' })))
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

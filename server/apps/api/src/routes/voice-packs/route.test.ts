@@ -22,7 +22,7 @@ function createTestApp(service: VoicePackService, user: { id: string } | null) {
 }
 
 function createService() {
-  return {
+  return castUnknown<(VoicePackService)>({
     listEnabled: vi.fn(async () => [{
       id: 'vp-1',
       name: 'Enabled',
@@ -44,7 +44,7 @@ function createService() {
     disable: vi.fn(),
     findById: vi.fn(),
     findEnabledByVoiceId: vi.fn(),
-  } as unknown as VoicePackService
+  })
 }
 
 describe('voice packs routes', () => {
@@ -79,3 +79,7 @@ describe('voice packs routes', () => {
     expect(service.listEnabled).toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

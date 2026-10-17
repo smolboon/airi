@@ -61,6 +61,7 @@ describe('live2d MAGIC settings', () => {
   // profile registry with an unknown key and read `dataset` from `undefined`.
   //
   // Before the fix, the store returned `idle-excited` unchanged.
+
   // We fixed this by resetting unknown persisted profile IDs at the storage boundary.
   it('resets a persisted profile ID that is not in the profile registry', async () => {
     persistedValues.set('settings/live2d/magic/profile', 'idle-excited')

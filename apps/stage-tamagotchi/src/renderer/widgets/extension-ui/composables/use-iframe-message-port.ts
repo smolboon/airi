@@ -147,6 +147,7 @@ export function useIframeMessagePort(
     // or renderer remounts, which means the iframe's one-shot ready event may
     // have already been emitted. Treat load as the point where invokes may be
     // attempted; Eventa still owns request timeout/error handling if the iframe
+
     // has not registered its handler yet.
     iframeReady.value = true
     iframeLoadError.value = undefined

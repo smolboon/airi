@@ -51,12 +51,12 @@ describe('createWorkflowPrepToolExecutor', () => {
       cwd: '/tmp',
     })
 
-    runtime = {
+    runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({ approvalMode: 'never' }),
       stateManager,
       browserDomBridge: { getStatus: vi.fn(), readAllFramesDom: vi.fn() },
       cdpBridgeManager: { ensureBridge: vi.fn() },
-    } as unknown as ComputerUseServerRuntime
+    })
   })
 
   it('writes audit entries for internal PTY send/read/destroy operations', async () => {
@@ -120,3 +120,7 @@ describe('createWorkflowPrepToolExecutor', () => {
     expect(writeToPty).toHaveBeenCalledWith('pty_1', { data: 'vim --version' })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

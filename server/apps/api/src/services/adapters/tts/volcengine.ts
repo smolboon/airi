@@ -74,6 +74,7 @@ export const volcengineAdapter: TtsAdapter = {
     //   we send a normal Bearer here, NOT the `Bearer; ` form.
     // - takes `app.appid`, `app.cluster`, `user.uid`, `request.reqid`,
     //   `audio.encoding`, `audio.speed_ratio` from `extra_body` jsonpath.
+
     // - decodes the upstream base64 audio frame itself and returns binary.
     return sendSpeechViaUnSpeech({
       ctx,

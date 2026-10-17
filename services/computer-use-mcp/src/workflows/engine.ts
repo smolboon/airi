@@ -333,6 +333,7 @@ export async function executeWorkflow(params: {
     // resolves the target surface BEFORE evaluating strategy advisories.
     // When the surface resolver says 'pty', the engine self-acquires the PTY
     // through the unified approval path (acquirePty callback) and continues
+
     // execution on the PTY — no outward reroute needed.
     //
     // The old v1 strategy-driven reroute is kept as a secondary fallback

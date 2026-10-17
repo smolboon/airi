@@ -104,6 +104,7 @@ export const useChatSessionStore = defineStore('chat-session', () => {
   // (`userId === 'local'`) users never open a socket. `cloudSyncReady` is a
   // UI-facing readiness flag (true after a successful reconcile); it does
   // NOT gate `pushMessageToCloud`, which writes to the outbox and lets
+
   // reconnect catch up — that way the very first message in a session does
   // not get dropped while reconcile completes.
   const cloudSyncReady = ref(false)
@@ -651,6 +652,7 @@ export const useChatSessionStore = defineStore('chat-session', () => {
     // snapshot the index *with the doomed entry still in it* and write that
     // snapshot to IDB. The user then sees the row reappear after a reload.
     //
+
     // Old behavior: await mapper.deleteChat → mutate → persist; the
     // overlapping persistSession races us and wins.
     //
@@ -688,6 +690,7 @@ export const useChatSessionStore = defineStore('chat-session', () => {
       // (offline, transient 5xx), the next reconcile will see the remote id
       // here and skip the adopt branch — preventing the ghost-session bug
       // where the server still has the row and re-creates the local mapping.
+
       // The reconcile-driven `drainTombstones` retries failed DELETEs.
       await enqueuePersist(() => chatSessionsRepo.addTombstone(currentUserId, remoteChatId))
       if (cloudChatId) {

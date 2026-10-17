@@ -280,6 +280,7 @@ describe('card inheritance with real module stores', () => {
   // card setup completed.
   //
   // We fixed this by loading auth-owned voices after card setup applies the
+
   // effective provider, model, and voice in the synchronization leader.
   it('loads official voices through authenticated card setup', async () => {
     const speechStore = useSpeechStore()

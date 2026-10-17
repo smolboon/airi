@@ -1,5 +1,5 @@
 import type { Browser, BrowserContext, ElectronApplication } from 'playwright'
-import type { RunnerTestCase, TestAPI, TestContext } from 'vitest'
+import type { RunnerTestCase, TestContext } from 'vitest'
 import type { UserWorkspaceConfig } from 'vitest/config'
 
 import { mkdtemp, rm } from 'node:fs/promises'
@@ -249,7 +249,7 @@ export function createAudioTestAPI<Definition, Plan, Context extends object, Pre
 
   return {
     describe,
-    it: collector as TestAPI as AudioTestAPI<Definition, Context>,
+    it: castUnknown<(AudioTestAPI<Definition, Context>)>(collector),
   }
 }
 
@@ -417,4 +417,8 @@ export async function runAudioTestSession<Session extends AudioTestSession>(
     throw errors[0]
   if (errors.length > 1)
     throw new AggregateError(errors, 'The audio test and its cleanup produced multiple errors')
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

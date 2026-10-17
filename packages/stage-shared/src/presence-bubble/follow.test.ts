@@ -49,6 +49,7 @@ describe('presence bubble follower', () => {
     // seconds rather than overshooting, so it landed on 200 with the cap
     // removed and the assertion still held by a rounding error.
     //
+
     // The cap is what stops one frame costing a step per 8ms of the gap. A
     // stall now has to land exactly where the longest allowed frame lands.
     const stalled = new PresenceBubbleFollower()

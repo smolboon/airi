@@ -48,7 +48,7 @@ function createGlMock(options: GlMockOptions = {}) {
     },
   }
 
-  return gl as unknown as WebGLRenderingContext
+  return castUnknown<(WebGLRenderingContext)>(gl)
 }
 
 describe('isCanvasRegionTransparent', () => {
@@ -124,3 +124,7 @@ describe('isCanvasRegionTransparent', () => {
     expect(result).toBe(false)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

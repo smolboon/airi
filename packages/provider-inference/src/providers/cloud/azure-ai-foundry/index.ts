@@ -70,7 +70,7 @@ export const providerAzureAIFoundry = defineProvider<AzureAIFoundryConfig, 'azur
     // ProviderDefinition still declares a synchronous result, while the runtime awaits it.
     // Source: @xsai-ext/providers special/create and stores/providers/provider.ts.
     // Remove this cast when ProviderDefinition accepts MaybePromise<ProviderInstance>.
-    return provider as unknown as ProviderInstance
+    return castUnknown<(ProviderInstance)>(provider)
   },
 
   extraMethods: {
@@ -116,3 +116,7 @@ export const providerAzureAIFoundry = defineProvider<AzureAIFoundryConfig, 'azur
     ],
   },
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

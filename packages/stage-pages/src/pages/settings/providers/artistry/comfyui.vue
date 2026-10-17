@@ -233,10 +233,6 @@ function generateExampleJson(wf: ComfyUIWorkflowTemplate) {
   }
   return JSON.stringify(example, null, 2)
 }
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text)
-}
 </script>
 
 <template>
@@ -426,7 +422,7 @@ function copyToClipboard(text: string) {
               <Button
 
                 size="sm"
-                @click="copyToClipboard(generateExampleJson(wf))"
+                @click="navigator.clipboard.writeText(generateExampleJson(wf))"
               >
                 {{ t('settings.pages.providers.provider.comfyui.settings.workflows.copy_json') }}
               </Button>

@@ -92,7 +92,7 @@ async function createZip(entries: Record<string, Blob | string | Uint8Array>): P
 function installMemoryOPFS(root = new MemoryDirectoryHandle('root')): MemoryDirectoryHandle {
   vi.stubGlobal('navigator', {
     storage: {
-      getDirectory: vi.fn(async () => root as unknown as FileSystemDirectoryHandle),
+      getDirectory: vi.fn(async () => castUnknown<(FileSystemDirectoryHandle)>(root)),
     },
   })
   return root
@@ -101,7 +101,7 @@ function installMemoryOPFS(root = new MemoryDirectoryHandle('root')): MemoryDire
 async function writeLegacyCache(root: MemoryDirectoryHandle, key: string): Promise<void> {
   const dir = await root.getDirectoryHandle(key, { create: true })
   await OPFSCache.writeFile(
-    dir as unknown as FileSystemDirectoryHandle,
+    castUnknown<(FileSystemDirectoryHandle)>(dir),
     'model.model3.json',
     JSON.stringify({ Version: 3 }),
   )
@@ -151,12 +151,12 @@ describe('opfs cache full directory persistence', () => {
   it('does not restore ignored archive metadata that already exists in OPFS', async () => {
     const dir = await root.getDirectoryHandle('metadata-model', { create: true })
     await OPFSCache.writeFile(
-      dir as unknown as FileSystemDirectoryHandle,
+      castUnknown<(FileSystemDirectoryHandle)>(dir),
       '__MACOSX/._model.model3.json',
       new Blob([new Uint8Array([0, 5, 22, 7, 0, 2, 0, 0])]),
     )
     await OPFSCache.writeFile(
-      dir as unknown as FileSystemDirectoryHandle,
+      castUnknown<(FileSystemDirectoryHandle)>(dir),
       'model.model3.json',
       JSON.stringify({
         Version: 3,
@@ -164,7 +164,7 @@ describe('opfs cache full directory persistence', () => {
       }),
     )
     await OPFSCache.writeFile(
-      dir as unknown as FileSystemDirectoryHandle,
+      castUnknown<(FileSystemDirectoryHandle)>(dir),
       '__meta.json',
       JSON.stringify({ sourceUrl: 'blob:first', version: 3 }),
     )
@@ -310,3 +310,7 @@ describe('opfs cache full directory persistence', () => {
     )
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

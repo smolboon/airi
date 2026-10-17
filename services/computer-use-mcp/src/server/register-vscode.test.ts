@@ -15,11 +15,11 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _schema: unknown, handler: ToolHandler) {
         handlers.set(name, handler)
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -61,10 +61,10 @@ describe('registerVscodeTools', () => {
   let runtime: ComputerUseServerRuntime
 
   beforeEach(() => {
-    runtime = {
+    runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig(),
       stateManager: new RunStateManager(),
-    } as unknown as ComputerUseServerRuntime
+    })
   })
 
   it('opens workspaces through the standard terminal_exec chain and updates run-state', async () => {
@@ -184,3 +184,7 @@ describe('registerVscodeTools', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -336,6 +336,7 @@ export const useSpeechStore = defineStore('speech', () => {
   // voices for an explicit `?model=`. Ensure the active model is a valid
   // streaming model id so voice loading gets the right recommendations (parity
   // with the HTTP provider's auto-pick). Reseeds the server-curated default
+
   // both when no model is selected AND when `activeSpeechModel` still holds a
   // stale id from a previously-active provider (the global model ref is shared
   // across providers, and the per-surface reset may not have run yet). No-op
@@ -365,6 +366,7 @@ export const useSpeechStore = defineStore('speech', () => {
   // one entry, and the provider looks broken until then. This applies to every
   // single-model speech provider, not only to the VOICEVOX family.
   //
+
   // The voice selection stays as it is. Voices belong to the provider, not to
   // this model, and a provider switch clears both before this runs.
   function ensureSingleOptionSpeechModel() {

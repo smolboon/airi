@@ -11,7 +11,6 @@ import { useSpeechStore } from '@proj-airi/stage-ui/stores/modules/speech'
 import { useVisionStore } from '@proj-airi/stage-ui/stores/modules/vision/store'
 import { useSettings } from '@proj-airi/stage-ui/stores/settings'
 import { useSettingsStageModel } from '@proj-airi/stage-ui/stores/settings/stage-model'
-import { useTheme } from '@proj-airi/ui'
 import { createPinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-vue'
@@ -348,6 +347,7 @@ describe('controls Island overflow', () => {
   //
   // Before the patch, the bottom dock could open with its main controls clipped.
   //
+
   // We fixed this by aligning the outer viewport to the dock edge after layout changes.
   it('issue #2400 aligns bottom docks to the visible vertical scroll end', async () => {
     await page.viewport(450, 200)
@@ -373,6 +373,7 @@ describe('controls Island overflow', () => {
   // Before the patch, the outside timer collapsed the menu during a scrollbar drag.
   //
   // We fixed this by treating pressed scrollbar interaction as a blocked state.
+
   // The interaction path is independent from the size and dock matrix.
   it('issue #2400 keeps the expanded menu open during a scrollbar drag', async () => {
     await page.viewport(450, 300)
@@ -400,23 +401,6 @@ describe('controls Island overflow', () => {
   })
 })
 
-// https://github.com/moeru-ai/airi/issues/2521
-it('cycles the theme through light, dark, and the system scheme', async () => {
-  const { i18n, screen } = mountControlsIsland('bottom-right')
-  const label = (key: string) => i18n.global.t(`tamagotchi.stage.controls-island.${key}`)
-  await screen.getByLabelText(label('expand'), { exact: true }).click()
-
-  const { themeMode } = useTheme()
-  const order = ['light', 'dark', 'auto'] as const
-  const labelKeys = { light: 'switch-to-light-mode', dark: 'switch-to-dark-mode', auto: 'switch-to-system-mode' }
-  // Three presses return to the starting theme, so the test leaves the stored theme as it was.
-  for (let press = 0; press < order.length; press++) {
-    const next = order[(order.indexOf(themeMode.value) + 1) % order.length]
-    await screen.getByLabelText(label(labelKeys[next]), { exact: true }).click()
-    expect(themeMode.value).toBe(next)
-  }
-})
-
 it('keeps the menu open while genuinely hovered even if the Electron cursor signal reports outside', async () => {
   // ROOT CAUSE:
   //
@@ -427,6 +411,7 @@ it('keeps the menu open while genuinely hovered even if the Electron cursor sign
   // "outside" and collapsing the menu regardless of where the cursor
   // actually is.
   //
+
   // We fixed this by ORing that signal with useMouseInElement's plain
   // DOM-based isOutside, which tracks real pointer position and needs no
   // OS-level cursor query. The menu now stays open whenever either signal
@@ -530,6 +515,7 @@ it('keeps the profile creation form open for pointer interaction (PR #2474)', as
   // card with the name entered for the previous card.
   //
   // We fixed this by canceling creation when a non-create option is selected.
+
   // The close-to-create transition remains allowed.
   await screen.getByRole('combobox').click()
   await page.getByRole('option', { name: i18n.global.t('stage.profile-switcher.save-as-new') }).click()

@@ -10,6 +10,7 @@ declare module '@vishot/mockup-desktop-vue' {
   // `./navigator`, which are not emitted as declaration files in npm 0.0.3.
   // Source/context: `node_modules/@vishot/mockup-desktop-vue/dist/components.js`
   // and `dist/components/index.d.ts`.
+
   // Removal condition: delete this module augmentation after Vishot publishes
   // corrected component declaration barrels.
   export const DecoFocusMask: Component

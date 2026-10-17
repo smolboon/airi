@@ -26,6 +26,7 @@ describe('profile switcher', () => {
     // the form before the user could enter a name.
     //
     // The form now owns outside-click dismissal, while Select owns its own
+
     // portal lifecycle. Closing the Select therefore does not cancel creation.
     const screen = await renderProfileSwitcher()
 

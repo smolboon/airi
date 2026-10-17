@@ -298,9 +298,11 @@ export class ReflexRuntime {
     //
     // NOTICE: 'alert' was previously here too, which meant any nearby threat (e.g. mobs in a cave)
     // flipped the bot to 'alert' and SILENTLY cancelled auto-follow — so "follow me down the mine"
+
     // left the bot standing still near hostiles. There is currently no alert/defend behavior that
     // sets a competing pathfinder goal (the only reflex behavior is idle-gaze), so suppressing follow
     // during alert gave the bot nothing useful to do. A companion should stay with its owner INTO
+
     // danger, so alert no longer cancels follow.
     if (mode === 'work' || mode === 'wander') {
       if (snapshot.autonomy.followActive)

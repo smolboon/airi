@@ -1,0 +1,8 @@
+Butter is a VRM 0 humanoid by Polygonal Mind.
+The file name in the source repository is 100Avatars_083_Butter.vrm.
+The source repository is https://github.com/PolygonalMind/100Avatars
+The license in the file is CC0 1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/
+This app did not make the mesh or the texture.
+
+aori-face.vrm is a separate portrait. This app made that mesh. The license is CC0 1.0 Universal. Butter stays the companion sample. Butter's texture paints the word BUTTER. It has no eyes, no nose, and no mouth.

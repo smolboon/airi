@@ -168,6 +168,7 @@ describe('spotlight host context', () => {
     // The host keeps the registration across renderer page loads, and the key
     // callback it stores belongs to the page that registered it. A page that went
     // away without releasing left the accelerator claimed, so the next page's
+
     // register was rejected as a duplicate and the shortcut kept dispatching into
     // the unloaded page until the app restarted.
     //

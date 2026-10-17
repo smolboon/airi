@@ -20,16 +20,20 @@ import { parseColor } from 'unocss/preset-mini'
 //    Error: connect ENETUNREACH 2a04:4e42:83::485:443 - Local (:::0) ...
 //  ]
 //
+
 // This is same for either Google Fonts or Fontsource as provider. But GitHub Actions and local development works fine.
 // My assumption is that the default timeout for auto-selecting family is too short (250ms)[^1] for the implementation
+
 // of the Happy Eyeballs algorithm in Node.js, which is used by the `net` module to connect to the server, workflows
 // illustrates like this:
 //
 // lookupAndConnect > autoSelectFamilyAttemptTimeout > lookupAndConnectMultiple > internalConnectMultiple > defaultTriggerAsyncIdScope
 //
+
 // Such mechanism will be used when the `net` module attempts to connect to a server using both IPv4 and IPv6 addresses,
 // which is the case for Netlify builder.
 //
+
 // In order to fix this issue, we can increase the timeout to 1000ms (1 second) so that the algorithm has more time to
 // attempt to connect to the server before timing out.
 //

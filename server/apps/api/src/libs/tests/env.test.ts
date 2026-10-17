@@ -94,6 +94,7 @@ describe('parseEnv', () => {
   // because `parseEnv` calls `process.exit(1)` on validation failure (intended
   // for boot failures, not test assertions). Testing through `parseEnv` would
   // require mocking `process.exit`, which destabilizes the vitest worker on
+
   // module-init paths (parsedEnv = injeca.provide('env', () => parseEnv(env))).
   // The success-case tests above prove the validator chain runs; the failure
   // mode is exercised via integration / manual deploy testing.

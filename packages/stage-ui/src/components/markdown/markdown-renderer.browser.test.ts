@@ -77,6 +77,7 @@ describe('markdown renderer initial content', () => {
     // TransitionVertical measured that empty element and kept the stale height for 250 ms.
     // The content jumped to its real height when the animation released its fixed height.
     //
+
     // We fixed this by rendering basic Markdown synchronously before optional rich processing.
     const markdown = `### Roof Leak in Server Room
 

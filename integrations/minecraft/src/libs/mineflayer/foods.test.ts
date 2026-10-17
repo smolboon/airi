@@ -11,7 +11,7 @@ function item(name: string, foodPoints?: number): { name: string, foodPoints?: n
 }
 
 function botWith(items: Array<{ name: string, foodPoints?: number }>): Bot {
-  return { inventory: { items: () => items } } as unknown as Bot
+  return castUnknown<(Bot)>({ inventory: { items: () => items } })
 }
 
 describe('food classification', () => {
@@ -51,3 +51,7 @@ describe('selectReadyFood', () => {
     expect(hasReadyFood(botWith([item('cooked_cod', 5)]))).toBe(true)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

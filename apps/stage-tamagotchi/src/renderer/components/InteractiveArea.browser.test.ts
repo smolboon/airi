@@ -204,6 +204,7 @@ describe('interactive area synchronized state', () => {
     // height above the textarea: 6px above and 2px below.
     //
     // We fixed this with justify-center. The empty and single-line textarea
+
     // now has 4px on each side, and multiline input stays centered.
     await page.viewport(390, 844)
     const { screen } = await renderArea(MobileInteractiveArea)
@@ -794,6 +795,7 @@ describe('interactive area synchronized state', () => {
   // The test scrolled as soon as the reply started to expand. Each later resize
   // queued a tail scroll, which could unmount the message selected by the test.
   // Virtua then retried that tail scroll when older rows were first measured.
+
   // Wait for the transition, measurements, and pending scroll before the jitter.
   // A slower transition exposes this race without depending on CI load.
   it.each(['200ms', '1s'])('keeps the history scrollport behind the floating composer (%s reply)', async (duration) => {

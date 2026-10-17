@@ -331,6 +331,7 @@ export function createLlmRouterService(options: CreateLlmRouterServiceOptions) {
         // but isn't yet in our project's TS lib target consistently, so we
         // wire a tiny manual aggregator to stay portable.
         // Source: MDN AbortSignal.any (Baseline 2024). Removal condition:
+
         // once tsconfig lib bumps to ES2024 and Node 20 minimum, swap to
         // `AbortSignal.any([attemptCtrl.signal, req.abortSignal])`.
         const attemptCtrl = new AbortController()
@@ -739,11 +740,13 @@ export function createLlmRouterService(options: CreateLlmRouterServiceOptions) {
         //   the upstream (e.g. azure invalid voice id, volcengine missing
         //   `adapterParams.appid`). Every key on every upstream would reject
         //   the same way, so propagate without fallback.
+
         // - `ApiError` 5xx — adapter caught a network failure and wrapped it
         //   in `createInternalError(...)`. Different keys / upstreams may
         //   succeed, so fold into the same fallback path as a plain network
         //   error.
         // - `Error & { status: number }` — upstream answered non-2xx; we own
+
         //   the fallback decision and consult `fallbackHttpCodes`.
         // - plain `Error` — network failure or per-attempt timeout (our
         //   AbortController fired); treat as `'timeout'` for KTD-1 mapping.

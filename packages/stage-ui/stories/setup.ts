@@ -31,8 +31,12 @@ export const setupVue3 = defineSetupVue3(({ app }) => {
   app.use(MotionPlugin)
   app.use(i18n)
   // TODO: Fix autoAnimatePlugin type error
-  app.use(autoAnimatePlugin as unknown as Plugin)
+  app.use(castUnknown<(Plugin)>(autoAnimatePlugin))
 
   app.component('ThemeColorsHueControl', ThemeColorsHueControl)
   app.component('CharacterCardColorControls', CharacterCardColorControls)
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

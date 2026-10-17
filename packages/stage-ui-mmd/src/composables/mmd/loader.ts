@@ -33,6 +33,7 @@ export function createMMDLoaderContext(urlModifier?: UrlModifier): MMDLoaderCont
       // (e.g. "blob:http://host/uuid/tex/face.png"). We must still run those
       // through the resolver — an earlier `blob:` short-circuit here silently
       // broke all ZIP textures. Only data: URIs (embedded toon textures) are
+
       // passed through untouched. The resolver falls back to the original URL
       // for the model file and any unmatched path, so this is safe.
       if (url.startsWith('data:'))

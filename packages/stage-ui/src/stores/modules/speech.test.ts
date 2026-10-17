@@ -72,6 +72,7 @@ describe('speech store helpers', () => {
   // The watcher then called getModelsForProvider twice when the cache was empty.
   //
   // We fixed this by keeping model selection behind explicit operations. A UI
+
   // consumer can still read providerModels when it needs the cached catalog.
   it('does not query the model cache when only provider state changes', async () => {
     const providersStore = useProviderStore()
@@ -99,6 +100,7 @@ describe('speech store helpers', () => {
   // refManualReset reported that no-op assignment as another Pinia mutation.
   //
   // Catalog refreshes now stay outside the speech settings snapshot. They
+
   // must not publish settings when no selected voice needs an update.
   it('does not publish a second mutation for an unresolved voice', async () => {
     const providersStore = useProviderStore()
@@ -129,6 +131,7 @@ describe('speech store helpers', () => {
   // replaced the synchronized selection with speech-noop.
   //
   // We fixed this by keeping provider selection command-driven. A provider
+
   // configuration snapshot no longer edits the speech module selection.
   it('keeps the selected provider while provider snapshots are incomplete', async () => {
     const providersStore = useProviderStore()

@@ -162,6 +162,7 @@ export async function resolveRequestAuth(
   // stateless — verified by signature, not by a session row — so the admin
   // plugin's session.create.before hook (which only fires on login) cannot
   // invalidate a token mid-TTL. Re-checking `user.banned` here (free: the user
+
   // row is already loaded) is what makes a ban take effect immediately across
   // the HTTP, WebSocket, and OIDC token paths that funnel through this function.
   if (isUserBannedNow(resolved.user))

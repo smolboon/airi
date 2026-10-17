@@ -81,6 +81,7 @@ export function chatCompletions(deps: V1RouteDeps): GatewayCallback<'chat-comple
     // shape. Span is closed inside the catch so failures show up in traces.
     // NOTICE:
     // Propagate the client disconnect signal so an upstream LLM call doesn't
+
     // keep generating tokens (and burning paid upstream quota) after the
     // caller hangs up. Without this the streaming-cancel path records
     // fluxConsumed: 0 while real cost was incurred — a silent revenue leak.

@@ -52,6 +52,7 @@ export function setupSettingsWindowReusableFunc(params: {
       width: 600.0,
       height: 800.0,
       show: false,
+      backgroundColor: '#171717',
       icon,
       webPreferences: {
         preload: join(getElectronMainDirname(), '../preload/index.mjs'),

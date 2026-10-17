@@ -68,11 +68,13 @@ describe('billingService', () => {
       // requestId.
       //
       // Before the fix: second call hit the unique index on
+
       // (user_id, request_id) and threw, the poller's catch block marked
       // the recipient as `failed` despite the user already having been credited.
       // User got the FLUX but the recipient row was stuck in failed.
       //
       // After the fix: second call detects the existing flux_transaction row,
+
       // returns it as an idempotent success without touching balance or cache.
       // Poller advances to granted normally.
       const requestId = 'campaign-replay-test'

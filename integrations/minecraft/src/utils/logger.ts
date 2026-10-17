@@ -29,7 +29,7 @@ export function useLogger() {
 
   // Proxy logger to broadcast events
   // We need to preserve the original formatting/behavior while adding the side-effect
-  return {
+  return castUnknown<(ReturnType<typeof useLogg>)>({
     log: (message: string, ...args: any[]) => {
       logger.log(message, ...args)
       DebugService.getInstance().log('INFO', `[${dirName}/${fileName}] ${message}`, { args })
@@ -73,5 +73,9 @@ export function useLogger() {
       logger.errorWithError(message, error)
       DebugService.getInstance().log('ERROR', `[${dirName}/${fileName}] ${message}`, { error })
     },
-  } as unknown as ReturnType<typeof useLogg> // Force type for now as complete Logg interface is complex to mock fully perfectly without more boilerplate
+  }) // Force type for now as complete Logg interface is complex to mock fully perfectly without more boilerplate
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

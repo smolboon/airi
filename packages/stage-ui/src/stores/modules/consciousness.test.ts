@@ -112,6 +112,7 @@ describe('consciousness store provider selection', () => {
   // error to the user.
   //
   // We fixed this by checking the ProviderDefinition registry through the
+
   // runtime store without building executable ProviderMetadata objects.
   //
   // https://github.com/moeru-ai/airi/issues/1761
@@ -201,6 +202,7 @@ describe('consciousness store provider selection', () => {
   // the consciousness settings page. Provider changes made anywhere else
   // (onboarding, character cards, provider deletion) kept the previous
   // provider's model id, and the next chat request failed upstream with
+
   // 404 model_not_found (e.g. "Model gpt-oss-120b does not exist").
   //
   // We fixed this by moving the reset into the store itself, next to the
@@ -252,6 +254,7 @@ describe('consciousness store provider selection', () => {
   // reset the model. A stale storage event then restored the previous model.
   // Both windows published each reflected change and created an endless loop.
   //
+
   // We fixed this by keeping localStorage as one-way persistence. Pinia is the
   // only channel that can update live state across windows.
   it('does not apply storage events as a second cross-window state channel', async () => {

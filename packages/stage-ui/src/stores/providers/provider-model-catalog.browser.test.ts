@@ -154,6 +154,7 @@ describe('provider model catalog synchronization', () => {
   // Before: the leader returned only the models and kept the other catalog
   // fields in its renderer.
   //
+
   // We fixed this by returning one serializable model catalog from the action.
   // The follower receives the models, availability, and default model together.
   it('returns streaming catalog metadata to a follower-only renderer', async () => {
@@ -214,6 +215,7 @@ describe('provider model catalog synchronization', () => {
   //
   // Before: mutate providerConfig.model in the follower page.
   //
+
   // We fixed this by routing model updates to awaited leader-owned actions.
   it('applies defaults through the leader without replacing a user selection', async () => {
     const namespace = `provider-model-default:${crypto.randomUUID()}`

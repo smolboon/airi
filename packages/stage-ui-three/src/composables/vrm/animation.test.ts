@@ -134,11 +134,11 @@ describe('reAnchorRootPositionTrack', () => {
 })
 
 function createMockVRMCore() {
-  return {
+  return castUnknown<(VRMCore)>({
     expressionManager: {
       setValue: vi.fn(),
     },
-  } as unknown as VRMCore
+  })
 }
 
 function lastBlinkValue(vrm: VRMCore) {
@@ -160,6 +160,7 @@ describe('useBlink', () => {
     // froze the sine cycle and left the eyelid stuck closed until the emote
     // reset.
     //
+
     // We fixed this by always advancing the controller and holding the blink
     // morph at 0 while suppressed.
     vi.spyOn(Math, 'random').mockReturnValue(0) // nextBlinkTime = MIN_BLINK_INTERVAL (1s)
@@ -235,3 +236,7 @@ describe('useBlink', () => {
     expect(lastBlinkValue(vrm)).toBeGreaterThan(0)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

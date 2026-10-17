@@ -107,6 +107,7 @@ export async function setupDesktopOverlayWindow(params: {
   // polling via callTool. If the handlers aren't registered yet, the
   // first eventa invoke hangs forever (no response dispatched back to
   // this window), and all subsequent poll cycles never fire because
+
   // the poll loop awaits each call sequentially.
   await setupDesktopOverlayElectronInvokes({
     window: overlayWindow,

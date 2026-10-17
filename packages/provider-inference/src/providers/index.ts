@@ -53,9 +53,11 @@ import { providerZai } from './cloud/zai'
 import { providerBrowserWebSpeechApi } from './local/browser-web-speech-api'
 import { providerIndexTtsVllm } from './local/index-tts-vllm'
 import { providerLmStudio } from './local/lm-studio'
+import { providerMlxServe } from './local/mlx-serve'
 import { providerOllama } from './local/ollama'
 import { providerPlayer2Speech } from './local/player2-speech'
 import { providerSpeechNoop } from './local/speech-noop'
+import { providerTensorFold } from './local/tensorfold'
 import { providerAivisSpeech, providerVoicevox } from './local/voicevox'
 
 /**
@@ -75,7 +77,7 @@ type ErasedProviderDefinitions<TDefinitions extends readonly ProviderDefinitionR
 function eraseProviderDefinitions<const TDefinitions extends readonly ProviderDefinitionRegistration[]>(
   ...definitions: TDefinitions
 ): ErasedProviderDefinitions<TDefinitions> {
-  return definitions as unknown as ErasedProviderDefinitions<TDefinitions>
+  return castUnknown<(ErasedProviderDefinitions<TDefinitions>)>(definitions)
 }
 
 /**
@@ -138,11 +140,17 @@ export const portableProviderDefinitions = eraseProviderDefinitions(
   providerBrowserWebSpeechApi,
   providerIndexTtsVllm,
   providerLmStudio,
+  providerMlxServe,
   providerOllama,
   providerPlayer2Speech,
   providerSpeechNoop,
+  providerTensorFold,
   providerAivisSpeech,
   providerVoicevox,
 )
 
 export { createProviderRegistry, defineProvider } from './registry'
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
