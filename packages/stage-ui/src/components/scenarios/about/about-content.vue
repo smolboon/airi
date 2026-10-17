@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<{
   links?: AboutLink[]
 }>(), {
   title: 'Project',
-  highlight: 'AIRI',
+  highlight: 'AORI',
   subtitle: '',
   links: () => ([
     { label: 'Home', href: 'https://airi.moeru.ai/docs/', icon: 'i-solar:home-smile-outline' },

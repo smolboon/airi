@@ -50,8 +50,8 @@ devtools:
     context-flow:
       title: Luồng ngữ cảnh
     editor:
-      title: Trình chỉnh sửa AIRI
-      description: Mở cửa sổ Trình chỉnh sửa AIRI độc lập
+      title: Trình chỉnh sửa AORI
+      description: Mở cửa sổ Trình chỉnh sửa AORI độc lập
       button: Mở trình chỉnh sửa
     lag-visualizer:
       title: Trình trực quan hóa độ trễ
@@ -103,5 +103,5 @@ screen-capture:
     dismiss: Bỏ qua
     instructions:
       step-1: Mở "Tùy chọn hệ thống", chọn "Quyền riêng tư & Bảo mật" từ thanh bên.
-      step-2: Trong phần "Ghi màn hình & Âm thanh hệ thống" và "Chỉ ghi âm thanh hệ thống", hãy bật công tắc cho AIRI.
-      step-2-note: Nếu không thấy AIRI trong danh sách, vui lòng thêm thủ công bằng cách nhấn nút "+" và chọn AIRI từ thư mục Ứng dụng (Applications).
+      step-2: Trong phần "Ghi màn hình & Âm thanh hệ thống" và "Chỉ ghi âm thanh hệ thống", hãy bật công tắc cho AORI.
+      step-2-note: Nếu không thấy AORI trong danh sách, vui lòng thêm thủ công bằng cách nhấn nút "+" và chọn AORI từ thư mục Ứng dụng (Applications).

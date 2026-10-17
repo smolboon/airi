@@ -76,10 +76,10 @@ devtools:
       squint:
         title: 對亮度變化眯眼
         description: 當螢幕變亮的速度快於角色的適應速度時收窄眼睛。持續明亮的螢幕不會讓眼睛保持眯著。設為 0 可關閉。
-      main-window-note: 變更會顯示在 AIRI 主視窗中。
+      main-window-note: 變更會顯示在 AORI 主視窗中。
       diagnostics:
         title: 擷取診斷
-        waiting: 正在等待 AIRI 主視窗傳送診斷資料。
+        waiting: 正在等待 AORI 主視窗傳送診斷資料。
         status:
           disabled: 已停用
           starting: 啟動中
@@ -92,14 +92,14 @@ devtools:
           display: 顯示器與邊界
           video-size: 來源影片
           sample-size: 取樣畫面
-          window-bounds: AIRI 視窗邊界
+          window-bounds: AORI 視窗邊界
           excluded-region: 排除區域
           exposure: 螢幕曝光
           behind-luminance: 角色背後的光線
           updated: 最後更新
         preview:
           title: 縮小後擷取畫面
-          description: 紅色矩形標示 AIRI 視窗。虛線矩形標示光照圖涵蓋的範圍。
+          description: 紅色矩形標示 AORI 視窗。虛線矩形標示光照圖涵蓋的範圍。
           unavailable: 沒有可用的擷取畫面。
         pixels:
           title: 像素判定
@@ -110,7 +110,7 @@ devtools:
           see-through: 穿透
         maps:
           title: 光照圖
-          window: 每張光照圖涵蓋 AIRI 視窗，以及四邊各半個視窗的範圍。外框標示視窗位置。
+          window: 每張光照圖涵蓋 AORI 視窗，以及四邊各半個視窗的範圍。外框標示視窗位置。
           unavailable: 沒有可用的環境資料。
           target: 實測值
           applied: 平滑後套用值
@@ -173,7 +173,7 @@ devtools:
         filtered: 著色器輸出
         unavailable: 預覽需要 WebGL，但此視窗無法建立繪圖環境。
         environment:
-          live: 光線來自 AIRI 主視窗發布的最新快照。
+          live: 光線來自 AORI 主視窗發布的最新快照。
           neutral: 尚未收到快照，因此預覽使用中性環境。
         regions:
           title: 測試卡區域
@@ -237,7 +237,7 @@ devtools:
         reset-view: 重設檢視
         export-project: 匯出專案
         import-project: 匯入專案
-        import-error: 此檔案不是有效的 AIRI Live2D 動作專案。
+        import-error: 此檔案不是有效的 AORI Live2D 動作專案。
         playback:
           label: 時間軸播放控制
           start: 跳至開頭
@@ -419,7 +419,7 @@ devtools:
           recording: 正在錄製動作
           playing: 正在播放動作
           ready: '{count} 個取樣 · {duration}'
-        import-error: 此檔案不是有效的 AIRI Live2D 動作錄製檔。
+        import-error: 此檔案不是有效的 AORI Live2D 動作錄製檔。
     performance-visualizer:
       title: 效能顯示器
       description: 切換 FPS/長任務/記憶體覆蓋
@@ -435,5 +435,5 @@ screen-capture:
     dismiss: 取消
     instructions:
       step-1: 打開「系統偏好設定」，從側邊欄中選擇「隱私與安全」。
-      step-2: 在「螢幕與系統聲音錄製」以及「系統聲音錄製」區域，開啟 AIRI 的開關。
-      step-2-note: 如果 AIRI 沒有被列出，則請手動按下「+」按鈕並從應用資料夾選擇 AIRI。
+      step-2: 在「螢幕與系統聲音錄製」以及「系統聲音錄製」區域，開啟 AORI 的開關。
+      step-2-note: 如果 AORI 沒有被列出，則請手動按下「+」按鈕並從應用資料夾選擇 AORI。
