@@ -98,9 +98,14 @@ vi.mock('@proj-airi/server-sdk', () => ({
   },
 }))
 
+const stageMocks = vi.hoisted(() => ({
+  isStageTamagotchi: vi.fn(() => true),
+  isStageWeb: vi.fn(() => false),
+}))
+
 vi.mock('@proj-airi/stage-shared', () => ({
-  isStageTamagotchi: () => true,
-  isStageWeb: () => false,
+  isStageTamagotchi: stageMocks.isStageTamagotchi,
+  isStageWeb: stageMocks.isStageWeb,
 }))
 
 vi.mock('@vueuse/core', async () => {
@@ -118,6 +123,25 @@ vi.mock('../../../devtools/websocket-inspector', () => ({
 }))
 
 const { useModsServerChannelStore } = await import('./channel-server')
+
+beforeEach(() => {
+  stageMocks.isStageTamagotchi.mockReset()
+  stageMocks.isStageTamagotchi.mockReturnValue(true)
+  stageMocks.isStageWeb.mockReset()
+  stageMocks.isStageWeb.mockReturnValue(false)
+})
+
+afterEach(() => {
+  vi.unstubAllEnvs()
+  vi.unstubAllGlobals()
+})
+
+function useHostedStageWeb(hostname: string) {
+  stageMocks.isStageTamagotchi.mockReturnValue(false)
+  stageMocks.isStageWeb.mockReturnValue(true)
+  vi.stubEnv('DEV', false)
+  vi.stubGlobal('location', { hostname })
+}
 
 describe('channel-server store reconnect', () => {
   beforeEach(() => {
@@ -426,5 +450,168 @@ describe('channel-server store reconnect', () => {
 
     expect(serverSdkMocks.MockClient.instances.length).toBeGreaterThan(1)
     expect(serverSdkMocks.MockClient.instances.at(-1)?.options.token).toBe('rotated-secret')
+  })
+})
+
+describe('channel-server store hosted web probe', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    serverSdkMocks.MockClient.instances.length = 0
+  })
+
+  // Hosted stage-web logged connection refused for ws://localhost:6121/ws.
+  // ROOT CAUSE:
+  // The store always opened that local server. A hosted page has none, so the client retried.
+  // Production stage-web skips that URL when the page host is not loopback.
+  it('does not open the local server from a hosted stage-web page', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const store = useModsServerChannelStore()
+
+    await store.initialize()
+    await store.ensureConnected()
+    store.send({
+      type: 'spark:notify',
+      data: { message: 'hosted' },
+    } as any)
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(0)
+    expect(store.pendingSendCount).toBe(1)
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
+  it('opens the local server when a production stage-web page is on localhost', async () => {
+    useHostedStageWeb('localhost')
+    const store = useModsServerChannelStore()
+
+    const initializePromise = store.initialize()
+    const client = serverSdkMocks.MockClient.instances[0]
+
+    expect(client.options.url).toBe('ws://localhost:6121/ws')
+
+    client.simulateAuthenticated()
+    await initializePromise
+  })
+
+  it('opens the local server when a production stage-web page is on 127.0.0.1', async () => {
+    useHostedStageWeb('127.0.0.1')
+    const store = useModsServerChannelStore()
+
+    void store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('ws://localhost:6121/ws')
+  })
+
+  it('opens the local server during stage-web dev on a non-local host', async () => {
+    stageMocks.isStageTamagotchi.mockReturnValue(false)
+    stageMocks.isStageWeb.mockReturnValue(true)
+    vi.stubEnv('DEV', true)
+    vi.stubGlobal('location', { hostname: '192.168.1.20' })
+    const store = useModsServerChannelStore()
+
+    void store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(1)
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('ws://localhost:6121/ws')
+  })
+
+  it('opens the local server from the desktop app on a non-local host', async () => {
+    vi.stubEnv('DEV', false)
+    vi.stubGlobal('location', { hostname: 'aori-chi.vercel.app' })
+    const store = useModsServerChannelStore()
+
+    void store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(1)
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('ws://localhost:6121/ws')
+  })
+
+  it('opens a configured server URL on a hosted stage-web page', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    vi.stubEnv('VITE_AIRI_WS_URL', 'wss://example.com/ws')
+    const store = useModsServerChannelStore()
+
+    void store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(1)
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('wss://example.com/ws')
+  })
+
+  it('opens a custom server URL on a hosted stage-web page', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    const store = useModsServerChannelStore()
+
+    await store.initialize()
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(0)
+
+    store.websocketUrl = 'wss://tunnel.example/ws'
+    await nextTick()
+
+    const client = serverSdkMocks.MockClient.instances[0]
+    expect(client.options.url).toBe('wss://tunnel.example/ws')
+
+    client.simulateAuthenticated()
+    expect(store.connected).toBe(true)
+  })
+
+  it('does not open another loopback port 6121 URL from a hosted stage-web page', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    const store = useModsServerChannelStore()
+
+    store.websocketUrl = 'ws://127.0.0.1:6121/ws'
+    await nextTick()
+    await store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(0)
+  })
+
+  it('opens the local server after the user saves that address on a hosted page', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    const store = useModsServerChannelStore()
+
+    await store.initialize()
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(0)
+
+    store.serverUrlConfigured = true
+    await nextTick()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(1)
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('ws://localhost:6121/ws')
+  })
+
+  it('opens the local server when the build sets VITE_AIRI_WS_URL to that server', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    vi.stubEnv('VITE_AIRI_WS_URL', 'ws://localhost:6121/ws')
+    const store = useModsServerChannelStore()
+
+    void store.initialize()
+
+    expect(serverSdkMocks.MockClient.instances).toHaveLength(1)
+    expect(serverSdkMocks.MockClient.instances[0]?.options.url).toBe('ws://localhost:6121/ws')
+  })
+
+  it('flushes a queued send after the hosted page gets a custom server URL', async () => {
+    useHostedStageWeb('aori-chi.vercel.app')
+    const store = useModsServerChannelStore()
+
+    store.send({
+      type: 'spark:notify',
+      data: { message: 'queued-on-hosted-page' },
+    } as any)
+
+    store.websocketUrl = 'wss://tunnel.example/ws'
+    await nextTick()
+
+    const client = serverSdkMocks.MockClient.instances[0]
+    client.simulateAuthenticated()
+
+    expect(store.pendingSendCount).toBe(0)
+    expect(client.sent).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'spark:notify',
+        data: { message: 'queued-on-hosted-page' },
+      }),
+    ]))
   })
 })

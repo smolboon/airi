@@ -6,6 +6,13 @@
 
 > Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)
 
+## Local server
+
+Dev builds and pages on a loopback host open `ws://localhost:6121/ws`.
+A production page on another host does not open that address until the user saves a server address.
+`VITE_AIRI_WS_URL` selects a WebSocket URL for that build.
+Desktop builds still open the local server.
+
 ## Performance diagnostics
 
 Run `pnpm dev:web:https` from the repository root. Open `/devtools/performance-visualizer` and enable FPS.

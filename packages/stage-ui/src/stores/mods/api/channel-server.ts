@@ -46,6 +46,65 @@ function hasReconnectableWebSocketScheme(url: string | undefined) {
   }
 }
 
+/** The local AIRI server channel listens on this URL. */
+const implicitLocalServerUrl = 'ws://localhost:6121/ws'
+
+function configuredServerUrl() {
+  const value = import.meta.env.VITE_AIRI_WS_URL
+  if (typeof value !== 'string')
+    return ''
+
+  return value.trim()
+}
+
+function isLoopbackHostname(hostname: string) {
+  const normalized = hostname.trim().toLowerCase().replace(/\.$/, '').replace(/^\[|\]$/g, '')
+  return normalized === 'localhost'
+    || normalized.endsWith('.localhost')
+    || normalized === '127.0.0.1'
+    || normalized === '::1'
+}
+
+function isImplicitLocalServerUrl(url: string) {
+  try {
+    const parsedUrl = new URL(url)
+    const websocket = parsedUrl.protocol === 'ws:' || parsedUrl.protocol === 'wss:'
+    return websocket && isLoopbackHostname(parsedUrl.hostname) && parsedUrl.port === '6121'
+  }
+  catch {
+    return false
+  }
+}
+
+function pageHostname() {
+  const hostname = globalThis.location?.hostname
+  return typeof hostname === 'string' ? hostname : ''
+}
+
+// A hosted stage-web page has no local AIRI server.
+// The implicit probe opens ws://localhost:6121/ws, the browser refuses it, and the client retries.
+// Desktop, dev, a loopback page, a custom URL, and a user-saved local address still open the channel.
+function shouldOpenServerChannel(websocketUrl: string, serverUrlConfigured: boolean) {
+  if (!isStageWeb())
+    return true
+
+  if (import.meta.env.DEV)
+    return true
+
+  if (isLoopbackHostname(pageHostname()))
+    return true
+
+  if (!isImplicitLocalServerUrl(websocketUrl))
+    return true
+
+  // VITE_AIRI_WS_URL named the local server, so this build opts in.
+  const configuredUrl = configuredServerUrl()
+  if (configuredUrl && isImplicitLocalServerUrl(configuredUrl))
+    return true
+
+  return serverUrlConfigured
+}
+
 const REPLAYABLE_EVENT_TYPES = new Set<keyof WebSocketEvents>([
   'module:announced',
   'module:de-announced',
@@ -66,9 +125,11 @@ export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:se
   const pendingSendCount = computed(() => pendingSend.value.length)
   const reconnectedCallbacks = new Set<() => void>()
 
-  const defaultWebSocketUrl = import.meta.env.VITE_AIRI_WS_URL || 'ws://localhost:6121/ws'
+  const defaultWebSocketUrl = configuredServerUrl() || implicitLocalServerUrl
   const websocketUrl = useLocalStorage('settings/connection/websocket-url', defaultWebSocketUrl)
   const websocketAuthToken = useLocalStorage('settings/connection/websocket-auth-token', '')
+  // False until the user saves a server address. The automatic default must not count as that save.
+  const serverUrlConfigured = useLocalStorage('settings/connection/server-url-configured', false)
   const registeredListeners: ChannelListenerEntry[] = []
   const replayableEvents = new Map<keyof WebSocketEvents, WebSocketBaseEvent<any, any>>()
 
@@ -110,6 +171,9 @@ export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:se
       token: options?.token ?? (websocketAuthToken.value || undefined),
       url: websocketUrl.value || defaultWebSocketUrl,
     }
+    if (!shouldOpenServerChannel(requestedConnection.url, serverUrlConfigured.value))
+      return
+
     const isSameConnection = connectionIdentity?.url === requestedConnection.url
       && connectionIdentity.token === requestedConnection.token
 
@@ -242,6 +306,10 @@ export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:se
   }
 
   async function ensureConnected() {
+    const url = websocketUrl.value || defaultWebSocketUrl
+    if (!shouldOpenServerChannel(url, serverUrlConfigured.value))
+      return
+
     await initializing.value
     if (!connected.value) {
       return await initialize()
@@ -364,22 +432,33 @@ export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:se
     }
   }
 
-  watch([websocketUrl, websocketAuthToken], ([newUrl, newToken], [oldUrl, oldToken]) => {
-    if (newUrl === oldUrl && newToken === oldToken)
+  watch([websocketUrl, websocketAuthToken, serverUrlConfigured], ([newUrl, newToken, newConfigured], [oldUrl, oldToken, oldConfigured]) => {
+    if (newUrl === oldUrl && newToken === oldToken && newConfigured === oldConfigured)
       return
 
     if (!hasReconnectableWebSocketScheme(newUrl))
       return
 
+    const openChannel = shouldOpenServerChannel(newUrl, newConfigured)
     if (client.value || initializing.value) {
       dispose()
-      void initialize()
+      if (openChannel)
+        void initialize()
+      return
     }
+
+    // Hosted stage-web skips the first probe. A later user URL must start the channel.
+    if (!isStageWeb())
+      return
+
+    if (openChannel)
+      void initialize()
   })
 
   return {
     connected,
     pendingSendCount,
+    serverUrlConfigured,
     websocketAuthToken,
     websocketUrl,
     ensureConnected,

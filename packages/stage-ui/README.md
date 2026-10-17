@@ -34,6 +34,8 @@ The app roots reset the store before registration. This also stops an old load f
 `StartupOverlay` reads the store and shows splash, progress, or an error with a retry action.
 `useStartupResourceTimeout` fails a resource that stays loading past its deadline. Web and Pocket apply it to character model loading.
 The optional Mods server connects outside the tracked startup work. Its connection does not block onboarding.
+A hosted web page does not open the implicit local server at `ws://localhost:6121/ws`.
+Dev builds, local pages, desktop, and `VITE_AIRI_WS_URL` still open a server channel.
 Each app's HTML shows the first splash before Vue mounts. CSS hides it when Vue renders into `#app`.
 The home page reports when its character model is ready or fails. A failed model keeps the overlay visible.
 If the model fails, the user can retry the app or continue without a character.
