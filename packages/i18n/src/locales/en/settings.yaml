@@ -2005,6 +2005,12 @@ pages:
       lm-studio:
         description: lmstudio.ai
         title: LM Studio
+      mlx-serve:
+        description: localhost:11234
+        title: MLX-Serve
+      tensorfold:
+        description: 127.0.0.1:8080
+        title: TensorFold
       vllm:
         description: vllm.ai
         title: vLLM

@@ -53,9 +53,11 @@ import { providerZai } from './cloud/zai'
 import { providerBrowserWebSpeechApi } from './local/browser-web-speech-api'
 import { providerIndexTtsVllm } from './local/index-tts-vllm'
 import { providerLmStudio } from './local/lm-studio'
+import { providerMlxServe } from './local/mlx-serve'
 import { providerOllama } from './local/ollama'
 import { providerPlayer2Speech } from './local/player2-speech'
 import { providerSpeechNoop } from './local/speech-noop'
+import { providerTensorFold } from './local/tensorfold'
 import { providerAivisSpeech, providerVoicevox } from './local/voicevox'
 
 /**
@@ -138,9 +140,11 @@ export const portableProviderDefinitions = eraseProviderDefinitions(
   providerBrowserWebSpeechApi,
   providerIndexTtsVllm,
   providerLmStudio,
+  providerMlxServe,
   providerOllama,
   providerPlayer2Speech,
   providerSpeechNoop,
+  providerTensorFold,
   providerAivisSpeech,
   providerVoicevox,
 )
