@@ -10,8 +10,8 @@ animations:
 dialogs:
   onboarding:
     official:
-      title: Proveedor Oficial de AORI
-    title: '¡Bienvenido a AORI!'
+      title: Proveedor Oficial de Aori
+    title: '¡Bienvenido a Aori!'
     description: Configuremos tu primer proveedor de IA para comenzar.
     selectProvider: Elige un Proveedor de IA
     configureProvider: Configurar {provider}
@@ -34,13 +34,13 @@ dialogs:
     retry: Volver a intentar
     credentialsSafeLabel: '¡Mantén tus claves y credenciales API a salvo!'
     credentialsSafeLocal: >-
-      AORI se está ejecutando localmente en su PC, y nunca robaremos sus credenciales para proveedores de IA / LLM. Pero tenga en cuenta que sus claves API son información confidencial. Asegúrese de mantenerlas seguras y no compartirlas con nadie.
+      Aori se está ejecutando localmente en su PC, y nunca robaremos sus credenciales para proveedores de IA / LLM. Pero tenga en cuenta que sus claves API son información confidencial. Asegúrese de mantenerlas seguras y no compartirlas con nadie.
     credentialsSafeOpenSource: >-
-      AORI es de código abierto en {github}, si desea comprobar cómo manejamos sus credenciales, no dude en inspeccionar nuestro código.
+      Aori es de código abierto en {github}, si desea comprobar cómo manejamos sus credenciales, no dude en inspeccionar nuestro código.
     enableChatCheck: >-
       Permitir a airi enviar un mensaje "ping" al primer modelo de chat disponible para comprobar la disponibilidad
     start: '¡Hagámoslo!'
-    loginPrompt: Inicia sesión para utilizar el proveedor oficial de AORI para obtener la mejor experiencia.
+    loginPrompt: Inicia sesión para utilizar el proveedor oficial de Aori para obtener la mejor experiencia.
     loginAction: Iniciar sesión
     setupWithoutSigningIn: Configurar con su proveedor
     flux: Flujo
@@ -55,7 +55,7 @@ dialogs:
       notificationsTitle: Notificaciones
       notificationsDescription: Permitir recordatorios y actualizaciones importantes de estado.
       microphoneTitle: Micrófono
-      microphoneDescription: Permite que AORI use el micrófono para la entrada de voz y la transcripción.
+      microphoneDescription: Permite que Aori use el micrófono para la entrada de voz y la transcripción.
       requestAction: Solicitar acceso
       optionalHint: Puedes continuar aunque no se concedan estos permisos.
       stateGranted: Concedido
@@ -92,7 +92,7 @@ analytics:
   notice:
     title: Análisis de uso
     description: >-
-      AORI recopila análisis de uso anónimo para ayudarnos a entender cómo se utiliza la aplicación y mejorar la estabilidad. No se recogen datos personales.
+      Aori recopila análisis de uso anónimo para ayudarnos a entender cómo se utiliza la aplicación y mejorar la estabilidad. No se recogen datos personales.
     privacyPrefix: Leer el
     privacyLink: Política de privacidad
     onboardingHint: Puedes desactivar las analíticas más tarde en Configuración > Sistema > General.
@@ -139,7 +139,7 @@ live2d:
   theme-color-from-model:
     title: Extraer colores del modelo
     description: >
-      Extrae los colores más destacados del lienzo de renderizado actual. Haz clic en el color para aplicarlo a AORI. Si los colores no te convencen, prueba a realizar la extracción varias veces, con el modelo en diferentes poses.
+      Extrae los colores más destacados del lienzo de renderizado actual. Haz clic en el color para aplicarlo a Aori. Si los colores no te convencen, prueba a realizar la extracción varias veces, con el modelo en diferentes poses.
     button-extract:
       title: Extraer
   animation:
@@ -162,7 +162,7 @@ live2d:
       description: Forzar la animación de parpadeo con un temporizador externo
     blink-mode:
       title: Modo parpadeo
-      description: Elige entre el parpadeo integrado en el modelo o el temporizador de parpadeo forzado de AORI.
+      description: Elige entre el parpadeo integrado en el modelo o el temporizador de parpadeo forzado de Aori.
     idle-motion:
       title: Animación inactiva
       no-motion: No hay animación disponible
@@ -223,7 +223,7 @@ pages:
     connections:
       tab: Cuentas conectadas
       title: Cuentas conectadas
-      description: Inicia sesión en AORI a través de estos proveedores. Desvincula tu cuenta para revocar el acceso y, a continuación, vuelve a vincularla para cambiar a otra cuenta.
+      description: Inicia sesión en Aori a través de estos proveedores. Desvincula tu cuenta para revocar el acceso y, a continuación, vuelve a vincularla para cambiar a otra cuenta.
       status:
         linked: Vinculado
         notLinked: No vinculado
@@ -240,7 +240,7 @@ pages:
         listFailed: No se pudo cargar las cuentas conectadas.
         unlinkFailed: No se pudo desvincular esta cuenta.
         linkFailed: No se pudo iniciar el flujo de vinculación.
-        accountAlreadyLinkedToDifferentUser: Esta cuenta OAuth ya está vinculada a otra cuenta de AORI. Elige otra cuenta del proveedor o desvincúlala primero de la otra cuenta de AORI.
+        accountAlreadyLinkedToDifferentUser: Esta cuenta OAuth ya está vinculada a otra cuenta de Aori. Elige otra cuenta del proveedor o desvincúlala primero de la otra cuenta de Aori.
         oauthCallbackFailed: No pudimos conectar esta cuenta OAuth. Inténtalo de nuevo o elige otra cuenta del proveedor.
         lastAccount: Este es tu único método de inicio de sesión. Establece primero una contraseña antes de desvincularlo.
     security:
@@ -311,7 +311,7 @@ pages:
     delete: Eliminar
     delete_card: Eliminar Tarjeta
     delete_confirmation: '¿Estás seguro de que quieres eliminar esta tarjeta?'
-    description: Usar presets de tarjeta de personaje AORI
+    description: Usar presets de tarjeta de personaje Aori
     description_label: Descripción
     drop_here: Suelta para subir
     create_card: Crear una nueva Tarjeta
@@ -381,7 +381,7 @@ pages:
       model: Habla / Modelo
       voice: Habla / Voz
     systemprompt: Prompt del Sistema
-    title: Tarjeta AORI
+    title: Tarjeta Aori
     try_different_search: Prueba un término de búsqueda diferente
     export: Exportar
     exported: Paquete de tarjeta exportado
@@ -390,13 +390,13 @@ pages:
     import_missing_file: Al paquete de tarjeta le faltan archivos necesarios
     import_invalid_file: El archivo del paquete de la tarjeta no es válido
     upload: Subir
-    upload_desc: Haz clic o arrastra un paquete de tarjeta de AORI para importarlo
+    upload_desc: Haz clic o arrastra un paquete de tarjeta de Aori para importarlo
   memory:
     description: Donde se almacenan y organizan las memorias
     title: Memoria
   data:
     title: Datos
-    description: Administrar, exportar y restablecer los datos de AORI
+    description: Administrar, exportar y restablecer los datos de Aori
     sections:
       chats:
         title: Conversaciones
@@ -425,11 +425,11 @@ pages:
         delete: Eliminar todos los datos
       desktop-folder:
         title: Abrir carpeta de datos de la aplicación
-        description: Abrir carpeta de datos de AORI en tu explorador de archivos.
+        description: Abrir carpeta de datos de Aori en tu explorador de archivos.
         open: Abrir carpeta
       desktop:
         title: Restablecer ajustes de escritorio y estados
-        description: Limpiar ajustes de escritorio y estado de ejecución de AORI.
+        description: Limpiar ajustes de escritorio y estado de ejecución de Aori.
         center: Mover la ventana del escritorio al centro
         reset: Restablecer datos de escritorio
     confirmations:
@@ -523,7 +523,7 @@ pages:
           name: Nano Banana (Vista previa)
           description: Utilice Google AI Studio para previsualizar imágenes y reacciones.
       card:
-        description: Configura cómo AORI genera imágenes y contenido visual.
+        description: Configura cómo Aori genera imágenes y contenido visual.
         comfyui_empty: No hay flujos de trabajo de ComfyUI configurados. Ve a Ajustes → Proveedores → ComfyUI para cargar una plantilla de flujo de trabajo.
         exposed_fields: 'Campos expuestos {count}'
         open_on_replicate: Abrir al replicar
@@ -596,7 +596,7 @@ pages:
     gaming-factorio:
       description: '¡Jugando Factorio!'
       enable: Habilitar integración con Factorio
-      enable-description: Permitir que AORI interactúe con el juego Factorio
+      enable-description: Permitir que Aori interactúe con el juego Factorio
       server-address: Dirección del servidor
       server-address-description: La dirección IP o nombre de host del servidor de Factorio
       server-address-placeholder: Ingrese la dirección del servidor (por ejemplo, localhost o 192.168.1.100)
@@ -660,7 +660,7 @@ pages:
     messaging-discord:
       description: Chat y chat de voz por Discord
       enable: Habilitar integración con Discord
-      enable-description: Permitir que AORI interactúe a través de Discord
+      enable-description: Permitir que Aori interactúe a través de Discord
       token: Token del bot
       token-description: Su token de bot de Discord
       token-placeholder: Ingrese su token de bot de Discord
@@ -717,7 +717,7 @@ pages:
     x:
       description: Navegación y uso de X / Twitter
       enable: Habilitar integración con X / Twitter
-      enable-description: Permitir que AORI interactúe con X / Twitter
+      enable-description: Permitir que Aori interactúe con X / Twitter
       api-key: Clave API
       api-key-description: Su clave API de X / Twitter
       api-key-placeholder: Ingrese su clave API de X / Twitter
@@ -733,16 +733,16 @@ pages:
       configured: '¡X / Twitter está configurado correctamente!'
     web-search:
       title: Búsqueda web
-      description: Permitir que AORI busque información actual en la web
+      description: Permitir que Aori busque información actual en la web
       enable: Activar la búsqueda web
-      enable-description: Permitir que AORI busque en la web durante el chat
+      enable-description: Permitir que Aori busque en la web durante el chat
       api-key: Clave API de Tavily
       api-key-description: La búsqueda web funciona con Tavily. Obtén una clave API gratuita en tavily.com.
       api-key-placeholder: Introduce tu clave API de Tavily
       configured: '¡La búsqueda web está lista para usar!'
     mcp-server:
       title: Servidores MCP
-      description: Configure los servidores MCP y traiga sus herramientas a AORI.
+      description: Configure los servidores MCP y traiga sus herramientas a Aori.
       config-path: Archivo de configuración
       runtime-title: Estado de ejecución
       empty: Aún no hay servidores MCP; haz clic en "Añadir servidor" a continuación para crear uno, o pega una configuración mediante "Editar JSON".
@@ -986,7 +986,7 @@ pages:
     helpinfo:
       title: '¿Primera vez aquí?'
       description: >
-        AORI requiere que al menos un proveedor de {chat} esté configurado para pensar y comportarse correctamente. Podrías pensarlo como el cerebro de los personajes que viven en el sistema AORI.
+        Aori requiere que al menos un proveedor de {chat} esté configurado para pensar y comportarse correctamente. Podrías pensarlo como el cerebro de los personajes que viven en el sistema Aori.
     explained:
       chat: Proveedores de modelos de generación de texto. ej. OpenRouter, OpenAI, Ollama.
       Speech: Proveedores de modelos de habla (texto a voz). ej. ElevenLabs, Azure Speech.
@@ -1221,12 +1221,12 @@ pages:
         title: La API de Prompt
       official:
         title: Proveedor Oficial
-        description: Proveedor oficial de IA por AORI.
+        description: Proveedor oficial de IA por Aori.
         speech-title: Proveedor oficial de voz
-        speech-description: Proveedor oficial de texto a voz de AORI.
+        speech-description: Proveedor oficial de texto a voz de Aori.
         speech-streaming-title: Proveedor oficial de voz en streaming
         transcription-title: Proveedor Oficial de Transcripción
-        transcription-description: Proveedor oficial de voz a texto por AORI.
+        transcription-description: Proveedor oficial de voz a texto por Aori.
       transcriptions:
         playground:
           title: Playground de Transcripción
@@ -1241,18 +1241,18 @@ pages:
       label: Dirección del servidor WebSocket
     server-hostname:
       label: Exponer en red
-      description: Choose whether the AORI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: Token de autenticación
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AORI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
       placeholder: Autogenerar
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
       refresh: Actualizar
-      image-alt: Código QR de conexión de canal del servidor AORI
+      image-alt: Código QR de conexión de canal del servidor Aori
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
       errors:
@@ -1261,7 +1261,7 @@ pages:
     qr-scan:
       title: Conexión rápida
       description: Escanear el código QR desde Tamagotchi para conectarse rápidamente
-      instructions: Señalar la cámara en el código QR de la conexión AORI.
+      instructions: Señalar la cámara en el código QR de la conexión Aori.
       action: Escanear
       success:
         title: Dirección conectada guardada
@@ -1337,8 +1337,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: Verde AORI
-              description: '¡El color de tema verdoso predeterminado, traído por AORI para ti!'
+                color-1: Verde Aori
+              description: '¡El color de tema verdoso predeterminado, traído por Aori para ti!'
               title: Color Predeterminado
             morandi:
               colors:
@@ -1431,7 +1431,7 @@ pages:
 theme:
   title: Tema
   description: |
-    Cambiar el tema base de AORI, modo Claro o modo Oscuro.
+    Cambiar el tema base de Aori, modo Claro o modo Oscuro.
 title: Configuración
 voices: Voz
 vrm:

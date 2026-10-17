@@ -14,7 +14,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { Format, LogLevel, setGlobalFormat, setGlobalHookPostLog, setGlobalLogLevel, useLogg } from '@guiiai/logg'
 import { createContext } from '@moeru/eventa/adapters/electron/main'
 import { hasSelectedScreenCaptureSource, initScreenCaptureForMain } from '@proj-airi/electron-screen-capture/main'
-import { app, ipcMain, protocol, session } from 'electron'
+import { app, ipcMain, nativeTheme, protocol, session } from 'electron'
 import { noop } from 'es-toolkit'
 import { createLoggLogger, injeca, lifecycle } from 'injeca'
 import { isLinux } from 'std-env'
@@ -166,6 +166,8 @@ if (shouldStartMainProcess) {
 
 let fileLogger: FileLoggerHandle = nullFileLoggerHandle
 let skipFileLogging = false
+
+nativeTheme.themeSource = 'dark'
 
 app.whenReady().then(async () => {
   if (!shouldStartMainProcess) {

@@ -355,7 +355,7 @@ export async function validateLive2DZip(file: File | Blob): Promise<Live2DValida
         report,
         'multiple-settings-files',
         'warning',
-        `The archive contains ${settingsPaths.length} model settings files. AORI will use ${settingsFileName}.`,
+        `The archive contains ${settingsPaths.length} model settings files. Aori will use ${settingsFileName}.`,
         'Keep one model3.json file in each archive, or import each model as a separate ZIP.',
       )
     }

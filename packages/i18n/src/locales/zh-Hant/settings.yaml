@@ -10,8 +10,8 @@ animations:
 dialogs:
   onboarding:
     official:
-      title: AORI 官方提供者
-    title: 歡迎來到 AORI！
+      title: Aori 官方提供者
+    title: 歡迎來到 Aori！
     description: 讓我們先設定您的第一個服務來源來開始使用。
     selectProvider: 選擇服務來源
     configureProvider: 設定 {provider}
@@ -35,9 +35,9 @@ dialogs:
     retry: 重試
     credentialsSafeLabel: 請妥善保管 API 金鑰與憑證！
     credentialsSafeLocal: >-
-      AORI 完全在您的電腦本機執行，我們絕不會竊取您用於 AI / LLM 提供者的憑證。但請注意，API 金鑰屬於敏感資訊，請妥善保管，切勿與他人分享。
+      Aori 完全在您的電腦本機執行，我們絕不會竊取您用於 AI / LLM 提供者的憑證。但請注意，API 金鑰屬於敏感資訊，請妥善保管，切勿與他人分享。
     credentialsSafeOpenSource: >-
-      AORI 以 {github} 開放原始碼，如果您想了解我們如何處理您的憑證，歡迎檢視我們的程式碼。
+      Aori 以 {github} 開放原始碼，如果您想了解我們如何處理您的憑證，歡迎檢視我們的程式碼。
     enableChatCheck: >-
       允許 airi 傳送「ping」訊息給第一個可用的聊天模型，以檢查是否可用
     start: 開始吧！
@@ -51,7 +51,7 @@ dialogs:
       notificationsTitle: 通知
       notificationsDescription: 允許提醒以及重要的狀態更新。
       microphoneTitle: 麥克風
-      microphoneDescription: 允許 AORI 使用麥克風進行語音輸入和轉錄。
+      microphoneDescription: 允許 Aori 使用麥克風進行語音輸入和轉錄。
       requestAction: 請求取得
       optionalHint: 即使沒有授予這些權限，您也可以繼續。
       stateGranted: 已授權
@@ -92,7 +92,7 @@ live2d:
   theme-color-from-model:
     title: 從模型中提取顏色
     description: >
-      從目前的渲染畫布提取主要顏色。點選顏色即可套用至 AORI；若顏色不理想，請讓模型擺出不同姿勢後多次提取。
+      從目前的渲染畫布提取主要顏色。點選顏色即可套用至 Aori；若顏色不理想，請讓模型擺出不同姿勢後多次提取。
     button-extract:
       title: 提取
   animation:
@@ -115,7 +115,7 @@ live2d:
       description: 使用外部計時器強制播放眨眼動畫
     blink-mode:
       title: 眨眼模式
-      description: 選擇模型內建的眨眼，或 AORI 的強制眨眼計時器。
+      description: 選擇模型內建的眨眼，或 Aori 的強制眨眼計時器。
     idle-motion:
       title: 待機動畫
       no-motion: 沒有可用的動畫
@@ -163,7 +163,7 @@ pages:
       description: 管理您的公開顯示名稱。
     connections:
       error:
-        accountAlreadyLinkedToDifferentUser: 這個 OAuth 帳戶已經連結到另一個 AORI 帳戶了。請選擇另一個第三方帳戶，或先在另一個 AORI 帳戶中解除連結。
+        accountAlreadyLinkedToDifferentUser: 這個 OAuth 帳戶已經連結到另一個 Aori 帳戶了。請選擇另一個第三方帳戶，或先在另一個 Aori 帳戶中解除連結。
         oauthCallbackFailed: 暫時無法連結這個 OAuth 帳戶。請重試，或選擇另一個第三方帳戶。
     danger:
       deleteAccount:
@@ -199,7 +199,7 @@ pages:
     delete: 刪除
     delete_card: 刪除角色卡
     delete_confirmation: 確定要刪除此角色卡嗎？
-    description: 使用 AORI 角色卡預設
+    description: 使用 Aori 角色卡預設
     description_label: 描述
     drop_here: 放開以上傳檔案
     create_card: 建立新角色卡
@@ -269,7 +269,7 @@ pages:
       model: 聲音 / 模型
       voice: 聲音 / 聲線
     systemprompt: 系統提示詞
-    title: AORI 角色卡
+    title: Aori 角色卡
     try_different_search: 嘗試使用其他關鍵字搜尋
     export: 匯出
     exported: 角色卡套件已匯出
@@ -278,13 +278,13 @@ pages:
     import_missing_file: 角色卡套件缺少必要檔案
     import_invalid_file: 角色卡套件檔案無效
     upload: 上傳
-    upload_desc: 點擊或拖曳 AORI 角色卡套件以匯入
+    upload_desc: 點擊或拖曳 Aori 角色卡套件以匯入
   memory:
     description: 存放記憶的地方，以及策略
     title: 記憶體
   data:
     title: 資料
-    description: 管理已儲存的 AORI 資料、匯出與重置作業
+    description: 管理已儲存的 Aori 資料、匯出與重置作業
     sections:
       chats:
         title: 對話紀錄
@@ -313,11 +313,11 @@ pages:
         delete: 刪除所有資料
       desktop-folder:
         title: 開啟應用程式資料夾
-        description: 在檔案管理器中開啟 AORI 的資料夾。
+        description: 在檔案管理器中開啟 Aori 的資料夾。
         open: 開啟資料夾
       desktop:
         title: 重設桌面設定與狀態
-        description: 清除 AORI 桌面設定與執行階段狀態
+        description: 清除 Aori 桌面設定與執行階段狀態
         center: 將桌面視窗移至中央
         reset: 重設桌面資料
     confirmations:
@@ -412,7 +412,7 @@ pages:
           name: Nano Banana（預覽）
           description: 使用 Google AI Studio 進行圖像預覽與回應。
       card:
-        description: 設定 AORI 生成圖像與視覺內容的方式。
+        description: 設定 Aori 生成圖像與視覺內容的方式。
         comfyui_empty: 尚未設定 ComfyUI 工作流程。前往「設定 → 提供者 → ComfyUI」上傳工作流程範本。
         exposed_fields: '已公開 {count} 個欄位'
         open_on_replicate: 在 Replicate 上開啟
@@ -465,7 +465,7 @@ pages:
       description: 一起玩 Factorio！
       title: 異星工廠 Factorio
       enable: 啟用異星工廠集成
-      enable-description: 允許 AORI 與異星工廠遊戲互動
+      enable-description: 允許 Aori 與異星工廠遊戲互動
       server-address: 伺服器地址
       server-address-description: 異星工廠伺服器的 IP 地址或主機名稱
       server-address-placeholder: 輸入伺服器地址（例如：localhost 或 192.168.1.100）
@@ -496,7 +496,7 @@ pages:
     messaging-discord:
       description: Discord 訊息與語音聊天
       enable: 啟用 Discord 集成
-      enable-description: 允許 AORI 透過 Discord 進行互動
+      enable-description: 允許 Aori 透過 Discord 進行互動
       token: 機器人權杖
       token-description: 您的 Discord 機器人权杖
       token-placeholder: 輸入您的 Discord 機器人权杖
@@ -547,7 +547,7 @@ pages:
     x:
       description: X / Twitter 的瀏覽與使用
       enable: 啟用 X / Twitter 集成
-      enable-description: 允許 AORI 與 X / Twitter 互動
+      enable-description: 允許 Aori 與 X / Twitter 互動
       api-key: API 金鑰
       api-key-description: 您的 X / Twitter API 金鑰
       api-key-placeholder: 輸入您的 X / Twitter API 金鑰
@@ -563,16 +563,16 @@ pages:
       configured: X / Twitter 已正確設定！
     web-search:
       title: 網路搜尋
-      description: 讓 AORI 連網搜尋最新資訊
+      description: 讓 Aori 連網搜尋最新資訊
       enable: 啟用網路搜尋
-      enable-description: 允許 AORI 在對話中連網搜尋
+      enable-description: 允許 Aori 在對話中連網搜尋
       api-key: Tavily API 金鑰
       api-key-description: 網路搜尋由 Tavily 提供支援，可在 tavily.com 免費取得 API 金鑰。
       api-key-placeholder: 輸入您的 Tavily API 金鑰
       configured: 網路搜尋已就緒！
     mcp-server:
       title: MCP 伺服器
-      description: 設定 MCP 伺服器並將其工具帶入 AORI。
+      description: 設定 MCP 伺服器並將其工具帶入 Aori。
       config-path: 設定檔
       runtime-title: 執行狀態
       empty: 尚無 MCP 伺服器 — 點擊下方「新增伺服器」建立一個，或透過「編輯 JSON」貼上設定。
@@ -733,7 +733,7 @@ pages:
     helpinfo:
       title: 第一次使用？
       description: >
-        AORI 需要設定至少一個 {chat} 服務來源，才能正常思考與運作。你可以把它看作是 AORI 系統中角色的大腦。
+        Aori 需要設定至少一個 {chat} 服務來源，才能正常思考與運作。你可以把它看作是 Aori 系統中角色的大腦。
     explained:
       chat: 文字生成模型服務來源，例如 OpenRouter、OpenAI、Ollama
       Speech: 語音（文字轉語音）模型服務來源，例如 ElevenLabs、Azure Speech
@@ -928,16 +928,16 @@ pages:
       label: WebSocket 伺服器位址
     server-hostname:
       label: Expose On Network
-      description: Choose whether the AORI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: Auth Token
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AORI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
-      image-alt: AORI server channel connection QR code
+      image-alt: Aori server channel connection QR code
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
   system:
@@ -1017,8 +1017,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: AORI 綠
-              description: AORI 為您帶來的預設綠色系主題色彩！
+                color-1: Aori 綠
+              description: Aori 為您帶來的預設綠色系主題色彩！
               title: 預設色彩
             morandi:
               colors:
@@ -1095,7 +1095,7 @@ sections:
 theme:
   title: 主題
   description: |
-    切換 AORI 的基礎主題，亮色模式或暗色模式。
+    切換 Aori 的基礎主題，亮色模式或暗色模式。
 title: 設定
 voices: 聲線
 vrm:

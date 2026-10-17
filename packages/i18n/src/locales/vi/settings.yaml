@@ -10,8 +10,8 @@ animations:
 dialogs:
   onboarding:
     official:
-      title: Nhà cung cấp chính thức của AORI
-    title: Chào mừng đến với AORI!
+      title: Nhà cung cấp chính thức của Aori
+    title: Chào mừng đến với Aori!
     description: Hãy thiết lập nhà cung cấp AI đầu tiên để bắt đầu.
     selectProvider: Chọn nhà cung cấp AI
     configureProvider: Cấu hình {provider}
@@ -33,13 +33,13 @@ dialogs:
     retry: Thử lại
     credentialsSafeLabel: Hãy giữ các khóa API và thông tin xác thực an toàn!
     credentialsSafeLocal: >-
-      AORI đang chạy hoàn toàn cục bộ trên PC của bạn và chúng tôi sẽ không bao giờ đánh cắp các thông tin xác thực cho các nhà cung cấp AI / LLM. Nhưng hãy nhớ rằng các khóa API của bạn là thông tin nhạy cảm. Hãy giữ chúng an toàn và không được chia sẽ với bất kỳ ai.
+      Aori đang chạy hoàn toàn cục bộ trên PC của bạn và chúng tôi sẽ không bao giờ đánh cắp các thông tin xác thực cho các nhà cung cấp AI / LLM. Nhưng hãy nhớ rằng các khóa API của bạn là thông tin nhạy cảm. Hãy giữ chúng an toàn và không được chia sẽ với bất kỳ ai.
     credentialsSafeOpenSource: >-
-      AORI là dự án mã nguồn mở trên {github}, nếu bạn muốn kiểm tra cách chúng tôi xử lý các thông tin xác thực của bạn, bạn có thể kiểm tra code của chúng tôi.
+      Aori là dự án mã nguồn mở trên {github}, nếu bạn muốn kiểm tra cách chúng tôi xử lý các thông tin xác thực của bạn, bạn có thể kiểm tra code của chúng tôi.
     enableChatCheck: >-
-      Cho phép AORI gửi tín hiệu "ping" đến mô hình chat có thể dùng được đầu tiên để kiểm tra tính khả dụng
+      Cho phép Aori gửi tín hiệu "ping" đến mô hình chat có thể dùng được đầu tiên để kiểm tra tính khả dụng
     start: Bắt đầu thôi!
-    loginPrompt: Đăng nhập để sử dụng nhà cung cấp AORI chính thức để có trải nghiệm tốt nhất.
+    loginPrompt: Đăng nhập để sử dụng nhà cung cấp Aori chính thức để có trải nghiệm tốt nhất.
     loginAction: Đăng nhập
     setupWithoutSigningIn: Thiết lập nhà cung cấp của bạn
     buyFlux: Mua Flux
@@ -53,7 +53,7 @@ dialogs:
       notificationsTitle: Thông báo
       notificationsDescription: Cho phép nhắc nhở và các cập nhật trạng thái quan trọng.
       microphoneTitle: Micrô
-      microphoneDescription: Cho phép AORI sử dụng micrô để nhập giọng nói và phiên âm.
+      microphoneDescription: Cho phép Aori sử dụng micrô để nhập giọng nói và phiên âm.
       requestAction: Yêu cầu quyền truy cập
       optionalHint: Bạn vẫn có thể tiếp tục ngay cả khi chưa cấp các quyền này.
       stateGranted: Đã cấp quyền
@@ -90,7 +90,7 @@ analytics:
   notice:
     title: Phân tích dữ liệu sử dụng
     description: >-
-      AORI thu thập dữ liệu sử dụng một cách ẩn danh để giúp chúng tôi hiểu cách ứng dụng được dùng và cải thiện sự ổn định. Không có dữ liệu cá nhân nào được thu thập.
+      Aori thu thập dữ liệu sử dụng một cách ẩn danh để giúp chúng tôi hiểu cách ứng dụng được dùng và cải thiện sự ổn định. Không có dữ liệu cá nhân nào được thu thập.
     privacyPrefix: Đọc
     privacyLink: chính sách quyền riêng tư
     onboardingHint: Bạn có thể tắt phân tích ở Cài đặt > Hệ thống > Chung.
@@ -137,7 +137,7 @@ live2d:
   theme-color-from-model:
     title: Trích xuất màu từ mô hình
     description: >
-      Xuất các màu nổi bật từ canvas đang render hiện tại. Nhấp vào màu và áp dụng nó lên AORI. Thử xuất nhiều lần với mô hình theo nhiều tư thế khác nhau nếu màu sắc chưa được như mong muốn.
+      Xuất các màu nổi bật từ canvas đang render hiện tại. Nhấp vào màu và áp dụng nó lên Aori. Thử xuất nhiều lần với mô hình theo nhiều tư thế khác nhau nếu màu sắc chưa được như mong muốn.
     button-extract:
       title: Trích xuất
   animation:
@@ -160,7 +160,7 @@ live2d:
       description: Ép hoạt ảnh chớp mắt bằng bộ hẹn giờ ngoài
     blink-mode:
       title: Chế độ chớp mắt
-      description: Chọn mô hình chớp mắt có sẵn hoặc bộ hẹn giờ chớp mắt bắt buộc của AORI.
+      description: Chọn mô hình chớp mắt có sẵn hoặc bộ hẹn giờ chớp mắt bắt buộc của Aori.
     idle-motion:
       title: Hoạt ảnh nhàn rỗi
       no-motion: Không có hoạt ảnh khả dụng
@@ -221,7 +221,7 @@ pages:
     connections:
       tab: Các tài khoản đã được liên kết
       title: Các tài khoản đã được liên kết
-      description: Đăng nhập AORI thông qua các nhà cung cấp này. Hủy liên kết để thu hồi quyền truy cập, sau đó liên kết lại một lần nữa để chuyển sang tài khoản khác.
+      description: Đăng nhập Aori thông qua các nhà cung cấp này. Hủy liên kết để thu hồi quyền truy cập, sau đó liên kết lại một lần nữa để chuyển sang tài khoản khác.
       status:
         linked: Đã liên kết
         notLinked: Chưa được liên kết
@@ -238,7 +238,7 @@ pages:
         listFailed: Không thể tải các tài khoản đã liên kết.
         unlinkFailed: Không thể hủy liên kết tài khoản này.
         linkFailed: Không thể khởi động liên kết luồng (luồng liên kết).
-        accountAlreadyLinkedToDifferentUser: Tài khoản OAuth này đã được liên kết với một tài khoản AORI khác. Hãy chọn tài khoản nhà cung cấp khác hoặc hủy liên kết tài khoản đó khỏi tài khoản AORI kia trước.
+        accountAlreadyLinkedToDifferentUser: Tài khoản OAuth này đã được liên kết với một tài khoản Aori khác. Hãy chọn tài khoản nhà cung cấp khác hoặc hủy liên kết tài khoản đó khỏi tài khoản Aori kia trước.
         oauthCallbackFailed: Không thể kết nối tài khoản OAuth này. Hãy thử lại hoặc chọn tài khoản nhà cung cấp khác.
         lastAccount: Đây là phương thức đăng nhập duy nhất của bạn. Đặt mật khẩu trước khi hủy liên kết.
     security:
@@ -309,7 +309,7 @@ pages:
     delete: Xóa
     delete_card: Xóa thẻ
     delete_confirmation: Bạn có chắc muốn xóa thẻ này?
-    description: Dùng preset thẻ nhân vật AORI
+    description: Dùng preset thẻ nhân vật Aori
     description_label: Mô tả
     drop_here: Kéo vào đây để tải lên
     create_card: Tạo thẻ mới
@@ -379,7 +379,7 @@ pages:
       model: Giọng nói / Mô hình
       voice: Giọng nói / Giọng
     systemprompt: Lời nhắc hệ thống
-    title: Thẻ AORI
+    title: Thẻ Aori
     try_different_search: Hãy thử từ khóa khác
     export: Xuất
     exported: Đã xuất gói thẻ
@@ -388,13 +388,13 @@ pages:
     import_missing_file: Gói thẻ thiếu các tệp bắt buộc
     import_invalid_file: Tệp gói thẻ không hợp lệ
     upload: Tải lên
-    upload_desc: Nhấp hoặc kéo thả gói thẻ AORI vào đây để nhập
+    upload_desc: Nhấp hoặc kéo thả gói thẻ Aori vào đây để nhập
   memory:
     description: Nơi lưu trữ và tổ chức ký ức
     title: Bộ nhớ
   data:
     title: Dữ liệu
-    description: Quản lý dữ liệu AORI đã lưu, xuất và đặt lại
+    description: Quản lý dữ liệu Aori đã lưu, xuất và đặt lại
     sections:
       chats:
         title: Phiên trò chuyện
@@ -423,11 +423,11 @@ pages:
         delete: Xóa sạch dữ liệu
       desktop-folder:
         title: Mở thư mục dữ liệu ứng dụng
-        description: Mở thư mục dữ liệu của AORI trong trình quản lý tệp tin của bạn.
+        description: Mở thư mục dữ liệu của Aori trong trình quản lý tệp tin của bạn.
         open: Mở thư mục
       desktop:
         title: Đặt lại thiết lập máy tính
-        description: Xóa các cài đặt và trạng thái thực thi của AORI trên máy tính.
+        description: Xóa các cài đặt và trạng thái thực thi của Aori trên máy tính.
         center: Đưa cửa sổ desktop về giữa màn hình
         reset: Đặt lại dữ liệu desktop
     confirmations:
@@ -522,7 +522,7 @@ pages:
           name: Nano Banana (Bản xem trước)
           description: Sử dụng Google AI Studio để xem trước ảnh và các phản ứng.
       card:
-        description: Cấu hình cách AORI tạo ảnh và các nội dung đồ họa.
+        description: Cấu hình cách Aori tạo ảnh và các nội dung đồ họa.
         comfyui_empty: ComfyUI workflows chưa được cấu hình. Đi tới Cài đặt → Nhà cung cấp → ComfyUI để tải mẫu workflow.
         exposed_fields: '{count} trường được cung cấp'
         open_on_replicate: Mở bằng Replicate
@@ -601,7 +601,7 @@ pages:
     gaming-factorio:
       description: Chơi Factorio!
       enable: Bật tích hợp Factorio
-      enable-description: Cho phép AORI tương tác với trò chơi Factorio
+      enable-description: Cho phép Aori tương tác với trò chơi Factorio
       server-address: Địa chỉ máy chủ
       server-address-description: Địa chỉ IP hoặc tên máy chủ của máy chủ Factorio
       server-address-placeholder: Nhập địa chỉ máy chủ (ví dụ localhost hoặc 192.168.1.100)
@@ -679,7 +679,7 @@ pages:
     messaging-discord:
       description: Trò chuyện & gọi thoại qua Discord
       enable: Bật tích hợp Discord
-      enable-description: Cho phép AORI tương tác qua Discord
+      enable-description: Cho phép Aori tương tác qua Discord
       token: Mã token của bot
       token-description: Mã token bot Discord của bạn
       token-placeholder: Nhập mã token bot Discord của bạn
@@ -736,7 +736,7 @@ pages:
     x:
       description: Sử Dụng Twitter
       enable: Bật tích hợp X / Twitter
-      enable-description: Cho phép AORI tương tác với X / Twitter
+      enable-description: Cho phép Aori tương tác với X / Twitter
       api-key: Khóa API
       api-key-description: Khóa API X / Twitter của bạn
       api-key-placeholder: Nhập khóa API X / Twitter của bạn
@@ -752,16 +752,16 @@ pages:
       configured: Đã cấu hình X / Twitter thành công!
     web-search:
       title: Tìm kiếm trên web
-      description: Cho phép AORI tìm kiếm trên web để lấy thông tin mới nhất
+      description: Cho phép Aori tìm kiếm trên web để lấy thông tin mới nhất
       enable: Kích hoạt Tìm kiếm trên Web
-      enable-description: Cho phép AORI tìm kiếm trên web trong khi trò chuyện
+      enable-description: Cho phép Aori tìm kiếm trên web trong khi trò chuyện
       api-key: Khóa API Tavily
       api-key-description: Chức năng tìm kiếm trên web được cung cấp bởi Tavily. Nhận API miễn phí tại tavily.com.
       api-key-placeholder: Nhập Tavily API của bạn
       configured: Tìm kiếm web đã sẵn sàng sử dụng!
     mcp-server:
       title: Các máy chủ MCP
-      description: Cấu hình các máy chủ MCP và đưa công cụ của chúng vào AORI.
+      description: Cấu hình các máy chủ MCP và đưa công cụ của chúng vào Aori.
       config-path: Tệp cấu hình
       runtime-title: Trạng thái thực thi
       empty: Chưa có máy chủ MCP nào. Nhấp "Thêm máy chủ" bên dưới để tạo một máy chủ, hoặc dán cấu hình qua "Chỉnh sửa JSON".
@@ -1012,7 +1012,7 @@ pages:
     helpinfo:
       title: Lần đầu tới đây?
       description: >
-        {chat} AORI cần ít nhất một nhà cung cấp để suy nghĩ và hoạt động đúng cách. Có thể coi nó như bộ não của nhân vật AORI trong hệ thống.
+        {chat} Aori cần ít nhất một nhà cung cấp để suy nghĩ và hoạt động đúng cách. Có thể coi nó như bộ não của nhân vật Aori trong hệ thống.
     explained:
       chat: 'Nhà cung cấp mô hình tạo văn bản. Ví dụ: OpenRouter, OpenAI, Ollama.'
       Speech: 'Nhà cung cấp mô hình giọng nói (text-to-speech). Ví dụ: ElevenLabs, Azure Speech.'
@@ -1114,7 +1114,7 @@ pages:
               description: Địa chỉ ComfyUI đang hoạt động
           cors:
             title: Yêu Cầu Bị Chặn Bởi CORS
-            description: ComfyUI mặc định chặn các yêu cầu từ các ứng dụng khác. Để cho phép AORI kết nối, bạn phải bắt đầu ComfyUI với flag `--enable-cors-header "*"`.
+            description: ComfyUI mặc định chặn các yêu cầu từ các ứng dụng khác. Để cho phép Aori kết nối, bạn phải bắt đầu ComfyUI với flag `--enable-cors-header "*"`.
           workflows:
             title: Mẫu Workflow
             upload: Tải Workflow
@@ -1125,7 +1125,7 @@ pages:
             remove: Xóa
             config_snippet: Đoạn cấu hình Nghệ thuật
             copy_json: Sao chép JSON
-            paste_hint: Dán nội dung này vào cấu hình Nghệ thuật của Thẻ AORI để ghi đè các node này.
+            paste_hint: Dán nội dung này vào cấu hình Nghệ thuật của Thẻ Aori để ghi đè các node này.
           upload:
             prompt: Kéo thả hoặc chọn tệp workflow_api.json
             invalid_json: JSON không hợp lệ
@@ -1288,13 +1288,13 @@ pages:
         description: Với Prompt API, bạn có thể gửi yêu cầu bằng ngôn ngữ tự nhiên đến mô hình cơ sở trong Chrome.
       official:
         title: Nhà Cung Cấp Chính Thức
-        description: Nhà cung cấp AI chính thức bởi AORI.
+        description: Nhà cung cấp AI chính thức bởi Aori.
         speech-title: Nhà cung cấp giọng nói chính thức
-        speech-description: Nhà cung cấp chuyển văn bản thành giọng nói chính thức của AORI.
+        speech-description: Nhà cung cấp chuyển văn bản thành giọng nói chính thức của Aori.
         speech-streaming-title: Nhà Cung Cấp Giọng Nói Thời Gian Thực (Streaming) Chính Thức
-        speech-streaming-description: Nhà cung cấp text-to-speech độ trễ thấp chính thức bởi AORI (WebSocket hai chiều).
+        speech-streaming-description: Nhà cung cấp text-to-speech độ trễ thấp chính thức bởi Aori (WebSocket hai chiều).
         transcription-title: Nhà Cung Cấp Phiên Âm Chính Thức
-        transcription-description: Nhà cung cấp speech-to-text chính thức bởi AORI.
+        transcription-description: Nhà cung cấp speech-to-text chính thức bởi Aori.
       transcriptions:
         playground:
           title: Thử nghiệm chuyển văn bản
@@ -1309,18 +1309,18 @@ pages:
       label: Địa chỉ máy chủ WebSocket
     server-hostname:
       label: Expose On Network
-      description: Choose whether the AORI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: Auth Token
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AORI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
       placeholder: Tự động tạo
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
       refresh: Làm mới
-      image-alt: AORI server channel connection QR code
+      image-alt: Aori server channel connection QR code
       candidates: Các địa chỉ khả dụng
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
@@ -1330,7 +1330,7 @@ pages:
     qr-scan:
       title: Kết nối nhanh
       description: Quét mã QR từ Tamagotchi để kết nối nhanh
-      instructions: Hướng camera vào mã QR kết nối AORI.
+      instructions: Hướng camera vào mã QR kết nối Aori.
       action: Quét
       success:
         title: Đã lưu địa chỉ kết nối
@@ -1416,8 +1416,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: Xanh AORI
-              description: Màu xanh lá mặc định do AORI mang đến cho bạn!
+                color-1: Xanh Aori
+              description: Màu xanh lá mặc định do Aori mang đến cho bạn!
               title: Màu mặc định
             morandi:
               colors:
@@ -1518,7 +1518,7 @@ sections:
 theme:
   title: Chủ Đề
   description: |
-    Chuyển đổi chủ đề cơ bản của AORI, Chế độ Sáng hoặc Chế độ Tối.
+    Chuyển đổi chủ đề cơ bản của Aori, Chế độ Sáng hoặc Chế độ Tối.
 title: Cài Đặt
 voices: Giọng Nói
 vrm:

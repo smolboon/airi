@@ -169,7 +169,7 @@ describe('chat history', () => {
     await vi.waitFor(() => {
       const messageBubbles = Array.from(screen.container.querySelectorAll<HTMLElement>('.chat-message-item-container'))
       const replyBubble = messageBubbles.find(element => element.textContent?.includes('My follow-up'))
-      expect(replyBubble?.textContent).toContain('Replying to AORI')
+      expect(replyBubble?.textContent).toContain('Replying to Aori')
       expect(replyBubble?.textContent).toContain('Earlier answer')
     })
   })

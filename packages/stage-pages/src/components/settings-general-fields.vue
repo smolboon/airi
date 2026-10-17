@@ -3,7 +3,7 @@ import { all } from '@proj-airi/i18n'
 import { useAnalytics } from '@proj-airi/stage-ui/composables/use-analytics'
 import { isAnalyticsAvailableInBuild } from '@proj-airi/stage-ui/libs/product-signals'
 import { useSettings } from '@proj-airi/stage-ui/stores/settings'
-import { FieldCheckbox, FieldCombobox, useTheme } from '@proj-airi/ui'
+import { FieldCheckbox, FieldCombobox } from '@proj-airi/ui'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -24,7 +24,6 @@ const analyticsToggleValue = computed({
 })
 
 const { t } = useI18n()
-const { themeMode } = useTheme()
 const { privacyPolicyUrl } = useAnalytics()
 
 const languages = computed(() => {
@@ -34,23 +33,6 @@ const languages = computed(() => {
 
 <template>
   <div class="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800">
-    <FieldCombobox
-      v-model="themeMode"
-      v-motion
-      :class="['mb-2']"
-      :initial="{ opacity: 0, y: 10 }"
-      :enter="{ opacity: 1, y: 0 }"
-      :duration="250 + (2 * 10)"
-      :delay="2 * 50"
-      :label="t('settings.theme.title')"
-      :description="t('settings.theme.description')"
-      :options="[
-        { value: 'auto', label: t('settings.theme.auto') },
-        { value: 'light', label: t('settings.theme.light') },
-        { value: 'dark', label: t('settings.theme.dark') },
-      ]"
-    />
-
     <FieldCombobox
       v-model="settings.language"
       v-motion

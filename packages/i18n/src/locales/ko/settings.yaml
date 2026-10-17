@@ -124,7 +124,7 @@ pages:
   account:
     connections:
       error:
-        accountAlreadyLinkedToDifferentUser: 이 OAuth 계정은 이미 다른 AORI 계정에 연결되어 있습니다. 다른 제공자 계정을 선택하거나, 먼저 다른 AORI 계정에서 연결을 해제하세요.
+        accountAlreadyLinkedToDifferentUser: 이 OAuth 계정은 이미 다른 Aori 계정에 연결되어 있습니다. 다른 제공자 계정을 선택하거나, 먼저 다른 Aori 계정에서 연결을 해제하세요.
         oauthCallbackFailed: 이 OAuth 계정을 연결할 수 없습니다. 다시 시도하거나 다른 제공자 계정을 선택하세요.
   card:
     activate: 활성화
@@ -149,7 +149,7 @@ pages:
     delete: 삭제
     delete_card: 카드 삭제
     delete_confirmation: 이 카드를 삭제하시겠습니까?
-    description: AORI 캐릭터 카드 프리셋 사용
+    description: Aori 캐릭터 카드 프리셋 사용
     description_label: 설명
     drop_here: 여기로 끌어서 업로드
     create_card: 새로운 카드 만들기
@@ -216,7 +216,7 @@ pages:
       model: 음성 합성 / 모델
       voice: 음성 합성 / 음성
     systemprompt: 시스템 프롬프트
-    title: AORI 카드
+    title: Aori 카드
     try_different_search: 다른 검색어를 시도해보세요
     upload: 업로드
   memory:
@@ -224,7 +224,7 @@ pages:
     title: 메모리
   data:
     title: 데이터
-    description: 저장된 AORI 데이터, 내보낸 항목, 초기화된 항목 관리
+    description: 저장된 Aori 데이터, 내보낸 항목, 초기화된 항목 관리
     sections:
       chats:
         title: 채팅 세션
@@ -253,7 +253,7 @@ pages:
         delete: 모든 데이터 삭제
       desktop:
         title: 데스크탑 설정 및 상태 초기화
-        description: AORI 데스크탑 설정 및 런타임 상태를 전부 지웁니다.
+        description: Aori 데스크탑 설정 및 런타임 상태를 전부 지웁니다.
         reset: 데스크탑 데이터 지우기
     confirmations:
       tooltip: 정말 진행하실 건가요?
@@ -565,7 +565,7 @@ pages:
     helpinfo:
       title: 여기 처음 오셨나요?
       description: >
-        AORI는 적어도 하나의 {chat} 제공자가 올바르게 생각하고 행동하도록 구성되어야 합니다. AORI 시스템에 거주하는 캐릭터의 두뇌라고 생각할 수 있습니다.
+        AORI는 적어도 하나의 {chat} 제공자가 올바르게 생각하고 행동하도록 구성되어야 합니다. Aori 시스템에 거주하는 캐릭터의 두뇌라고 생각할 수 있습니다.
     explained:
       chat: '텍스트 생성 모델 제공자를 구성합니다. (예시: OpenRouter, OpenAI, Ollama)'
       Speech: '음성(TTS) 모델 제공자를 구성합니다. (예시: ElevenLabs, Azure Speech)'
@@ -744,16 +744,16 @@ pages:
       label: 웹소켓 서버 주소
     server-hostname:
       label: Expose On Network
-      description: Choose whether the AORI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: Auth Token
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AORI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
-      image-alt: AORI server channel connection QR code
+      image-alt: Aori server channel connection QR code
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
   system:
@@ -833,7 +833,7 @@ pages:
           presets:
             default:
               colors:
-                color-1: AORI 녹색
+                color-1: Aori 녹색
               description: AORI가 가져온 기본 녹색 테마 색상!
               title: 기본 색상
             morandi:

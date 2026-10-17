@@ -6,7 +6,7 @@ import { defineConfig } from 'histoire'
 export default defineConfig({
   routerMode: 'hash',
   theme: {
-    title: 'AORI UI',
+    title: 'Aori UI',
     logo: {
       dark: './public/logo.svg',
       light: './public/logo.svg',

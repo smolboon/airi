@@ -9,7 +9,7 @@ animations:
     title: Utiliser les transitions spécifiques à chaque page
 dialogs:
   onboarding:
-    title: Bienvenue dans AORI!
+    title: Bienvenue dans Aori!
     description: Configurez votre premier fournisseur d’IA pour commencer.
     selectProvider: Choisissez un fournisseur d'IA.
     configureProvider: Configurer {provider}
@@ -33,13 +33,13 @@ dialogs:
     retry: Réessayer
     credentialsSafeLabel: Gardez vos clés API et identifiants en sécurité !
     credentialsSafeLocal: >-
-      AORI fonctionne entièrement en local sur votre PC et nous ne volerons jamais vos identifiants pour les fournisseurs d'IA / LLM. Gardez toutefois à l'esprit que vos clés API sont des informations sensibles. Veillez à les conserver en lieu sûr et à ne les partager avec personne.
+      Aori fonctionne entièrement en local sur votre PC et nous ne volerons jamais vos identifiants pour les fournisseurs d'IA / LLM. Gardez toutefois à l'esprit que vos clés API sont des informations sensibles. Veillez à les conserver en lieu sûr et à ne les partager avec personne.
     credentialsSafeOpenSource: >-
-      AORI est open source sur {github}, si vous souhaitez vérifier comment nous gérons vos identifiants, n'hésitez pas à inspecter notre code.
+      Aori est open source sur {github}, si vous souhaitez vérifier comment nous gérons vos identifiants, n'hésitez pas à inspecter notre code.
     enableChatCheck: >-
-      Autoriser AORI à envoyer un message "ping" au premier modèle de chat disponible pour vérifier sa disponibilité
+      Autoriser Aori à envoyer un message "ping" au premier modèle de chat disponible pour vérifier sa disponibilité
     start: Commençons !
-    loginPrompt: Connectez-vous pour utiliser le fournisseur officiel AORI et bénéficier de la meilleure expérience.
+    loginPrompt: Connectez-vous pour utiliser le fournisseur officiel Aori et bénéficier de la meilleure expérience.
     loginAction: Se connecter
     setupWithoutSigningIn: Configurer avec votre fournisseur
     select-model: Choisissez un modèle
@@ -50,7 +50,7 @@ dialogs:
       title: Gestion des autorisations
       description: Vous pouvez accorder les autorisations nécessaires maintenant ou les configurer plus tard.
       notificationsDescription: Autorisez les rappels et les mises à jour de statut importantes.
-      microphoneDescription: Autorisez AORI à utiliser le microphone pour la saisie vocale et la transcription.
+      microphoneDescription: Autorisez Aori à utiliser le microphone pour la saisie vocale et la transcription.
       requestAction: Demander l’accès
       optionalHint: Vous pouvez continuer même si ces autorisations ne sont pas accordées.
       stateGranted: Accordée
@@ -70,7 +70,7 @@ analytics:
   notice:
     title: Statistiques d'utilisation
     description: >-
-      AORI collecte des statistiques d'utilisation anonymes pour nous aider à comprendre comment l'application est utilisée et améliorer sa stabilité. Aucune donnée personnelle n'est collectée.
+      Aori collecte des statistiques d'utilisation anonymes pour nous aider à comprendre comment l'application est utilisée et améliorer sa stabilité. Aucune donnée personnelle n'est collectée.
     privacyLink: politique de confidentialité
     onboardingHint: Vous pouvez désactiver les statistiques plus tard dans Paramètres > Système > Général.
     settingsHint: Vous pouvez désactiver les statistiques à tout moment.
@@ -118,7 +118,7 @@ pages:
     signedInAs: Connecté en tant que
     connections:
       error:
-        accountAlreadyLinkedToDifferentUser: Ce compte OAuth est déjà lié à un autre compte AORI. Choisissez un autre compte fournisseur ou dissociez-le d'abord de l'autre compte AORI.
+        accountAlreadyLinkedToDifferentUser: Ce compte OAuth est déjà lié à un autre compte Aori. Choisissez un autre compte fournisseur ou dissociez-le d'abord de l'autre compte Aori.
         oauthCallbackFailed: Impossible de connecter ce compte OAuth. Réessayez ou choisissez un autre compte fournisseur.
   card:
     activate: Activer
@@ -143,7 +143,7 @@ pages:
     delete: Supprimer
     delete_card: Supprimer la carte
     delete_confirmation: Êtes-vous sûr de vouloir supprimer cette carte ?
-    description: Utiliser les préréglages des cartes d'AORI
+    description: Utiliser les préréglages des cartes d'Aori
     drop_here: Déposer pour téléverser
     create_card: Créer une nouvelle carte
     edit_card: Modifier la carte
@@ -207,7 +207,7 @@ pages:
       model: Parole / Modèle
       voice: Parole / Voix
     systemprompt: Prompt système
-    title: Carte AORI
+    title: Carte Aori
     try_different_search: Essayez un autre terme de recherche
     upload: Téléverser
   memory:
@@ -215,7 +215,7 @@ pages:
     title: Mémoire
   data:
     title: Données
-    description: Gérer les données AORI enregistrées, les exports et les réinitialisations
+    description: Gérer les données Aori enregistrées, les exports et les réinitialisations
     sections:
       chats:
         title: Sessions de chat
@@ -243,11 +243,11 @@ pages:
         delete: Supprimer toutes les données
       desktop-folder:
         title: Ouvrir le dossier app data
-        description: Ouvrez le dossier de données d'AORI dans votre gestionnaire de fichiers.
+        description: Ouvrez le dossier de données d'Aori dans votre gestionnaire de fichiers.
         open: Ouvrir le dossier
       desktop:
         title: Réinitialiser les paramètres et états du bureau
-        description: Effacer les paramètres du bureau AORI et l'état d'exécution.
+        description: Effacer les paramètres du bureau Aori et l'état d'exécution.
         reset: Réinitialiser les données du bureau
     confirmations:
       tooltip: Êtes-vous sûr(e) ?
@@ -354,7 +354,7 @@ pages:
     gaming-factorio:
       description: Jouer à Factorio !
       enable: Activer l'intégration Factorio
-      enable-description: Autoriser AORI à interagir avec le jeu Factorio
+      enable-description: Autoriser Aori à interagir avec le jeu Factorio
       server-address: Adresse du serveur
       server-address-description: L'adresse IP ou le nom d'hôte du serveur Factorio
       server-address-placeholder: Entrez l'adresse du serveur (ex. localhost ou 192.168.1.100)
@@ -409,7 +409,7 @@ pages:
     messaging-discord:
       description: Chat et chat vocal via Discord
       enable: Activer l'intégration Discord
-      enable-description: Autoriser AORI à interagir via Discord
+      enable-description: Autoriser Aori à interagir via Discord
       token: Jeton du bot
       token-description: Votre jeton de bot Discord
       token-placeholder: Entrez votre jeton de bot Discord
@@ -455,7 +455,7 @@ pages:
     x:
       description: Navigation et utilisation X / Twitter
       enable: Activer l'intégration X / Twitter
-      enable-description: Autoriser AORI à interagir avec X / Twitter
+      enable-description: Autoriser Aori à interagir avec X / Twitter
       api-key: Clé API
       api-key-description: Votre clé API X / Twitter
       api-key-placeholder: Entrez votre clé API X / Twitter
@@ -594,7 +594,7 @@ pages:
     helpinfo:
       title: Première fois ici ?
       description: >
-        AORI nécessite qu’au moins un fournisseur {chat} soit configuré pour penser et se comporter correctement. On peut le considérer comme le cerveau des personnages vivant dans le système AORI.
+        Aori nécessite qu’au moins un fournisseur {chat} soit configuré pour penser et se comporter correctement. On peut le considérer comme le cerveau des personnages vivant dans le système Aori.
     explained:
       chat: Fournisseurs de modèles de génération de texte, par ex. OpenRouter, OpenAI, Ollama.
       Speech: Fournisseurs de modèles de synthèse vocale, par ex. ElevenLabs, Azure Speech.
@@ -751,11 +751,11 @@ pages:
         title: API Prompt
       official:
         title: Fournisseur officiel
-        description: Fournisseur d'IA officiel par AORI.
+        description: Fournisseur d'IA officiel par Aori.
         speech-title: Fournisseur vocal officiel
-        speech-description: Fournisseur texte-to-speech officiel par AORI.
+        speech-description: Fournisseur texte-to-speech officiel par Aori.
         transcription-title: Fournisseur de transcription officiel
-        transcription-description: Fournisseur speech-to-text officiel par AORI.
+        transcription-description: Fournisseur speech-to-text officiel par Aori.
       transcriptions:
         playground:
           title: Terrain de test de transcription
@@ -770,16 +770,16 @@ pages:
       label: Adresse du serveur WebSocket
     server-hostname:
       label: Expose On Network
-      description: Choose whether the AORI gateway only listens on this device or can be reached from your local network.
+      description: Choose whether the Aori gateway only listens on this device or can be reached from your local network.
     server-auth-token:
       label: Auth Token
       description: >-
-        Security token required by remote clients that connect to this gateway. When left empty, AORI generates a new token automatically.
+        Security token required by remote clients that connect to this gateway. When left empty, Aori generates a new token automatically.
     qr:
       title: Connect from Stage Pocket
       description: >-
         Scan this QR code from Stage Pocket to try all reachable local network addresses and save the first working one.
-      image-alt: AORI server channel connection QR code
+      image-alt: Aori server channel connection QR code
       token-hint: >-
         The QR code includes the auth token so Stage Pocket can authenticate after connecting. Do not share it publicly.
   system:
@@ -853,8 +853,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: Vert AORI
-              description: La couleur de thème verdâtre par défaut, offerte par AORI !
+                color-1: Vert Aori
+              description: La couleur de thème verdâtre par défaut, offerte par Aori !
               title: Couleur par défaut
             morandi:
               colors:
@@ -928,7 +928,7 @@ sections:
 theme:
   title: Thème
   description: |
-    Changez le thème de base d’AORI, mode clair ou mode sombre.
+    Changez le thème de base d’Aori, mode clair ou mode sombre.
 title: Paramètres
 voices: Voix
 vrm:

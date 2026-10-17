@@ -3,7 +3,7 @@ import { defineInvoke } from '@moeru/eventa'
 import { useElectronEventaContext, useElectronEventaInvoke, useElectronMouseInElement } from '@proj-airi/electron-vueuse'
 import { IS_DEV } from '@proj-airi/stage-shared'
 import { useSettings, useSettingsAudioDevice } from '@proj-airi/stage-ui/stores/settings'
-import { ScrollableArea, useTheme } from '@proj-airi/ui'
+import { ScrollableArea } from '@proj-airi/ui'
 import { refDebounced, useFocusWithin, useIntervalFn, useMouseInElement, useMousePressed } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { computed, reactive, ref, useId, useTemplateRef, watch } from 'vue'
@@ -48,24 +48,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<Emits>()
 
-const { themeMode, switchToNextTheme } = useTheme()
 const { t } = useI18n()
-// The button shows the current theme, and its label tells what a press selects.
-const themeIcons = {
-  light: 'i-solar:sun-2-outline',
-  dark: 'i-solar:moon-outline',
-  auto: 'i-lucide:contrast',
-} as const
-const themeActions = {
-  light: 'switch_to_dark_mode',
-  dark: 'switch_to_system_mode',
-  auto: 'switch_to_light_mode',
-} as const
-const themeLabel = computed(() => ({
-  light: t('tamagotchi.stage.controls-island.switch-to-dark-mode'),
-  dark: t('tamagotchi.stage.controls-island.switch-to-system-mode'),
-  auto: t('tamagotchi.stage.controls-island.switch-to-light-mode'),
-})[themeMode.value])
 const placement = useControlsIslandPlacement()
 const { dock, isLeft, isTop, motionPhase } = placement
 
@@ -393,25 +376,6 @@ function resetMainWindowPosition() {
                     </ControlButton>
                     <template #tooltip>
                       {{ t('tamagotchi.stage.controls-island.center-main-window') }}
-                    </template>
-                  </ControlButtonTooltip>
-
-                  <ControlButtonTooltip disable-hoverable-content>
-                    <ControlButton
-                      v-track-button="{
-                        name: 'controls_island_action',
-                        action: themeActions[themeMode],
-                      }"
-                      :button-style="adjustStyleClasses.button"
-                      :aria-label="themeLabel"
-                      @click="switchToNextTheme"
-                    >
-                      <Transition name="fade" mode="out-in">
-                        <div :key="themeMode" :class="[themeIcons[themeMode], adjustStyleClasses.icon]" text="neutral-800 dark:neutral-300" />
-                      </Transition>
-                    </ControlButton>
-                    <template #tooltip>
-                      {{ themeLabel }}
                     </template>
                   </ControlButtonTooltip>
 
