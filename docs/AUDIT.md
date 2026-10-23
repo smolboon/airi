@@ -44,7 +44,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Settings stores the character card fields. The fields are a name, a nickname, a description, a personality, a scenario, and a greeting. The fields also include alternate greetings, creator notes, lore, and tags. The fields also include a system prompt, post-history instructions, a card version, and modules.
 - The name and the personality enter the system prompt. A non-empty description, a non-empty system prompt, a non-empty scenario, and non-empty lore also enter that prompt. A non-empty greeting is the first local line. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. When a keyword matches, that lorebook entry enters the prompt.
 - Settings lists Factorio and Minecraft. Each game is not connected. The app does not open a game server.
-- Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori is not connected. X is unavailable. No token is stored.
+- Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori stores an event draft only. X is unavailable. No token is stored.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

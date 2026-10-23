@@ -237,7 +237,9 @@ This slice lists Discord, Telegram, and Satori in Settings. Each protocol is not
 
 This slice stores a Discord message draft. The draft has a channel and text. No token is stored. Telegram and Satori stay not connected.
 
-This slice stores a Telegram preview. The preview has a chat id and text. No token is stored. Satori stays not connected. Cloud provider sync stays absent.
+This slice stores a Telegram preview. The preview has a chat id and text. No token is stored. Satori stays not connected.
+
+This slice stores a Satori event draft. The draft has a platform and text. No token is stored. X stays unavailable. Cloud provider sync stays absent.
 
 ## What this checkout did not run
 

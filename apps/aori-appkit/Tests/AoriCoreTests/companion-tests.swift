@@ -125,6 +125,7 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertTrue(text.contains("X is unavailable."))
         XCTAssertTrue(text.contains("Discord is a message draft only."))
         XCTAssertTrue(text.contains("Telegram is a preview only."))
+        XCTAssertTrue(text.contains("Satori is an event draft only."))
         XCTAssertFalse(text.contains("token="))
         let draft = DiscordScaffold.draft(channel: " general ", text: " Hello ")
         XCTAssertEqual(draft, DiscordScaffold.Draft(channel: "general", text: "Hello"))
@@ -132,6 +133,9 @@ final class CompanionBehaviorTests: XCTestCase {
         let preview = TelegramScaffold.preview(chatID: " ci ", text: " Hello ")
         XCTAssertEqual(preview, TelegramScaffold.Preview(chatID: "ci", text: "Hello"))
         XCTAssertNil(TelegramScaffold.preview(chatID: "ci", text: " "))
+        let event = SatoriScaffold.draft(platform: " qq ", text: " Hello ")
+        XCTAssertEqual(event, SatoriScaffold.Draft(platform: "qq", text: "Hello"))
+        XCTAssertNil(SatoriScaffold.draft(platform: "qq", text: " "))
     }
 
     func testGameScaffoldListsFactorioAndMinecraft() {
