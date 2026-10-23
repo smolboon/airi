@@ -19,6 +19,7 @@ enum AoriMain {
             AppHolder.delegate = delegate
             let app = NSApplication.shared
             app.setActivationPolicy(.regular)
+            app.appearance = NSAppearance(named: .darkAqua)
             app.delegate = delegate
             app.run()
         }

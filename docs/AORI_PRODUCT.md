@@ -4,7 +4,7 @@ Aori is a desktop companion for macOS. The Vue apps use the same name.
 
 The companion is a character on the desktop. The window is transparent. You can drag it. It can stay above other windows. Clear pixels pass clicks through the window. Opaque pixels and the caption keep the click.
 
-Settings stores a name and a personality. The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
+Settings stores a name, a personality, a scenario, and a greeting. The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
 
 ## Sources
 

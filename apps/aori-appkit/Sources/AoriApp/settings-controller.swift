@@ -7,6 +7,8 @@ final class SettingsWindowController: NSWindowController {
     private let secrets: KeychainSecretStore
     private let nameField = NSTextField(string: "")
     private let personalityField = NSTextField(string: "")
+    private let scenarioField = NSTextField(string: "")
+    private let greetingField = NSTextField(string: "")
     private let providerPopup = NSPopUpButton()
     private let voicePopup = NSPopUpButton()
     private let baseField = NSTextField(string: "")
@@ -33,12 +35,13 @@ final class SettingsWindowController: NSWindowController {
         self.secrets = secrets
         self.records = records
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 520, height: 820),
+            contentRect: NSRect(x: 0, y: 0, width: 520, height: 920),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
         )
         window.title = "Aori Settings"
+        window.appearance = NSAppearance(named: .darkAqua)
         super.init(window: window)
         build()
         settingsLog("aori_settings=provider,voice,model,persona,memory")
@@ -65,6 +68,8 @@ final class SettingsWindowController: NSWindowController {
         self.presentation = presentation
         nameField.stringValue = persona.name
         personalityField.stringValue = persona.personality
+        scenarioField.stringValue = persona.scenario
+        greetingField.stringValue = persona.greeting
         baseField.stringValue = configuration.baseURL.absoluteString
         modelField.stringValue = configuration.model
         let stored = try? records.loadSettings()
@@ -111,6 +116,8 @@ final class SettingsWindowController: NSWindowController {
 
         let nameLabel = NSTextField(labelWithString: "Name")
         let personalityLabel = NSTextField(labelWithString: "Personality")
+        let scenarioLabel = NSTextField(labelWithString: "Scenario")
+        let greetingLabel = NSTextField(labelWithString: "Greeting")
         let providerLabel = NSTextField(labelWithString: "Provider")
         let voiceLabel = NSTextField(labelWithString: "Voice")
         let baseLabel = NSTextField(labelWithString: "Base URL")
@@ -155,6 +162,8 @@ final class SettingsWindowController: NSWindowController {
             pagesLabel, pageLabel,
             nameLabel, nameField,
             personalityLabel, personalityField,
+            scenarioLabel, scenarioField,
+            greetingLabel, greetingField,
             providerLabel, providerPopup,
             voiceLabel, voicePopup,
             baseLabel, baseField,
@@ -168,7 +177,7 @@ final class SettingsWindowController: NSWindowController {
         stack.alignment = .leading
         stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
-        for field in [nameField, personalityField, baseField, modelField, keyField] {
+        for field in [nameField, personalityField, scenarioField, greetingField, baseField, modelField, keyField] {
             field.translatesAutoresizingMaskIntoConstraints = false
         }
         providerPopup.translatesAutoresizingMaskIntoConstraints = false
@@ -182,6 +191,8 @@ final class SettingsWindowController: NSWindowController {
             stack.topAnchor.constraint(equalTo: root.topAnchor, constant: 16),
             nameField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             personalityField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            scenarioField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            greetingField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             providerPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             voicePopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             baseField.widthAnchor.constraint(equalTo: stack.widthAnchor),
@@ -284,7 +295,9 @@ final class SettingsWindowController: NSWindowController {
     private func currentPersona() -> CompanionPersona {
         CompanionPersona(
             name: nameField.stringValue,
-            personality: personalityField.stringValue
+            personality: personalityField.stringValue,
+            scenario: scenarioField.stringValue,
+            greeting: greetingField.stringValue
         )
     }
 

@@ -41,7 +41,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - A menu bar and a status item for chat, VRM open, Settings, and the companion.
 - A main window with the character and the transcript.
 - A borderless companion window. The standard policy is transparent, floating, draggable, and visible on all spaces.
-- A name and a personality in Settings. They become the system prompt.
+- A name, a personality, a scenario, and a greeting in Settings. The name, the personality, and a non-empty scenario become the system prompt. A non-empty greeting is the first local line. Creator notes, lore, and games stay absent.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.
