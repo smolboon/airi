@@ -129,7 +129,7 @@ public enum ChatProtocolScaffold {
 
     /// Names the protocols. No token is included.
     public static func report() -> String {
-        "Chat protocols: Discord is a message draft only. Telegram and Satori are not connected. X is unavailable. No token is stored."
+        "Chat protocols: Discord is a message draft only. Telegram is a preview only. Satori is not connected. X is unavailable. No token is stored."
     }
 }
 
