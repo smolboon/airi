@@ -6,12 +6,19 @@ import AVFoundation
 final class SettingsWindowController: NSWindowController {
     private let secrets: KeychainSecretStore
     private let nameField = NSTextField(string: "")
+    private let nicknameField = NSTextField(string: "")
+    private let descriptionField = NSTextField(string: "")
     private let personalityField = NSTextField(string: "")
     private let scenarioField = NSTextField(string: "")
     private let greetingField = NSTextField(string: "")
+    private let alternateGreetingsField = NSTextField(string: "")
     private let creatorNotesField = NSTextField(string: "")
     private let loreField = NSTextField(string: "")
     private let tagsField = NSTextField(string: "")
+    private let systemPromptField = NSTextField(string: "")
+    private let postHistoryField = NSTextField(string: "")
+    private let cardVersionField = NSTextField(string: "")
+    private let modulesField = NSTextField(string: "")
     private let providerPopup = NSPopUpButton()
     private let voicePopup = NSPopUpButton()
     private let baseField = NSTextField(string: "")
@@ -38,7 +45,7 @@ final class SettingsWindowController: NSWindowController {
         self.secrets = secrets
         self.records = records
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 520, height: 1100),
+            contentRect: NSRect(x: 0, y: 0, width: 520, height: 920),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
@@ -70,12 +77,19 @@ final class SettingsWindowController: NSWindowController {
         self.localeID = locale
         self.presentation = presentation
         nameField.stringValue = persona.name
+        nicknameField.stringValue = persona.nickname
+        descriptionField.stringValue = persona.description
         personalityField.stringValue = persona.personality
         scenarioField.stringValue = persona.scenario
         greetingField.stringValue = persona.greeting
+        alternateGreetingsField.stringValue = persona.alternateGreetingsText
         creatorNotesField.stringValue = persona.creatorNotes
         loreField.stringValue = persona.lore
         tagsField.stringValue = persona.tagsText
+        systemPromptField.stringValue = persona.systemPrompt
+        postHistoryField.stringValue = persona.postHistoryInstructions
+        cardVersionField.stringValue = persona.cardVersion
+        modulesField.stringValue = persona.modulesText
         baseField.stringValue = configuration.baseURL.absoluteString
         modelField.stringValue = configuration.model
         let stored = try? records.loadSettings()
@@ -98,7 +112,8 @@ final class SettingsWindowController: NSWindowController {
             voice: voice,
             keySource: configuration.keySource.rawValue,
             baseURL: configuration.baseURL.absoluteString,
-            personaName: persona.name
+            personaName: persona.name,
+            cardModules: persona.modulesText
         )
     }
 
@@ -121,12 +136,21 @@ final class SettingsWindowController: NSWindowController {
         window?.contentView = root
 
         let nameLabel = NSTextField(labelWithString: "Name")
+        let nicknameLabel = NSTextField(labelWithString: "Nickname")
+        let descriptionLabel = NSTextField(labelWithString: "Description")
         let personalityLabel = NSTextField(labelWithString: "Personality")
         let scenarioLabel = NSTextField(labelWithString: "Scenario")
         let greetingLabel = NSTextField(labelWithString: "Greeting")
+        let alternateGreetingsLabel = NSTextField(labelWithString: "Alternate greetings")
         let creatorNotesLabel = NSTextField(labelWithString: "Creator notes")
         let loreLabel = NSTextField(labelWithString: "Lore")
         let tagsLabel = NSTextField(labelWithString: "Tags")
+        let systemPromptLabel = NSTextField(labelWithString: "System prompt")
+        let postHistoryLabel = NSTextField(labelWithString: "Post-history instructions")
+        let cardVersionLabel = NSTextField(labelWithString: "Card version")
+        let modulesLabel = NSTextField(labelWithString: "Modules")
+        alternateGreetingsField.placeholderString = "Separate greetings with |"
+        modulesField.placeholderString = CompanionModule.defaultIDs.joined(separator: ", ")
         let providerLabel = NSTextField(labelWithString: "Provider")
         let voiceLabel = NSTextField(labelWithString: "Voice")
         let baseLabel = NSTextField(labelWithString: "Base URL")
@@ -134,7 +158,7 @@ final class SettingsWindowController: NSWindowController {
         let keyLabel = NSTextField(labelWithString: "API key")
         let memoryLabel = NSTextField(labelWithString: "Saved facts")
         let pagesLabel = NSTextField(labelWithString: "Pages")
-        pageLabel.maximumNumberOfLines = 12
+        pageLabel.maximumNumberOfLines = 16
         pageLabel.textColor = .secondaryLabelColor
         pageLabel.setAccessibilityLabel("Settings pages")
         sourceLabel.maximumNumberOfLines = 3
@@ -170,12 +194,19 @@ final class SettingsWindowController: NSWindowController {
         let stack = NSStackView(views: [
             pagesLabel, pageLabel,
             nameLabel, nameField,
+            nicknameLabel, nicknameField,
+            descriptionLabel, descriptionField,
             personalityLabel, personalityField,
             scenarioLabel, scenarioField,
             greetingLabel, greetingField,
+            alternateGreetingsLabel, alternateGreetingsField,
             creatorNotesLabel, creatorNotesField,
             loreLabel, loreField,
             tagsLabel, tagsField,
+            systemPromptLabel, systemPromptField,
+            postHistoryLabel, postHistoryField,
+            cardVersionLabel, cardVersionField,
+            modulesLabel, modulesField,
             providerLabel, providerPopup,
             voiceLabel, voicePopup,
             baseLabel, baseField,
@@ -189,33 +220,43 @@ final class SettingsWindowController: NSWindowController {
         stack.alignment = .leading
         stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
-        for field in [nameField, personalityField, scenarioField, greetingField, creatorNotesField, loreField, tagsField, baseField, modelField, keyField] {
+        let cardFields = [
+            nameField, nicknameField, descriptionField, personalityField, scenarioField, greetingField,
+            alternateGreetingsField, creatorNotesField, loreField, tagsField, systemPromptField,
+            postHistoryField, cardVersionField, modulesField, baseField, modelField, keyField,
+        ]
+        for field in cardFields {
             field.translatesAutoresizingMaskIntoConstraints = false
         }
         providerPopup.translatesAutoresizingMaskIntoConstraints = false
         voicePopup.translatesAutoresizingMaskIntoConstraints = false
         memoryPopup.translatesAutoresizingMaskIntoConstraints = false
-        root.addSubview(stack)
+        let scroll = NSScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.hasVerticalScroller = true
+        scroll.drawsBackground = false
+        scroll.borderType = .noBorder
+        scroll.documentView = stack
+        root.addSubview(scroll)
 
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -16),
-            stack.topAnchor.constraint(equalTo: root.topAnchor, constant: 16),
-            nameField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            personalityField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            scenarioField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            greetingField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            creatorNotesField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            loreField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            tagsField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+        var constraints = [
+            scroll.leadingAnchor.constraint(equalTo: root.leadingAnchor),
+            scroll.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+            scroll.topAnchor.constraint(equalTo: root.topAnchor),
+            scroll.bottomAnchor.constraint(equalTo: root.bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: scroll.contentView.leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: scroll.contentView.trailingAnchor, constant: -16),
+            stack.topAnchor.constraint(equalTo: scroll.contentView.topAnchor, constant: 16),
+            stack.widthAnchor.constraint(equalTo: scroll.contentView.widthAnchor, constant: -32),
             providerPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             voicePopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            baseField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            modelField.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            keyField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             memoryPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             pageLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
-        ])
+        ]
+        for field in cardFields {
+            constraints.append(field.widthAnchor.constraint(equalTo: stack.widthAnchor))
+        }
+        NSLayoutConstraint.activate(constraints)
         keyField.setAccessibilityLabel(AccessibilityCopy.apiKey)
     }
 
@@ -315,7 +356,14 @@ final class SettingsWindowController: NSWindowController {
             greeting: greetingField.stringValue,
             creatorNotes: creatorNotesField.stringValue,
             lore: loreField.stringValue,
-            tags: CompanionPersona.tags(from: tagsField.stringValue)
+            tags: CompanionPersona.tags(from: tagsField.stringValue),
+            nickname: nicknameField.stringValue,
+            description: descriptionField.stringValue,
+            alternateGreetings: CompanionPersona.greetings(from: alternateGreetingsField.stringValue),
+            systemPrompt: systemPromptField.stringValue,
+            postHistoryInstructions: postHistoryField.stringValue,
+            cardVersion: cardVersionField.stringValue,
+            modules: CompanionPersona.modules(from: modulesField.stringValue)
         )
     }
 

@@ -58,6 +58,41 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertFalse(prompt.contains("The lore is"))
     }
 
+    func testCardFieldsEnterThePromptOrStayOut() {
+        let card = CompanionPersona(
+            name: "Nova",
+            personality: "Stay calm.",
+            nickname: "Nia",
+            description: "A night clerk.",
+            alternateGreetings: ["Hi again.", " Hi again. ", ""],
+            systemPrompt: "Speak softly.",
+            postHistoryInstructions: "Stay in scene.",
+            cardVersion: "1.2.0",
+            modules: ["chat", "games", "chat"]
+        )
+        XCTAssertEqual(card.alternateGreetings, ["Hi again."])
+        XCTAssertEqual(card.modules, ["chat"])
+        XCTAssertEqual(CompanionPersona.modules(from: ""), CompanionModule.defaultIDs)
+        let prompt = CompanionPrompt.system(persona: card, memory: .empty)
+        XCTAssertTrue(prompt.contains("Speak softly."))
+        XCTAssertTrue(prompt.contains("The description is A night clerk."))
+        XCTAssertFalse(prompt.contains("Nia"))
+        XCTAssertFalse(prompt.contains("Hi again."))
+        XCTAssertFalse(prompt.contains("Stay in scene."))
+        XCTAssertFalse(prompt.contains("1.2.0"))
+        XCTAssertFalse(prompt.contains("chat"))
+        let sent = CompanionPrompt.messages(
+            persona: card,
+            memory: .empty,
+            history: [ChatMessage(role: .user, content: "Hello")]
+        )
+        XCTAssertEqual(sent.first?.role, .system)
+        XCTAssertTrue(sent.first?.content.contains("Speak softly.") ?? false)
+        XCTAssertEqual(sent.last?.role, .system)
+        XCTAssertEqual(sent.last?.content, "Stay in scene.")
+        XCTAssertEqual(CompanionGreeting.opening(persona: card, memory: .empty), "Hello. I am Nova. I am here on your desktop.")
+    }
+
     func testTagsKeepTheFirstSpelling() {
         XCTAssertEqual(CompanionPersona.tags(from: " Night, night, , Desk "), ["Night", "Desk"])
         XCTAssertEqual(CompanionPersona.tags(fromJSON: "not-json"), [])
@@ -71,6 +106,13 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(profile.persona.creatorNotes, "")
         XCTAssertEqual(profile.persona.lore, "")
         XCTAssertEqual(profile.persona.tags, [])
+        XCTAssertEqual(profile.persona.nickname, "")
+        XCTAssertEqual(profile.persona.description, "")
+        XCTAssertEqual(profile.persona.alternateGreetings, [])
+        XCTAssertEqual(profile.persona.systemPrompt, "")
+        XCTAssertEqual(profile.persona.postHistoryInstructions, "")
+        XCTAssertEqual(profile.persona.cardVersion, "")
+        XCTAssertEqual(profile.persona.modules, CompanionModule.defaultIDs)
     }
 
     func testEmotionWords() {
@@ -196,7 +238,14 @@ final class CompanionBehaviorTests: XCTestCase {
             greeting: "Good evening.",
             creatorNotes: "draft only",
             lore: "An old lamp.",
-            tags: ["Night", "night", " Desk "]
+            tags: ["Night", "night", " Desk "],
+            nickname: "Nia",
+            description: "A night clerk.",
+            alternateGreetings: ["Hi again."],
+            systemPrompt: "Speak softly.",
+            postHistoryInstructions: "Stay in scene.",
+            cardVersion: "1.2.0",
+            modules: ["chat", "speech"]
         )
         try store.save(CompanionProfile(persona: card, memory: .empty))
         XCTAssertEqual(try store.load().persona.tags, ["Night", "Desk"])
