@@ -65,7 +65,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Plugins | `plugin-sdk` | Manifest v2 host and one JavaScriptCore script | The grant is `aori.companion.*`. A `.mjs` file is rejected |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
-| Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Factorio and Minecraft are listed and not connected |
+| Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Factorio accepts a local hello. Minecraft is not connected |
 
 ## Native mapping
 
@@ -242,6 +242,8 @@ This slice stores a Telegram preview. The preview has a chat id and text. No tok
 This slice stores a Satori event draft. The draft has a platform and text. No token is stored. X stays unavailable.
 
 This slice drops X credential fields. X stays unavailable. No token is stored. Cloud provider sync stays absent.
+
+This slice accepts a Factorio hello on 127.0.0.1. A remote host is refused. No password is stored. Minecraft is not connected.
 
 ## What this checkout did not run
 

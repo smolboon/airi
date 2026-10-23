@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 #if canImport(SQLite3)
 import SQLite3
@@ -147,8 +148,41 @@ final class CompanionBehaviorTests: XCTestCase {
 
     func testGameScaffoldListsFactorioAndMinecraft() {
         XCTAssertEqual(CompanionGame.catalog.map(\.id), ["factorio", "minecraft"])
-        XCTAssertEqual(GameScaffold.status, "not connected")
-        XCTAssertEqual(GameScaffold.report(), "Games: Factorio and Minecraft. Each game is not connected.")
+        let text = GameScaffold.report()
+        XCTAssertTrue(text.contains("Factorio accepts a local hello."))
+        XCTAssertTrue(text.contains("A remote host is refused."))
+        XCTAssertTrue(text.contains("Minecraft is not connected."))
+        XCTAssertFalse(text.contains("Each game is not connected."))
+    }
+
+    func testFactorioAcceptsALocalHello() {
+        XCTAssertTrue(LocalHello.allows(" localhost "))
+        XCTAssertTrue(LocalHello.allows("127.0.0.1"))
+        XCTAssertFalse(LocalHello.allows("127.0.0.2"))
+        XCTAssertFalse(LocalHello.allows("example.com"))
+        XCTAssertEqual(
+            FactorioLink.hello(host: "203.0.113.10", port: 34197, player: "Aori"),
+            .failure(.refused)
+        )
+        XCTAssertEqual(
+            FactorioLink.hello(host: "127.0.0.1", port: 34197, player: " "),
+            .failure(.refused)
+        )
+        XCTAssertEqual(
+            FactorioLink.hello(host: "127.0.0.1", port: 34197, player: "Aori\nadmin"),
+            .failure(.refused)
+        )
+        guard let server = LocalHelloServer.bind() else {
+            XCTFail("bind")
+            return
+        }
+        let box = HelloBox()
+        DispatchQueue.global().async {
+            box.set(FactorioLink.hello(host: "localhost", port: server.port, player: " Aori "))
+        }
+        let served = server.serveOne()
+        XCTAssertEqual(served, "OK Aori")
+        XCTAssertEqual(box.wait(), .success(FactorioLink.Hello(player: "Aori", reply: "OK Aori")))
     }
 
     func testLorebookEntersThePromptOnlyOnAKeyword() {
@@ -450,5 +484,25 @@ final class CompanionBehaviorTests: XCTestCase {
         try store.save(id: "ja")
         XCTAssertEqual(try store.load(), "ja")
         try FileManager.default.removeItem(at: directory)
+    }
+}
+
+private final class HelloBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private let ready = DispatchSemaphore(value: 0)
+    private var value: Result<FactorioLink.Hello, LocalHelloError>?
+
+    func set(_ value: Result<FactorioLink.Hello, LocalHelloError>) {
+        lock.lock()
+        self.value = value
+        lock.unlock()
+        ready.signal()
+    }
+
+    func wait() -> Result<FactorioLink.Hello, LocalHelloError>? {
+        ready.wait()
+        lock.lock()
+        defer { lock.unlock() }
+        return value
     }
 }
