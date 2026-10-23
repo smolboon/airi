@@ -136,6 +136,13 @@ final class CompanionBehaviorTests: XCTestCase {
         let event = SatoriScaffold.draft(platform: " qq ", text: " Hello ")
         XCTAssertEqual(event, SatoriScaffold.Draft(platform: "qq", text: "Hello"))
         XCTAssertNil(SatoriScaffold.draft(platform: "qq", text: " "))
+        XCTAssertTrue(text.contains("Credential fields are dropped."))
+        let kept = XScaffold.kept([
+            "api_key": "secret",
+            "access_token": "secret",
+            "note": "public",
+        ])
+        XCTAssertEqual(kept, ["note": "public"])
     }
 
     func testGameScaffoldListsFactorioAndMinecraft() {

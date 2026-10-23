@@ -239,7 +239,9 @@ This slice stores a Discord message draft. The draft has a channel and text. No 
 
 This slice stores a Telegram preview. The preview has a chat id and text. No token is stored. Satori stays not connected.
 
-This slice stores a Satori event draft. The draft has a platform and text. No token is stored. X stays unavailable. Cloud provider sync stays absent.
+This slice stores a Satori event draft. The draft has a platform and text. No token is stored. X stays unavailable.
+
+This slice drops X credential fields. X stays unavailable. No token is stored. Cloud provider sync stays absent.
 
 ## What this checkout did not run
 
