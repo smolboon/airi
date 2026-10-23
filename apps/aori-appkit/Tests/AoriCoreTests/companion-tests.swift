@@ -116,6 +116,12 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(profile.persona.lorebook, [])
     }
 
+    func testGameScaffoldListsFactorioAndMinecraft() {
+        XCTAssertEqual(CompanionGame.catalog.map(\.id), ["factorio", "minecraft"])
+        XCTAssertEqual(GameScaffold.status, "not connected")
+        XCTAssertEqual(GameScaffold.report(), "Games: Factorio and Minecraft. Each game is not connected.")
+    }
+
     func testLorebookEntersThePromptOnlyOnAKeyword() {
         let entries = Lorebook.parse("lamp, Lamp | An old lamp. ;;  | missing ;; desk | A night desk")
         XCTAssertEqual(entries.map(\.keywords), [["lamp"], ["desk"]])

@@ -65,7 +65,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Plugins | `plugin-sdk` | Manifest v2 host and one JavaScriptCore script | The grant is `aori.companion.*`. A `.mjs` file is rejected |
 | Integrations | `integrations/` | Absent | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
-| Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Games stay absent |
+| Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Factorio and Minecraft are listed and not connected |
 
 ## Native mapping
 
@@ -229,7 +229,9 @@ This slice stores creator notes, lore, and tags. When the text is not empty, lor
 
 This slice stores a nickname, a description, alternate greetings, a system prompt, post-history instructions, a card version, and modules. When the description is not empty, it enters the system prompt. When the system prompt text is not empty, that text enters the system prompt. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, and the card version stay out of the prompt.
 
-This slice stores a keyword lorebook on the card. When the user text contains a keyword, that entry enters the system prompt. A miss stays out of the prompt. When the prose lore is not empty, it still enters the system prompt. Games, cloud provider sync, and the other chat protocols stay absent.
+This slice stores a keyword lorebook on the card. When the user text contains a keyword, that entry enters the system prompt. A miss stays out of the prompt. When the prose lore is not empty, it still enters the system prompt.
+
+This slice lists Factorio and Minecraft in Settings. Each game is not connected. The app does not open a game server. Cloud provider sync and the other chat protocols stay absent.
 
 ## What this checkout did not run
 
