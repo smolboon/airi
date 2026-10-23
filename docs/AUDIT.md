@@ -25,7 +25,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | User interface and interaction | 4 | Run 38369523526 captured the Settings window. The page list names scene, providers, modules, the character card, memory, data, connection, models, and system. Full provider catalogs are absent. |
 | Graphics and character rendering | 4 | Run 38377354859 saved a SceneKit image of Butter. The head fills the upper frame. The front has black letter marks. It does not show eyes, a nose, or a mouth. Head `989cbd319` has no macOS job. Cubism, MMD, and Spine are absent. |
 | Audio, speech input, and speech output | 4 | Run 38369523526 logged `aori_mic_utterance=speech` and `aori_viseme_source=audio`. `AORI_MIC_WAV` fed that mark. A phoneme recognizer is absent. |
-| Networking and model providers | 4 | Run 38377354859 logged `aori_vision_reply=Mock vision from CI.` and `aori_telegram=sent`. The mock decodes the PNG. A bad image returns an error. This is not a live Telegram session. |
+| Networking and model providers | 4 | Run 38377354859 logged `aori_vision_reply=Mock vision from CI.` and `aori_telegram=sent`. The mock decodes the PNG. The native list also offers MLX-Serve and TensorFold. This is not a live Telegram session. |
 | Security, secrets, and privacy | 4 | Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, `aori_bookmark=ok`, and `aori_keychain=roundtrip`. Screen capture uses permission. CI still stages files in the app container. |
 | Data persistence | 4 | Run 38369523526 logged `aori_store=sqlite` and `aori_embed_recall=tea`. Chat, settings, the persona, and the locale id are in that file. pgvector stays out. |
 | Error handling and recovery | 4 | Run 38377354859 logged `aori_provider_error=500` and `aori_llm_reply=Mock reply from CI.` Unit tests cover one retry. The rest of AIRI error handling is absent. |
@@ -116,6 +116,8 @@ Head `989cbd319` has no macOS job. The portrait file is now `aori-face.vrm`. A L
 Audio is 4. Run 38369523526 logged `aori_mic_utterance=speech` and `aori_viseme_source=audio`. `AORI_MIC_WAV` fed that mark. A phoneme recognizer is absent.
 
 Networking is 4. The mock decodes the vision PNG. Run 38377354859 logged `aori_telegram=sent`. That post used the local mock. A live Telegram session is absent.
+
+The native provider list offers OpenAI-compatible, MLX-Serve, and TensorFold. MLX-Serve uses port 11234. TensorFold uses port 8080. Other provider catalogs are absent.
 
 Security is 4. The signature has no checkout path exception. The log says `aori_bookmark=ok`. A Developer ID profile is absent. CI still stages files in the app container.
 

@@ -1,6 +1,6 @@
 # Aori product
 
-Aori is a desktop companion for macOS. It is a native port of Project AIRI. The Vue apps keep the upstream name. This app does not rename them.
+Aori is a desktop companion for macOS. The Vue apps use the same name.
 
 The companion is a character on the desktop. The window is transparent. You can drag it. It can stay above other windows. Clear pixels pass clicks through the window. Opaque pixels and the caption keep the click.
 
@@ -14,7 +14,11 @@ Animates is a separate product from Animation Inc. The site at animates.ai says 
 
 ## This milestone
 
-The sample character is Butter, a CC0 VRM by Polygonal Mind. Rust skins the mesh, lights it, and fills a depth buffer. AppKit shows that image. Chat can call an OpenAI-compatible provider. When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
+The sample character is Butter, a CC0 VRM by Polygonal Mind. Rust skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
+
+Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve or TensorFold. Those choices fill the local base URL. The same client sends the chat.
+
+When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
 
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 

@@ -119,7 +119,13 @@ apps/aori-appkit/
 
 ### Milestone 1, this change
 
-The companion window is transparent, draggable, and able to stay above other apps. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. The editable fields are a name, a personality, one provider, a voice, a model, and saved facts. The name and the personality become the system prompt. The provider list has one entry. Saved facts live in `companion.sqlite`. Launch shows a local greeting and speaks it. The greeting does not call the provider. The placeholder blinks and sways while idle. The words glad, sorry, and wow change the face. The mouth moves on a timer while speech is active. That timer is not lip-sync from audio samples. Chat still streams from an OpenAI-compatible endpoint. The key comes from the environment or the Keychain. VRM files expose a title and a mesh count. The mesh is still the placeholder.
+The companion window is transparent, draggable, and able to stay above other apps. Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. The editable fields are a name, a personality, a provider, a voice, a model, and saved facts. The name and the personality become the system prompt.
+
+The provider list has OpenAI-compatible, MLX-Serve, and TensorFold. MLX-Serve uses port 11234. TensorFold uses port 8080. Both use the OpenAI-compatible client. Other catalogs are absent. Saved facts live in `companion.sqlite`.
+
+Launch shows a local greeting and speaks it. The greeting does not call the provider. The placeholder blinks and sways while idle. The words glad, sorry, and wow change the face. The mouth moves on a timer while speech is active. That timer is not lip-sync from audio samples.
+
+Chat still streams from an OpenAI-compatible endpoint. The key comes from the environment or the Keychain. VRM files expose a title and a mesh count. The mesh is still the placeholder.
 
 ### Milestone 2, this change
 

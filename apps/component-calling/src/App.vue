@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useTheme } from '@proj-airi/ui'
 import { RouterLink, RouterView } from 'vue-router'
-
-const { isDark, toggleDark } = useTheme()
 </script>
 
 <template>
@@ -12,10 +9,6 @@ const { isDark, toggleDark } = useTheme()
         Component Calling
       </h1>
       <div flex flex-row items-center gap-2>
-        <button text-lg @click="() => toggleDark()">
-          <div v-if="isDark" i-solar:moon-stars-bold-duotone />
-          <div v-else i-solar:sun-bold />
-        </button>
         <a href="https://github.com/moeru-ai/airi/tree/main/apps/component-calling">
           <div i-simple-icons:github />
         </a>

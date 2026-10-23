@@ -74,7 +74,7 @@ const AuthEnvSchema = object({
   ),
   RESEND_API_KEY: optional(string(), ''),
   RESEND_FROM_EMAIL: optional(string(), 'noreply@airi.moeru.ai'),
-  RESEND_FROM_NAME: optional(string(), 'Project AIRI'),
+  RESEND_FROM_NAME: optional(string(), 'Aori'),
   DB_POOL_MAX: optionalIntegerFromString(20, 'DB_POOL_MAX', 1),
   DB_POOL_IDLE_TIMEOUT_MS: optionalIntegerFromString(30000, 'DB_POOL_IDLE_TIMEOUT_MS', 1),
   DB_POOL_CONNECTION_TIMEOUT_MS: optionalIntegerFromString(5000, 'DB_POOL_CONNECTION_TIMEOUT_MS', 1),

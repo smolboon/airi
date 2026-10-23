@@ -158,7 +158,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
     async sendVerification({ to, url }) {
       await send({
         to,
-        subject: 'Verify your email for Project AIRI',
+        subject: 'Verify your email for Aori',
         html: renderVerificationHtml(url),
         text: renderVerificationText(url),
       }, 'verification')
@@ -166,7 +166,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
     async sendPasswordReset({ to, url }) {
       await send({
         to,
-        subject: 'Reset your Project AIRI password',
+        subject: 'Reset your Aori password',
         html: renderPasswordResetHtml(url),
         text: renderPasswordResetText(url),
       }, 'password_reset')
@@ -174,7 +174,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
     async sendMagicLink({ to, url }) {
       await send({
         to,
-        subject: 'Your Project AIRI sign-in link',
+        subject: 'Your Aori sign-in link',
         html: renderMagicLinkHtml(url),
         text: renderMagicLinkText(url),
       }, 'magic_link')
@@ -182,7 +182,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
     async sendChangeEmailConfirmation({ to, newEmail, url }) {
       await send({
         to,
-        subject: 'Confirm your new email address for Project AIRI',
+        subject: 'Confirm your new email address for Aori',
         html: renderChangeEmailHtml(url, newEmail),
         text: renderChangeEmailText(url, newEmail),
       }, 'change_email')
@@ -190,7 +190,7 @@ export function createEmailService(config: EmailConfig, logger: Logger = useLogg
     async sendDeleteAccountVerification({ to, url }) {
       await send({
         to,
-        subject: 'Confirm account deletion for Project AIRI',
+        subject: 'Confirm account deletion for Aori',
         html: renderDeleteAccountHtml(url),
         text: renderDeleteAccountText(url),
       }, 'delete_account')
@@ -231,7 +231,7 @@ function renderActionEmailText(args: { heading: string, body: string, url: strin
 function renderVerificationHtml(url: string): string {
   return renderActionEmailHtml({
     heading: 'Verify your email',
-    body: 'Welcome to Project AIRI. Click the button below to confirm this is your email address.',
+    body: 'Welcome to Aori. Click the button below to confirm this is your email address.',
     ctaLabel: 'Verify email',
     url,
     footer: 'If you did not create an account, you can safely ignore this email.',
@@ -241,7 +241,7 @@ function renderVerificationHtml(url: string): string {
 function renderVerificationText(url: string): string {
   return renderActionEmailText({
     heading: 'Verify your email',
-    body: 'Welcome to Project AIRI. Open this link to confirm your email address:',
+    body: 'Welcome to Aori. Open this link to confirm your email address:',
     url,
     footer: 'If you did not create an account, you can safely ignore this email.',
   })
@@ -250,7 +250,7 @@ function renderVerificationText(url: string): string {
 function renderPasswordResetHtml(url: string): string {
   return renderActionEmailHtml({
     heading: 'Reset your password',
-    body: 'We received a request to reset the password for your Project AIRI account.',
+    body: 'We received a request to reset the password for your Aori account.',
     ctaLabel: 'Reset password',
     url,
     footer: 'If you did not request this, you can safely ignore this email — your password will not change.',
@@ -260,7 +260,7 @@ function renderPasswordResetHtml(url: string): string {
 function renderPasswordResetText(url: string): string {
   return renderActionEmailText({
     heading: 'Reset your password',
-    body: 'Open this link to reset your Project AIRI password:',
+    body: 'Open this link to reset your Aori password:',
     url,
     footer: 'If you did not request this, you can safely ignore this email — your password will not change.',
   })
@@ -268,7 +268,7 @@ function renderPasswordResetText(url: string): string {
 
 function renderMagicLinkHtml(url: string): string {
   return renderActionEmailHtml({
-    heading: 'Sign in to Project AIRI',
+    heading: 'Sign in to Aori',
     body: 'Click the button below to sign in. This link expires shortly and can be used once.',
     ctaLabel: 'Sign in',
     url,
@@ -278,7 +278,7 @@ function renderMagicLinkHtml(url: string): string {
 
 function renderMagicLinkText(url: string): string {
   return renderActionEmailText({
-    heading: 'Sign in to Project AIRI',
+    heading: 'Sign in to Aori',
     body: 'Open this link to sign in (single-use, expires shortly):',
     url,
     footer: 'If you did not request this link, you can safely ignore this email.',
@@ -288,7 +288,7 @@ function renderMagicLinkText(url: string): string {
 function renderChangeEmailHtml(url: string, newEmail: string): string {
   return renderActionEmailHtml({
     heading: 'Confirm your new email',
-    body: `Confirm that ${newEmail} should become your Project AIRI account email.`,
+    body: `Confirm ${newEmail} as the new email for your Aori account.`,
     ctaLabel: 'Confirm new email',
     url,
     footer: 'If you did not request this change, contact support immediately.',
@@ -298,7 +298,7 @@ function renderChangeEmailHtml(url: string, newEmail: string): string {
 function renderChangeEmailText(url: string, newEmail: string): string {
   return renderActionEmailText({
     heading: 'Confirm your new email',
-    body: `Confirm that ${newEmail} should become your Project AIRI account email by opening this link:`,
+    body: `Confirm ${newEmail} as the new email for your Aori account. Open this link:`,
     url,
     footer: 'If you did not request this change, contact support immediately.',
   })
@@ -312,7 +312,7 @@ function renderChangeEmailText(url: string, newEmail: string): string {
 function renderDeleteAccountHtml(url: string): string {
   return renderActionEmailHtml({
     heading: 'Confirm account deletion',
-    body: 'Click below to permanently delete your Project AIRI account. This cannot be undone. Your Flux balance is cleared. Cancel an active subscription first, or the deletion stops. Link expires in 24 hours.',
+    body: 'Click below to permanently delete your Aori account. This cannot be undone. Your Flux balance is cleared. Cancel an active subscription first, or the deletion stops. Link expires in 24 hours.',
     ctaLabel: 'Delete my account',
     url,
     footer: 'Did not request this? Ignore this email and rotate your password.',
@@ -322,7 +322,7 @@ function renderDeleteAccountHtml(url: string): string {
 function renderDeleteAccountText(url: string): string {
   return renderActionEmailText({
     heading: 'Confirm account deletion',
-    body: 'Open this link to permanently delete your Project AIRI account. This cannot be undone. Your Flux balance is cleared. Cancel an active subscription first, or the deletion stops. Link expires in 24 hours.',
+    body: 'Open this link to permanently delete your Aori account. This cannot be undone. Your Flux balance is cleared. Cancel an active subscription first, or the deletion stops. Link expires in 24 hours.',
     url,
     footer: 'Did not request this? Ignore this email and rotate your password.',
   })

@@ -1,7 +1,7 @@
 // noinspection ES6PreferShortImport: IntelliJ IDE hint to avoid warning to use `~/contributors`, will fail on build if changed
 
 /* Texts */
-export const projectName = 'Project AIRI'
+export const projectName = 'Aori'
 export const projectShortName = 'AIRI'
 export const projectDescription
   = 'An open-source attempt to re-create Neuro-sama, the most famous AI VTuber on this earth, but also forming a cyber companion for everyone.'

@@ -786,7 +786,7 @@ async function main() {
       })
       chatClientSharesMainTarget = true
       addTimeline('chat-target-ready', {
-        title: 'AIRI',
+        title: 'Aori',
         url: 'http://localhost:5173/#/chat',
         mode: 'same-window-route',
       })

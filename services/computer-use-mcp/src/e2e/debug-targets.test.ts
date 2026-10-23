@@ -43,7 +43,7 @@ describe('debug target helpers', () => {
       }),
       createTarget({
         id: 'main',
-        title: 'AIRI',
+        title: 'Aori',
         url: 'http://localhost:5173/',
       }),
       createTarget({
@@ -63,14 +63,14 @@ describe('debug target helpers', () => {
     }))).toBe(true)
 
     expect(isChatSurfaceTarget(createTarget({
-      title: 'AIRI',
+      title: 'Aori',
       url: 'http://localhost:5173/',
     }), {
       route: '#/chat',
     })).toBe(true)
 
     expect(isChatSurfaceTarget(createTarget({
-      title: 'AIRI',
+      title: 'Aori',
       url: 'http://localhost:5173/',
     }), {
       route: '#/',

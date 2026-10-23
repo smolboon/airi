@@ -54,7 +54,7 @@ watch(lang, () => locale.value = lang.value, { immediate: true })
               >
                 <img
                   class="w-6 md:w-9"
-                  alt="Project AIRI logo"
+                  alt="Aori logo"
                   :src="logo"
                 >
                 <span class="translate-y-1 text-xl font-bold font-sans-rounded md:text-2xl">{{ title }}</span>

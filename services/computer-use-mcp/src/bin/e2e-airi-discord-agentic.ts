@@ -900,7 +900,7 @@ async function main() {
       })
       chatClientSharesMainTarget = true
       addTimeline('chat-target-ready', {
-        title: 'AIRI',
+        title: 'Aori',
         url: 'http://localhost:5173/#/chat',
         mode: 'same-window-route',
       })
@@ -926,7 +926,7 @@ async function main() {
         || data.observation) as Record<string, unknown> | undefined
       const windows = Array.isArray(observationPayload?.windows) ? observationPayload.windows as Array<Record<string, unknown>> : []
       const frontmostAppName = String(observationPayload?.frontmostAppName || '')
-      const chatWindow = windows.find(window => String(window.title || '').includes('AIRI'))
+      const chatWindow = windows.find(window => String(window.title || '').includes('Aori'))
       if (!frontmostAppName.includes('Electron')) {
         return undefined
       }
