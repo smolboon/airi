@@ -16,7 +16,8 @@ final class SettingsPagesTests: XCTestCase {
             keySource: "environment",
             baseURL: "http://127.0.0.1:8765/v1",
             personaName: "Aori",
-            cardModules: "chat, speech, vision, memory, plugins"
+            cardModules: "chat, speech, vision, memory, plugins",
+            lorebookCount: 2
         )
         XCTAssertEqual(SettingsPages.ids.count, 9)
         for name in ["Scene:", "Providers:", "Modules:", "Character card:", "Memory:", "Data:", "Connection:", "Models:", "System:"] {
@@ -28,9 +29,10 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("TensorFold"))
         XCTAssertTrue(text.contains("Other catalogs are absent."))
         XCTAssertTrue(text.contains("Games are absent."))
-        XCTAssertTrue(text.contains("Fields: name, nickname, description, personality, scenario, greeting, alternate greetings, creator notes, lore, tags, system prompt, post-history instructions, card version, and modules."))
+        XCTAssertTrue(text.contains("Fields: name, nickname, description, personality, scenario, greeting, alternate greetings, creator notes, lore, tags, system prompt, post-history instructions, card version, modules, and a keyword lorebook."))
         XCTAssertTrue(text.contains("Card modules: chat, speech, vision, memory, plugins."))
-        XCTAssertTrue(text.contains("A keyword lorebook is absent."))
+        XCTAssertTrue(text.contains("Keyword lorebook: 2 entries."))
+        XCTAssertFalse(text.contains("A keyword lorebook is absent."))
         XCTAssertFalse(text.contains("Creator notes and lore are absent."))
         XCTAssertTrue(text.contains("1 saved facts."))
         XCTAssertTrue(text.contains("2 messages in companion.sqlite."))

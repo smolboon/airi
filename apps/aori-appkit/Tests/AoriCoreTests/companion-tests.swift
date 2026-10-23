@@ -113,6 +113,25 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(profile.persona.postHistoryInstructions, "")
         XCTAssertEqual(profile.persona.cardVersion, "")
         XCTAssertEqual(profile.persona.modules, CompanionModule.defaultIDs)
+        XCTAssertEqual(profile.persona.lorebook, [])
+    }
+
+    func testLorebookEntersThePromptOnlyOnAKeyword() {
+        let entries = Lorebook.parse("lamp, Lamp | An old lamp. ;;  | missing ;; desk | A night desk")
+        XCTAssertEqual(entries.map(\.keywords), [["lamp"], ["desk"]])
+        XCTAssertEqual(entries.map(\.content), ["An old lamp.", "A night desk"])
+        let card = CompanionPersona(name: "Nova", personality: "Stay calm.", lorebook: entries)
+        let miss = CompanionPrompt.system(persona: card, memory: .empty, context: "Hello there")
+        XCTAssertFalse(miss.contains("The lorebook says"))
+        let hit = CompanionPrompt.system(persona: card, memory: .empty, context: "Look at the lamp.")
+        XCTAssertTrue(hit.contains("The lorebook says An old lamp."))
+        XCTAssertFalse(hit.contains("A night desk"))
+        let sent = CompanionPrompt.messages(
+            persona: card,
+            memory: .empty,
+            history: [ChatMessage(role: .user, content: "The lamp is on.")]
+        )
+        XCTAssertTrue(sent.first?.content.contains("The lorebook says An old lamp.") ?? false)
     }
 
     func testEmotionWords() {
@@ -245,7 +264,8 @@ final class CompanionBehaviorTests: XCTestCase {
             systemPrompt: "Speak softly.",
             postHistoryInstructions: "Stay in scene.",
             cardVersion: "1.2.0",
-            modules: ["chat", "speech"]
+            modules: ["chat", "speech"],
+            lorebook: [LoreEntry(keywords: ["lamp", "Lamp"], content: " An old lamp. ")]
         )
         try store.save(CompanionProfile(persona: card, memory: .empty))
         XCTAssertEqual(try store.load().persona.tags, ["Night", "Desk"])

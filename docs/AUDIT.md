@@ -42,7 +42,8 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - A main window with the character and the transcript.
 - A borderless companion window. The standard policy is transparent, floating, draggable, and visible on all spaces.
 - Settings stores the character card fields. The fields are a name, a nickname, a description, a personality, a scenario, and a greeting. The fields also include alternate greetings, creator notes, lore, and tags. The fields also include a system prompt, post-history instructions, a card version, and modules.
-- The name and the personality enter the system prompt. A non-empty description, a non-empty system prompt, a non-empty scenario, and non-empty lore also enter that prompt. A non-empty greeting is the first local line. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. A keyword lorebook and games stay absent.
+- The name and the personality enter the system prompt. A non-empty description, a non-empty system prompt, a non-empty scenario, and non-empty lore also enter that prompt. A non-empty greeting is the first local line. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. When a keyword matches, that lorebook entry enters the prompt.
+- Games stay absent.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

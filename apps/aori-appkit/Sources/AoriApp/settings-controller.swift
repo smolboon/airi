@@ -14,6 +14,7 @@ final class SettingsWindowController: NSWindowController {
     private let alternateGreetingsField = NSTextField(string: "")
     private let creatorNotesField = NSTextField(string: "")
     private let loreField = NSTextField(string: "")
+    private let lorebookField = NSTextField(string: "")
     private let tagsField = NSTextField(string: "")
     private let systemPromptField = NSTextField(string: "")
     private let postHistoryField = NSTextField(string: "")
@@ -85,6 +86,7 @@ final class SettingsWindowController: NSWindowController {
         alternateGreetingsField.stringValue = persona.alternateGreetingsText
         creatorNotesField.stringValue = persona.creatorNotes
         loreField.stringValue = persona.lore
+        lorebookField.stringValue = persona.lorebookText
         tagsField.stringValue = persona.tagsText
         systemPromptField.stringValue = persona.systemPrompt
         postHistoryField.stringValue = persona.postHistoryInstructions
@@ -113,7 +115,8 @@ final class SettingsWindowController: NSWindowController {
             keySource: configuration.keySource.rawValue,
             baseURL: configuration.baseURL.absoluteString,
             personaName: persona.name,
-            cardModules: persona.modulesText
+            cardModules: persona.modulesText,
+            lorebookCount: persona.lorebook.count
         )
     }
 
@@ -144,6 +147,8 @@ final class SettingsWindowController: NSWindowController {
         let alternateGreetingsLabel = NSTextField(labelWithString: "Alternate greetings")
         let creatorNotesLabel = NSTextField(labelWithString: "Creator notes")
         let loreLabel = NSTextField(labelWithString: "Lore")
+        let lorebookLabel = NSTextField(labelWithString: "Lorebook")
+        lorebookField.placeholderString = "keyword | text"
         let tagsLabel = NSTextField(labelWithString: "Tags")
         let systemPromptLabel = NSTextField(labelWithString: "System prompt")
         let postHistoryLabel = NSTextField(labelWithString: "Post-history instructions")
@@ -202,6 +207,7 @@ final class SettingsWindowController: NSWindowController {
             alternateGreetingsLabel, alternateGreetingsField,
             creatorNotesLabel, creatorNotesField,
             loreLabel, loreField,
+            lorebookLabel, lorebookField,
             tagsLabel, tagsField,
             systemPromptLabel, systemPromptField,
             postHistoryLabel, postHistoryField,
@@ -222,7 +228,7 @@ final class SettingsWindowController: NSWindowController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         let cardFields = [
             nameField, nicknameField, descriptionField, personalityField, scenarioField, greetingField,
-            alternateGreetingsField, creatorNotesField, loreField, tagsField, systemPromptField,
+            alternateGreetingsField, creatorNotesField, loreField, lorebookField, tagsField, systemPromptField,
             postHistoryField, cardVersionField, modulesField, baseField, modelField, keyField,
         ]
         for field in cardFields {
@@ -356,6 +362,7 @@ final class SettingsWindowController: NSWindowController {
             greeting: greetingField.stringValue,
             creatorNotes: creatorNotesField.stringValue,
             lore: loreField.stringValue,
+            lorebook: Lorebook.parse(lorebookField.stringValue),
             tags: CompanionPersona.tags(from: tagsField.stringValue),
             nickname: nicknameField.stringValue,
             description: descriptionField.stringValue,
