@@ -116,6 +116,16 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(profile.persona.lorebook, [])
     }
 
+    func testChatProtocolsStayDisconnected() {
+        XCTAssertEqual(ChatProtocol.catalog.map(\.id), ["discord", "telegram", "satori", "x"])
+        XCTAssertEqual(ChatProtocolScaffold.status, "not connected")
+        XCTAssertEqual(ChatProtocolScaffold.unavailableID, "x")
+        let text = ChatProtocolScaffold.report()
+        XCTAssertTrue(text.contains("No token is stored."))
+        XCTAssertTrue(text.contains("X is unavailable."))
+        XCTAssertFalse(text.contains("token="))
+    }
+
     func testGameScaffoldListsFactorioAndMinecraft() {
         XCTAssertEqual(CompanionGame.catalog.map(\.id), ["factorio", "minecraft"])
         XCTAssertEqual(GameScaffold.status, "not connected")

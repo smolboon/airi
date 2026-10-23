@@ -157,6 +157,9 @@ final class SettingsWindowController: NSWindowController {
         let gamesLabel = NSTextField(wrappingLabelWithString: GameScaffold.report())
         gamesLabel.maximumNumberOfLines = 3
         gamesLabel.textColor = .secondaryLabelColor
+        let protocolsLabel = NSTextField(wrappingLabelWithString: ChatProtocolScaffold.report())
+        protocolsLabel.maximumNumberOfLines = 4
+        protocolsLabel.textColor = .secondaryLabelColor
         alternateGreetingsField.placeholderString = "Separate greetings with |"
         modulesField.placeholderString = CompanionModule.defaultIDs.joined(separator: ", ")
         let providerLabel = NSTextField(labelWithString: "Provider")
@@ -217,6 +220,7 @@ final class SettingsWindowController: NSWindowController {
             cardVersionLabel, cardVersionField,
             modulesLabel, modulesField,
             gamesLabel,
+            protocolsLabel,
             providerLabel, providerPopup,
             voiceLabel, voicePopup,
             baseLabel, baseField,
@@ -263,6 +267,7 @@ final class SettingsWindowController: NSWindowController {
             memoryPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             pageLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
             gamesLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            protocolsLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ]
         for field in cardFields {
             constraints.append(field.widthAnchor.constraint(equalTo: stack.widthAnchor))

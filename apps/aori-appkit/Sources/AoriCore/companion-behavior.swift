@@ -111,6 +111,28 @@ public enum GameScaffold {
     }
 }
 
+public struct ChatProtocol: Equatable, Sendable {
+    public var id: String
+    public var title: String
+
+    public static let catalog = [
+        ChatProtocol(id: "discord", title: "Discord"),
+        ChatProtocol(id: "telegram", title: "Telegram"),
+        ChatProtocol(id: "satori", title: "Satori"),
+        ChatProtocol(id: "x", title: "X"),
+    ]
+}
+
+public enum ChatProtocolScaffold {
+    public static let status = "not connected"
+    public static let unavailableID = "x"
+
+    /// Names the protocols. No token is included.
+    public static func report() -> String {
+        "Chat protocols: Discord, Telegram, and Satori are not connected. X is unavailable. No token is stored."
+    }
+}
+
 public enum CompanionModule: String, Codable, CaseIterable, Sendable {
     case chat
     case speech

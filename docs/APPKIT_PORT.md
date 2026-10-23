@@ -231,7 +231,9 @@ This slice stores a nickname, a description, alternate greetings, a system promp
 
 This slice stores a keyword lorebook on the card. When the user text contains a keyword, that entry enters the system prompt. A miss stays out of the prompt. When the prose lore is not empty, it still enters the system prompt.
 
-This slice lists Factorio and Minecraft in Settings. Each game is not connected. The app does not open a game server. Cloud provider sync and the other chat protocols stay absent.
+This slice lists Factorio and Minecraft in Settings. Each game is not connected. The app does not open a game server.
+
+This slice lists Discord, Telegram, and Satori in Settings. Each protocol is not connected. X is unavailable. No token is stored. Cloud provider sync stays absent.
 
 ## What this checkout did not run
 

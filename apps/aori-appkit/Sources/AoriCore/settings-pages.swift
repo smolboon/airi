@@ -38,7 +38,7 @@ public enum SettingsPages {
             "Data: \(messageCount) messages in companion.sqlite.",
             "Connection: \(baseURL). Key source \(keySource).",
             "Models: \(model). Voice \(voice). The embedding file is aori-minilm.mlmodel.",
-            "System: locale \(locale). Account sync is absent.",
+            "System: locale \(locale). \(ChatProtocolScaffold.report()) Account sync is absent.",
         ].joined(separator: "\n")
     }
 }
