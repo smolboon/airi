@@ -31,7 +31,7 @@ public enum SettingsPages {
             "Scene: \(sceneTitle). \(sceneDetail) Avatar \(avatar). Cubism, MMD, and Spine are absent.",
             "Providers: OpenAI-compatible, MLX-Serve, and TensorFold. Selected \(LocalProviderCatalog.title(for: provider)). Other catalogs are absent.",
             "Modules: chat, speech, vision, memory, and plugins. Games are absent.",
-            "Character card: \(personaName). Fields: name, personality, scenario, and greeting. Creator notes and lore are absent.",
+            "Character card: \(personaName). Fields: name, personality, scenario, greeting, creator notes, lore, and tags. A keyword lorebook is absent.",
             "Memory: \(noteCount) saved facts.",
             "Data: \(messageCount) messages in companion.sqlite.",
             "Connection: \(baseURL). Key source \(keySource).",

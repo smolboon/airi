@@ -9,6 +9,9 @@ final class SettingsWindowController: NSWindowController {
     private let personalityField = NSTextField(string: "")
     private let scenarioField = NSTextField(string: "")
     private let greetingField = NSTextField(string: "")
+    private let creatorNotesField = NSTextField(string: "")
+    private let loreField = NSTextField(string: "")
+    private let tagsField = NSTextField(string: "")
     private let providerPopup = NSPopUpButton()
     private let voicePopup = NSPopUpButton()
     private let baseField = NSTextField(string: "")
@@ -35,7 +38,7 @@ final class SettingsWindowController: NSWindowController {
         self.secrets = secrets
         self.records = records
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 520, height: 920),
+            contentRect: NSRect(x: 0, y: 0, width: 520, height: 1100),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
@@ -70,6 +73,9 @@ final class SettingsWindowController: NSWindowController {
         personalityField.stringValue = persona.personality
         scenarioField.stringValue = persona.scenario
         greetingField.stringValue = persona.greeting
+        creatorNotesField.stringValue = persona.creatorNotes
+        loreField.stringValue = persona.lore
+        tagsField.stringValue = persona.tagsText
         baseField.stringValue = configuration.baseURL.absoluteString
         modelField.stringValue = configuration.model
         let stored = try? records.loadSettings()
@@ -118,6 +124,9 @@ final class SettingsWindowController: NSWindowController {
         let personalityLabel = NSTextField(labelWithString: "Personality")
         let scenarioLabel = NSTextField(labelWithString: "Scenario")
         let greetingLabel = NSTextField(labelWithString: "Greeting")
+        let creatorNotesLabel = NSTextField(labelWithString: "Creator notes")
+        let loreLabel = NSTextField(labelWithString: "Lore")
+        let tagsLabel = NSTextField(labelWithString: "Tags")
         let providerLabel = NSTextField(labelWithString: "Provider")
         let voiceLabel = NSTextField(labelWithString: "Voice")
         let baseLabel = NSTextField(labelWithString: "Base URL")
@@ -164,6 +173,9 @@ final class SettingsWindowController: NSWindowController {
             personalityLabel, personalityField,
             scenarioLabel, scenarioField,
             greetingLabel, greetingField,
+            creatorNotesLabel, creatorNotesField,
+            loreLabel, loreField,
+            tagsLabel, tagsField,
             providerLabel, providerPopup,
             voiceLabel, voicePopup,
             baseLabel, baseField,
@@ -177,7 +189,7 @@ final class SettingsWindowController: NSWindowController {
         stack.alignment = .leading
         stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
-        for field in [nameField, personalityField, scenarioField, greetingField, baseField, modelField, keyField] {
+        for field in [nameField, personalityField, scenarioField, greetingField, creatorNotesField, loreField, tagsField, baseField, modelField, keyField] {
             field.translatesAutoresizingMaskIntoConstraints = false
         }
         providerPopup.translatesAutoresizingMaskIntoConstraints = false
@@ -193,6 +205,9 @@ final class SettingsWindowController: NSWindowController {
             personalityField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             scenarioField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             greetingField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            creatorNotesField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            loreField.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            tagsField.widthAnchor.constraint(equalTo: stack.widthAnchor),
             providerPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             voicePopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             baseField.widthAnchor.constraint(equalTo: stack.widthAnchor),
@@ -297,7 +312,10 @@ final class SettingsWindowController: NSWindowController {
             name: nameField.stringValue,
             personality: personalityField.stringValue,
             scenario: scenarioField.stringValue,
-            greeting: greetingField.stringValue
+            greeting: greetingField.stringValue,
+            creatorNotes: creatorNotesField.stringValue,
+            lore: loreField.stringValue,
+            tags: CompanionPersona.tags(from: tagsField.stringValue)
         )
     }
 

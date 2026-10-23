@@ -43,12 +43,24 @@ final class CompanionBehaviorTests: XCTestCase {
             name: "Nova",
             personality: "Stay calm.",
             scenario: "A night desk.",
-            greeting: "Good evening."
+            greeting: "Good evening.",
+            creatorNotes: "draft only",
+            lore: "An old lamp.",
+            tags: ["archive"]
         )
         let cardPrompt = CompanionPrompt.system(persona: card, memory: .empty)
         XCTAssertTrue(cardPrompt.contains("The scene is A night desk."))
+        XCTAssertTrue(cardPrompt.contains("The lore is An old lamp."))
+        XCTAssertFalse(cardPrompt.contains("draft only"))
+        XCTAssertFalse(cardPrompt.contains("archive"))
         XCTAssertEqual(CompanionGreeting.opening(persona: card, memory: memory), "Good evening.")
         XCTAssertFalse(prompt.contains("The scene is"))
+        XCTAssertFalse(prompt.contains("The lore is"))
+    }
+
+    func testTagsKeepTheFirstSpelling() {
+        XCTAssertEqual(CompanionPersona.tags(from: " Night, night, , Desk "), ["Night", "Desk"])
+        XCTAssertEqual(CompanionPersona.tags(fromJSON: "not-json"), [])
     }
 
     func testOlderCardJSONOmitsScenarioAndGreeting() throws {
@@ -56,6 +68,9 @@ final class CompanionBehaviorTests: XCTestCase {
         let profile = try JSONDecoder().decode(CompanionProfile.self, from: Data(json.utf8))
         XCTAssertEqual(profile.persona.scenario, "")
         XCTAssertEqual(profile.persona.greeting, "")
+        XCTAssertEqual(profile.persona.creatorNotes, "")
+        XCTAssertEqual(profile.persona.lore, "")
+        XCTAssertEqual(profile.persona.tags, [])
     }
 
     func testEmotionWords() {
@@ -178,9 +193,13 @@ final class CompanionBehaviorTests: XCTestCase {
             name: "Nova",
             personality: "Stay calm.",
             scenario: "A night desk.",
-            greeting: "Good evening."
+            greeting: "Good evening.",
+            creatorNotes: "draft only",
+            lore: "An old lamp.",
+            tags: ["Night", "night", " Desk "]
         )
         try store.save(CompanionProfile(persona: card, memory: .empty))
+        XCTAssertEqual(try store.load().persona.tags, ["Night", "Desk"])
         XCTAssertEqual(try store.load().persona, card)
         try FileManager.default.removeItem(at: directory)
     }
