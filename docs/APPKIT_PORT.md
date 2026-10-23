@@ -233,7 +233,9 @@ This slice stores a keyword lorebook on the card. When the user text contains a 
 
 This slice lists Factorio and Minecraft in Settings. Each game is not connected. The app does not open a game server.
 
-This slice lists Discord, Telegram, and Satori in Settings. Each protocol is not connected. X is unavailable. No token is stored. Cloud provider sync stays absent.
+This slice lists Discord, Telegram, and Satori in Settings. Each protocol is not connected. X is unavailable. No token is stored.
+
+This slice stores a Discord message draft. The draft has a channel and text. No token is stored. Telegram and Satori stay not connected. Cloud provider sync stays absent.
 
 ## What this checkout did not run
 
