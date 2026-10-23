@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -195,6 +195,16 @@ final class CompanionBehaviorTests: XCTestCase {
             "note": "public",
         ])
         XCTAssertEqual(kept, ["note": "public"])
+    }
+
+    func testChessMoveDraftUsesSquaresOnly() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("Chess stores a move draft only."))
+        let move = ChessScaffold.move(from: " E2 ", to: " e4 ")
+        XCTAssertEqual(move, ChessScaffold.Move(from: "e2", to: "e4"))
+        XCTAssertNil(ChessScaffold.move(from: "e2", to: "e2"))
+        XCTAssertNil(ChessScaffold.move(from: "e9", to: "e4"))
+        XCTAssertNil(ChessScaffold.move(from: "engine", to: "e4"))
     }
 
     func testFactorioAcceptsALocalHello() {
