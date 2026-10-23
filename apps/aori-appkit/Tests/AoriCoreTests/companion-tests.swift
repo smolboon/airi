@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension", "stickers"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -221,6 +221,18 @@ final class CompanionBehaviorTests: XCTestCase {
             "note": "public",
         ])
         XCTAssertEqual(kept, ["note": "public"])
+    }
+
+    func testStickerDraftListsEmotionsOnly() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("Stickers list emotions only."))
+        XCTAssertTrue(text.contains("No image is stored."))
+        XCTAssertFalse(text.lowercased().contains("airi"))
+        let draft = StickerScaffold.draft(name: " Glad ", emotion: " Happy ")
+        XCTAssertEqual(draft, StickerScaffold.Draft(name: "Glad", emotion: "happy"))
+        XCTAssertNil(StickerScaffold.draft(name: "Glad", emotion: "joy"))
+        XCTAssertNil(StickerScaffold.draft(name: "https://example.com", emotion: "happy"))
+        XCTAssertNil(StickerScaffold.draft(name: "Airi", emotion: "happy"))
     }
 
     func testFactorioAcceptsALocalHello() {

@@ -140,13 +140,14 @@ public struct CompanionIntegration: Equatable, Sendable {
         CompanionIntegration(id: "web-search", title: "Web search"),
         CompanionIntegration(id: "chess", title: "Chess"),
         CompanionIntegration(id: "web-extension", title: "Web extension"),
+        CompanionIntegration(id: "stickers", title: "Stickers"),
     ]
 }
 
 public enum IntegrationScaffold {
     /// Names the integrations. No token is included.
     public static func report() -> String {
-        "Integrations: VS Code is a context draft only. Home Assistant is an entity draft only. Web search is unavailable. Chess stores a move draft only. The web extension is a page draft only. Credential fields are dropped. No token is stored."
+        "Integrations: VS Code is a context draft only. Home Assistant is an entity draft only. Web search is unavailable. Chess stores a move draft only. The web extension is a page draft only. Stickers list emotions only. No image is stored. Credential fields are dropped. No token is stored."
     }
 }
 

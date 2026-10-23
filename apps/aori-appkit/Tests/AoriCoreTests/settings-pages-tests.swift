@@ -53,6 +53,9 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("Web search is unavailable."))
         XCTAssertTrue(text.contains("Chess stores a move draft only."))
         XCTAssertTrue(text.contains("The web extension is a page draft only."))
+        XCTAssertTrue(text.contains("Stickers list emotions only."))
+        XCTAssertTrue(text.contains("No image is stored."))
+        XCTAssertFalse(text.lowercased().contains("airi"))
         XCTAssertTrue(text.contains("Credential fields are dropped."))
         XCTAssertTrue(text.contains("No token is stored."))
     }
