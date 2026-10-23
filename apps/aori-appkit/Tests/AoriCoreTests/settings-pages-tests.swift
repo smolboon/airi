@@ -48,5 +48,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("Credential fields are dropped."))
         XCTAssertTrue(text.contains("No token is stored."))
         XCTAssertTrue(text.contains("Account sync is absent."))
+        XCTAssertTrue(text.contains("Integrations: VS Code is a context draft only."))
+        XCTAssertTrue(text.contains("No token is stored."))
     }
 }
