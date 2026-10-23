@@ -49,6 +49,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Home Assistant is an entity draft only. Credential fields are dropped. No token is stored. A URL is refused.
 - Web search is unavailable. Credential fields are dropped. No token is stored. No query is sent.
 - Chess stores a move draft only. The draft has two squares. No engine runs. No token is stored.
+- The web extension is a page draft only. The draft has a title and text. A URL is refused. No token is stored.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

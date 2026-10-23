@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -205,6 +205,22 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertNil(ChessScaffold.move(from: "e2", to: "e2"))
         XCTAssertNil(ChessScaffold.move(from: "e9", to: "e4"))
         XCTAssertNil(ChessScaffold.move(from: "engine", to: "e4"))
+    }
+
+    func testWebExtensionPageDraftDropsTheAddress() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("The web extension is a page draft only."))
+        let draft = WebExtensionScaffold.draft(title: " Notes ", text: " Hello ")
+        XCTAssertEqual(draft, WebExtensionScaffold.Draft(title: "Notes", text: "Hello"))
+        XCTAssertNil(WebExtensionScaffold.draft(title: "https://example.com", text: "Hello"))
+        XCTAssertNil(WebExtensionScaffold.draft(title: "Notes", text: "see https://example.com"))
+        let kept = WebExtensionScaffold.kept([
+            "url": "https://example.com",
+            "cookie": "secret",
+            "token": "secret",
+            "note": "public",
+        ])
+        XCTAssertEqual(kept, ["note": "public"])
     }
 
     func testFactorioAcceptsALocalHello() {
