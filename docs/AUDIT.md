@@ -46,6 +46,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Settings lists Factorio and Minecraft. Factorio accepts a local hello on 127.0.0.1. Minecraft accepts a local hello on 127.0.0.1. A remote host is refused. No password is stored. The app does not open a game server.
 - Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori stores an event draft only. X is unavailable. Credential fields are dropped. No token is stored.
 - VS Code is a context draft only. The draft has a folder and text. No token is stored. A URL is refused.
+- Home Assistant is an entity draft only. Credential fields are dropped. No token is stored. A URL is refused.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.
