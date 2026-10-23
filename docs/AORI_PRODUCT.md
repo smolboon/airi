@@ -24,6 +24,8 @@ The web extension is a page draft only. The draft has a title and text. A URL is
 
 Stickers list emotions only. No image is stored. A URL is refused.
 
+Beat sync names a style from a tempo. The microphone stays off. Screen capture stays off.
+
 The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
 
 When the lore is not empty, it enters the system prompt. When the description is not empty, it enters the system prompt. When the system prompt text is not empty, that text enters the system prompt. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. When the user text contains a lorebook keyword, that entry enters the system prompt.
