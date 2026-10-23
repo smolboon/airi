@@ -104,7 +104,7 @@ public struct CompanionGame: Equatable, Sendable {
 
 public enum GameScaffold {
     public static func report() -> String {
-        "Games: Factorio and Minecraft. Factorio accepts a local hello. A remote host is refused. Minecraft is not connected."
+        "Games: Factorio and Minecraft. Factorio accepts a local hello. Minecraft accepts a local hello. A remote host is refused."
     }
 }
 
