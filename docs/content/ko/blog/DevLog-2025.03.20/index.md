@@ -22,7 +22,7 @@ import SteinsGateMayori from '../../../en/blog/DevLog-2025.03.20/assets/steins-g
 다시 안녕하세요! 지난 DevLog 이후 10일이 지났습니다.
 
 사용자 인터페이스를 크게 개선했고, 더 많은 LLM 프로바이더와 음성 프로바이더를 통합할 수 있게 됐으며,
-Discord와 bilibili를 비롯한 여러 소셜 미디어 플랫폼에 AIRI를 처음으로 올렸습니다.
+Discord와 bilibili를 비롯한 여러 소셜 미디어 플랫폼에 Aori를 처음으로 올렸습니다.
 
 들려드리고 싶은 이야기가 정말 많습니다.
 
@@ -32,7 +32,7 @@ Discord와 bilibili를 비롯한 여러 소셜 미디어 플랫폼에 AIRI를 �
 
 <img :src="Gelbana" alt="Gelbana" />
 
-> 아, 걱정 마세요. 우리의 사랑스러운 [AIRI](https://github.com/moeru-ai/airi)가 이렇게 젤바나가
+> 아, 걱정 마세요. 우리의 사랑스러운 [Aori](https://github.com/moeru-ai/airi)가 이렇게 젤바나가
 > 되지는 않습니다. 다만 [_슈타인즈 게이트_](https://myanimelist.net/anime/9253/Steins_Gate)
 > 애니메이션을 아직 안 보셨다면 꼭 한번 보세요~!
 
@@ -71,7 +71,7 @@ Discord와 bilibili를 비롯한 여러 소셜 미디어 플랫폼에 AIRI를 �
 <ThemedVideo muted autoplay :src="histoireFirstLook" />
 
 OKLCH 색 팔레트 전체를 캔버스에 한 번에 펼쳐 놓고 참고할 수 있습니다. 하지만 색을 이리저리
-시도해 보면서 Project AIRI 테마와 같은 결의 느낌을 잡기에는 완벽하지 않았죠.
+시도해 보면서 Project Aori 테마와 같은 결의 느낌을 잡기에는 완벽하지 않았죠.
 
 그래서 먼저 컬러 슬라이더를 다시 구현했고, 훨씬 잘 맞는 느낌이 됐습니다:
 
@@ -80,7 +80,7 @@ OKLCH 색 팔레트 전체를 캔버스에 한 번에 펼쳐 놓고 참고할 �
 
 덕분에 슬라이더가 조금 더 전문적으로 보입니다.
 
-로고와 기본 초록색 계열도 AIRI 테마에 맞게 바꿀 수 있어서, UI 페이지 전용 로고를 따로
+로고와 기본 초록색 계열도 Aori 테마에 맞게 바꿀 수 있어서, UI 페이지 전용 로고를 따로
 디자인했습니다:
 
 <img class="light" :src="HistoireLogo" alt="project airi logo for histoire" />

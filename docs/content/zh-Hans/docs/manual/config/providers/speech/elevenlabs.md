@@ -1,12 +1,12 @@
 ---
 title: ElevenLabs（TTS）
-description: 在 AIRI 中配置 ElevenLabs 语音合成
+description: 在 Aori 中配置 ElevenLabs 语音合成
 ---
 
-ElevenLabs 可将 AIRI 的回复合成为语音。
+ElevenLabs 可将 Aori 的回复合成为语音。
 
 ::: info 为什么选择 ElevenLabs？
-如果你想使用 ElevenLabs 账户中的音色，并在 AIRI 中直接选择可用声音，可以选择此服务商。
+如果你想使用 ElevenLabs 账户中的音色，并在 Aori 中直接选择可用声音，可以选择此服务商。
 :::
 
 ## 第一步：获取 API Key
@@ -19,7 +19,7 @@ ElevenLabs 可将 AIRI 的回复合成为语音。
 不要将 API Key 提交到仓库、截图或发送给他人。若怀疑泄露，请立即在 ElevenLabs 控制台撤销并重新创建。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → ElevenLabs**。
 2. 将 API Key 粘贴到基础设置。

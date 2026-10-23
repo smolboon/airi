@@ -1,12 +1,12 @@
 ---
 title: Featherless.ai
-description: 在 AIRI 中配置 Featherless.ai 聊天模型
+description: 在 Aori 中配置 Featherless.ai 聊天模型
 ---
 
-Featherless.ai 在 AIRI 中通过兼容 API 提供聊天模型。
+Featherless.ai 在 Aori 中通过兼容 API 提供聊天模型。
 
 ::: info 为什么选择 Featherless.ai？
-如果你已在 Featherless.ai 开通模型访问，可直接使用其 API Key 配置 AIRI。
+如果你已在 Featherless.ai 开通模型访问，可直接使用其 API Key 配置 Aori。
 :::
 
 ## 第一步：获取 API Key
@@ -17,7 +17,7 @@ Featherless.ai 在 AIRI 中通过兼容 API 提供聊天模型。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Featherless.ai**，填写 **API Key**。默认 Base URL 为 `https://api.featherless.ai/v1/`。
 

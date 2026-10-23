@@ -1,9 +1,9 @@
 ---
 title: CometAPI
-description: 在 AIRI 中配置 CometAPI 聊天模型
+description: 在 Aori 中配置 CometAPI 聊天模型
 ---
 
-CometAPI 在 AIRI 中提供聊天模型，也有独立的 TTS 与 STT 服务商页面。
+CometAPI 在 Aori 中提供聊天模型，也有独立的 TTS 与 STT 服务商页面。
 
 ::: info 为什么选择 CometAPI？
 如果你希望在同一 CometAPI 账户下配置聊天、语音合成和语音识别，可以选择它。
@@ -17,7 +17,7 @@ CometAPI 在 AIRI 中提供聊天模型，也有独立的 TTS 与 STT 服务商�
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → CometAPI**，填写 **API Key**。默认 Base URL 为 `https://api.cometapi.com/v1/`。
 

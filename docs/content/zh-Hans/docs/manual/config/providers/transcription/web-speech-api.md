@@ -1,6 +1,6 @@
 ---
 title: 浏览器 Web Speech API（ASR/STT）
-description: 在 AIRI 网页版中使用浏览器内置语音识别
+description: 在 Aori 网页版中使用浏览器内置语音识别
 ---
 
 Web Speech API 使用浏览器提供的语音识别能力，不需要单独申请 API Key。
@@ -11,14 +11,14 @@ Web Speech API 使用浏览器提供的语音识别能力，不需要单独申�
 
 ## 第一步：确认浏览器支持
 
-1. 使用 AIRI 网页版；Web Speech API 不会在桌面版（Electron）中提供。
+1. 使用 Aori 网页版；Web Speech API 不会在桌面版（Electron）中提供。
 2. 确认当前浏览器支持 Web Speech API，并准备允许麦克风权限。
 
 ::: warning 浏览器限制
-Web Speech API 仅适用于浏览器环境，AIRI 桌面版（Electron）不支持它。不同浏览器、网络环境和语言的识别能力可能不同。
+Web Speech API 仅适用于浏览器环境，Aori 桌面版（Electron）不支持它。不同浏览器、网络环境和语言的识别能力可能不同。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 在网页版打开 **设置 → 服务商 → 语音识别 → Web Speech API**。
 2. 选择识别语言，以及需要时的连续识别和中间结果选项。

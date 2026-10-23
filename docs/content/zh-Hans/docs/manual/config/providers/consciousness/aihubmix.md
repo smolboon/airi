@@ -1,9 +1,9 @@
 ---
 title: AIHubMix
-description: 在 AIRI 中配置 AIHubMix 聊天模型
+description: 在 Aori 中配置 AIHubMix 聊天模型
 ---
 
-AIHubMix 在 AIRI 中提供聊天模型，并可列出账户可用模型。
+AIHubMix 在 Aori 中提供聊天模型，并可列出账户可用模型。
 
 ::: info 为什么选择 AIHubMix？
 如果你希望通过一个 API Key 使用 AIHubMix 账户中提供的模型，可以选择它。
@@ -17,7 +17,7 @@ AIHubMix 在 AIRI 中提供聊天模型，并可列出账户可用模型。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → AIHubMix**，填写 **API Key**。默认 Base URL 为 `https://aihubmix.com/v1/`。
 

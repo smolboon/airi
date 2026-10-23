@@ -217,6 +217,16 @@ function certHasAllDomains(certPem: string, domains: string[]): boolean {
   }
 }
 
+function certificateAuthorityNamesAori(pem: string): boolean {
+  try {
+    const certificate = new X509Certificate(pem)
+    return certificate.subject.includes('CN=Aori') && certificate.subject.includes('O=Aori')
+  }
+  catch {
+    return false
+  }
+}
+
 function isTrustedServerChannelCertificate(request: ServerChannelCertificateVerifyRequest): boolean {
   if (!['CERT_AUTHORITY_INVALID', 'ERR_CERT_AUTHORITY_INVALID'].includes(request.verificationResult)
     && request.errorCode !== -202) {
@@ -229,10 +239,10 @@ function isTrustedServerChannelCertificate(request: ServerChannelCertificateVeri
 
   const issuer = request.certificate.issuer
   return request.certificate.subject.commonName === 'localhost'
-    && issuer.commonName === 'AIRI'
+    && issuer.commonName === 'Aori'
     && issuer.country === 'US'
     && issuer.locality === 'Local'
-    && issuer.organizations.includes('AIRI')
+    && issuer.organizations.includes('Aori')
 }
 
 function configureServerChannelCertificateTrust() {
@@ -286,24 +296,28 @@ async function installCACertificate(caCert: string) {
     }
   }
   catch (error) {
-    log.withError(error).warn(`Failed to install AIRI WebSocket CA certificate from ${caCertPath}`)
+    log.withError(error).warn(`Failed to install Aori WebSocket CA certificate from ${caCertPath}`)
   }
 }
 
 async function generateCertificate() {
   const { caCertPath, caKeyPath } = getCertificatePaths()
 
-  let ca: { key: string, cert: string }
+  let ca: { key: string, cert: string } | undefined
 
   if (existsSync(caCertPath) && existsSync(caKeyPath)) {
-    ca = {
-      cert: readFileSync(caCertPath, 'utf-8'),
-      key: readFileSync(caKeyPath, 'utf-8'),
+    const storedCert = readFileSync(caCertPath, 'utf-8')
+    if (certificateAuthorityNamesAori(storedCert)) {
+      ca = {
+        cert: storedCert,
+        key: readFileSync(caKeyPath, 'utf-8'),
+      }
     }
   }
-  else {
+
+  if (!ca) {
     ca = await createCA({
-      organization: 'AIRI',
+      organization: 'Aori',
       countryCode: 'US',
       state: 'Development',
       locality: 'Local',
@@ -333,11 +347,11 @@ async function getOrCreateCertificate() {
   const { certPath, keyPath, caCertPath } = getCertificatePaths()
   const expectedDomains = getCertificateDomains()
 
-  if (existsSync(certPath) && existsSync(keyPath)) {
+  if (existsSync(certPath) && existsSync(keyPath) && existsSync(caCertPath)) {
     const cert = readFileSync(certPath, 'utf-8')
     const key = readFileSync(keyPath, 'utf-8')
-    if (certHasAllDomains(cert, expectedDomains)) {
-      const caCert = existsSync(caCertPath) ? readFileSync(caCertPath, 'utf-8') : undefined
+    const caCert = readFileSync(caCertPath, 'utf-8')
+    if (certHasAllDomains(cert, expectedDomains) && certificateAuthorityNamesAori(caCert)) {
       return { cert: withCertificateChain(cert, caCert), key }
     }
   }

@@ -1,6 +1,6 @@
 ---
 title: Amazon Bedrock
-description: 在 AIRI 中配置 Amazon Bedrock 聊天模型
+description: 在 Aori 中配置 Amazon Bedrock 聊天模型
 ---
 
 Amazon Bedrock 使用 AWS 凭据和区域来访问已获授权的基础模型。
@@ -17,7 +17,7 @@ Amazon Bedrock 使用 AWS 凭据和区域来访问已获授权的基础模型。
 不要公开 AWS 访问密钥。请使用权限最小化的凭据，并在不再使用时撤销。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Amazon Bedrock**，填写 AWS **API Key**，并选择区域；默认区域为 `us-east-1`。
 2. 确认该 AWS 账户已在对应区域获得目标模型的访问权限。只有在使用自定义 Bedrock Endpoint 时才填写自定义地址。

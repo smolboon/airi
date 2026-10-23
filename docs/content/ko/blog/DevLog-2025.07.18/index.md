@@ -9,7 +9,7 @@ preview-cover:
   dark: "@assets('/en/blog/DevLog-2025.07.18/assets/factorio-belt.gif')"
 ---
 
-안녕하세요, AIRI 메인테이너 중 한 명인 [@LemonNeko](https://github.com/LemonNekoGH)입니다.
+안녕하세요, Aori 메인테이너 중 한 명인 [@LemonNeko](https://github.com/LemonNekoGH)입니다.
 
 ## 돌아보기
 

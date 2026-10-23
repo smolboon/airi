@@ -1,6 +1,6 @@
 ---
 title: Ollama（本地模型）
-description: 使用本地 Ollama 服务为 AIRI 配置聊天模型
+description: 使用本地 Ollama 服务为 Aori 配置聊天模型
 ---
 
 Ollama 是开源的本地大模型运行框架。它可以在自己的设备上运行模型并提供本地 API，默认不需要 API Key。
@@ -28,7 +28,7 @@ Ollama 是开源的本地大模型运行框架。它可以在自己的设备上�
 
 2. 如需使用其他模型，将 `qwen2` 替换为相应的模型 ID。首次下载模型所需时间取决于模型大小和网络环境。
 
-## 第三步：在 AIRI 中配置
+## 第三步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Ollama**。
 2. 保留默认 Base URL：`http://localhost:11434/v1/`；如果 Ollama 运行在其他设备上，填写该设备可访问的地址。
@@ -36,13 +36,13 @@ Ollama 是开源的本地大模型运行框架。它可以在自己的设备上�
 
 ## 第四步：验证配置
 
-1. **Ping API**：点击此按钮测试 AIRI 能否连接本地服务。
+1. **Ping API**：点击此按钮测试 Aori 能否连接本地服务。
 2. **选择模型**：测试成功后，点击此处选择已下载的模型。
 
 ## 排查
 
-无法连接时，先确认 Ollama 正在运行，且端口与 Base URL 一致。若 AIRI 与 Ollama 不在同一设备，使用可从 AIRI 设备访问的局域网地址，并仅在可信网络中开放该服务。
+无法连接时，先确认 Ollama 正在运行，且端口与 Base URL 一致。若 Aori 与 Ollama 不在同一设备，使用可从 Aori 设备访问的局域网地址，并仅在可信网络中开放该服务。
 
-::: warning AIRI 无法连接本地 Ollama
-如果 Ollama 正在运行但 AIRI 显示网络或 CORS 错误，请按 Ollama 的启动方式设置 `OLLAMA_ORIGINS`，允许 AIRI 的来源访问服务后再重启 Ollama。不要为了排查问题而将本地服务直接暴露到公网。
+::: warning Aori 无法连接本地 Ollama
+如果 Ollama 正在运行但 Aori 显示网络或 CORS 错误，请按 Ollama 的启动方式设置 `OLLAMA_ORIGINS`，允许 Aori 的来源访问服务后再重启 Ollama。不要为了排查问题而将本地服务直接暴露到公网。
 :::

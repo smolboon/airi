@@ -141,7 +141,7 @@ extension URLSessionHostWebSocketSession: URLSessionWebSocketDelegate, URLSessio
         }
 
         if trustLooksLikeAiriServerCertificate(trust) {
-            print("[URLSessionHostWebSocketSession] challenge accepted by AIRI fallback host=\(challenge.protectionSpace.host)")
+            print("[URLSessionHostWebSocketSession] challenge accepted by Aori fallback host=\(challenge.protectionSpace.host)")
             completionHandler(.useCredential, URLCredential(trust: trust))
             return
         }
@@ -211,7 +211,7 @@ private func trustLooksLikeAiriServerCertificate(_ trust: SecTrust) -> Bool {
         return false
     }
 
-    return certificateSummary(issuer) == "AIRI"
+    return certificateSummary(issuer) == "Aori"
 }
 
 private func certificateSummary(_ certificate: SecCertificate) -> String? {

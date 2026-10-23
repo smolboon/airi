@@ -1,6 +1,6 @@
 ---
 title: Web App Development
-description: Run, check, and build the AIRI web app
+description: Run, check, and build the Aori web app
 ---
 
 The web app is in `apps/stage-web` and powers [airi.moeru.ai](https://airi.moeru.ai). From the repository root, run:

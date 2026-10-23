@@ -1,12 +1,12 @@
 ---
 title: 开发环境与首次贡献
-description: 从本地运行 Project AIRI 到提交第一个拉取请求
+description: 从本地运行 Project Aori 到提交第一个拉取请求
 ---
 
-你好呀！感谢你有兴趣参与 Project AIRI。本页说明如何建立本地开发环境、创建分支并提交第一个 Pull Request。
+你好呀！感谢你有兴趣参与 Project Aori。本页说明如何建立本地开发环境、创建分支并提交第一个 Pull Request。
 
 ::: info 适用范围
-本节面向需要修改源码、文档或设计资源的贡献者。若只是使用 AIRI，请从「用户手册」开始；应用内的调试工具请参阅[开发者工具](./desktop-developer-tools)。
+本节面向需要修改源码、文档或设计资源的贡献者。若只是使用 Aori，请从「用户手册」开始；应用内的调试工具请参阅[开发者工具](./desktop-developer-tools)。
 :::
 
 ## 前置准备
@@ -167,7 +167,7 @@ git add <changed-files>
 git commit -m "<your-commit-message>"
 ```
 
-### 将你的代码推送（push）至先前 fork 或者拥有写入权限的 AIRI 仓库
+### 将你的代码推送（push）至先前 fork 或者拥有写入权限的 Aori 仓库
 
 ```shell
 git push -u origin <your-branch-name>

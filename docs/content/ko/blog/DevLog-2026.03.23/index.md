@@ -3,7 +3,7 @@ title: DevLog @ 2026.03.23
 category: DevLog
 date: 2026-03-23
 excerpt: |
-  AIRI 모바일 성능 개선을 위한 초기 조사
+  Aori 모바일 성능 개선을 위한 초기 조사
 preview-cover:
   light: "@assets('/en/blog/DevLog-2026.03.23/assets/cover-light.avif')"
   dark: "@assets('/en/blog/DevLog-2026.03.23/assets/cover-dark.avif')"
@@ -11,9 +11,9 @@ preview-cover:
 
 안녕하세요, [@PurCHES5](https://github.com/PurCHES5)입니다.
 
-최근 AIRI 팀에 합류해 모바일 개발을 맡게 됐습니다. 이 프로젝트와 오픈소스 워크플로 전반에 대한 지식이 아직 얕은 상태에서, 첫 과제는 모바일 빌드 성능을 개선하기 위해 게임 엔진이나 다른 기술적 해법을 통합할 수 있는 가능성을 검토하는 것입니다.
+최근 Aori 팀에 합류해 모바일 개발을 맡게 됐습니다. 이 프로젝트와 오픈소스 워크플로 전반에 대한 지식이 아직 얕은 상태에서, 첫 과제는 모바일 빌드 성능을 개선하기 위해 게임 엔진이나 다른 기술적 해법을 통합할 수 있는 가능성을 검토하는 것입니다.
 
-현재 AIRI 모바일 통합의 문제는 주로 성능입니다. 최신 모바일 버전인 [`stage-pocket`](https://github.com/moeru-ai/airi/tree/e952fe779e64494e778e44956eb1caf3338c61a7/apps/stage-pocket)은 사실상 메인 Vue.js 애플리케이션을 그대로 복사해 Capacitor로 패키징한 것입니다.
+현재 Aori 모바일 통합의 문제는 주로 성능입니다. 최신 모바일 버전인 [`stage-pocket`](https://github.com/moeru-ai/airi/tree/e952fe779e64494e778e44956eb1caf3338c61a7/apps/stage-pocket)은 사실상 메인 Vue.js 애플리케이션을 그대로 복사해 Capacitor로 패키징한 것입니다.
 
 모바일 기기, 특히 iOS 기기와 저사양 하드웨어에서는 Live2D와 VRM 컴포넌트가 WebView에 할당된 메모리를 빠르게 소진해 크래시로 이어집니다.
 
@@ -159,10 +159,10 @@ Unity 3D로 프로토타입 3종을 만들었고, 내보내기 용량을 줄이�
 ### 스크린샷
 
 **Android 렌더러 — Live2D:**
-![Android Renderer Live2D prototype](/en/blog/DevLog-2026.03.23/assets/Screenshot-AIRI-Live2D.avif)
+![Android Renderer Live2D prototype](/en/blog/DevLog-2026.03.23/assets/Screenshot-Aori-Live2D.avif)
 
 **Android 렌더러 — VRM:**
-![Android Renderer VRM prototype](/en/blog/DevLog-2026.03.23/assets/Screenshot-AIRI-VRM.avif)
+![Android Renderer VRM prototype](/en/blog/DevLog-2026.03.23/assets/Screenshot-Aori-VRM.avif)
 
 일관성을 위해 모든 프로토타입 빌드에 동일한 Vue.js 프론트엔드를 적용했습니다. Unity WebGL 내보내기의 경우 [`unity-webgl`](https://github.com/Marinerer/unity-webgl)을 써서 WebView의 기존 내용을 Unity WebGL로 바로 대체했습니다. Unity Android 렌더러의 경우 Three.js와 VRM 모듈이 들어 있던 기존 뷰를 완전히 제거하고, Unity가 배경 레이어로 렌더링하며 그 위에 Vue.js UI를 렌더링합니다.
 
@@ -202,7 +202,7 @@ Unity 3D로 프로토타입 3종을 만들었고, 내보내기 용량을 줄이�
 ![Unity Android Renderer Live2D](/en/blog/DevLog-2026.03.23/assets/Live2D-android-renderer.avif)
 
 **Three.js — VRM (기준):**
-![Original VRM Module from AIRI](/en/blog/DevLog-2026.03.23/assets/VRM-airi.avif)
+![Original VRM Module from Aori](/en/blog/DevLog-2026.03.23/assets/VRM-airi.avif)
 
 **Unity WebGL — VRM:**
 ![Unity WebGL VRM](/en/blog/DevLog-2026.03.23/assets/VRM-webgl.avif)

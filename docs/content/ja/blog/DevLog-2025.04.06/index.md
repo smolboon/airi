@@ -45,7 +45,7 @@ import ReLUStickerWow from '../../../en/blog/DevLog-2025.04.06/assets/relu-stick
 
 ### 記憶システム
 
-最近、数ヶ月準備してきた Project AIRI の「記憶アップデート」に備えて、[`telegram-bot`](https://github.com/moeru-ai/airi/tree/main/integrations/telegram-bot) をリファクタリングしています。
+最近、数ヶ月準備してきた Project Aori の「記憶アップデート」に備えて、[`telegram-bot`](https://github.com/moeru-ai/airi/tree/main/integrations/telegram-bot) をリファクタリングしています。
 
 実装後の記憶システムを、現在最も先進的で強力かつ堅牢なものにする予定であり、その思想の多くは現実世界の人間の記憶システムから深くインスピレーションを得ています。
 
@@ -426,7 +426,7 @@ const combinedScore = sql<number>`((1.2 * ${similarity}) + (0.2 * ${timeRelevanc
   </div>
 </div>
 
-もちろん、モデル、声、Project AIRI がサポートするすべてのモジュール 🎉 を設定する機能を含むエディタも含まれています。
+もちろん、モデル、声、Project Aori がサポートするすべてのモジュール 🎉 を設定する機能を含むエディタも含まれています。
 
 [@luoling8192](https://github.com/luoling8192) に本当に感謝します！
 
@@ -489,9 +489,9 @@ const combinedScore = sql<number>`((1.2 * ${similarity}) + (0.2 * ${timeRelevanc
 - Featherless.ai プロバイダーのサポート
 - Gemini プロバイダーのサポート（[@asukaminato0721](https://github.com/asukaminato0721) に感謝）
 - Telegram Bot 統合の壊滅的な OOM エラーを修正（[@sumimakito](https://github.com/sumimakito)、[@kwaa](https://github.com/kwaa)、[@QiroNT](https://github.com/QiroNT) に感謝）
-- Project AIRI の特別 DevLog 用に 98.css 統合を追加（[@OverflowCat](https://github.com/OverflowCat) に感謝）
+- Project Aori の特別 DevLog 用に 98.css 統合を追加（[@OverflowCat](https://github.com/OverflowCat) に感謝）
 
-> これは Project AIRI の特別版開発ログです。主なインスピレーションは [@OverflowCat](https://github.com/OverflowCat) のブログ記事 [ModTran](https://blog.xinshijiededa.men/modtran/) から得ており、コードスタイルは [@OverflowCat](https://github.com/OverflowCat) の https://github.com/OverflowCat/blog/blob/0a92f916629ad942b7da84b894759fde1616bf37/src/components/98/98.ts での実装を大いに参考にしています。
+> これは Project Aori の特別版開発ログです。主なインスピレーションは [@OverflowCat](https://github.com/OverflowCat) のブログ記事 [ModTran](https://blog.xinshijiededa.men/modtran/) から得ており、コードスタイルは [@OverflowCat](https://github.com/OverflowCat) の https://github.com/OverflowCat/blog/blob/0a92f916629ad942b7da84b894759fde1616bf37/src/components/98/98.ts での実装を大いに参考にしています。
 >
 > 彼女が書いたブログ記事は素晴らしく、私が詳しくないほぼすべての内容をカバーしています。ぜひチェックしてみてください。きっと気に入るはずです。
 

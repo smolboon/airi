@@ -1,12 +1,12 @@
 ---
 title: 개발 환경 설정과 첫 기여
-description: Project AIRI를 로컬에서 실행하고 첫 Pull Request 제출하기
+description: Project Aori를 로컬에서 실행하고 첫 Pull Request 제출하기
 ---
 
-안녕하세요! Project AIRI에 기여하는 데 관심을 가져 주셔서 감사합니다. 이 가이드는 로컬 개발 환경을 설정하고, 브랜치를 만들고, 첫 Pull Request를 제출하는 방법을 설명합니다.
+안녕하세요! Project Aori에 기여하는 데 관심을 가져 주셔서 감사합니다. 이 가이드는 로컬 개발 환경을 설정하고, 브랜치를 만들고, 첫 Pull Request를 제출하는 방법을 설명합니다.
 
 ::: info 적용 범위
-이 섹션은 소스 코드, 문서, 디자인 리소스를 변경하려는 컨트리뷰터를 위한 내용입니다. AIRI를 사용하기만 하려면 사용자 매뉴얼부터 시작하세요. 앱에 내장된 디버깅 도구는 [개발자 도구](./desktop-developer-tools)를 참고하세요.
+이 섹션은 소스 코드, 문서, 디자인 리소스를 변경하려는 컨트리뷰터를 위한 내용입니다. Aori를 사용하기만 하려면 사용자 매뉴얼부터 시작하세요. 앱에 내장된 디버깅 도구는 [개발자 도구](./desktop-developer-tools)를 참고하세요.
 :::
 
 ## 사전 준비물
@@ -62,7 +62,7 @@ description: Project AIRI를 로컬에서 실행하고 첫 Pull Request 제출�
 아직 저장소를 클론하지 않았다면 이 섹션은 건너뛰세요.
 :::
 
-`upstream` 원격이 설정되어 있지 않다면, 변경 사항을 가져오기 전에 Project AIRI 저장소를 추가하세요:
+`upstream` 원격이 설정되어 있지 않다면, 변경 사항을 가져오기 전에 Project Aori 저장소를 추가하세요:
 
 ```shell
 git remote add upstream https://github.com/moeru-ai/airi.git

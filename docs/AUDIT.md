@@ -1,6 +1,6 @@
 # Aori AppKit audit
 
-Audit date: 2026-10-15. Scope: `apps/aori-appkit` and `docs/APPKIT_PORT.md`. Aori is the native app. Project AIRI is the upstream product.
+Audit date: 2026-10-15. Scope: `apps/aori-appkit` and `docs/APPKIT_PORT.md`. Aori is the native app. The Vue apps are the rest of this product.
 
 Scores use 0 to 5.
 
@@ -9,7 +9,7 @@ Scores use 0 to 5.
 - 2 means partial.
 - 3 means usable, with known gaps.
 - 4 means strong for this milestone.
-- 5 means complete for the whole upstream AIRI product.
+- 5 means complete for the whole Aori product.
 
 The scores judge the native port, not the Vue apps. The long-term aim is above 4.5 in every area. This file does not use a 10-point scale. This file does not use a score of 6.
 
@@ -20,7 +20,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Area | Score | Evidence |
 | --- | --- | --- |
 | Product scope and feature parity | 3 | The app chats, speaks, recalls notes, and reads the screen. Games, Cubism moc3, and most integrations are absent. Run 38355635403 ran one `.js` plugin in JavaScriptCore. |
-| Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole AIRI map. |
+| Architecture and module boundaries | 4 | `docs/AORI_ARCHITECTURE.md` names the modules. ScreenCaptureKit stays in the app target. `AoriCore` does not import AppKit. GPUI is a second binary. This is not the whole Aori map. |
 | Platform integration | 4 | Run 38377354859 logged `aori_stt_auth=whisper` and `aori_stt_engine=whisper`. The runner did not grant Speech. `testSpeechAuthLogNamesTheGrantOrWhisper` maps a mocked granted status to `aori_stt_auth=authorized` and to engine `speech`. |
 | User interface and interaction | 4 | Run 38369523526 captured the Settings window. The page list names scene, providers, modules, the character card, memory, data, connection, models, and system. Full provider catalogs are absent. |
 | Graphics and character rendering | 4 | Run 38377354859 saved a SceneKit image of Butter. The head fills the upper frame. The front has black letter marks. It does not show eyes, a nose, or a mouth. Head `989cbd319` has no macOS job. Cubism, MMD, and Spine are absent. |
@@ -28,12 +28,12 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 | Networking and model providers | 4 | Run 38377354859 logged `aori_vision_reply=Mock vision from CI.` and `aori_telegram=sent`. The mock decodes the PNG. The native list also offers MLX-Serve and TensorFold. This is not a live Telegram session. |
 | Security, secrets, and privacy | 4 | Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, `aori_bookmark=ok`, and `aori_keychain=roundtrip`. Screen capture uses permission. CI still stages files in the app container. |
 | Data persistence | 4 | Run 38369523526 logged `aori_store=sqlite` and `aori_embed_recall=tea`. Chat, settings, the persona, and the locale id are in that file. pgvector stays out. |
-| Error handling and recovery | 4 | Run 38377354859 logged `aori_provider_error=500` and `aori_llm_reply=Mock reply from CI.` Unit tests cover one retry. The rest of AIRI error handling is absent. |
+| Error handling and recovery | 4 | Run 38377354859 logged `aori_provider_error=500` and `aori_llm_reply=Mock reply from CI.` Unit tests cover one retry. The rest of Aori error handling is absent. |
 | Testing | 4 | Linux passed 72 tests. macOS passed 73 tests. `cargo test -p aori-face` passed 18 tests. The macOS log recorded MiniLM recall, delete, and two vision ticks. |
-| Continuous integration and build | 4 | Run 38377354859 passed the Linux job and the macOS job. It saved the SceneKit image and the Settings window. Runs 38374510363 and 38375164808 failed and were fixed. Head `989cbd319` has no Actions run. This is not CI for the whole AIRI product. |
-| Documentation | 4 | The product, architecture, port, and audit notes use run 38377354859 as the last macOS proof. Head `989cbd319` has no Actions run. They do not cover the whole AIRI product. |
+| Continuous integration and build | 4 | Run 38377354859 passed the Linux job and the macOS job. It saved the SceneKit image and the Settings window. Runs 38374510363 and 38375164808 failed and were fixed. Head `989cbd319` has no Actions run. This is not CI for the whole Aori product. |
+| Documentation | 4 | The product, architecture, port, and audit notes use run 38377354859 as the last macOS proof. Head `989cbd319` has no Actions run. They do not cover the whole Aori product. |
 | Accessibility | 4 | Run 38359815442 logged `aori_caption=Mock reply from CI.` and `aori_voiceover=running`. The app posts that line as an announcement. VoiceOver starts after the app exits. The log does not record that audio. |
-| Internationalization | 4 | Run 38369523526 logged `aori_locale=ja` and `aori_menu_memory=記憶`. Other AIRI pages stay on Crowdin. |
+| Internationalization | 4 | Run 38369523526 logged `aori_locale=ja` and `aori_menu_memory=記憶`. Other Aori pages stay on Crowdin. |
 | Performance and operability | 4 | Run 38377354859 logged `aori_fps=374.52`, `aori_latency_ms=66.02`, and `aori_memory_mb=558.05`. The FPS value is one frame. An earlier line in that log is `aori_latency_ms=0.00`. There is no broader telemetry product. |
 
 ## What works in code
@@ -123,17 +123,17 @@ Security is 4. The signature has no checkout path exception. The log says `aori_
 
 Data persistence is 4. Run 38369523526 logged `aori_store=sqlite` and `aori_embed_recall=tea`. The locale id is in the same file. pgvector stays out.
 
-Error handling is 4. Run 38377354859 logged `aori_provider_error=500` and still returned the mock reply. The rest of AIRI error handling is absent.
+Error handling is 4. Run 38377354859 logged `aori_provider_error=500` and still returned the mock reply. The rest of Aori error handling is absent.
 
-Testing is 4. The suite covers this app. It does not cover the whole AIRI product.
+Testing is 4. The suite covers this app. It does not cover the whole Aori product.
 
-Continuous integration is 4. Run 38377354859 passed the Linux job and the macOS job. Commits after `783044b2b` have no Actions run. The expression screenshots are not in an artifact. This is not CI for the whole AIRI product.
+Continuous integration is 4. Run 38377354859 passed the Linux job and the macOS job. Commits after `783044b2b` have no Actions run. The expression screenshots are not in an artifact. This is not CI for the whole Aori product.
 
-Documentation is 4. These notes use run 38377354859 as the last macOS proof. Head `989cbd319` has no Actions run. They do not cover the whole AIRI product.
+Documentation is 4. These notes use run 38377354859 as the last macOS proof. Head `989cbd319` has no Actions run. They do not cover the whole Aori product.
 
 Accessibility is 4. Run 38359815442 logged `aori_caption=Mock reply from CI.`. VoiceOver starts after the app exits. The log does not record that audio.
 
-Internationalization is 4. Run 38369523526 logged `aori_menu_memory=記憶`. Other AIRI pages stay on Crowdin.
+Internationalization is 4. Run 38369523526 logged `aori_menu_memory=記憶`. Other Aori pages stay on Crowdin.
 
 Performance is 4. Run 38377354859 logged FPS, latency, and memory. The FPS value is one frame. There is no broader telemetry product.
 

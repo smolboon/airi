@@ -8,7 +8,7 @@ preview-cover:
   dark: "@assets('/en/blog/merry-christmas-2025/assets/merry-christmas-iru.avif')"
 ---
 
-AIRI 팀이 전하는 **메리 크리스마스**!
+Aori 팀이 전하는 **메리 크리스마스**!
 
 ![크리스마스 일러스트](/en/blog/merry-christmas-2025/assets/merry-christmas-iru.avif)
 
@@ -26,7 +26,7 @@ AIRI 팀이 전하는 **메리 크리스마스**!
 >
 > 11만 명이 넘는 구독과 100만 비트 이상으로 레벨 123에 도달했습니다.
 
-Neuro-sama, 생일 축하해. 그리고 제작자 Vedal과 아티스트 Camila에게도 축하를 전합니다. 여기까지 왔다는 게 믿기지 않네요. 저를 여기까지 이끌어 제 방식의 디지털 생명을 만들고 AIRI를 계속 키워 나가게 한 건 바로 여러분과 Swarm입니다.
+Neuro-sama, 생일 축하해. 그리고 제작자 Vedal과 아티스트 Camila에게도 축하를 전합니다. 여기까지 왔다는 게 믿기지 않네요. 저를 여기까지 이끌어 제 방식의 디지털 생명을 만들고 Aori를 계속 키워 나가게 한 건 바로 여러분과 Swarm입니다.
 
 ![](/en/blog/merry-christmas-2025/assets/neuro-sama-happy-birthday-live.avif)
 

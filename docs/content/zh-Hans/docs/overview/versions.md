@@ -1,6 +1,6 @@
 ---
 title: 版本与下载
-description: AIRI 的不同版本以及如何获取它们
+description: Aori 的不同版本以及如何获取它们
 ---
 
 <script setup>

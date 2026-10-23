@@ -8,7 +8,7 @@ Settings stores a name and a personality. The app stores facts that you mark wit
 
 ## Sources
 
-Project AIRI supplies the companion idea, the chat flow, and the VRM stage. The transparent window comes from the AIRI Stage Tamagotchi app.
+The Vue apps supply the companion idea, the chat flow, and the VRM stage. The transparent window comes from Stage Tamagotchi.
 
 Animates is a separate product from Animation Inc. The site at animates.ai says companions live on phones and desktops. The App Store page says the app uses real-time voice, emotion, and memory. That page does not describe a transparent desktop pet. Aori does not copy an Animates window. A fan site at companionsfan.cz is not the vendor.
 
@@ -26,7 +26,7 @@ When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. Rus
 
 Menu strings exist for en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The API key can live in the Keychain. A provider error retries once before any reply text. VoiceOver labels are on the chat controls, the character, and both windows. The screenshot path reads those live labels. It then tries to start VoiceOver.
 
-The app reads an AIRI Manifest v2 file named `extension.airi.json`. The host grant is `aori.companion.*` with the snapshot action. A JSON command list asks for capabilities. The sample plugin `aori-greeting` receives the greeting text. A request for `aori.files.read` is denied. A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
+The app reads an Aori Manifest v2 file named `extension.airi.json`. The host grant is `aori.companion.*` with the snapshot action. A JSON command list asks for capabilities. The sample plugin `aori-greeting` receives the greeting text. A request for `aori.files.read` is denied. A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 

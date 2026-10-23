@@ -1,6 +1,6 @@
 ---
 title: これはどんなプロジェクト？
-description: Project AIRI のユーザーインターフェースを知る
+description: Project Aori のユーザーインターフェースを知る
 ---
 
 ### TL;DR
@@ -25,7 +25,7 @@ description: Project AIRI のユーザーインターフェースを知る
 
 [Neuro-sama](https://www.youtube.com/@Neurosama) をご存じかもしれません。現状いちばん強いデジタルコンパニオンで、ゲームも会話もこなし、あなたや（VTuber コミュニティの）視聴者と双方向にやり取りできます。こうした存在を「デジタルヒューマン」と呼ぶ人もいます。**ただし彼女はオープンソースではなく、配信が終われば触れなくなってしまいます。**
 
-だからこそ Project AIRI は、もうひとつの選択肢を用意しました。
+だからこそ Project Aori は、もうひとつの選択肢を用意しました。
 **いつでもどこでも、手軽に自分だけのデジタルライフ／サイバー生命を持てるようにすること。**
 
 ## はじめかた
@@ -57,7 +57,7 @@ Web とデスクトップの両方を用意しています。
 
 Web 版は手軽にアクセスでき、モバイルからでも利用できます。
 
-デスクトップ版は VTuber 配信や computer-use（PC 操作代行）、ローカル LLM へのアクセスなど高度な用途に向いています。ローカル推論なら、AIRI を動かすために大量のトークンを払う必要もありません。
+デスクトップ版は VTuber 配信や computer-use（PC 操作代行）、ローカル LLM へのアクセスなど高度な用途に向いています。ローカル推論なら、Aori を動かすために大量のトークンを払う必要もありません。
 
 <div flex gap-2 w-full flex-col justify-center text-base>
   <a href="../../../en/docs/overview/guide/tamagotchi/" w-full flex items-center gap-2 border="2 solid gray-500/10" rounded-lg px-4 py-2>
@@ -88,4 +88,4 @@ Web 版は手軽にアクセスでき、モバイルからでも利用できま�
 
 このプロジェクトへの貢献方法は [Contributing](../contributing/) をご覧ください。
 
-Project AIRI の UI を設計・改善するための参考は [Design Guidelines](../contributing/design-guidelines/resources) を参照してください。
+Project Aori の UI を設計・改善するための参考は [Design Guidelines](../contributing/design-guidelines/resources) を参照してください。

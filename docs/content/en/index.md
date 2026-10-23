@@ -1,5 +1,5 @@
 ---
 layout: home
-title: 'Project AIRI'
+title: 'Project Aori'
 slogan: 'A container of souls of AI waifu / virtual characters to bring them into our worlds.'
 ---

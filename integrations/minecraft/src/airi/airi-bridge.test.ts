@@ -78,7 +78,7 @@ describe('airiBridge spark command routing', () => {
       type: 'signal:airi_command',
       payload: expect.objectContaining({
         type: 'airi_command',
-        description: 'Directive from AIRI: "collect wood"',
+        description: 'Directive from Aori: "collect wood"',
         sourceId: 'airi',
         metadata: expect.objectContaining({
           message: 'collect wood',

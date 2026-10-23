@@ -1,12 +1,12 @@
 ---
 title: OpenAI 兼容 API（TTS）
-description: 在 AIRI 中配置 OpenAI 或兼容 OpenAI 的 API 作为语音合成服务商
+description: 在 Aori 中配置 OpenAI 或兼容 OpenAI 的 API 作为语音合成服务商
 ---
 
 本页用于配置 OpenAI 或提供 OpenAI 兼容语音接口的服务商。完成配置后，在“发声”中选择模型和音色。
 
 ::: info 为什么选择 OpenAI 兼容 TTS？
-如果你的语音服务商明确提供 OpenAI 兼容的语音合成接口，可以用同一种配置方式接入 AIRI。仅 API 地址以 `/v1` 结尾或密钥以 `sk-` 开头，不能保证服务兼容。
+如果你的语音服务商明确提供 OpenAI 兼容的语音合成接口，可以用同一种配置方式接入 Aori。仅 API 地址以 `/v1` 结尾或密钥以 `sk-` 开头，不能保证服务兼容。
 :::
 
 ## 第一步：获取 API Key
@@ -19,7 +19,7 @@ description: 在 AIRI 中配置 OpenAI 或兼容 OpenAI 的 API 作为语音合�
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在服务商控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → OpenAI 兼容 API**。
 2. 填写 API Key 和要使用的 TTS 模型 ID。

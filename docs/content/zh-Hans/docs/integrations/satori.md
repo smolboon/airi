@@ -3,7 +3,7 @@ title: Satori 机器人
 description: 通过 Satori 协议和 Koishi 桥接多个消息平台
 ---
 
-Satori 机器人通过 Koishi 的 Satori 服务接入 QQ、Telegram、Discord、Lark 等消息平台。当前独立运行的核心是过渡实现，适合实验和维护，不应被视为稳定的 AIRI Core 集成。
+Satori 机器人通过 Koishi 的 Satori 服务接入 QQ、Telegram、Discord、Lark 等消息平台。当前独立运行的核心是过渡实现，适合实验和维护，不应被视为稳定的 Aori Core 集成。
 
 ## 前提条件
 

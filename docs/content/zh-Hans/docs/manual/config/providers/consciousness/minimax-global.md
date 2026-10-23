@@ -1,10 +1,10 @@
 ---
 title: MiniMax Global
-description: 在 AIRI 中配置海外版 MiniMax 作为大模型服务商
+description: 在 Aori 中配置海外版 MiniMax 作为大模型服务商
 is_openai_compatible: true
 ---
 
-本页适用于在 MiniMax 海外平台创建的 API Key。完成配置后，AIRI 可以在“意识”中使用 MiniMax Global 提供的聊天模型。
+本页适用于在 MiniMax 海外平台创建的 API Key。完成配置后，Aori 可以在“意识”中使用 MiniMax Global 提供的聊天模型。
 
 ::: info 为什么选择 MiniMax Global？
 如果你在 MiniMax 海外平台创建 API Key，或使用海外 Token Plan，应选择 MiniMax Global。中国大陆平台创建的 Key 请使用 [MiniMax（中国大陆）](./minimax.md)；两套平台的 API Key、计费和 Base URL 不能混用。
@@ -20,7 +20,7 @@ is_openai_compatible: true
 不要将 API Key 提交到仓库、放入截图或发送给他人。密钥泄露后，请立即在 MiniMax Global 平台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → MiniMax Global**。
 2. 将 API Key 粘贴到基础设置。
@@ -30,7 +30,7 @@ is_openai_compatible: true
 
 1. **Ping API**：点击此按钮测试网络是否连通以及 API Key 是否填写正确。
 2. **选择模型**：测试成功后，点击此处选择你想使用的具体模型。
-3. 在 **设置 → 意识** 中选择 MiniMax Global 与该模型，并发送一条短消息确认 AIRI 能够回复。
+3. 在 **设置 → 意识** 中选择 MiniMax Global 与该模型，并发送一条短消息确认 Aori 能够回复。
 
 ## 排查
 

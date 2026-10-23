@@ -12,7 +12,7 @@
   <img width="250" src="./content/public/banner-light-1280x640.avif" />
 </picture>
 
-<h1 align="center">Project AIRI</h1>
+<h1 align="center">Project Aori</h1>
 
 <p align="center">Neuro-sama를 재현하여, AI 와이프 / 가상 캐릭터의 영혼 그릇을 우리 세상으로 가져옵니다.</p>
 
@@ -32,7 +32,7 @@
 
 <p float="left" align="center">
   <!-- readme-section:release-binary-windows -->
-  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-windows-x64-setup.exe">
+  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/Aori-0.12.0-beta.5-windows-x64-setup.exe">
     <picture>
       <source
         width="33%"
@@ -48,7 +48,7 @@
     </picture>
   </a>
   <!-- readme-section:release-binary-macos -->
-  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-darwin-arm64.dmg">
+  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/Aori-0.12.0-beta.5-darwin-arm64.dmg">
     <picture>
       <source
         width="33%"
@@ -128,27 +128,27 @@
 </p>
 
 <p align="center">
-  <a href="https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380" alt="AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+  <a href="https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380" alt="Aori - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
   <a href="https://trendshift.io/repositories/14636" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14636" alt="moeru-ai%2Fairi | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
 
 > [Neuro-sama](https://www.youtube.com/@Neurosama)에서 큰 영감을 받았습니다
 
 > [!TIP]
-> Windows에서는 [winget](https://learn.microsoft.com/windows/package-manager/winget/)으로 AIRI를 설치할 수 있습니다:
+> Windows에서는 [winget](https://learn.microsoft.com/windows/package-manager/winget/)으로 Aori를 설치할 수 있습니다:
 >
 > ```powershell
-> winget install MoeruAI.AIRI
+> winget install MoeruAI.Aori
 > ```
 >
-> 또는 [Scoop](https://scoop.sh/)으로 AIRI를 설치할 수 있습니다:
+> 또는 [Scoop](https://scoop.sh/)으로 Aori를 설치할 수 있습니다:
 >
 > ```powershell
 > scoop bucket add airi https://github.com/moeru-ai/airi
 > scoop install airi/airi
 > ```
 >
-> macOS에서는 별도의 커스텀 tap을 추가하지 않고 [Homebrew Cask](https://brew.sh/)로 AIRI를 설치할 수 있습니다:
+> macOS에서는 별도의 커스텀 tap을 추가하지 않고 [Homebrew Cask](https://brew.sh/)로 Aori를 설치할 수 있습니다:
 >
 > ```sh
 > brew install --cask airi
@@ -159,12 +159,12 @@
 
 > [!NOTE]
 >
-> Project AIRI에서 탄생한 모든 하위 프로젝트를 위한 전용 조직 [@proj-airi](https://github.com/proj-airi)가 있습니다. 확인해 보세요!
+> Project Aori에서 탄생한 모든 하위 프로젝트를 위한 전용 조직 [@proj-airi](https://github.com/proj-airi)가 있습니다. 확인해 보세요!
 >
 > RAG, 메모리 시스템, 임베디드 데이터베이스, 아이콘, Live2D 유틸리티 등 다양한 프로젝트가 있습니다!
 
 > [!TIP]
-> [Crowdin](https://crowdin.com/project/proj-airi)에서 AIRI를 번역하거나 `packages/i18n/src/locales/`를 수정하는 Pull Request를 열 수 있습니다. 두 방법은 같은 번역을 업데이트합니다.
+> [Crowdin](https://crowdin.com/project/proj-airi)에서 Aori를 번역하거나 `packages/i18n/src/locales/`를 수정하는 Pull Request를 열 수 있습니다. 두 방법은 같은 번역을 업데이트합니다.
 >
 > 영어 원문과 완전히 동일한 번역을 제출하지 마세요. 검토에서 거부됩니다. 번역이 없는 문자열은 영어로 표시됩니다.
 >
@@ -178,20 +178,20 @@
 
 아마 [Neuro-sama](https://www.youtube.com/@Neurosama)를 이미 알고 계실 겁니다. 그녀는 현재 게임을 플레이하고, 채팅하고, 여러분 및 참여자들과 상호작용할 수 있는 최고의 AI VTuber / 동반자입니다. 이런 존재를 "디지털 휴먼"이라고 부르기도 합니다. **안타깝게도 오픈 소스가 아니기 때문에, 라이브 스트리밍이 끝나면 그녀와 상호작용할 수 없습니다**.
 
-그래서 이 프로젝트 AIRI는 여기서 또 다른 가능성을 제시합니다: **언제 어디서나 쉽게, 당신만의 디지털 라이프, 사이버 생명을 가질 수 있도록**.
+그래서 이 프로젝트 Aori는 여기서 또 다른 가능성을 제시합니다: **언제 어디서나 쉽게, 당신만의 디지털 라이프, 사이버 생명을 가질 수 있도록**.
 
 ## 최근 DevLog와 이야기
 
 - [DevLog @ 2026.03.23: 모바일 성능과 게임 엔진 탐색](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - 2026년 3월 23일
 - [DevLog @ 2026.03.14: VRM 스테이지 수명주기, 캐시, 관측성](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - 2026년 3월 14일
 - [DevLog @ 2026.02.16: Dome Keeper 데이터 수집과 학습 파이프라인](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - 2026년 2월 16일
-- [DevLog @ 2026.01.01: AIRI Pocket과 FlowChat 메모리 실험](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - 2026년 1월 1일
+- [DevLog @ 2026.01.01: Aori Pocket과 FlowChat 메모리 실험](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - 2026년 1월 1일
 - [DevLog @ 2025.10.20: Electron 이전, 새 모델, Moeru AI 업데이트](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - 2025년 10월 20일
 - [DevLog @ 2025.08.26: airi-factorio의 순수 비전 방향 진척](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - 2025년 8월 26일
-- [DevLog @ 2025.08.05: AIRI v0.7 릴리스 하이라이트](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - 2025년 8월 5일
+- [DevLog @ 2025.08.05: Aori v0.7 릴리스 하이라이트](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - 2025년 8월 5일
 - [DevLog @ 2025.08.01: 스트리밍 텍스트 애니메이션과 자소 클러스터](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - 2025년 8월 1일
 - [DevLog @ 2025.07.18: Factorio Learning Environment로 airi-factorio 다시 보기](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - 2025년 7월 18일
-- [DreamLog 0x1: Project AIRI의 시작 이야기](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - 2025년 6월 16일
+- [DreamLog 0x1: Project Aori의 시작 이야기](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - 2025년 6월 16일
 - ...더 많은 내용은 [문서 사이트](https://airi.moeru.ai/docs/en/)에서
 
 ## 이 프로젝트의 특별한 점은?
@@ -201,7 +201,7 @@
 > [!TIP]
 > 웹 기술을 사용하면 성능이 떨어지지 않을까 걱정되시나요?
 >
-> 걱정하지 마세요. 브라우저 버전은 브라우저와 웹뷰에서 얼마나 많은 것을 할 수 있는지 보여주기 위한 것이지만, 이에 완전히 의존하지는 않습니다. AIRI의 데스크톱 버전은 기본적으로 [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit)와 [Apple Metal](https://developer.apple.com/metal/)을 사용할 수 있으며 (HuggingFace와 [candle](https://github.com/huggingface/candle) 프로젝트 덕분에), 복잡한 의존성 관리 없이 사용 가능합니다. 트레이드오프를 고려하여, 그래픽, 레이아웃, 애니메이션, 그리고 WIP 플러그인 시스템에는 부분적으로 웹 기술을 활용하고 있습니다.
+> 걱정하지 마세요. 브라우저 버전은 브라우저와 웹뷰에서 얼마나 많은 것을 할 수 있는지 보여주기 위한 것이지만, 이에 완전히 의존하지는 않습니다. Aori의 데스크톱 버전은 기본적으로 [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit)와 [Apple Metal](https://developer.apple.com/metal/)을 사용할 수 있으며 (HuggingFace와 [candle](https://github.com/huggingface/candle) 프로젝트 덕분에), 복잡한 의존성 관리 없이 사용 가능합니다. 트레이드오프를 고려하여, 그래픽, 레이아웃, 애니메이션, 그리고 WIP 플러그인 시스템에는 부분적으로 웹 기술을 활용하고 있습니다.
 
 이는 **アイリ VTuber가 최신 브라우저와 기기에서 실행 가능**하며, 모바일 기기에서도 작동한다는 것을 의미합니다 (PWA 지원 완료). 이를 통해 개발자들이 アイリ VTuber의 기능을 한 단계 더 끌어올리면서도, 사용자에게 TCP 연결이나 기타 비웹 기술이 필요한 기능을 활성화할 수 있는 유연성을 제공합니다. 예를 들어 Discord 음성 채널에 연결하거나, 친구들과 Minecraft나 Factorio를 함께 플레이할 수 있습니다.
 
@@ -229,7 +229,7 @@
 > - Three.js
 > - WebXR (@moeru-ai 조직의 [다른 프로젝트](https://github.com/moeru-ai/chat)도 확인해 보세요)
 >
-> **관심이 있으시다면, 여기서 자기소개를 해보시는 건 어떨까요? [Would like to join part of us to build AIRI?](https://github.com/moeru-ai/airi/discussions/33)**
+> **관심이 있으시다면, 여기서 자기소개를 해보시는 건 어떨까요? [Would like to join part of us to build Aori?](https://github.com/moeru-ai/airi/discussions/33)**
 
 ## 현재 진행 상황과 로드맵
 
@@ -386,8 +386,8 @@ npx bumpp --no-commit --no-tag
 - [WebAI: Realtime Voice Chat](https://github.com/proj-airi/webai-realtime-voice-chat): VAD + STT + LLM + TTS로 ChatGPT 실시간 음성을 처음부터 구현한 완전한 예제
 - [`@proj-airi/drizzle-duckdb-wasm`](https://github.com/moeru-ai/airi/tree/main/packages/drizzle-duckdb-wasm/README.md): DuckDB WASM용 Drizzle ORM 드라이버
 - [`@proj-airi/duckdb-wasm`](https://github.com/moeru-ai/airi/tree/main/packages/duckdb-wasm/README.md): 사용하기 쉬운 `@duckdb/duckdb-wasm` 래퍼
-- [AIRI Factorio](https://github.com/moeru-ai/airi-factorio): AIRI가 Factorio를 플레이할 수 있게 하는 프로젝트
-- [AIRI DomeKeeper](https://github.com/proj-airi/game-playing-ai-dome-keeper): AIRI가 DomeKeeper를 플레이할 수 있게 하는 프로젝트
+- [Aori Factorio](https://github.com/moeru-ai/airi-factorio): Aori가 Factorio를 플레이할 수 있게 하는 프로젝트
+- [Aori DomeKeeper](https://github.com/proj-airi/game-playing-ai-dome-keeper): Aori가 DomeKeeper를 플레이할 수 있게 하는 프로젝트
 - [Factorio RCON API](https://github.com/nekomeowww/factorio-rcon-api): Factorio 헤드리스 서버 콘솔용 RESTful API 래퍼
 - [`autorio`](https://github.com/moeru-ai/airi-factorio/tree/main/packages/autorio): Factorio 자동화 라이브러리
 - [`tstl-plugin-reload-factorio-mod`](https://github.com/moeru-ai/airi-factorio/tree/main/packages/tstl-plugin-reload-factorio-mod): 개발 중 Factorio 모드 리로드 지원
@@ -487,16 +487,16 @@ flowchart LR
 ## 후원자
 
 <p align="center">
-  <strong>OpenCollective, Patreon, Ko-fi를 통해 Project AIRI를 후원해 주셔서 감사합니다.</strong>
+  <strong>OpenCollective, Patreon, Ko-fi를 통해 Project Aori를 후원해 주셔서 감사합니다.</strong>
 </p>
 
 <p align="center">
-  <img src="./content/public/assets/sponsors/sponsors.svg" alt="Project AIRI supporters" />
+  <img src="./content/public/assets/sponsors/sponsors.svg" alt="Project Aori supporters" />
 </p>
 
 ## 특별한 감사
 
-Project AIRI에 기여해 주신 모든 기여자분들께 특별한 감사를 드립니다 ❤️
+Project Aori에 기여해 주신 모든 기여자분들께 특별한 감사를 드립니다 ❤️
 
 <a href="https://github.com/moeru-ai/airi/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=moeru-ai/airi" />

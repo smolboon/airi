@@ -1,9 +1,9 @@
 ---
 title: キャラクターカードテンプレート
-description: Project AIRI 用の Character Card V3 JSON テンプレートです。
+description: Project Aori 用の Character Card V3 JSON テンプレートです。
 ---
 
-このテンプレートは、AIRI のキャラクターカードを作成するための最小構成の Character Card V3 JSON です。下の JSON をコピーし、サンプルの値を自分のキャラクター設定に置き換えてください。フィールド名と階層構造はそのまま残します。
+このテンプレートは、Aori のキャラクターカードを作成するための最小構成の Character Card V3 JSON です。下の JSON をコピーし、サンプルの値を自分のキャラクター設定に置き換えてください。フィールド名と階層構造はそのまま残します。
 
 ::: tip 編集のヒント
 - まずは `name`、`description`、`personality`、`scenario`、`first_mes` から入力します。

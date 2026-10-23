@@ -237,7 +237,7 @@ describe('centerWindowOnDisplay', () => {
    * A missing main window reports a stable domain error to the renderer.
    */
   it('rejects recovery when the target window is unavailable', () => {
-    expect(() => centerWindowOnDisplay(undefined)).toThrowError('Main AIRI window is not available.')
+    expect(() => centerWindowOnDisplay(undefined)).toThrowError('Main Aori window is not available.')
   })
 
   /**
@@ -252,7 +252,7 @@ describe('centerWindowOnDisplay', () => {
       isDestroyed: () => true,
       setBounds: vi.fn(),
       show: vi.fn(),
-    })).toThrowError('Main AIRI window is not available.')
+    })).toThrowError('Main Aori window is not available.')
     expect(getBounds).not.toHaveBeenCalled()
   })
 })

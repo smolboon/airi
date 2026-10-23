@@ -12,9 +12,9 @@ import cursorOpenSettings from '../../../en/blog/DevLog-2025.04.22/assets/cursor
 
 안녕하세요, [@LemonNeko](https://github.com/LemonNekoGH)입니다. 이번에는 제가 DevLog 작성에 참여해서 개발 이야기를 나눠 보려 합니다.
 
-두 달 전, 저희는 AIRI의 웹 인터페이스를 Electron으로 포팅했습니다 [#7](https://github.com/moeru-ai/airi/pull/7) (지금은 Tauri로 다시 리팩터링됐지만요 🤣 [#90](https://github.com/moeru-ai/airi/pull/90)). 덕분에 화면 위에 데스크톱 펫처럼 띄울 수 있게 됐죠. 그와 동시에 AIRI가 휴대폰을 쓸 수 있게 하면 어떨까 하는 생각이 있었는데, 계속 미뤄 두고 있었습니다.
+두 달 전, 저희는 Aori의 웹 인터페이스를 Electron으로 포팅했습니다 [#7](https://github.com/moeru-ai/airi/pull/7) (지금은 Tauri로 다시 리팩터링됐지만요 🤣 [#90](https://github.com/moeru-ai/airi/pull/90)). 덕분에 화면 위에 데스크톱 펫처럼 띄울 수 있게 됐죠. 그와 동시에 Aori가 휴대폰을 쓸 수 있게 하면 어떨까 하는 생각이 있었는데, 계속 미뤄 두고 있었습니다.
 
-지난 주말(2025.04.20), 시간을 좀 내서 ADB와 상호작용할 수 있는 MCP 서버 데모 [airi-android](https://github.com/LemonNekoGH/airi-android)를 만들었습니다. AIRI에게 기본적인 모바일 조작 능력을 주는 것이죠 (사실 대부분의 LLM이 이걸 통해 휴대폰을 조작할 수 있습니다). 데모 영상입니다:
+지난 주말(2025.04.20), 시간을 좀 내서 ADB와 상호작용할 수 있는 MCP 서버 데모 [airi-android](https://github.com/LemonNekoGH/airi-android)를 만들었습니다. Aori에게 기본적인 모바일 조작 능력을 주는 것이죠 (사실 대부분의 LLM이 이걸 통해 휴대폰을 조작할 수 있습니다). 데모 영상입니다:
 
 <ThemedVideo controls muted :src="cursorOpenSettings" />
 
@@ -70,6 +70,6 @@ AI와 작업하면서 사람과 함께 코딩하는 기분이 든 건 이번이 
 emulator -avd Pixel_6_Pro_API_34
 ```
 
-다음에는 AIRI 데스크톱 펫을 MCP 서버에 연결해서 뭘 하고 싶어 하는지 보려고 합니다. 어쩌면 지금 ReLU가 하는 것처럼 Telegram을 열고 우리와 대화할지도 모르죠. 다만 Telegram API를 쓰지 않고서요.
+다음에는 Aori 데스크톱 펫을 MCP 서버에 연결해서 뭘 하고 싶어 하는지 보려고 합니다. 어쩌면 지금 ReLU가 하는 것처럼 Telegram을 열고 우리와 대화할지도 모르죠. 다만 Telegram API를 쓰지 않고서요.
 
 다소 두서없고 알맹이가 부족했을지 모를 DevLog를 읽어 주셔서 감사합니다. 다음에 또 만나요!

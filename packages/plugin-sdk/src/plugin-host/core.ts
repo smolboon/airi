@@ -222,7 +222,7 @@ export class ExtensionHost {
     this.loader = new FileSystemLoader()
     this.runtime = options.runtime ?? 'electron'
     if (options.airiVersion && !semver.valid(options.airiVersion)) {
-      throw new Error(`AIRI version must be a valid semantic version: ${options.airiVersion}`)
+      throw new Error(`Aori version must be a valid semantic version: ${options.airiVersion}`)
     }
     this.airiVersion = options.airiVersion
     this.permissionResolver = options.permissionResolver
@@ -241,7 +241,7 @@ export class ExtensionHost {
     }
     if (this.airiVersion && !semver.satisfies(this.airiVersion, manifest.engines.airi, { includePrerelease: true })) {
       throw new Error(
-        `Extension \`${manifest.id}\` requires AIRI \`${manifest.engines.airi}\`, but the running version is \`${this.airiVersion}\`.`,
+        `Extension \`${manifest.id}\` requires Aori \`${manifest.engines.airi}\`, but the running version is \`${this.airiVersion}\`.`,
       )
     }
   }

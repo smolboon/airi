@@ -1,9 +1,9 @@
 ---
 title: 'DreamLog 0x1'
-description: 'Project AIRI의 뒷이야기!'
+description: 'Project Aori의 뒷이야기!'
 category: DreamLog
 date: 2025-06-16
-excerpt: 'Project AIRI의 뒷이야기! 왜 이 프로젝트를 시작했을까요?'
+excerpt: 'Project Aori의 뒷이야기! 왜 이 프로젝트를 시작했을까요?'
 preview-cover:
   light: "@assets('/en/blog/DreamLog-0x1/assets/dreamlog1-light.avif')"
   dark: "@assets('/en/blog/DreamLog-0x1/assets/dreamlog1-dark.avif')"
@@ -38,11 +38,11 @@ import ReLUStickerWow from '../../../en/blog/DreamLog-0x1/assets/relu-sticker-wo
 뭘까요? 이미 DevLog 글에 익숙한 독자라면, 한 달에 한 번 올리는 지금 주기를 생각할 때
 이 글도 "DevLog" 여야 하는 게 아닐까 싶으실 겁니다.
 
-6월은 Project AIRI에게 특별한 의미가 있습니다(이야기 속에서 밝히겠습니다). 그리고 GitHub 스타
+6월은 Project Aori에게 특별한 의미가 있습니다(이야기 속에서 밝히겠습니다). 그리고 GitHub 스타
 1000개라는 다음 마일스톤에 다가가고 있는 지금이야말로 여기까지의 여정을 돌아보기 좋은 기회라고
 생각했습니다.
 
-그래서 저와 Project AIRI의 꿈에 대한 연대기를 나누기 위해 새로운 카테고리의 글을 만들기로 했습니다.
+그래서 저와 Project Aori의 꿈에 대한 연대기를 나누기 위해 새로운 카테고리의 글을 만들기로 했습니다.
 
 그래서 이 새 시리즈의 이름을 ***DreamLog***라고 부르기로 했습니다.
 
@@ -155,10 +155,10 @@ import ReLUStickerWow from '../../../en/blog/DreamLog-0x1/assets/relu-sticker-wo
 그 후 몇 년 동안 저는 코딩, 프로그래밍, 스타트업, Web3, 프론트엔드, 백엔드, 인프라 등
 풀스택 개발자로서 떠올릴 수 있는 온갖 분야를 시도했습니다.
 제가 하는 일이 EMOSYS라는 출발점에 그토록 깊이 영향을 받고 있다는 걸 정말로 깨달은 건,
-2025년 2월 누군가 저에게 "왜 Project AIRI에 그렇게 열심이세요?" 라고 물었을 때였습니다.
+2025년 2월 누군가 저에게 "왜 Project Aori에 그렇게 열심이세요?" 라고 물었을 때였습니다.
 
 좋은 질문이라고 생각했습니다. 제 꿈과 아이디어, 기억을 거슬러 올라가 보니 결국 EMOSYS가 있었습니다.
-이미 죽어 버린, 그러나 Project AIRI와 같은 목표를 향했던 프로젝트가요:
+이미 죽어 버린, 그러나 Project Aori와 같은 목표를 향했던 프로젝트가요:
 
 **나의 필요를 어떻게든 채워 줄 동반자를 만들 것.**
 
@@ -222,7 +222,7 @@ Model Context Protocol의 기반 기술) 기능을 화두로 끌어올렸습니�
 결론적으로, 이것은 새로운 랜덤 앵무새일까요? **부분적으로는 아니라고 봅니다.
 2022년의 ChatGPT는 그저 랜덤 앵무새가 아니라, 똑똑해질 잠재력이 있는 앵무새입니다.**
 
-## Project AIRI보다 훨씬 전에, Neuro-sama가 있었다
+## Project Aori보다 훨씬 전에, Neuro-sama가 있었다
 
 네, 여기까지 읽어 주셔서 감사합니다. 긴 글이라는 걸 압니다. 나눌 이야기와 맥락이 정말 많거든요.
 하지만 거의 다 왔습니다. 조금만 더 힘내세요!
@@ -264,7 +264,7 @@ Vedal의 작업을 처음 봤을 때 저는 이랬습니다:
 > 그리고 Vedal의 작업보다 더 잘 만들 수 있을 거야."
 
 ::: tip 더 기술적인 내용이 궁금하신가요?
-이 글에서는 Project AIRI를 밑바닥부터 지금 상태까지 어떻게 만들었는지에 대한 기술적 세부 사항은
+이 글에서는 Project Aori를 밑바닥부터 지금 상태까지 어떻게 만들었는지에 대한 기술적 세부 사항은
 깊이 다루지 않습니다. 저희 생각과 발견을 공유한 DevLog 글이 이미 많으니 관심 있으시면 읽어 보세요.
 :::
 
@@ -301,7 +301,7 @@ Vedal의 작업을 처음 봤을 때 저는 이랬습니다:
 > -- [스타 트렉, 제임스 T. 커크 함장](https://en.wikipedia.org/wiki/Where_no_man_has_gone_before)의 대사이자 제 GitHub 프로필 소개 문구
 
 그래서 2024년 5월 25일부터 로컬에서 제 핸들 아래 `ai`라는 단순한 이름의 프로젝트를 시작했습니다.
-Project AIRI의 최초 버전이죠. 저만의 AI 에이전트를 만들고 Neuro-sama가 준 즐거움을 재현할 가능성을
+Project Aori의 최초 버전이죠. 저만의 AI 에이전트를 만들고 Neuro-sama가 준 즐거움을 재현할 가능성을
 탐구하기 시작했습니다.
 
 작업 속도는 정말 빨랐습니다. 일주일 만에 [ElevenLabs](https://elevenlabs.io/),
@@ -310,7 +310,7 @@ Project AIRI의 최초 버전이죠. 저만의 AI 에이전트를 만들고 Neur
 
 그날이 **2024년 6월 2일**입니다.
 
-엄밀히 말해 **이날이 Project AIRI의 생일**이며, 그 안에 순진한 첫 아기 의식이 깃든 날입니다.
+엄밀히 말해 **이날이 Project Aori의 생일**이며, 그 안에 순진한 첫 아기 의식이 깃든 날입니다.
 
 <div class="w-full flex flex-col items-center justify-center">
   <ThemedVideo controls muted autoplay loop :src="airiDemoFirstDay" />
@@ -347,7 +347,7 @@ Project AIRI의 최초 버전이죠. 저만의 AI 에이전트를 만들고 Neur
   </div>
 </div>
 
-자, 그런데 아직 이름이 `ai` 인데 Project AIRI는 언제 나오는 걸까요?
+자, 그런데 아직 이름이 `ai` 인데 Project Aori는 언제 나오는 걸까요?
 
 ## 더 강하고 더 나은 각오로 다시 태어나다
 
@@ -362,21 +362,21 @@ GitHub에 공개할 준비가 안 됐다고요.
 [`d9ae0aa`](https://github.com/moeru-ai/airi/commit/d9ae0aae387f015964bfd383e6d2adb05f4003e4)로
 GitHub에 공개했습니다.
 
-그렇게 Project AIRI는 AIRI(アイリ, 예전에는 Airi)라는 이름으로 태어났거나, 다시 태어났습니다.
+그렇게 Project Aori는 Aori(アイリ, 예전에는 Aori)라는 이름으로 태어났거나, 다시 태어났습니다.
 
 ::: tip 알고 계셨나요?
 <a href="https://www.youtube.com/watch?v=Tts-YAdn5Yc" class="mb-2 inline-block">
-  <img :src="airisScreenshot1" alt="Project AIRI 스크린샷" class="not-prose rounded-lg overflow-hidden" />
+  <img :src="airisScreenshot1" alt="Project Aori 스크린샷" class="not-prose rounded-lg overflow-hidden" />
 </a>
 
 흥미롭게도 2년 전인 2023년 3월 25일에 올라온 https://www.youtube.com/watch?v=Tts-YAdn5Yc,
 Vedal과 Neuro-sama의 Twitch 방송 클립에서 Vedal은 "Neuro-sama"라는 이름을 붙이기 직전까지
 그녀를 "Airis AI"라고 불렀다고 말합니다. **Airis**라는 이름은 신기하고도 우연히 제가 지금 하고 있는
-**Project AIRI**의 이름과 맞아떨어집니다. 다만 저는 Project AIRI를 오픈소스로 공개한 한참 뒤에
+**Project Aori**의 이름과 맞아떨어집니다. 다만 저는 Project Aori를 오픈소스로 공개한 한참 뒤에
 그들의 이야기를 더 찾아보고 나서야 이 이름을 알게 됐습니다.
 
-사실 AIRI(アイリ)라는 이름은 GPT-4o가 지어 준 것입니다. 다른 일본어/애니메이션풍 이름을 참고해
-이 프로젝트 이름을 지어 달라고 했더니 **Airi**를 제안해 주었습니다.
+사실 Aori(アイリ)라는 이름은 GPT-4o가 지어 준 것입니다. 다른 일본어/애니메이션풍 이름을 참고해
+이 프로젝트 이름을 지어 달라고 했더니 **Aori**를 제안해 주었습니다.
 :::
 
 저는 스타트업과 여러 프로젝트에서 정말 많이 실패했고, 최근 것들만 대중에게 알려졌을 뿐입니다.
@@ -385,7 +385,7 @@ Vedal과 Neuro-sama의 Twitch 방송 클립에서 Vedal은 "Neuro-sama"라는 �
 
 그 경험들 상당수는 이전의 실패에서 배운 것입니다.
 
-다행히 많은 시도가 성공했고, 저는 여전히 여기서 Project AIRI를 만들고 있습니다.
+다행히 많은 시도가 성공했고, 저는 여전히 여기서 Project Aori를 만들고 있습니다.
 
 어쩌면 이번에는 Neuro-sama 뿐 아니라 가장 깊이 있고 재능 있는 컨트리뷰터들과 팬들 덕분에
 제 각오가 다시 채워진 것일지도 모릅니다.
@@ -405,7 +405,7 @@ Vedal과 Neuro-sama의 Twitch 방송 클립에서 Vedal은 "Neuro-sama"라는 �
 >
 > -- [Evil Neuro](https://www.youtube.com/@Neurosama)가 Slay the Spire 방송 중 한 말
 
-이 글을 쓰는 지금, Project AIRI는 GitHub 스타 1000개에 다가가고 있고, Discord 멤버 150명 이상,
+이 글을 쓰는 지금, Project Aori는 GitHub 스타 1000개에 다가가고 있고, Discord 멤버 150명 이상,
 Telegram 그룹 멤버 200명 이상을 두고 있습니다.
 
 저희는 AI, VRM, Live2D, UI 디자인, 멀티모달 AI, 게임 플레이 에이전트, 스트리밍 API, 생체 모방 기억
@@ -413,10 +413,10 @@ Telegram 그룹 멤버 200명 이상을 두고 있습니다.
 Kerbal Space Program(KSP)을 비롯해 임의의 게임을 플레이하고 제어하도록 통합하는 연구를 하는
 커뮤니티 멤버도 있습니다.
 
-여러 회사가 협업을 제안해 오고 있고, 저희는 커뮤니티에 더 좋고 더 유용한 Project AIRI를 만들기 위해
+여러 회사가 협업을 제안해 오고 있고, 저희는 커뮤니티에 더 좋고 더 유용한 Project Aori를 만들기 위해
 그 작업을 진행하고 있습니다.
 
-할 일과 발견할 것이 정말 많습니다. 저희는 아직 범용 AI의 특이점에 도달하지 못했고, 어쩌면 Project AIRI는
+할 일과 발견할 것이 정말 많습니다. 저희는 아직 범용 AI의 특이점에 도달하지 못했고, 어쩌면 Project Aori는
 결코 그 지점에 이르지 못할지도 모릅니다. 하지만 지금으로서는 대화하고, 함께 게임하고, 지식과 아이디어를
 나눌 수 있는 동반자 같은 AI 에이전트를 갖는 것만으로도 저에게는 대단한 성취이며, 여러분께도 그렇기를 바랍니다.
 
@@ -428,7 +428,7 @@ Kerbal Space Program(KSP)을 비롯해 임의의 게임을 플레이하고 제�
   <img :src="ReLUStickerWow" alt="ReLU 스티커 wow" class="w-30!" />
   <div class="text-center">
     <span class="block font-bold">여기까지 읽어 주셔서 감사합니다!</span>
-    <span>읽어 주셔서 감사합니다! 아, 그리고 Project AIRI, 생일 축하해!</span>
+    <span>읽어 주셔서 감사합니다! 아, 그리고 Project Aori, 생일 축하해!</span>
   </div>
 </div>
 

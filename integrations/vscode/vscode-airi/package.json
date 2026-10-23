@@ -1,11 +1,11 @@
 {
   "publisher": "proj-airi",
   "name": "vscode-airi",
-  "displayName": "AIRI VSCode adapter",
+  "displayName": "Aori VSCode adapter",
   "type": "module",
   "version": "0.12.0-beta.5",
   "private": true,
-  "description": "Adapter that connects VSCode into Project AIRI",
+  "description": "Adapter that connects VSCode into Aori",
   "repository": {
     "type": "git",
     "url": "https://github.com/moeru-ai/airi.git",
@@ -27,24 +27,24 @@
     "commands": [
       {
         "command": "airi-vscode.enable",
-        "title": "AIRI: Enable"
+        "title": "Aori: Enable"
       },
       {
         "command": "airi-vscode.disable",
-        "title": "AIRI: Disable"
+        "title": "Aori: Disable"
       },
       {
         "command": "airi-vscode.status",
-        "title": "AIRI: Show Status"
+        "title": "Aori: Show Status"
       }
     ],
     "configuration": {
-      "title": "AIRI",
+      "title": "Aori",
       "properties": {
         "airi-vscode.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable or disable the AIRI extension"
+          "description": "Enable or disable the Aori extension"
         },
         "airi-vscode.contextLines": {
           "type": "number",

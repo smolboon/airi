@@ -1,6 +1,6 @@
 # Design Implementation Notes
 
-The [AIRI Design Guide](../../../DESIGN.md) defines visual identity and reuse rules. This document records source findings and delivery procedures.
+The [Aori Design Guide](../../../DESIGN.md) defines visual identity and reuse rules. This document records source findings and delivery procedures.
 
 ## Format Alignment
 
@@ -8,7 +8,7 @@ The guide follows the eight ordered sections in the [Google DESIGN.md specificat
 
 The optional YAML token block is omitted. Dynamic colors remain in Chromatic and theme settings. Static component values stay linked to their implementations.
 
-The uppercase `DESIGN.md` filename follows the format convention. It is an explicit exception to AIRI's kebab-case file naming rule.
+The uppercase `DESIGN.md` filename follows the format convention. It is an explicit exception to Aori's kebab-case file naming rule.
 
 Root `AGENTS.md` explicitly references it. Automatic discovery by external tools is not assumed.
 
@@ -38,10 +38,10 @@ The repository already includes implementation, review, and screenshot skills. T
 
 | Task | Entry point | Purpose |
 | --- | --- | --- |
-| Choose visual patterns and components | The design guide and the [component reference](../../../docs/ai/context/ui-components.md) | Understand AIRI design conventions and APIs |
+| Choose visual patterns and components | The design guide and the [component reference](../../../docs/ai/context/ui-components.md) | Understand Aori design conventions and APIs |
 | Write component styles | [enforce-rules-for-unocss](../../../.agents/skills/enforce-rules-for-unocss/SKILL.md) | Reuse controls, organize utilities, and preserve theme behavior |
 | Write Vue components | [vue-best-practices](../../../.agents/skills/vue-best-practices/SKILL.md) and [TypeScript rules](../../../.agents/skills/enforce-rules-for-typescript/SKILL.md) | Define component boundaries, state, and implementation practices |
-| Review interaction and accessibility | [web-design-guidelines](../../../.agents/skills/web-design-guidelines/SKILL.md) | Supply review checks alongside AIRI visual conventions |
+| Review interaction and accessibility | [web-design-guidelines](../../../.agents/skills/web-design-guidelines/SKILL.md) | Supply review checks alongside Aori visual conventions |
 | Capture visual evidence | [use-vishot](../../../.agents/skills/use-vishot/SKILL.md) | Capture screenshots through the appropriate runtime scenarios |
 | Publish a UI PR | [create-pr](../../../.agents/skills/create-pr/SKILL.md) | Review affected behavior and provide comparable screenshots |
 

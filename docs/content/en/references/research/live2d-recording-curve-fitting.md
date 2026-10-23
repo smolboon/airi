@@ -12,7 +12,7 @@ Use a channel-aware fitting pipeline, not one generic simplification pass.
 
 Do not use Visvalingam-Whyatt as the primary fitter. Its area measure does not give a direct maximum value-error bound.
 
-## Current AIRI contract
+## Current Aori contract
 
 The current `airi-live2d-motion/v6` format stores ordered millisecond samples. Each sample contains 13 normalized scalar channels. Eleven channels are visible in the editor. `eyeOpen` is an editor projection of `1 - eyeSquint`. The two offset channels remain hidden. See the [recording schema](../../../../../apps/stage-tamagotchi/src/renderer/composables/live2d-motion-recording.ts) and [pose contract](../../../../../packages/stage-ui-live2d/src/stores/motion-control.ts).
 
@@ -37,7 +37,7 @@ Standard implementations treat `(time, value)` as a Euclidean point. For example
 
 That metric is unsuitable without scaling. A duration of 20,000 ms dominates a value range of 2. Scaling time changes which details survive. A screen-space scale also makes results depend on editor size.
 
-For AIRI, use time only to evaluate the candidate line. Measure the vertical residual at each original sample:
+For Aori, use time only to evaluate the candidate line. Measure the vertical residual at each original sample:
 
 ```text
 u = (sampleTime - leftTime) / (rightTime - leftTime)
@@ -65,7 +65,7 @@ The original algorithm treats time and value as two geometric coordinates. There
 
 Cubism already defines linear, cubic Bézier, stepped, and inverse-stepped motion segments. Its restricted cubic segments place control times at one-third and two-thirds of the segment duration. [The official `motion3.json` specification](https://github.com/Live2D/CubismSpecs/blob/master/FileFormats/motion3.json.md) defines these segments.
 
-For AIRI, adapt Schneider to a scalar time function:
+For Aori, adapt Schneider to a scalar time function:
 
 - Fix each segment's endpoint times.
 - Fix the two control times at one-third and two-thirds of the duration.
@@ -74,9 +74,9 @@ For AIRI, adapt Schneider to a scalar time function:
 - Measure maximum vertical error at every source time.
 - Split at the largest error and fit each side again.
 
-This adaptation removes temporal scaling from the fit. It also produces curves that map directly to Cubism's restricted Bézier representation. This is an AIRI design recommendation, not a claim from Schneider's paper.
+This adaptation removes temporal scaling from the fit. It also produces curves that map directly to Cubism's restricted Bézier representation. This is an Aori design recommendation, not a claim from Schneider's paper.
 
-A TypeScript port of Schneider's general algorithm exists in [`odiak/fit-curve`](https://github.com/odiak/fit-curve/blob/master/packages/fit-curve/src/index.ts). It is useful as a reference or experiment. It still uses parametric two-dimensional error, so it does not provide AIRI's required value-at-time guarantee without adaptation.
+A TypeScript port of Schneider's general algorithm exists in [`odiak/fit-curve`](https://github.com/odiak/fit-curve/blob/master/packages/fit-curve/src/index.ts). It is useful as a reference or experiment. It still uses parametric two-dimensional error, so it does not provide Aori's required value-at-time guarantee without adaptation.
 
 ### Smoothing splines
 
@@ -124,7 +124,7 @@ Do not use root-mean-square error alone. One short facial event can have a large
 
 | Option | Use |
 | --- | --- |
-| Small local vertical-RDP function | Recommended baseline. It matches AIRI's scalar error rule and needs no dependency. |
+| Small local vertical-RDP function | Recommended baseline. It matches Aori's scalar error rule and needs no dependency. |
 | `simplify-js` | Good experiment for standard geometric RDP. Use `highQuality: true` to skip its radial pre-pass. It still needs coordinate scaling. |
 | Adapted local cubic fitter | Recommended production target. It can share segmentation, anchors, and validation with vertical RDP. |
 | `odiak/fit-curve` | Good Schneider reference and prototype. Do not adopt it unchanged for scalar timeline curves. |

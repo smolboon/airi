@@ -1,6 +1,6 @@
 ---
 title: Minecraft
-description: Project AIRI への貢献
+description: Project Aori への貢献
 ---
 
 ### Minecraft エージェント

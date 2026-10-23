@@ -1,12 +1,12 @@
 ---
 title: CometAPI（TTS）
-description: 在 AIRI 中配置 CometAPI 语音合成
+description: 在 Aori 中配置 CometAPI 语音合成
 ---
 
 CometAPI 通过其兼容接口提供语音合成。
 
 ::: info 为什么选择 CometAPI？
-如果你已使用 CometAPI 管理模型和凭据，可直接在 AIRI 中复用该 API Key。
+如果你已使用 CometAPI 管理模型和凭据，可直接在 Aori 中复用该 API Key。
 :::
 
 ## 第一步：获取 API Key
@@ -18,7 +18,7 @@ CometAPI 通过其兼容接口提供语音合成。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → CometAPI Speech**，填写 API Key。
 2. 保留默认 Base URL：`https://api.cometapi.com/v1/`；只有使用代理或兼容网关时才修改。

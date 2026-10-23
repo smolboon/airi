@@ -1,12 +1,12 @@
 ---
 title: Development Setup and Your First Contribution
-description: Run Project AIRI locally and submit your first pull request
+description: Run Project Aori locally and submit your first pull request
 ---
 
-Hello! Thank you for your interest in contributing to Project AIRI. This guide explains how to set up a local development environment, create a branch, and submit your first pull request.
+Hello! Thank you for your interest in contributing to Project Aori. This guide explains how to set up a local development environment, create a branch, and submit your first pull request.
 
 ::: info Scope
-This section is for contributors who want to change source code, documentation, or design resources. If you only want to use AIRI, start with the user manual. For the debugging tools built into the app, see [Developer Tools](./desktop-developer-tools).
+This section is for contributors who want to change source code, documentation, or design resources. If you only want to use Aori, start with the user manual. For the debugging tools built into the app, see [Developer Tools](./desktop-developer-tools).
 :::
 
 ## Prerequisites
@@ -62,7 +62,7 @@ The repository pins Node.js and pnpm in [`.tool-versions`](https://github.com/mo
 Skip this section if you have not cloned the repository yet.
 :::
 
-If the `upstream` remote is not configured, add the Project AIRI repository before you fetch changes:
+If the `upstream` remote is not configured, add the Project Aori repository before you fetch changes:
 
 ```shell
 git remote add upstream https://github.com/moeru-ai/airi.git

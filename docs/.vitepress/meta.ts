@@ -2,7 +2,7 @@
 
 /* Texts */
 export const projectName = 'Aori'
-export const projectShortName = 'AIRI'
+export const projectShortName = 'Aori'
 export const projectDescription
   = 'An open-source attempt to re-create Neuro-sama, the most famous AI VTuber on this earth, but also forming a cyber companion for everyone.'
 

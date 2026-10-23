@@ -1,9 +1,9 @@
 ---
 title: Deepgram（TTS）
-description: 在 AIRI 中配置 Deepgram 语音合成
+description: 在 Aori 中配置 Deepgram 语音合成
 ---
 
-Deepgram 在 AIRI 中提供 Aura 系列语音合成模型。
+Deepgram 在 Aori 中提供 Aura 系列语音合成模型。
 
 ::: info 为什么选择 Deepgram？
 如果你已经使用 Deepgram，或希望在 Aura 系列语音中挑选音色，可以使用此集成。
@@ -19,7 +19,7 @@ Deepgram 在 AIRI 中提供 Aura 系列语音合成模型。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → Deepgram**，将 API Key 粘贴到基础设置。
 2. 保留界面默认 Base URL；仅在自行部署兼容网关时修改。

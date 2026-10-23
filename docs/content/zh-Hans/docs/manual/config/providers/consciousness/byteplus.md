@@ -1,12 +1,12 @@
 ---
 title: BytePlus
-description: 在 AIRI 中配置 BytePlus 聊天模型
+description: 在 Aori 中配置 BytePlus 聊天模型
 ---
 
-BytePlus 在 AIRI 中使用 Ark 兼容的聊天服务配置。
+BytePlus 在 Aori 中使用 Ark 兼容的聊天服务配置。
 
 ::: info 为什么选择 BytePlus？
-如果你已在 BytePlus 创建 Ark 模型端点，可在 AIRI 中直接使用该端点和凭据。
+如果你已在 BytePlus 创建 Ark 模型端点，可在 Aori 中直接使用该端点和凭据。
 :::
 
 ## 第一步：准备 BytePlus 凭据
@@ -17,7 +17,7 @@ BytePlus 在 AIRI 中使用 Ark 兼容的聊天服务配置。
 不要将 API Key 或端点凭据提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → BytePlus**，按照 BytePlus 控制台填写 API Key、端点或模型信息。
 2. 不要猜测 Endpoint ID；请复制控制台中已创建端点的实际标识。

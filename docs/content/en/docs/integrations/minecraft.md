@@ -1,9 +1,9 @@
 ---
 title: Minecraft Agent
-description: Run AIRI's local game agent on a trusted Minecraft server
+description: Run Aori's local game agent on a trusted Minecraft server
 ---
 
-The Minecraft integration uses Mineflayer to connect AIRI to a Minecraft server. The agent receives context, performs in-game actions, and reports state. The integration is intended for local development and maintenance. The current implementation is planned to migrate to a Fabric runtime. Do not build new long-term features around it.
+The Minecraft integration uses Mineflayer to connect Aori to a Minecraft server. The agent receives context, performs in-game actions, and reports state. The integration is intended for local development and maintenance. The current implementation is planned to migrate to a Fabric runtime. Do not build new long-term features around it.
 
 ::: warning Source installation required
 The Minecraft agent currently works only when run from source. Follow [the contributor guide](/en/docs/contributing/) to set up a local development environment.
@@ -18,12 +18,12 @@ pnpm i
 ```
 
 - Provide a reachable local or trusted Minecraft server. The connection address and port come from the configuration file.
-- Prepare working AIRI and model-service settings.
+- Prepare working Aori and model-service settings.
 - Provide an OpenAI-compatible API.
 
 ::: warning Credential security
 Keep API keys, service addresses, and Minecraft server credentials only in the local **.env.local** file. Do not commit, screenshot, or share these values.
-The API key in this file is separate from the API key in AIRI. The keys are not interchangeable. Use a dedicated key for the Minecraft service.
+The API key in this file is separate from the API key in Aori. The keys are not interchangeable. Use a dedicated key for the Minecraft service.
 :::
 
 ## Configure
@@ -32,9 +32,9 @@ The API key in this file is separate from the API key in AIRI. The keys are not 
 cp integrations/minecraft/.env integrations/minecraft/.env.local
 ```
 
-Edit **integrations/minecraft/.env.local** and provide the required Minecraft server, AIRI, and model-service settings.
+Edit **integrations/minecraft/.env.local** and provide the required Minecraft server, Aori, and model-service settings.
 
-In the Desktop ver., open **Settings → Connection**. Show and copy the **Auth Token**. Then add these AIRI channel settings:
+In the Desktop ver., open **Settings → Connection**. Show and copy the **Auth Token**. Then add these Aori channel settings:
 
 ```env
 AIRI_WS_BASEURL=ws://localhost:6121/ws
@@ -63,8 +63,8 @@ The default login mode is offline. For Microsoft account login, read the comment
 pnpm -F @proj-airi/minecraft-bot dev
 ```
 
-After startup, the agent connects to AIRI and the Minecraft server. In a development environment, read the terminal log to confirm the connection and action status. Send a text message in the game to interact with AIRI.
-A missing or incorrect `AIRI_WS_TOKEN` prevents the module from registering with AIRI.
+After startup, the agent connects to Aori and the Minecraft server. In a development environment, read the terminal log to confirm the connection and action status. Send a text message in the game to interact with Aori.
+A missing or incorrect `AIRI_WS_TOKEN` prevents the module from registering with Aori.
 
 ## Security and limitations
 
