@@ -41,6 +41,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("locale ja."))
         XCTAssertTrue(text.contains("Chat protocols: Discord is a message draft only. Telegram is a preview only. Satori is an event draft only."))
         XCTAssertTrue(text.contains("X is unavailable."))
+        XCTAssertTrue(text.contains("Credential fields are dropped."))
         XCTAssertTrue(text.contains("No token is stored."))
         XCTAssertTrue(text.contains("Account sync is absent."))
     }
