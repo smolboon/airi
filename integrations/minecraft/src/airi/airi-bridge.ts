@@ -224,7 +224,7 @@ export class AiriBridge {
       type: 'signal:airi_command',
       payload: Object.freeze({
         type: 'airi_command' as const,
-        description: `Directive from AIRI: "${message}"`,
+        description: `Directive from Aori: "${message}"`,
         sourceId,
         confidence: 1.0,
         timestamp: Date.now(),

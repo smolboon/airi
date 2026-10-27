@@ -11,7 +11,7 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import javax.security.auth.x500.X500Principal
 
-// NOTICE: Tamagotchi can issue a local AIRI root CA for WSS on LAN IPs.
+// NOTICE: Tamagotchi can issue a local Aori root CA for WSS on LAN IPs.
 // Pocket does not import that CA into Android's system trust store, so the native
 // websocket bridge has to accept that very specific certificate shape itself.
 // The hostname/SAN check still runs in OkHttp after trust validation.
@@ -63,10 +63,10 @@ private fun looksLikeAiriServerCertificate(certificate: X509Certificate): Boolea
     val issuer = certificate.issuerX500Principal
 
     return subject.attribute("CN") == "localhost"
-        && issuer.attribute("CN") == "AIRI"
+        && issuer.attribute("CN") == "Aori"
         && issuer.attribute("C") == "US"
         && issuer.attribute("L") == "Local"
-        && issuer.attribute("O") == "AIRI"
+        && issuer.attribute("O") == "Aori"
 }
 
 private fun X500Principal.attribute(key: String): String? =

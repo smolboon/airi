@@ -1,6 +1,6 @@
 ---
 title: Telegram 봇
-description: PostgreSQL과 모델 서비스를 사용해 AIRI를 Telegram 봇으로 실행하기
+description: PostgreSQL과 모델 서비스를 사용해 Aori를 Telegram 봇으로 실행하기
 ---
 
 Telegram 봇을 실행하려면 Telegram Bot Token, PostgreSQL 벡터 데이터베이스, 모델 서비스가 필요합니다. 저장소의 Compose 서비스는 pgvector 호환 모드로 pgvecto.rs 0.4.0이 포함된 PostgreSQL을 실행합니다. 봇은 소스에서 직접 실행하도록 만들어졌습니다.

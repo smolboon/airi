@@ -1,9 +1,9 @@
 ---
 title: Index-TTS（本地 TTS）
-description: 在 AIRI 中连接本地 Index-TTS 服务
+description: 在 Aori 中连接本地 Index-TTS 服务
 ---
 
-Index-TTS 是通过本地 HTTP 服务接入 AIRI 的语音合成选项。
+Index-TTS 是通过本地 HTTP 服务接入 Aori 的语音合成选项。
 
 ::: info 为什么选择 Index-TTS？
 如果你已在本机运行 Index-TTS，并希望声音数据保留在本地网络中，可以选择它。
@@ -12,21 +12,21 @@ Index-TTS 是通过本地 HTTP 服务接入 AIRI 的语音合成选项。
 ## 第一步：启动本地服务
 
 1. 按 Index-TTS 的部署说明启动服务。
-2. AIRI 默认连接 `http://localhost:11996/tts/`；如果你使用其他主机或端口，请记录完整地址。
+2. Aori 默认连接 `http://localhost:11996/tts/`；如果你使用其他主机或端口，请记录完整地址。
 3. 确认服务可返回模型和音色信息。
 
 ::: warning 本地服务安全
 不要将本地服务端口暴露到不受信任的公共网络。若修改了监听地址，请确认访问控制由你负责。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → Index-TTS by Bilibili**。
 2. 填写与本地服务一致的 Base URL。
 
 ## 第三步：验证配置
 
-1. **Ping API**：点击此按钮测试 AIRI 是否能连接该本地服务。
+1. **Ping API**：点击此按钮测试 Aori 是否能连接该本地服务。
 2. **选择模型和音色**：测试成功后，选择 `IndexTTS-1.5` 和服务返回的音色；再到 **设置 → 发声** 启用。
 3. 输入短文本试听，确认可正常播放。
 

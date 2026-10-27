@@ -1,6 +1,6 @@
 ---
 title: バージョン一覧
-description: AIRI の異なるバージョンと入手方法
+description: Aori の異なるバージョンと入手方法
 ---
 
 <script setup>

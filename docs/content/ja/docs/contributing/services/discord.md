@@ -1,6 +1,6 @@
 ---
 title: Discord Bot
-description: Project AIRI への貢献
+description: Project Aori への貢献
 ---
 
 ### Discord bot 統合

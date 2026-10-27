@@ -26,12 +26,12 @@ import DemoDayHangzhou2 from '../../../en/blog/DevLog-2025.05.16/assets/demo-day
 import DemoDayHangzhou3 from '../../../en/blog/DevLog-2025.05.16/assets/demo-day-hangzhou-3.avif'
 </script>
 
-다시 안녕하세요! [Project AIRI](https://github.com/moeru-ai/airi)를 시작한
+다시 안녕하세요! [Project Aori](https://github.com/moeru-ai/airi)를 시작한
 [Neko](https://github.com/nekomeowww)입니다!
 
-DevLog를 통한 Project AIRI 소식이 늦어져 죄송합니다. 늦어진 점 너그러이 봐 주세요.
+DevLog를 통한 Project Aori 소식이 늦어져 죄송합니다. 늦어진 점 너그러이 봐 주세요.
 
-> 지난 몇 달 동안 저희는 AIRI 개발 진행 상황에 대해 훌륭한 DevLog를 여러 편 썼습니다.
+> 지난 몇 달 동안 저희는 Aori 개발 진행 상황에 대해 훌륭한 DevLog를 여러 편 썼습니다.
 > 생각과 아이디어를 나누고, 사용하는 기술을 설명하고, 영감을 받은 작품 이야기까지... 전부요.
 >
 > - [v0.4.0 UI 업데이트](../DevLog-2025.03.20/)
@@ -41,7 +41,7 @@ DevLog를 통한 Project AIRI 소식이 늦어져 죄송합니다. 늦어진 점
 
 # 데자뷔
 
-지난 몇 주 동안 Project AIRI 자체의 주요 퀘스트는 한동안 진전이 없었습니다. 2025년 3월부터 이어진
+지난 몇 주 동안 Project Aori 자체의 주요 퀘스트는 한동안 진전이 없었습니다. 2025년 3월부터 이어진
 거대한 UI 리팩터링과 릴리스로 제가 꽤 번아웃이 왔던 것 같습니다. 그동안 대부분의 작업은
 커뮤니티 메인테이너들이 해 주었습니다.
 
@@ -72,16 +72,16 @@ LLM 기반 롤플레잉 캐릭터를 저장하고 공유하는 수단이 캐릭�
 :::
 
 > 캐릭터 카드를 쓰려면 설정 페이지(앱 오른쪽 위, 데스크톱 앱에서는 톱니바퀴 아이콘에 마우스를 올리세요)로
-> 이동해 "Airi Card" 버튼을 찾아 클릭하세요.
+> 이동해 "Aori Card" 버튼을 찾아 클릭하세요.
 
-<img class="light" :src="CharacterCardMenuLight" alt="Airi Card 메뉴 버튼이 있는 메뉴 스크린샷" />
-<img class="dark" :src="CharacterCardMenuDark" alt="Airi Card 메뉴 버튼이 있는 메뉴 스크린샷" />
+<img class="light" :src="CharacterCardMenuLight" alt="Aori Card 메뉴 버튼이 있는 메뉴 스크린샷" />
+<img class="dark" :src="CharacterCardMenuDark" alt="Aori Card 메뉴 버튼이 있는 메뉴 스크린샷" />
 
-> 그러면 "Airi Card 편집 화면" 으로 이동해, 페르소나 커스터마이즈를 위해 캐릭터 카드를
+> 그러면 "Aori Card 편집 화면" 으로 이동해, 페르소나 커스터마이즈를 위해 캐릭터 카드를
 > 업로드하고 편집할 수 있습니다.
 
-<img class="light" :src="CharacterCardSettingsLight" alt="Airi Card 편집 화면 스크린샷" />
-<img class="dark" :src="CharacterCardSettingsDark" alt="Airi Card 편집 화면 스크린샷" />
+<img class="light" :src="CharacterCardSettingsLight" alt="Aori Card 편집 화면 스크린샷" />
+<img class="dark" :src="CharacterCardSettingsDark" alt="Aori Card 편집 화면 스크린샷" />
 
 캐릭터 카드 쇼케이스도 몇 가지 방식을 시도해 봤습니다...
 
@@ -96,7 +96,7 @@ LLM 기반 롤플레잉 캐릭터를 저장하고 공유하는 수단이 캐릭�
 > 진행하고 안내해 주었습니다. 정말 감사합니다.
 
 - Tauri MCP 지원
-- AIRI를 Android 기기에 연결
+- Aori를 Android 기기에 연결
 
 이 두 가지는 큰 업데이트이자 실험이었고, [@LemonNekoGH](https://github.com/LemonNekoGH)가 맡아 주었습니다.
 이에 대해 DevLog 두 편을 써서 이면의 기술적 세부 사항을 공유했습니다.
@@ -105,11 +105,11 @@ LLM 기반 롤플레잉 캐릭터를 저장하고 공유하는 수단이 캐릭�
 - [Android 조작하기](../DevLog-2025.04.22/)
 - [Tauri에서의 MCP](../DevLog-2025.04.28/)
 
-## Project AIRI 주요 퀘스트
+## Project Aori 주요 퀘스트
 
 ### 듣는 귀, 말하는 입
 
-4월 15일부터, AIRI의 VAD(음성 활성 감지),
+4월 15일부터, Aori의 VAD(음성 활성 감지),
 [ASR(자동 음성 인식)](https://huggingface.co/tasks/automatic-speech-recognition),
 [TTS(텍스트 음성 변환)](https://huggingface.co/tasks/text-to-speech)이 모두 매우 복잡하고
 쓰기도 이해하기도 어렵다는 걸 느꼈습니다. 그 무렵 저는 [@himself65](https://github.com/himself65)와
@@ -118,7 +118,7 @@ LLM 기반 롤플레잉 캐릭터를 저장하고 공유하는 수단이 캐릭�
 LLM 스트리밍 토큰과 오디오 바이트의 이벤트 기반 스트림을 처리하도록 돕는 라이브러리입니다.
 
 [`llama-flow`](https://github.com/run-llama/llama-flow)는 정말 작고 타입 안전합니다.
-이것이 없던 시절에는 AIRI를 구동할 데이터를 처리하기 위해 여러 비동기 작업을 이어 붙이려고
+이것이 없던 시절에는 Aori를 구동할 데이터를 처리하기 위해 여러 비동기 작업을 이어 붙이려고
 **큐** 구조와 Vue 반응성 기반 워크플로 시스템을 직접 감싸야 했습니다.
 
 그때부터 VAD, ASR, TTS 워크플로를 단순화하는 예제와 데모를 더 많이 실험하기 시작했습니다.
@@ -241,7 +241,7 @@ npm install @velin-dev/core
 
 <img :src="DemoDayHangzhou1" alt="Demo Day @ Hangzhou" />
 
-이게 접니다. 다른 참가자들에게 AIRI 프로젝트를 소개했고 정말 즐거운 시간을 보냈습니다!
+이게 접니다. 다른 참가자들에게 Aori 프로젝트를 소개했고 정말 즐거운 시간을 보냈습니다!
 재능 있는 개발자, 제품 디자이너, 창업자를 정말 많이 만났습니다.
 
 오늘 이 DevLog에서 나눈 거의 모든 내용과, 사랑하는 AI VTuber Neuro-sama도 소개했습니다.

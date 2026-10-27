@@ -456,7 +456,7 @@ describe('planExtensionActivation', () => {
         extensionIds: ['future-extension'],
         requestedVersion: '^2.0.0',
         providerVersion: '1.5.0',
-        message: 'Extension "future-extension" requires AIRI ^2.0.0, but the Host runs 1.5.0.',
+        message: 'Extension "future-extension" requires Aori ^2.0.0, but the Host runs 1.5.0.',
       }],
     })
   })

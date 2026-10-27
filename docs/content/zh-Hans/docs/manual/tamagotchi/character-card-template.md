@@ -1,9 +1,9 @@
 ---
 title: 角色卡模板
-description: Project AIRI 的 Character Card V3 JSON 模板。
+description: Project Aori 的 Character Card V3 JSON 模板。
 ---
 
-这个模板提供了一份最小可用的 Character Card V3 结构，可以作为创建 AIRI 角色卡时的起点。你可以复制下面的 JSON，把示例内容替换成自己的角色设定，并保持字段名和层级结构不变。
+这个模板提供了一份最小可用的 Character Card V3 结构，可以作为创建 Aori 角色卡时的起点。你可以复制下面的 JSON，把示例内容替换成自己的角色设定，并保持字段名和层级结构不变。
 
 ::: tip 编辑提示
 - 可以先填写 `name`、`description`、`personality`、`scenario` 和 `first_mes`。

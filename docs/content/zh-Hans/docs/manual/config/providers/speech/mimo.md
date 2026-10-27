@@ -1,6 +1,6 @@
 ---
 title: 小米 MiMo（TTS）
-description: 在 AIRI 中配置小米 MiMo 语音合成
+description: 在 Aori 中配置小米 MiMo 语音合成
 ---
 
 MiMo 支持预设音色、声音设计和声音克隆三种语音合成模式。
@@ -18,7 +18,7 @@ MiMo 支持预设音色、声音设计和声音克隆三种语音合成模式。
 声音克隆需要 Base64 data URI 格式的音频样本。只能上传你有权使用的声音；不要公开 API Key 或他人的声音样本。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 在 **设置 → 服务商 → 语音合成 → Xiaomi MiMo** 中填写 API Key。
 2. 保留默认 Base URL：`https://api.xiaomimimo.com/v1/`，除非服务商提供了其他地址。

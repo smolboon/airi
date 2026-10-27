@@ -1,14 +1,14 @@
 # Aori AppKit port
 
-Aori is a native macOS app based on Project AIRI. The app lives in `apps/aori-appkit`. It uses Swift and AppKit. Apple Silicon is the first machine target. Intel Macs on macOS 14 can build the same package.
+Aori is a native macOS app. The app lives in `apps/aori-appkit`. It uses Swift and AppKit. Apple Silicon is the first machine target. Intel Macs on macOS 14 can build the same package.
 
-This note maps the current AIRI apps onto Aori.
+This note maps the Vue apps onto the native app.
 
 The verb for this note is "make sure". The noun for saved values is "configuration".
 
 ## Product direction
 
-Aori is a desktop AI companion. It is based on Project AIRI. The same kind of product is Animates, from Animation Inc.
+Aori is a desktop AI companion. Animates, from Animation Inc., is the same kind of product.
 
 The character lives on the desktop. The first window is transparent, draggable, and able to stay above other apps. Later milestones add a real face, audio lip-sync, and richer memory. Chat tools and games come after the companion can stay, speak, and remember.
 
@@ -20,11 +20,11 @@ The Apple listing says the companions use real-time voice, show an emotional ran
 
 A fan site, not Animation Inc., describes desktop display modes. Those modes include Overlay, which stays above other windows, and Holographic, which hides the monitor background with a black field. The same site says each companion keeps its own memories. It also says custom personality controls are a plan, not a shipped feature. Source: [Companions Fan FAQ](https://companionsfan.cz/en/faq/) and [glossary](https://companionsfan.cz/en/glossary/). This checkout did not launch Animates. Treat the fan notes as secondary.
 
-The official pages do not say that the Mac window is a transparent, click-through pet. Aori takes that desktop behavior from Project AIRI Stage Tamagotchi, not from a verified Animates window.
+The official pages do not say that the Mac window is a transparent, click-through pet. Aori takes that desktop behavior from Stage Tamagotchi, not from a verified Animates window.
 
 AniMate at getanimate.app is a different product. It is a VRM desktop pet. This note does not use it as the source for Animates.
 
-## Current AIRI
+## Current Vue apps
 
 Stage Web, Stage Tamagotchi, and Stage Pocket share Vue, Pinia, and `packages/stage-ui`. Stage Tamagotchi is the Electron desktop app. Stage Pocket is the Capacitor mobile app.
 
@@ -197,7 +197,7 @@ The Live2D Cubism Core library is proprietary. Live2D does not publish that libr
 
 ### Milestone 5, plugins
 
-The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the AIRI range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
+The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the Aori range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
 
 The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory.
 
@@ -219,9 +219,9 @@ That file is a Core ML conversion of all-MiniLM-L6-v2. The license is Apache-2.0
 
 Run 38359062380 logged `aori_embed_recall=tea`. `tea please` is closer to `I like tea` than to `The cat is orange`. The Memory window then showed `The cat is orange` after the delete.
 
-### Milestone 8, the rest of AIRI
+### Milestone 8, the rest of Aori
 
-Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project AIRI today.
+Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project Aori today.
 
 ## What this checkout did not run
 

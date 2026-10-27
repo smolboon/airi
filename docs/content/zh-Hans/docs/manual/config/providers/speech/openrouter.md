@@ -1,12 +1,12 @@
 ---
 title: OpenRouter（TTS）
-description: 在 AIRI 中配置 OpenRouter 作为语音合成服务商
+description: 在 Aori 中配置 OpenRouter 作为语音合成服务商
 ---
 
 OpenRouter 是一个聚合式 API 服务商。完成配置后，在“发声”中选择 OpenRouter 提供的语音模型和音色。
 
 ::: info 为什么选择 OpenRouter 语音？
-如果你希望在同一个 OpenRouter 账户中管理多个模型和语音能力，可以选择此服务商。在中国大陆使用 AIRI 时，可以优先尝试 302.AI；实际可用性仍取决于你的网络环境、支付方式和服务商政策。
+如果你希望在同一个 OpenRouter 账户中管理多个模型和语音能力，可以选择此服务商。在中国大陆使用 Aori 时，可以优先尝试 302.AI；实际可用性仍取决于你的网络环境、支付方式和服务商政策。
 :::
 
 ## 第一步：获取 API Key
@@ -19,7 +19,7 @@ OpenRouter 是一个聚合式 API 服务商。完成配置后，在“发声”�
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 OpenRouter 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → OpenRouter**。
 2. 将 API Key 粘贴到基础设置。

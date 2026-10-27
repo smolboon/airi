@@ -1,12 +1,12 @@
 ---
 title: Nano Banana（艺术创作）
-description: 在 AIRI 中配置 Nano Banana 图像生成
+description: 在 Aori 中配置 Nano Banana 图像生成
 ---
 
 Nano Banana 使用 Google AI Studio API Key 生成图片。完成配置后，可在 **设置 → 艺术** 选择该服务商。
 
 ::: info 为什么选择 Nano Banana？
-如果你已有 Google AI Studio API Key，并希望直接使用 AIRI 内置的 Gemini 图像模型与分辨率选项，可以选择它。
+如果你已有 Google AI Studio API Key，并希望直接使用 Aori 内置的 Gemini 图像模型与分辨率选项，可以选择它。
 :::
 
 ## 第一步：获取 API Key
@@ -19,7 +19,7 @@ Nano Banana 使用 Google AI Studio API Key 生成图片。完成配置后，可
 不要将 API Key 提交到仓库、放入截图或发送给他人。密钥泄露后，请立即在 Google AI Studio 中撤销并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 艺术 → Nano Banana**，粘贴 API Key。
 2. 选择默认模型：`gemini-3.1-flash-image-preview`、`gemini-3-pro-image-preview` 或 `gemini-2.5-flash-image`。

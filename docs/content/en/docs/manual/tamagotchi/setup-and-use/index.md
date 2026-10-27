@@ -1,5 +1,5 @@
 ---
-title: Project AIRI Manual
+title: Project Aori Manual
 authors:
   - name: MuGewRayce
     aliases:
@@ -14,40 +14,40 @@ authors:
     role: Contributing editor
     kind: person
 ---
-This manual corresponds to AIRI 0.11.3.
+This manual corresponds to Aori 0.11.3.
 
 ::: warning Before you begin
-- Some AIRI features and operations are not covered in detail in this manual.
+- Some Aori features and operations are not covered in detail in this manual.
 - The Chinese edition is the source version. Other language editions are machine-translated and lightly edited manually, so their wording may differ from the app. Always refer to the app if there are discrepancies.
 - This manual is based on research by its contributors and may be incomplete, inaccurate, or out of date.
 - The manual focuses on the desktop app and includes selected web tutorials. The two versions differ in some areas, so follow the app when they conflict.
-- AIRI updates may change the documented behavior. This manual describes the version current when it was written; refer to the app and current release notes for later versions.
-- If you have any questions about this manual, please leave a message at @jhicefair or @0x_selenic_dove in the [Project AIRI Official Discord](https://discord.gg/TgQ3Cu2F7A) channel.
-- Join the WeChat group: Open the [WeChat group description](https://github.com/moeru-ai/airi/blob/main/docs/wechat.md), scan the QR code to add the admin's WeChat, and include `AIRI` in the join request; the admin will invite you to join the group.
+- Aori updates may change the documented behavior. This manual describes the version current when it was written; refer to the app and current release notes for later versions.
+- If you have any questions about this manual, please leave a message at @jhicefair or @0x_selenic_dove in the [Project Aori Official Discord](https://discord.gg/TgQ3Cu2F7A) channel.
+- Join the WeChat group: Open the [WeChat group description](https://github.com/moeru-ai/airi/blob/main/docs/wechat.md), scan the QR code to add the admin's WeChat, and include `Aori` in the join request; the admin will invite you to join the group.
 - Join the QQ group: Open the [QQ group invitation link](https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info), then use QQ to confirm joining; if the link is invalid, refer to the latest link in the repository README.
-- For other questions about AIRI, join the community discussion on Discord, WeChat, or QQ.
+- For other questions about Aori, join the community discussion on Discord, WeChat, or QQ.
 - Have fun chatting with your AI companion! :)
 :::
 
 <a id="chapter-1-installation"></a>
 ## Chapter 1: Installation
 
-Go to the [latest Project AIRI release](https://github.com/moeru-ai/airi/releases/latest), expand **Assets**, and download the file for your device. Open the package and follow the installation prompts. Replace `<version>` below with the value used by the current release.
+Go to the [latest Project Aori release](https://github.com/moeru-ai/airi/releases/latest), expand **Assets**, and download the file for your device. Open the package and follow the installation prompts. Replace `<version>` below with the value used by the current release.
 
 | Platform | Device | File to download |
 | --- | --- | --- |
-| Windows | x64 or Windows 11 ARM64 | `AIRI-<version>-windows-x64-setup.exe` |
-| macOS | Apple silicon (M series) | `AIRI-<version>-darwin-arm64.dmg` |
-| macOS | Intel | `AIRI-<version>-darwin-x64.dmg` |
-| Linux | x64 Debian systems such as Ubuntu | `AIRI-<version>-linux-amd64.deb` |
-| Linux | x64 RPM systems such as Fedora, openSUSE | `AIRI-<version>-linux-x86_64.rpm` |
-| Linux | ARM64 Debian systems such as Ubuntu | `AIRI-<version>-linux-arm64.deb` |
-| Linux | ARM64 RPM systems such as Fedora, openSUSE | `AIRI-<version>-linux-aarch64.rpm` |
-| Android | Android devices, including supported HarmonyOS devices | `AIRI-<version>-android.apk` |
+| Windows | x64 or Windows 11 ARM64 | `Aori-<version>-windows-x64-setup.exe` |
+| macOS | Apple silicon (M series) | `Aori-<version>-darwin-arm64.dmg` |
+| macOS | Intel | `Aori-<version>-darwin-x64.dmg` |
+| Linux | x64 Debian systems such as Ubuntu | `Aori-<version>-linux-amd64.deb` |
+| Linux | x64 RPM systems such as Fedora, openSUSE | `Aori-<version>-linux-x86_64.rpm` |
+| Linux | ARM64 Debian systems such as Ubuntu | `Aori-<version>-linux-arm64.deb` |
+| Linux | ARM64 RPM systems such as Fedora, openSUSE | `Aori-<version>-linux-aarch64.rpm` |
+| Android | Android devices, including supported HarmonyOS devices | `Aori-<version>-android.apk` |
 | iOS/iPadOS | iPhone, iPad | The `.ipa` asset for iOS/iPadOS |
 
 ::: info About Windows installation
-The installer can install AIRI for the current user or for everyone. A current-user installation does not require administrator rights. Installing for everyone requires administrator rights and makes AIRI available to every user on the computer.
+The installer can install Aori for the current user or for everyone. A current-user installation does not require administrator rights. Installing for everyone requires administrator rights and makes Aori available to every user on the computer.
 :::
 
 ::: info About iPhone and iPad installation
@@ -57,30 +57,30 @@ The project team plans to release a TestFlight testing link in the future.
 :::
 
 ::: info About HarmonyOS
-A native HarmonyOS version is not currently available. If you use HarmonyOS NEXT, use Zhuoyitong (卓易通) to install the Android version of AIRI.
+A native HarmonyOS version is not currently available. If you use HarmonyOS NEXT, use Zhuoyitong (卓易通) to install the Android version of Aori.
 :::
 
 <a id="chapter-2-initial-configuration"></a>
 ## Chapter 2: Initial configuration
 
-Before you start using AIRI, you need at least one chat provider and an available chat model. Cloud services usually require an API key or a login account; local services require starting the model service first.
+Before you start using Aori, you need at least one chat provider and an available chat model. Cloud services usually require an API key or a login account; local services require starting the model service first.
 
 Complete the initial configuration as follows:
 
-1. Open AIRI and start the onboarding flow.
+1. Open Aori and start the onboarding flow.
 2. On the welcome screen, optionally click the <span class="i-lucide:globe inline-block align-[-0.125em]" aria-hidden="true"></span> **globe button** in the upper-right corner to change the interface language.
-3. Select **Setup with your provider** to use your own provider, or **Sign in** to use AIRI's official provider. If you are unsure which provider to use, start with [AIRI Official Provider](../../config/providers/consciousness/official.md), [OpenRouter](../../config/providers/consciousness/openrouter.md), [OpenAI Compatible](../../config/providers/consciousness/openai.md), or a local [Ollama](../../config/providers/consciousness/ollama.md) instance.
+3. Select **Setup with your provider** to use your own provider, or **Sign in** to use Aori's official provider. If you are unsure which provider to use, start with [Aori Official Provider](../../config/providers/consciousness/official.md), [OpenRouter](../../config/providers/consciousness/openrouter.md), [OpenAI Compatible](../../config/providers/consciousness/openai.md), or a local [Ollama](../../config/providers/consciousness/ollama.md) instance.
 4. If you use your own provider:
     1. Select the provider you would like to use and click **Next**.
     2. Enter your API key, change the Base URL if necessary, and click **Next**.
     3. If an analytics notice is shown, review it and click **Next**.
     4. Select the chat model you plan to use and click **Save and Continue**.
-5. To use AIRI's official provider, see [AIRI official provider](../../config/providers/consciousness/official.md).
+5. To use Aori's official provider, see [Aori official provider](../../config/providers/consciousness/official.md).
 
-Congratulations! You have completed AIRI's initial configuration.
+Congratulations! You have completed Aori's initial configuration.
 
 ::: tip Just configure the chat first
-Once the chat provider and model are successfully configured, AIRI can reply to messages. Later, you can add capabilities such as speech synthesis (TTS), speech recognition (ASR/STT), visual understanding, and art creation. You can refer to [Voice Input and Output](../../config/audio.md), [Visual Understanding](../../config/vision.md) or [Art Creation](#chapter-4-art) to learn how to configure.
+Once the chat provider and model are successfully configured, Aori can reply to messages. Later, you can add capabilities such as speech synthesis (TTS), speech recognition (ASR/STT), visual understanding, and art creation. You can refer to [Voice Input and Output](../../config/audio.md), [Visual Understanding](../../config/vision.md) or [Art Creation](#chapter-4-art) to learn how to configure.
 :::
 
 ::: warning API Key security
@@ -88,7 +88,7 @@ API Keys, AccessKey Secrets, and other service credentials should only be saved 
 :::
 
 <a id="chapter-3-interface-overview"></a>
-## Chapter 3: AIRI interface overview
+## Chapter 3: Aori interface overview
 
 <a id="chapter-3-main-window"></a>
 ### Main window
@@ -100,38 +100,38 @@ This window displays the virtual character. Its primary controls are:
 - **Expand** - Located in the lower right corner; click it to show more controls.
 - **Open hearing Controls** - Opens the voice-input controls.
 ::: info Hearing control
-First enable microphone input and select the microphone; if prompted for permission, allow AIRI to use the microphone. After configuring the transcription service, speech can be transcribed and sent to the current chat session. AIRI pauses input while speaking to reduce feedback.
+First enable microphone input and select the microphone; if prompted for permission, allow Aori to use the microphone. After configuring the transcription service, speech can be transcribed and sent to the current chat session. Aori pauses input while speaking to reduce feedback.
 :::
 
 - **Drag to move window** - Hold the left mouse button and drag to move the main window.
 
 Click **Expand**. The available controls are:
 
-- **Sign in** — sign in to your AIRI account.
-- **Open settings** — open AIRI's settings interface.
+- **Sign in** — sign in to your Aori account.
+- **Open settings** — open Aori's settings interface.
 - **Switch Profile** — switch profiles.
 - **Open Chat** — open the chat window.
 - **Refresh** — refresh the main window.
 - **Move to screen center** — moves the window to the center of the screen.
-- "Switch to dark mode"/"Switch to light mode" - switch AIRI's interface theme.
-- "Pin on top"/"Unpin from top" - control whether the AIRI window stays above other windows.
-- "Auto hide"/"Always show" - control whether the AIRI window gets out of the way when you move the pointer over it.
-- **Close** — close AIRI with one click.
+- The interface uses the dark theme.
+- "Pin on top"/"Unpin from top" - control whether the Aori window stays above other windows.
+- "Auto hide"/"Always show" - control whether the Aori window gets out of the way when you move the pointer over it.
+- **Close** — close Aori with one click.
 
-![Expanded AIRI main-window control menu](./assets/manual-controls-island-expanded.avif)
+![Expanded Aori main-window control menu](./assets/manual-controls-island-expanded.avif)
 
 <a id="chapter-3-system-tray"></a>
 ### Other system tray options
 
-Find the AIRI icon in the Windows taskbar or macOS menu bar.
+Find the Aori icon in the Windows taskbar or macOS menu bar.
 
 ::: tip If you can't find the taskbar/menu bar icon...
-On Windows, you may need to click "Show hidden icons (⌃)" on the taskbar to expand it to find the AIRI icon.
+On Windows, you may need to click "Show hidden icons (⌃)" on the taskbar to expand it to find the Aori icon.
 
-On a MacBook with a display notch, the AIRI icon may not fit in the visible menu bar. Open **System Settings → Menu Bar** and hide another menu bar item to make room.
+On a MacBook with a display notch, the Aori icon may not fit in the visible menu bar. Open **System Settings → Menu Bar** and hide another menu bar item to make room.
 :::
 
-Right-click the AIRI icon to open the tray menu. The available entries depend on the current platform and app state:
+Right-click the Aori icon to open the tray menu. The available entries depend on the current platform and app state:
 
 - **Show** — show the main window.
 - **Adjust sizes** — resize and center the main window. It contains four options:
@@ -146,14 +146,14 @@ Right-click the AIRI icon to open the tray menu. The available entries depend on
   - **Bottom Left** — Align to the lower-left corner of the desktop.
   - **Bottom Right** — Align to the lower-right corner of the desktop.
 - **Settings...** — open the settings interface.
-- **About...** — open the About window to view the version, visit the project homepage, update AIRI, or select the update channel.
+- **About...** — open the About window to view the version, visit the project homepage, update Aori, or select the update channel.
 - **Open Inlay...** — open an experimental window for testing Electron vibrancy and background-material effects. It is not the Spotlight prompt.
 - **Open Widgets...** — open the widget window. Widgets supplied by maps, weather, art, or extensions appear here; the window may be empty when no corresponding tool or extension is running.
-- **Open Caption...** / **Close Caption...** — open or close captions. When TTS is enabled, captions display AIRI's spoken text and are hidden by default while the pointer hovers over them.
+- **Open Caption...** / **Close Caption...** — open or close captions. When TTS is enabled, captions display Aori's spoken text and are hidden by default while the pointer hovers over them.
 - **Caption Overlay** — contains two options:
   - **Follow window** — This mode is selected by default. The caption window then moves with the main window; if unchecked, its position is independent.
   - **Reset position** — Reset the caption position.
-- **Quit** — Close AIRI.
+- **Quit** — Close Aori.
 
 
 
@@ -167,30 +167,30 @@ This part only introduces what is in the interface. See Chapter 4 for specific f
 You can open the settings interface in the following two ways:
 
 - Click **Expand** in the main window and select **Open settings**.
-- Right-click the AIRI icon in the system tray and select **Settings...**.
+- Right-click the Aori icon in the system tray and select **Settings...**.
 
 The settings navigation includes:
 
-- **AIRI Card** - Select and configure the active character.
-- **Modules** - Configure AIRI features such as Consciousness, Speech, Hearing, Vision, and integrations.
+- **Aori Card** - Select and configure the active character.
+- **Modules** - Configure Aori features such as Consciousness, Speech, Hearing, Vision, and integrations.
 - **Scenes** - Configure the active character's background.
 - **Models** - Select, import, and configure the character display model.
 - **Memory** - View memory settings as they become available.
 - **Providers** - Configure Chat, Vision, Speech, Transcription, and Artistry providers.
-- **Data** - Export, reset, or remove locally stored AIRI data.
-- **Connection** - Configure the AIRI WebSocket server and remote access.
+- **Data** - Export, reset, or remove locally stored Aori data.
+- **Connection** - Configure the Aori WebSocket server and remote access.
 - **System** - Contains **General**, **Color Scheme**, **Window Shortcuts**, and **Developer** pages. See [Desktop Developer Tools](/en/docs/contributing/desktop-developer-tools) for the developer-only pages.
 
-![AIRI settings overview](./assets/manual-settings-window.avif)
+![Aori settings overview](./assets/manual-settings-window.avif)
 
 <a id="chapter-3-chat-window"></a>
 ### Chat window
 
 You can click **Expand** in the main window and then select **Open Chat** to open the chat window.
 
-![AIRI chat window](./assets/manual-chat-window.avif)
+![Aori chat window](./assets/manual-chat-window.avif)
 
-Here you can chat with AIRI. After speech synthesis is enabled, **Stop speaking** appears while AIRI is reading a reply; clicking it stops the current speech playback without cancelling the generated text reply.
+Here you can chat with Aori. After speech synthesis is enabled, **Stop speaking** appears while Aori is reading a reply; clicking it stops the current speech playback without cancelling the generated text reply.
 
 Click **Conversations** in the chat-window title bar, or click the title itself, to open the conversation list. Conversations are ordered by their most recent update and show a preview and synchronization status. You can switch or delete conversations, or create a new conversation for the current character. Deletion is usually unrecoverable, so confirm that you no longer need the content.
 
@@ -200,17 +200,17 @@ Click **Conversations** in the chat-window title bar, or click the title itself,
 You can open the settings interface in the following two ways:
 
 - Click **Expand** in the main window and select **Open settings**.
-- Right-click the AIRI icon in the system tray and select **Settings...**.
+- Right-click the Aori icon in the system tray and select **Settings...**.
 
 <a id="chapter-4-airi-card"></a>
-### AIRI Card
+### Aori Card
 
 Here you can import, create, edit, and activate character cards.
 
-![AIRI character card settings](./assets/manual-airi-card.avif)
+![Aori character card settings](./assets/manual-airi-card.avif)
 
 ::: info About import and export
-Character cards can be imported or exported as AIRI character card packs. Card packs use Character Card V3 data and may include a Live2D, Spine, Tachie, or VRM display model. During import, AIRI validates the package manifest and character-card data; packages with an invalid format or missing required files cannot be imported. AIRI Card packs use an explicit field whitelist and are not lossless CCv3 backups; see the [Character Card Template](../character-card-template.md) for details.
+Character cards can be imported or exported as Aori character card packs. Card packs use Character Card V3 data and may include a Live2D, Spine, Tachie, or VRM display model. During import, Aori validates the package manifest and character-card data; packages with an invalid format or missing required files cannot be imported. Aori Card packs use an explicit field whitelist and are not lossless CCv3 backups; see the [Character Card Template](../character-card-template.md) for details.
 :::
 
 To create a character card:
@@ -225,12 +225,12 @@ To create a character card:
 
 The most important identity fields are the character's name and description:
 
-- The name is the character name currently shown by AIRI. Although Character Card V3 supports a `nickname` field, the current interface and runtime still display `name`.
+- The name is the character name currently shown by Aori. Although Character Card V3 supports a `nickname` field, the current interface and runtime still display `name`.
 - The description tells the model who the character is. Use the default character card as a reference when you need an example.
 
 ::: info Editor's notes
-- The default ReLU prompt explains AIRI's `ACT` tokens for stage emotions and actions. Keep equivalent instructions in a custom card if you want the model to control those behaviors; omitting them can reduce or remove action and emotion output.
-- Creator notes are only notes for character cards and will not affect the AIRI response results.
+- The default ReLU prompt explains Aori's `ACT` tokens for stage emotions and actions. Keep equivalent instructions in a custom card if you want the model to control those behaviors; omitting them can reduce or remove action and emotion output.
+- Creator notes are only notes for character cards and will not affect the Aori response results.
 - Behavior defines personality, scenario, and greetings. Modules can specify chat, Vision, Speech, and display-model preferences. Artistry stores image-generation preferences. Settings contains the system prompt, post-history instructions, and card version.
 :::
 
@@ -241,23 +241,23 @@ Creating a character card does not activate it automatically. Use the card's act
 <a id="chapter-4-modules"></a>
 ### Modules
 
-Configure AIRI's active capabilities here.
+Configure Aori's active capabilities here.
 
-![AIRI module settings](./assets/manual-modules.avif)
+![Aori module settings](./assets/manual-modules.avif)
 
 #### Consciousness
 
 Open **Settings → Modules → Consciousness** to select the active chat provider and model. See [Chat Model](../../config/llm.md) for the complete provider-to-model flow.
-![AIRI Consciousness settings](./assets/manual-consciousness.avif)
+![Aori Consciousness settings](./assets/manual-consciousness.avif)
 
 #### Speech
-Open **Settings → Modules → Speech** to select the active speech provider, model, and voice. See [Voice Input and Output](../../config/audio.md) for configuration. If you do not want AIRI to speak, select **None**.
+Open **Settings → Modules → Speech** to select the active speech provider, model, and voice. See [Voice Input and Output](../../config/audio.md) for configuration. If you do not want Aori to speak, select **None**.
 ::: tip Supplementary instructions for the Speech page
 - Select the provider and model first, then select a supported voice. Different providers expose different fields.
 - Pitch only affects providers and models that support this parameter.
 :::
 
-![AIRI Speech settings](./assets/manual-speech.avif)
+![Aori Speech settings](./assets/manual-speech.avif)
 
 #### Hearing
 Open **Settings → Modules → Hearing** to select the transcription provider, model, and audio input. See [Voice Input and Output](../../config/audio.md) for configuration. If you are not using voice input yet, select **None**.
@@ -268,17 +268,17 @@ Speech-to-text (STT), also called automatic speech recognition (ASR), converts s
 :::
 
 ::: info Using voice input on macOS
-The first time you use voice input on macOS, allow AIRI to access the microphone when prompted.
+The first time you use voice input on macOS, allow Aori to access the microphone when prompted.
 ![macOS permission prompt](image-7.png)
 :::
 
-![AIRI Hearing settings](./assets/manual-hearing.avif)
+![Aori Hearing settings](./assets/manual-hearing.avif)
 
 In addition, you can:
 
 - Enable the Auto-send transcribed text feature for automatic sending.
 - Disable it to review or edit a transcription before sending it.
-- Use **Auto-send delay** to change how long AIRI waits before sending.
+- Use **Auto-send delay** to change how long Aori waits before sending.
 
 ::: info Automatic sending
 When auto-send is enabled, the recognized text will be sent to the chat session after a set delay; when it is turned off, you can check or modify the text before sending it manually.
@@ -297,12 +297,12 @@ If you want to test STT functionality:
 #### Vision
 Open **Settings → Modules → Vision** to select the active vision provider and image-capable model and to set **Capture interval**. See [Visual Understanding](../../config/vision.md) for the complete flow.
 
-![AIRI Vision settings](./assets/manual-vision.avif)
+![Aori Vision settings](./assets/manual-vision.avif)
 
 ::: warning Before using screen vision, you need to start Vision Capture
 When configuring only the vision service provider and model, there is no need to enable this tool.
 
-To have AIRI analyze your screen or window, open **System → Developer → Vision Capture**, grant screen-recording permission, select a window or display, and click **Start ticker**. To send the results to the current character, enable **Publish to character**.
+To have Aori analyze your screen or window, open **System → Developer → Vision Capture**, grant screen-recording permission, select a window or display, and click **Start ticker**. To send the results to the current character, enable **Publish to character**.
 
 Vision Capture is the current desktop debugging/development workflow; leaving the page will stop the capture loop. For complete instructions, see [Desktop Developer Tools](/en/docs/contributing/desktop-developer-tools#vision-capture).
 :::
@@ -311,16 +311,16 @@ Vision Capture is the current desktop debugging/development workflow; leaving th
 <a id="chapter-4-art"></a>
 #### Artistry (artistic creation)
 
-Here you can configure AIRI's ability to create art.
+Here you can configure Aori's ability to create art.
 
 Open **Settings → Providers → Artistry** to configure an image provider, then enable it under **Settings → Modules → Artistry**.
 
 ::: warning Tool calling for interactive Artistry
-In the ordinary interactive Artistry flow, AIRI makes the configured image tool available to the current **chat model**, which calls the tool to submit the generation task. This flow requires a provider and model that support **Tool Calling / Function Calling**.
+In the ordinary interactive Artistry flow, Aori makes the configured image tool available to the current **chat model**, which calls the tool to submit the generation task. This flow requires a provider and model that support **Tool Calling / Function Calling**.
 
 Under **Settings → Modules → Consciousness**, select a model that the provider explicitly marks as supporting tool calling. Models limited to ordinary text conversations may respond with text without submitting a task to the selected image service.
 
-After configuration, ask the character to generate a simple image. Confirm that AIRI initiates a tool call; if the provider offers task status, history, or a console, you can also confirm that it received the task. After the task returns an image, AIRI displays the result. See the corresponding page under **Settings → Providers → Artistry** for provider-specific verification.
+After configuration, ask the character to generate a simple image. Confirm that Aori initiates a tool call; if the provider offers task status, history, or a console, you can also confirm that it received the task. After the task returns an image, Aori displays the result. See the corresponding page under **Settings → Providers → Artistry** for provider-specific verification.
 
 The character-card option **Cinematic Autonomy (Autonomous Artist)** uses a separate text-analysis flow and invokes the selected image provider directly, so that mode does not require LLM tool calling.
 :::
@@ -335,20 +335,20 @@ This feature is not available yet. If you have ideas for its implementation, sub
 
 #### Discord
 
-Discord integration requires running the bot service from source to allow AIRI to enter the Discord server's messaging and voice channels.
+Discord integration requires running the bot service from source to allow Aori to enter the Discord server's messaging and voice channels.
 
 1. Create a Discord application and enable the required Intents described in the [Discord Bot Integration Guide](/en/docs/integrations/discord).
 2. Start the Discord bot service from the repository.
-3. In AIRI, open **Settings → Connection** and copy the **Auth Token** into the bot service configuration.
-4. Open **Settings → Modules → Discord**, enter the **Bot Token**, turn on **Enable Discord Integration**, and click **Save**. The running bot service receives this configuration from AIRI.
+3. In Aori, open **Settings → Connection** and copy the **Auth Token** into the bot service configuration.
+4. Open **Settings → Modules → Discord**, enter the **Bot Token**, turn on **Enable Discord Integration**, and click **Save**. The running bot service receives this configuration from Aori.
 
 ::: warning Credential security
-The Bot Token, AIRI Auth Token, and optional transcription credentials should only be saved in local configuration. Do not submit, screenshot, or send these values.
+The Bot Token, Aori Auth Token, and optional transcription credentials should only be saved in local configuration. Do not submit, screenshot, or send these values.
 :::
 
 #### X / Twitter
 
-The X / Twitter settings form is present, but the integration is not functional in AIRI 0.11.3. Do not enter credentials. See the [X / Twitter Integration Guide](/en/docs/integrations/x) for the current implementation limitation.
+The X / Twitter settings form is present, but the integration is not functional in Aori 0.11.3. Do not enter credentials. See the [X / Twitter Integration Guide](/en/docs/integrations/x) for the current implementation limitation.
 
 #### Web search
 
@@ -356,7 +356,7 @@ Open **Settings → Modules → Web Search**, then follow the [Web Search Config
 
 #### Minecraft
 
-Minecraft integration requires running a local agent service from source. Follow the [Minecraft Agent Integration Guide](/en/docs/integrations/minecraft) to configure the trusted server, AIRI, and model services, and then start the agent.
+Minecraft integration requires running a local agent service from source. Follow the [Minecraft Agent Integration Guide](/en/docs/integrations/minecraft) to configure the trusted server, Aori, and model services, and then start the agent.
 
 ::: warning Security reminder
 Do not connect Minecraft agents to untrusted public servers. It drives local Minecraft sessions and network connections, and malicious servers can cause unexpected behavior.
@@ -368,11 +368,11 @@ Instructions for running integration services from source are in the **Integrati
 
 #### Factorio
 
-Open **Settings → Modules → Factorio**, then follow the [Factorio Integration Guide](/en/docs/integrations/factorio) to enter the trusted server address, port, and in-game username. AIRI does not include a ready-to-deploy Factorio server-side integration.
+Open **Settings → Modules → Factorio**, then follow the [Factorio Integration Guide](/en/docs/integrations/factorio) to enter the trusted server address, port, and in-game username. Aori does not include a ready-to-deploy Factorio server-side integration.
 
 #### MCP Server
 
-MCP (Model Context Protocol) allows AIRI to use external tools through local processes. On desktop, open **Settings → Modules → MCP Server**, click **Add server**, then fill in **Identifier**, **Command**, **Arguments**, and any optional **Working directory** or **Environment** values. Use **Test** to test the selected server, then click **Save and restart** to write the configuration and restart MCP. **Reveal in file manager** and **Edit JSON** are also available for direct configuration maintenance. Only run MCP servers that you trust: they can execute commands locally and access environment variables that you grant.
+MCP (Model Context Protocol) allows Aori to use external tools through local processes. On desktop, open **Settings → Modules → MCP Server**, click **Add server**, then fill in **Identifier**, **Command**, **Arguments**, and any optional **Working directory** or **Environment** values. Use **Test** to test the selected server, then click **Save and restart** to write the configuration and restart MCP. **Reveal in file manager** and **Edit JSON** are also available for direct configuration maintenance. Only run MCP servers that you trust: they can execute commands locally and access environment variables that you grant.
 
 #### Beat Sync
 
@@ -381,9 +381,9 @@ Open **Settings → Modules → Beat Sync**. Beat Sync analyzes audio from a sel
 <a id="chapter-4-stage"></a>
 ### Scenes
 
-Scenes are backgrounds for AIRI's main interface.
+Scenes are backgrounds for Aori's main interface.
 
-The **Scene Gallery** shows the backgrounds currently available to AIRI. Hover over an inactive scene and click its check button to make it the active character background.
+The **Scene Gallery** shows the backgrounds currently available to Aori. Hover over an inactive scene and click its check button to make it the active character background.
 
 Click **Upload to Gallery** to import an image.
 
@@ -394,9 +394,9 @@ To remove the active background, click **Clear Default**.
 
 Here you can select and set up your character's model.
 
-![AIRI character model settings](./assets/manual-models.avif)
+![Aori character model settings](./assets/manual-models.avif)
 
-AIRI supports Live2D, Spine 2D, VRM 3D, MMD, and Tachie models.
+Aori supports Live2D, Spine 2D, VRM 3D, MMD, and Tachie models.
 
 If you just want to switch an existing model, we recommend the following steps:
 
@@ -431,7 +431,7 @@ You can continue to adjust in the following order:
 3. To use an idle animation, ensure that the imported package includes animation files.
 4. Expand **Expressions** and enable **Expression System** to use expressions included with the model.
 
-When speech synthesis is enabled, AIRI automatically restores Live2D's mouth state after speech playback.
+When speech synthesis is enabled, Aori automatically restores Live2D's mouth state after speech playback.
 
 ::: info Parameters and expressions
 The parameters, standby animations and expressions available to the model are determined by the model file itself. After the Expression System is enabled, only the expressions actually provided by the model will be displayed; if there are no expressions or animation files, the corresponding options will have no effect.
@@ -457,11 +457,11 @@ This feature is not available yet. If you have ideas for its implementation, sub
 <a id="chapter-4-providers"></a>
 ### Providers
 
-**Providers** is where AIRI connects to model, voice, transcription, and image services. Enter provider credentials here, then select the provider and model on the corresponding module page.
+**Providers** is where Aori connects to model, voice, transcription, and image services. Enter provider credentials here, then select the provider and model on the corresponding module page.
 
 You can choose categories by purpose:
 
-- **Chat**: Configure a chat model so AIRI can reply to messages. At least one working Chat provider is required.
+- **Chat**: Configure a chat model so Aori can reply to messages. At least one working Chat provider is required.
 - **Vision**: Configure a vision model for image understanding; then select it under **Modules → Vision**.
 - **Speech**: Configure text-to-speech; then select the provider, model, and voice under **Modules → Speech**.
 - **Transcription**: Configure speech-to-text; then select the provider and model under **Modules → Hearing**.
@@ -482,22 +482,22 @@ Save API Keys, AccessKey Secrets, and other service credentials only in settings
 - Vision providers store their own credentials, even when their fields match the corresponding Chat provider. See [Visual Understanding](../../config/vision.md) for details.
 :::
 
-![AIRI service provider settings](./assets/manual-providers.avif)
+![Aori service provider settings](./assets/manual-providers.avif)
 
 ::: tip Technical advice
-The provider list depends on the installed AIRI version. If an unlisted provider implements an OpenAI-compatible interface, use the corresponding **OpenAI Compatible** entry and enter the exact Base URL and model ID from that provider's documentation.
+The provider list depends on the installed Aori version. If an unlisted provider implements an OpenAI-compatible interface, use the corresponding **OpenAI Compatible** entry and enter the exact Base URL and model ID from that provider's documentation.
 :::
 
 <a id="chapter-4-data"></a>
 ### Data
 
-Manage AIRI's locally stored data here.
+Manage Aori's locally stored data here.
 
 ::: warning Unrecoverable operation
 Deletion and reset operations in this section cannot be undone. Confirm the selected data before continuing.
 :::
 
-![AIRI Data settings](./assets/manual-data-settings.avif)
+![Aori Data settings](./assets/manual-data-settings.avif)
 
 Use **Move desktop window to center** to restore the desktop stage to the center of the current screen.
 
@@ -508,12 +508,12 @@ These data controls are available only in the Desktop ver. They are not availabl
 <a id="chapter-4-connection"></a>
 ### Connection
 
-**Connection** configures AIRI's service channel. Set the **WebSocket Server Address** and turn on **Enable Secure WebSocket (WSS)** when encrypted transport is required. On desktop, **Expose On Network** can be set to **This device**, **All**, or **Advanced**; **Advanced** reveals **Bind Hostname**. You can also set an **Auth Token** and use the QR code to connect the Mobile ver. Expose AIRI only on trusted networks and keep the token private.
+**Connection** configures Aori's service channel. Set the **WebSocket Server Address** and turn on **Enable Secure WebSocket (WSS)** when encrypted transport is required. On desktop, **Expose On Network** can be set to **This device**, **All**, or **Advanced**; **Advanced** reveals **Bind Hostname**. You can also set an **Auth Token** and use the QR code to connect the Mobile ver. Expose Aori only on trusted networks and keep the token private.
 
-![AIRI Connection settings](./assets/manual-websocket-settings.avif)
+![Aori Connection settings](./assets/manual-websocket-settings.avif)
 
-::: tip macOS may require administrator verification
-When secure WebSockets are enabled, AIRI adds the local certificate to the macOS login keychain. You may be asked to authorize this action using Touch ID or entering your Mac login password. Verify your fingerprint or Mac login password to continue.
+::: tip macOS asks for administrator verification
+When secure WebSockets are on, Aori adds the local certificate to the macOS login keychain. macOS can ask you to authorize this action with Touch ID or the Mac login password. Verify your fingerprint or Mac login password to continue.
 ![macOS administrator verification](image-16.png)
 :::
 
@@ -523,20 +523,20 @@ When secure WebSockets are enabled, AIRI adds the local certificate to the macOS
 
 #### General
 
-Configure AIRI's theme, language, and general behavior here.
+Configure Aori's theme, language, and general behavior here.
 
-![AIRI System general settings](./assets/manual-system-general.avif)
+![Aori System general settings](./assets/manual-system-general.avif)
 
-- **Theme** switches between light and dark mode.
-- **Language** sets the interface language; the selection is retained after restarting AIRI.
+- The theme is dark.
+- **Language** sets the interface language; the selection is retained after restarting Aori.
 - **Controls Island Icon Size** changes the desktop control-island icon size.
 - **Enable usage analytics** controls anonymous usage analytics when analytics are available in the current build. The description links to the privacy policy.
 
 #### Color scheme
 
-Configure AIRI's theme colors here.
+Configure Aori's theme colors here.
 
-![AIRI color scheme settings](./assets/manual-system-color-scheme.avif)
+![Aori color scheme settings](./assets/manual-system-color-scheme.avif)
 
 - Turn on **RGB** to cycle through theme colors automatically.
 - Drag the marker below the color bar or click the bar to choose a color.
@@ -548,15 +548,15 @@ Click a color swatch to apply its preset.
 :::
 
 #### Window Shortcuts
-Here you can modify the **Spotlight** global shortcut. Spotlight is AIRI's floating prompt input.
+Here you can modify the **Spotlight** global shortcut. Spotlight is Aori's floating prompt input.
 
 1. Click the current shortcut key.
 2. Press the new key combination you want to use; it must contain at least one modifier key: Cmd, Ctrl, Alt, or Super.
-3. If another application already uses the shortcut, AIRI reports a conflict. Press Esc to cancel recording.
+3. If another application already uses the shortcut, Aori reports a conflict. Press Esc to cancel recording.
 4. Click **Reset** to restore the default shortcut.
 
 ::: tip Use Spotlight
-Press the configured shortcut to open Spotlight. Enter a request and press Enter; AIRI hides Spotlight and displays the result in a notification. Press Esc to close it without sending.
+Press the configured shortcut to open Spotlight. Enter a request and press Enter; Aori hides Spotlight and displays the result in a notification. Press Esc to close it without sending.
 :::
 
 #### Developer
@@ -569,7 +569,7 @@ This page is used to develop, troubleshoot, and verify experimental features; re
 <a id="chapter-3-main-web"></a>
 ### Web main interface
 
-![AIRI web interface](./assets/manual-main-web.avif)
+![Aori web interface](./assets/manual-main-web.avif)
 
 The web interface contains the character stage, chat area, and account and display controls.
 
@@ -589,7 +589,7 @@ The upper area provides access to **About**, **Characters**, and the account men
 
 ###### Flux
 
-Flux is the balance used by AIRI's official services. After you sign in, open **Flux** to view your balance, usage statistics, and transaction history. If the current deployment supports purchases, you can select an available package. The Desktop ver. opens checkout in the system browser. Requests to official chat, vision, or speech services can consume Flux. Third-party providers bill usage separately.
+Flux is the balance used by Aori's official services. After you sign in, open **Flux** to view your balance, usage statistics, and transaction history. If the current deployment supports purchases, you can select an available package. The Desktop ver. opens checkout in the system browser. Requests to official chat, vision, or speech services can consume Flux. Third-party providers bill usage separately.
 
 ###### Settings
 
@@ -603,7 +603,7 @@ The lower-right controls provide six actions:
 - mute or unmute speech output;
 - adjust character position and size;
 - clear the current conversation;
-- switch between light and dark themes;
+- the theme is dark;
 - change the background.
 
 ###### Position and size
@@ -620,9 +620,9 @@ Select the trash button to clear messages and context from the active conversati
 Cleared messages cannot be restored.
 :::
 
-###### Switch between light and dark
+###### Dark theme
 
-Select the sun or moon button to switch between the light and dark themes.
+The interface uses the dark theme.
 
 ###### Background
 
@@ -644,8 +644,8 @@ On surfaces that display **WebSocket Status** in the upper-right area, click it 
 <a id="chapter-ed-toeveryeditor"></a>
 ## Contributing to this manual
 
-This community-maintained manual is published with the official AIRI documentation. Contributions that improve its accuracy, wording, screenshots, or formatting are welcome. Submit a pull request and add yourself to the author list when your contribution is substantial.
+This community-maintained manual is published with the official Aori documentation. Contributions that improve its accuracy, wording, screenshots, or formatting are welcome. Submit a pull request and add yourself to the author list when your contribution is substantial.
 
-Thank you for helping improve AIRI's documentation.
+Thank you for helping improve Aori's documentation.
 
 ——Ling Zhen

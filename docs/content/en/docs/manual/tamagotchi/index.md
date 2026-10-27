@@ -5,10 +5,10 @@ description: How to get started with the Desktop ver.
 
 ## Start chatting first
 
-After installing and starting AIRI, complete the onboarding flow:
+After installing and starting Aori, complete the onboarding flow:
 
 1. On the welcome screen, optionally click the <span class="i-lucide:globe inline-block align-[-0.125em]" aria-hidden="true"></span> **globe button** in the upper-right corner to change the interface language.
-2. Select **Setup with your provider**, or select **Sign in** to use the official AIRI provider.
+2. Select **Setup with your provider**, or select **Sign in** to use the official Aori provider.
 3. Select a Chat provider such as OpenRouter, OpenAI Compatible, DeepSeek, Ollama, Google Gemini, or Anthropic.
 4. Fill in the API Key, local service address and other necessary information.
 5. Select a chat model, then select **Save and Continue**.
@@ -33,9 +33,9 @@ The Desktop ver. usually consists of these interfaces:
 - **Controls Island**: A small group of buttons in the lower-right corner of the main character window.
 - **Chat Window**: A conversation window opened from the Controls Island.
 - **Settings Window**: Configure providers, profiles, models, modules, data, connections, and system options.
-- **System Tray Menu**: Adjust the window size and position, open settings, manage captions and widgets, or quit AIRI.
+- **System Tray Menu**: Adjust the window size and position, open settings, manage captions and widgets, or quit Aori.
 
-If the main character window is hidden, you can bring it back by clicking on the AIRI tray icon or selecting **Show** in the tray menu.
+If the main character window is hidden, you can bring it back by clicking on the Aori tray icon or selecting **Show** in the tray menu.
 
 ## Controls Island
 
@@ -46,7 +46,7 @@ The Controls Island is the main entry point for everyday use of the desktop app.
 - Click **Open settings** to configure providers, models, modules, profiles, and system settings.
 - Click **Switch Profile** to change the current character card.
 - If needed, you can click **Refresh** to reload the stage.
-- Click the light/dark icon to switch themes.
+- The interface uses the dark theme.
 - Click the pushpin icon to toggle **Pin on top**.
 - Click the eye icon to toggle **Auto hide** / **Always show**.
 - Click **Open hearing Controls** to open voice-input controls.
@@ -54,12 +54,12 @@ The Controls Island is the main entry point for everyday use of the desktop app.
 
 ## Hide on hover
 
-The eye icon controls whether AIRI remains fully interactive or fades out of the way to reduce obstruction while you work.
+The eye icon controls whether Aori remains fully interactive or fades out of the way to reduce obstruction while you work.
 
 - **Always show** keeps the character visible and clickable.
 - **Auto hide** fades the character and interface when the cursor is close, making it easier to click the application below.
 
-When you first enable hide on hover, AIRI displays a short explanation. If it becomes difficult to click AIRI, move the cursor near the Controls Island and click the eye icon again to switch it off.
+When you first enable hide on hover, Aori displays a short explanation. If it becomes difficult to click Aori, move the cursor near the Controls Island and click the eye icon again to switch it off.
 
 <div rounded-lg overflow-hidden>
   <video autoplay loop muted class="scale-180 translate-x--30 translate-y--2 lg:scale-150 lg:translate-x--40">
@@ -79,7 +79,7 @@ To move the main character window, drag the move button in the lower-right corne
 
 On Windows, you can drag the edges or corners of a window to resize it. Several common sizes are also provided in the tray menu:
 
-1. Right-click the AIRI tray icon.
+1. Right-click the Aori tray icon.
 2. Open **Adjust sizes**.
 3. Select **Recommended (450x600)**, **Full Height**, **Half Height**, or **Full Screen**.
 
@@ -98,7 +98,7 @@ After your first chat, review these pages:
 - **Providers**: Add or edit Chat, Vision, Speech, Transcription, and Artistry providers.
 - **Modules**: Select services for consciousness, speech, hearing, vision, memory, Discord, Minecraft, Factorio, MCP, and other modules.
 - **Models**: Switch between supported 2D/3D models, or import your own.
-- **AIRI Card**: Switch the current character, or create a new character card.
+- **Aori Card**: Switch the current character, or create a new character card.
 - **System**: Set the language, theme, usage-analytics settings, and desktop-specific options.
 
 Some modules are experimental and require local source configuration or additional services. See the [complete desktop manual](./setup-and-use/) for detailed instructions.

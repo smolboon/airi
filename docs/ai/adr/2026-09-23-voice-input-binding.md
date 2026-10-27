@@ -60,15 +60,15 @@ flowchart LR
   Device --> Page[Web or Pocket binding]
   Page --> VAD[Hearing VAD and segment queue]
   VAD --> HTTP[Streaming HTTP request]
-  HTTP --> API[AIRI API: auth and provider config]
+  HTTP --> API[Aori API: auth and provider config]
   API --> Token[Aliyun token]
   Token --> WS[Aliyun NLS WebSocket]
   WS --> SSE[SSE transcript]
   SSE --> Consumers[Page and chat input consumers]
 ```
 
-The browser-to-AIRI leg already uploads audio incrementally and receives SSE.
-Changing only that leg to WebSocket does not remove the AIRI-to-Aliyun hop.
+The browser-to-Aori leg already uploads audio incrementally and receives SSE.
+Changing only that leg to WebSocket does not remove the Aori-to-Aliyun hop.
 The current ASR route does not write a per-user usage ledger; the separate TTS
 WebSocket route performs a balance preflight and bills its session at completion.
 
@@ -80,7 +80,7 @@ sequenceDiagram
   participant D as Device store
   participant P as Page binding
   participant V as VAD
-  participant A as AIRI API
+  participant A as Aori API
   participant N as Aliyun NLS
   U->>D: Enable microphone
   D->>D: getUserMedia (may finish after page startup)

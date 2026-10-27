@@ -69,7 +69,7 @@ v0.7 릴리스와 이 DevLog를 계기로 지금까지 달성한 마일스톤도
 
 ### 데스크톱 버전
 
-Tamagotchi는 AIRI 데스크톱 버전의 이름으로, 다른 애플리케이션과 함께 작업을 방해하지 않으면서
+Tamagotchi는 Aori 데스크톱 버전의 이름으로, 다른 애플리케이션과 함께 작업을 방해하지 않으면서
 바탕화면에서 늘 곁에 있는 별도의 동반자로 실행할 수 있습니다.
 
 이전의 데스크톱 버전은 UI/UX가 충분히 다듬어지지 않은 실험 단계에 가까웠고,
@@ -102,18 +102,18 @@ Warudo입니다. 이들은 VTuber 방송용으로 설계되어서, OBS(Open Broa
 모델 창은 항상 투명 배경의 최소화된 창으로 **백그라운드에** 있고 OBS나 다른 방송 캡처 드라이버가
 이를 캡처합니다.
 
-AIRI를 VTuber 방송에 쓴다면 Fade on hover 기능이 없어도 괜찮습니다. 하지만 바탕화면 위의
+Aori를 VTuber 방송에 쓴다면 Fade on hover 기능이 없어도 괜찮습니다. 하지만 바탕화면 위의
 가상 동반자로 함께 지내게 하고 싶다면 곧 이런 점들을 느끼게 됩니다:
 
 - 모델 창을 항상 위에 두도록 설계하면 그 아래 애플리케이션으로 가는 마우스 이벤트를 막아 버립니다.
   우리가 원하는 게 아니죠.
 - 모델 창의 표시 여부를 매번 직접 토글해야 한다면, 특히 하던 일에 집중할 때 아주 불편합니다.
 
-그래서 이런 아이디어를 냈습니다. 마우스가 창 위에 올라오면 AIRI 안의 캐릭터가 흐려지고,
+그래서 이런 아이디어를 냈습니다. 마우스가 창 위에 올라오면 Aori 안의 캐릭터가 흐려지고,
 마우스 클릭 이벤트는 아래 애플리케이션으로 통과시키는 기능을요.
 
 저는 이 기능을 개인적으로 정말 좋아합니다. 이제 창을 끄거나 순서를 정리할 걱정 없이 어떤
-애플리케이션을 쓰든 AIRI의 캐릭터가 곁에 있을 수 있으니까요. AIRI를 개발하는 날이면 웹 버전이든
+애플리케이션을 쓰든 Aori의 캐릭터가 곁에 있을 수 있으니까요. Aori를 개발하는 날이면 웹 버전이든
 데스크톱 버전이든 늘 바탕화면에 그녀를 띄워 두고, 터미널과 VSCode/Cursor를 함께 켜 둡니다.
 
 **Fade on hover™**만 업데이트한 건 아닙니다. 데스크톱 버전의 UI/UX도 많이 개선하고
@@ -196,14 +196,14 @@ Steam이나 Battle.net처럼 모듈과 필요한 파일의 다운로드 진행 �
 
 #### 온보딩
 
-AIRI 설정이 지금 꽤 복잡하다는 걸 압니다 (그래도 코드 구조를 이해해야 설정할 수 있는
+Aori 설정이 지금 꽤 복잡하다는 걸 압니다 (그래도 코드 구조를 이해해야 설정할 수 있는
 순수 Python 기반 프로젝트들에 비하면 여전히 쉽습니다).
 
 [Me1td0wn76 (melty kiss)](https://github.com/Me1td0wn76) 님이 웹 버전에 온보딩 화면 지원을
-추가해 주신 덕분에, 처음 AIRI를 쓸 때 훨씬 나은 경험을 하실 수 있습니다.
+추가해 주신 덕분에, 처음 Aori를 쓸 때 훨씬 나은 경험을 하실 수 있습니다.
 
-이분은 Pull Request가 머지된 뒤 Project AIRI에 기여한 경험을 블로그로 나눠 주셨습니다:
-[AIRIプロジェクトに参加した話 - YAMA-blog](https://yama-pro.blog/posts/airi/)
+이분은 Pull Request가 머지된 뒤 Project Aori에 기여한 경험을 블로그로 나눠 주셨습니다:
+[Aoriプロジェクトに参加した話 - YAMA-blog](https://yama-pro.blog/posts/airi/)
 
 <img class="light" src="/en/blog/DevLog-2025.08.05/assets/airi-demo-onboarding-light.avif" alt="온보딩 라이트 모드" />
 <img class="dark" src="/en/blog/DevLog-2025.08.05/assets/airi-demo-onboarding-dark.avif" alt="온보딩 다크 모드" />
@@ -478,11 +478,11 @@ AIRI 설정이 지금 꽤 복잡하다는 걸 압니다 (그래도 코드 구조
 
 `postinstall` 스크립트는 여전히 필요하지만, 의존성을 인식해 빌드 결과를 캐시할 방법을 찾으면
 중복 빌드를 많이 피할 수 있습니다. 여기서 `turborepo`가 빌드를 더 빠르게 만들어 줍니다.
-`turborepo` 덕분에 AIRI 빌드 시간이 **평균 4분에서 25초로 줄었습니다**.
+`turborepo` 덕분에 Aori 빌드 시간이 **평균 4분에서 25초로 줄었습니다**.
 
 ### 이제 Nix를 지원합니다
 
-[@Weathercold (Weathercold)](https://github.com/Weathercold) 덕분에 AIRI를 빌드하는 Nix flake가
+[@Weathercold (Weathercold)](https://github.com/Weathercold) 덕분에 Aori를 빌드하는 Nix flake가
 생겼습니다. 크로스 플랫폼 호환성에 훌륭한 보탬이 되죠. macOS에서도 동작합니다.
 
 nix-pkgs로 들어갈 최종 Pull Request가 머지되기를 기다리고 있지만, 다음 명령으로 미리 써 보실 수 있습니다:

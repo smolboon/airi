@@ -1,6 +1,6 @@
 ---
 title: Discord 机器人
-description: 使用 Discord 应用与模型服务运行 AIRI 语音和消息机器人
+description: 使用 Discord 应用与模型服务运行 Aori 语音和消息机器人
 ---
 
 Discord 机器人连接 Discord 服务器中的消息和语音频道，并使用配置的模型服务生成回复。

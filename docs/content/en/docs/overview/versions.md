@@ -1,6 +1,6 @@
 ---
 title: Versions
-description: Different versions of AIRI and how to get them
+description: Different versions of Aori and how to get them
 ---
 
 <script setup>

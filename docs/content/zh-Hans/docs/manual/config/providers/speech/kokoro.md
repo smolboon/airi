@@ -1,9 +1,9 @@
 ---
 title: Kokoro（本地 TTS）
-description: 在 AIRI 中配置本地 Kokoro 语音合成
+description: 在 Aori 中配置本地 Kokoro 语音合成
 ---
 
-Kokoro 在 AIRI 中以本地模型方式运行语音合成。
+Kokoro 在 Aori 中以本地模型方式运行语音合成。
 
 ::: info 为什么选择 Kokoro？
 如果你希望在本地处理语音内容，并且设备满足模型运行条件，可以选择 Kokoro。
@@ -11,17 +11,17 @@ Kokoro 在 AIRI 中以本地模型方式运行语音合成。
 
 ## 第一步：准备本地运行环境
 
-1. 在支持 WebGPU 的环境中打开 AIRI；首次使用时，等待模型下载完成。
+1. 在支持 WebGPU 的环境中打开 Aori；首次使用时，等待模型下载完成。
 2. 该选项不需要云端 API Key，但会使用本机的下载空间、内存和计算资源。
 
 ::: warning 本地资源使用
 本地模型会占用下载空间、内存和计算资源。不要在设备资源不足时强行启用。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → Kokoro**。
-2. 选择 AIRI 提供的可用 Kokoro 模型。
+2. 选择 Aori 提供的可用 Kokoro 模型。
 
 ## 第三步：验证配置
 

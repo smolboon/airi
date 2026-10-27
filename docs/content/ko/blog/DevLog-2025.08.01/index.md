@@ -3,7 +3,7 @@ title: DevLog @ 2025.08.01
 category: DevLog
 date: 2025-08-01
 excerpt: |
-  Makito가 AIRI에서 텍스트 애니메이션을 구현하다가, UTF-8 바이트 스트림으로 들어오는 grapheme cluster를 다루는 라이브러리를 만들기까지의 여정을 나눕니다.<br /> 유익하고 영감이 되기를 바랍니다!
+  Makito가 Aori에서 텍스트 애니메이션을 구현하다가, UTF-8 바이트 스트림으로 들어오는 grapheme cluster를 다루는 라이브러리를 만들기까지의 여정을 나눕니다.<br /> 유익하고 영감이 되기를 바랍니다!
 preview-cover:
   light: "@assets('/en/blog/DevLog-2025.08.01/assets/cover-light.avif')"
   dark: "@assets('/en/blog/DevLog-2025.08.01/assets/cover-dark.avif')"
@@ -62,9 +62,9 @@ const trioCluster = ['👩‍👧', '‍', '👦']
 
 끝나지 않는 8월이 시작됐습니다… 이 [현실적인 수학 문제](https://oeis.org/A180632/a180632.pdf)로 시간을 보내도 좋겠네요. 앗, 이야기가 샜습니다.
 
-한동안 작업해 오긴 했지만, Project AIRI DevLog에 글을 쓰는 건 이번이 처음입니다.
+한동안 작업해 오긴 했지만, Project Aori DevLog에 글을 쓰는 건 이번이 처음입니다.
 
-이 글에서는 AIRI에서 텍스트 애니메이션을 구현하다가 UTF-8 바이트 스트림으로 들어오는 grapheme cluster를 다루는 라이브러리를 만들기까지의 여정을 나눠 보겠습니다. 유익하고 영감이 되기를 바랍니다!
+이 글에서는 Aori에서 텍스트 애니메이션을 구현하다가 UTF-8 바이트 스트림으로 들어오는 grapheme cluster를 다루는 라이브러리를 만들기까지의 여정을 나눠 보겠습니다. 유익하고 영감이 되기를 바랍니다!
 
 ## 배경
 
@@ -72,7 +72,7 @@ const trioCluster = ['👩‍👧', '‍', '👦']
 
 텍스트 애니메이션은 UI에서 메시지를 멋지게 등장시킬 때 특히 유용합니다. 보통 메시지는 완성된 형태로 도착하므로, 받은 텍스트를 글자로 쪼개서 애니메이션을 주기만 하면 됩니다.
 
-Project AIRI에서는 [@nekomeowww](https://github.com/nekomeowww)도 모션 효과가 들어간 애니메이션 채팅 말풍선 컴포넌트를 만들었습니다:
+Project Aori에서는 [@nekomeowww](https://github.com/nekomeowww)도 모션 효과가 들어간 애니메이션 채팅 말풍선 컴포넌트를 만들었습니다:
 
 <video controls muted autoplay loop max-w="500px" w-full mx-auto>
   <source src="/en/blog/DevLog-2025.08.01/assets/animated-chat-bubble.mp4">
@@ -169,6 +169,6 @@ while (true) {
 
 이 DevLog를 쓰는 시점에도 문자열을 grapheme cluster로 쪼개 주는 좋은 라이브러리는 여럿 있습니다. 하지만 그중에 UTF-8 바이트 스트림을 받아서 도착하는 대로 grapheme cluster를 내보내 주는 건 찾지 못했습니다. 그래서 위에서 설명한 방식으로 직접 하나 만들었고, 유니코드의 "grapheme cluster" 개념과 어감을 맞추려고 [Clustr](https://github.com/sumimakito/clustr)라고 이름 붙였습니다.
 
-핵심 코드는 총 100줄도 되지 않지만, UTF-8 바이트 스트림으로부터 멋진 텍스트 애니메이션을 만들고 싶은 다음 프로젝트에서 — Project AIRI에서 저희가 한 것처럼 — 도움이 될지도 모릅니다.
+핵심 코드는 총 100줄도 되지 않지만, UTF-8 바이트 스트림으로부터 멋진 텍스트 애니메이션을 만들고 싶은 다음 프로젝트에서 — Project Aori에서 저희가 한 것처럼 — 도움이 될지도 모릅니다.
 
-Project AIRI에서 저희가 하는 일이 궁금하시다면 GitHub 저장소 [moeru-ai/airi](https://github.com/moeru-ai/airi)를 확인해 보세요!
+Project Aori에서 저희가 하는 일이 궁금하시다면 GitHub 저장소 [moeru-ai/airi](https://github.com/moeru-ai/airi)를 확인해 보세요!

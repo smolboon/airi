@@ -1,6 +1,6 @@
 ---
 title: Telegram 机器人
-description: 使用 Telegram Bot、Postgres 与模型服务运行 AIRI 消息机器人
+description: 使用 Telegram Bot、Postgres 与模型服务运行 Aori 消息机器人
 ---
 
 Telegram 机器人需要 Telegram Bot Token、Postgres（含 pgvector）和模型服务。它面向从源码运行的集成场景。

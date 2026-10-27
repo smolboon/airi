@@ -24,7 +24,7 @@ onMounted(async () => {
 })
 ```
 
-지난주에는 저희 협력 디자이너/아티스트가 Project AIRI 로고의 기본/첫 버전 커미션을
+지난주에는 저희 협력 디자이너/아티스트가 Project Aori 로고의 기본/첫 버전 커미션을
 제출해 주었습니다. 로고의 느낌은 이렇습니다:
 
 ![](/en/blog/DevLog-2025.03.05/assets/airi-logos-v1.avif)
@@ -63,7 +63,7 @@ onMounted(async () => {
 
 ![](/en/blog/DevLog-2025.03.05/assets/airi-logos-final.avif)
 
-오늘 늦게는 Project AIRI의 [문서 사이트](https://airi.build)를 온라인에 배포하는 작업을 했습니다.
+오늘 늦게는 Project Aori의 [문서 사이트](https://airi.build)를 온라인에 배포하는 작업을 했습니다.
 저와 다른 개발자, 아티스트들이 참고 자료와 가이드라인으로 쓸 수 있도록요.
 
 해냈습니다! 새로 디자인한 로고를 컬러 팔레트와 함께 [문서 사이트](https://airi.build)에 올렸습니다:

@@ -1,12 +1,12 @@
 ---
-title: AIRI official provider
-description: Use AIRI's official chat provider
+title: Aori official provider
+description: Use Aori's official chat provider
 ---
 
-If you want to get started with AIRI quickly and want to simplify configuration, you can use the official provider to enable chat.
+If you want to get started with Aori quickly and want to simplify configuration, you can use the official provider to enable chat.
 
-::: info Why choose AIRI official provider?
-If you want to quickly experience AIRI without configuring a third-party API Key yourself, you can choose the official provider.
+::: info Why choose Aori official provider?
+If you want to quickly experience Aori without configuring a third-party API Key yourself, you can choose the official provider.
 :::
 
 ## Log in to your account
@@ -26,19 +26,19 @@ If you want to quickly experience AIRI without configuring a third-party API Key
 
 ## Check available Flux
 
-Flux is the balance used by AIRI official services. Any initial grant is configured by the current deployment, so check the balance shown in **Settings → Flux** rather than assuming a fixed amount.
+Flux is the balance used by Aori official services. Any initial grant is configured by the current deployment, so check the balance shown in **Settings → Flux** rather than assuming a fixed amount.
 
 ## Enable the provider
 
 1. Open **Settings → Modules → Consciousness**.
 2. Select **Official Provider** and the **Auto** model.
-3. Send a short message and confirm that AIRI replies.
+3. Send a short message and confirm that Aori replies.
 
-AIRI selects the official provider automatically only when no chat provider is already active. If you previously selected another provider, signing in does not replace that selection.
+Aori selects the official provider automatically only when no chat provider is already active. If you previously selected another provider, signing in does not replace that selection.
 
 ## Charge Flux
 
-Open **Settings → Flux** and choose an available package. On desktop, AIRI opens checkout in the system browser and refreshes the balance when the app regains focus. Builds or deployments with purchasing disabled do not offer checkout.
+Open **Settings → Flux** and choose an available package. On desktop, Aori opens checkout in the system browser and refreshes the balance when the app regains focus. Builds or deployments with purchasing disabled do not offer checkout.
 
 ## Troubleshooting
 

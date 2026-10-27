@@ -9,7 +9,7 @@ preview-cover:
   dark: "@assets('/en/blog/DevLog-2025.06.08/assets/250608-dark.avif')"
 ---
 
-안녕하세요, AIRI 메인테이너 중 한 명인 LemonNeko입니다. 오늘의 DevLog 주제는 AIRI 데스크톱 펫의 Live2D 모델이 마우스 위치를 바라보게 만드는 방법입니다.
+안녕하세요, Aori 메인테이너 중 한 명인 LemonNeko입니다. 오늘의 DevLog 주제는 Aori 데스크톱 펫의 Live2D 모델이 마우스 위치를 바라보게 만드는 방법입니다.
 
 ## 생각의 연쇄 「Chain of Thoughts」
 
@@ -31,11 +31,11 @@ Live2D에 커서 위치를 알려 주려면 Tauri의 네이티브 코드 호출 
 
 ![](/en/blog/DevLog-2025.06.08/assets/screen.avif)
 
-파란 상자가 화면, 분홍색이 AIRI 창, 보라색 화살표가 커서입니다. 다음과 같이 정의합니다:
+파란 상자가 화면, 분홍색이 Aori 창, 보라색 화살표가 커서입니다. 다음과 같이 정의합니다:
 
 - 화면 크기: `A x B`
-- AIRI 창의 좌상단 위치: `(E, F)`
-- AIRI 창의 크기: `C x D`
+- Aori 창의 좌상단 위치: `(E, F)`
+- Aori 창의 크기: `C x D`
 - 커서 위치: `G, H`
 
 그러면 창 안에서의 커서 상대 위치는 `(G - E, H - F)`가 됩니다.

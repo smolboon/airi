@@ -1,9 +1,9 @@
 ---
 title: 小米 MiMo
-description: 在 AIRI 中配置小米 MiMo 聊天模型
+description: 在 Aori 中配置小米 MiMo 聊天模型
 ---
 
-小米 MiMo 在 AIRI 中提供聊天模型，并有独立的 TTS 与 STT 服务商页面。
+小米 MiMo 在 Aori 中提供聊天模型，并有独立的 TTS 与 STT 服务商页面。
 
 ::: info 为什么选择小米 MiMo？
 如果你希望在同一 MiMo 账户下使用聊天和音频能力，可以选择它。
@@ -17,7 +17,7 @@ description: 在 AIRI 中配置小米 MiMo 聊天模型
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Xiaomi MiMo**，填写 **API Key**。默认 Base URL 为 `https://api.xiaomimimo.com/v1/`。
 

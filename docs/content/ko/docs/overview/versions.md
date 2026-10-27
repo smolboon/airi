@@ -1,6 +1,6 @@
 ---
 title: 버전
-description: AIRI의 여러 버전과 받는 방법
+description: Aori의 여러 버전과 받는 방법
 ---
 
 <script setup>

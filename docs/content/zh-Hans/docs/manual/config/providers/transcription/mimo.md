@@ -1,6 +1,6 @@
 ---
 title: 小米 MiMo（ASR/STT）
-description: 在 AIRI 中配置小米 MiMo 语音识别
+description: 在 Aori 中配置小米 MiMo 语音识别
 ---
 
 MiMo 使用其原生音频理解模型完成语音转写。
@@ -18,7 +18,7 @@ MiMo 使用其原生音频理解模型完成语音转写。
 不要公开 API Key。使用云端转写会把待识别音频发送给服务商，请先确认你的数据处理要求。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 在 **设置 → 服务商 → 语音识别 → Xiaomi MiMo** 中填写 API Key。
 2. 保留默认 Base URL：`https://api.xiaomimimo.com/v1/`，除非服务商提供了其他地址。
@@ -31,4 +31,4 @@ MiMo 使用其原生音频理解模型完成语音转写。
 
 ## 排查
 
-请求失败时，检查 API Key、模型选择和网络连接。没有文字结果时，确认 AIRI 已获得系统麦克风权限。
+请求失败时，检查 API Key、模型选择和网络连接。没有文字结果时，确认 Aori 已获得系统麦克风权限。

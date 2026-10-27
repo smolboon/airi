@@ -1,6 +1,6 @@
 ---
 title: 도구
-description: Project AIRI의 UI, UX를 디자인하기 위한 도구들
+description: Project Aori의 UI, UX를 디자인하기 위한 도구들
 ---
 
 ## 색상

@@ -3,7 +3,7 @@ title: DevLog @ 2026.03.14
 category: DevLog
 date: 2026-03-14
 excerpt: |
-  PR #1194 이야기 — AIRI의 VRM 3D 스테이지를 디버깅하고 생애주기를 다시 설계하며, 창 단위 캐시를 도입하고 ThreeScene 관측 가능성의 첫 토대를 놓은 과정입니다.
+  PR #1194 이야기 — Aori의 VRM 3D 스테이지를 디버깅하고 생애주기를 다시 설계하며, 창 단위 캐시를 도입하고 ThreeScene 관측 가능성의 첫 토대를 놓은 과정입니다.
 preview-cover:
   light: "@assets('/en/blog/DevLog-2026.03.14/assets/cover-light.avif')"
   dark: "@assets('/en/blog/DevLog-2026.03.14/assets/cover-dark.avif')"
@@ -11,7 +11,7 @@ preview-cover:
 
 안녕하세요, [@Lilia-Chen](https://github.com/Lilia-Chen)입니다.
 
-최근 AIRI의 VRM / Three.js 런타임, 즉 AIRI의 웹·데스크톱·모바일 앱이 공유하는 3D 스테이지를 작업해 왔습니다. 오늘 DevLog는 2026년 3월 8일에 열고 3월 12일에 머지한 [#1194](https://github.com/moeru-ai/airi/pull/1194)에 관한 이야기입니다.
+최근 Aori의 VRM / Three.js 런타임, 즉 Aori의 웹·데스크톱·모바일 앱이 공유하는 3D 스테이지를 작업해 왔습니다. 오늘 DevLog는 2026년 3월 8일에 열고 3월 12일에 머지한 [#1194](https://github.com/moeru-ai/airi/pull/1194)에 관한 이야기입니다.
 
 이야기는 단순합니다. VRM 스테이지가, 생애주기 실수가 렌더링 버그나 성능 버그, 혹은 "영원히 로딩 중" 같은 무작위 버그로 위장하기 너무 쉬운 지점에 이르렀던 것입니다.
 

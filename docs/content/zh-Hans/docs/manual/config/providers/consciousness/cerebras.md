@@ -1,12 +1,12 @@
 ---
 title: Cerebras
-description: 在 AIRI 中配置 Cerebras 聊天模型
+description: 在 Aori 中配置 Cerebras 聊天模型
 ---
 
-Cerebras 在 AIRI 中通过其兼容 API 提供聊天模型。
+Cerebras 在 Aori 中通过其兼容 API 提供聊天模型。
 
 ::: info 为什么选择 Cerebras？
-如果你已使用 Cerebras API，并希望在 AIRI 中调用账户可用模型，可以选择它。
+如果你已使用 Cerebras API，并希望在 Aori 中调用账户可用模型，可以选择它。
 :::
 
 ## 第一步：获取 API Key
@@ -17,7 +17,7 @@ Cerebras 在 AIRI 中通过其兼容 API 提供聊天模型。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Cerebras**，填写 **API Key**。默认 Base URL 为 `https://api.cerebras.ai/v1/`。
 

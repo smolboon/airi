@@ -12,7 +12,7 @@
   <img width="250" src="./content/public/banner-light-1280x640.avif" />
 </picture>
 
-<h1 align="center">Dự án AIRI</h1>
+<h1 align="center">Dự án Aori</h1>
 
 <p align="center">Lấy ý tưởng từ Neuro-sama và chúng tôi đã tạo ra một AI waifu / nhân vật ảo để mang họ đến với thế giới của chúng ta.</p>
 
@@ -32,7 +32,7 @@
 
 <p float="left" align="center">
   <!-- readme-section:release-binary-windows -->
-  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-windows-x64-setup.exe">
+  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/Aori-0.12.0-beta.5-windows-x64-setup.exe">
     <picture>
       <source
         width="33%"
@@ -48,7 +48,7 @@
     </picture>
   </a>
   <!-- readme-section:release-binary-macos -->
-  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-darwin-arm64.dmg">
+  <a href="https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/Aori-0.12.0-beta.5-darwin-arm64.dmg">
     <picture>
       <source
         width="33%"
@@ -128,27 +128,27 @@
 </p>
 
 <p align="center">
-  <a href="https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380" alt="AIRI - Một bình chứa linh hồn số, tái tạo Neuro-sama | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+  <a href="https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380" alt="Aori - Một bình chứa linh hồn số, tái tạo Neuro-sama | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
   <a href="https://trendshift.io/repositories/14636" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14636" alt="moeru-ai%2Fairi | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
 
 > Lấy cảm hứng mạnh mẽ từ [Neuro-sama](https://www.youtube.com/@Neurosama)
 
 > [!TIP]
-> Trên Windows, bạn có thể cài AIRI bằng [winget](https://learn.microsoft.com/windows/package-manager/winget/):
+> Trên Windows, bạn có thể cài Aori bằng [winget](https://learn.microsoft.com/windows/package-manager/winget/):
 >
 > ```powershell
-> winget install MoeruAI.AIRI
+> winget install MoeruAI.Aori
 > ```
 >
-> Hoặc cài AIRI bằng [Scoop](https://scoop.sh/):
+> Hoặc cài Aori bằng [Scoop](https://scoop.sh/):
 >
 > ```powershell
 > scoop bucket add airi https://github.com/moeru-ai/airi
 > scoop install airi/airi
 > ```
 >
-> Trên macOS, bạn có thể cài AIRI bằng [Homebrew Cask](https://brew.sh/) mà không cần thêm custom tap:
+> Trên macOS, bạn có thể cài Aori bằng [Homebrew Cask](https://brew.sh/) mà không cần thêm custom tap:
 >
 > ```sh
 > brew install --cask airi
@@ -159,12 +159,12 @@
 
 > [!NOTE]
 >
-> Chúng tôi có cả một tổ chức riêng [@proj-airi](https://github.com/proj-airi) cho các dự án con xuất phát từ AIRI. Hãy xem qua nhé!
+> Chúng tôi có cả một tổ chức riêng [@proj-airi](https://github.com/proj-airi) cho các dự án con xuất phát từ Aori. Hãy xem qua nhé!
 >
 > Bao gồm: RAG, hệ thống bộ nhớ, cơ sở dữ liệu nhúng, icon, tiện ích Live2D, và nhiều hơn nữa.
 
 > [!TIP]
-> Bạn có thể dịch AIRI trên [Crowdin](https://crowdin.com/project/proj-airi) hoặc mở một pull request thay đổi `packages/i18n/src/locales/`. Cả hai cách đều cập nhật cùng các bản dịch.
+> Bạn có thể dịch Aori trên [Crowdin](https://crowdin.com/project/proj-airi) hoặc mở một pull request thay đổi `packages/i18n/src/locales/`. Cả hai cách đều cập nhật cùng các bản dịch.
 >
 > Không gửi bản dịch giống hệt văn bản tiếng Anh. Bản dịch đó bị từ chối khi xét duyệt. Chuỗi chưa có bản dịch sẽ hiển thị văn bản tiếng Anh.
 >
@@ -178,20 +178,20 @@ Với sức mạnh của các mô hình LLM (ngôn ngữ lớn) hiện nay như 
 
 Có lẽ bạn đã biết [Neuro-sama](https://www.youtube.com/@Neurosama). Cô ấy là VTuber ảo xuất sắc nhất hiện nay, có thể vừa chơi game, vừa trò chuyện và tương tác với bạn cũng như khán giả. Một số người còn gọi đây là “con người số” (digital human). **Đáng tiếc, vì không mã nguồn mở, bạn không thể tương tác với cô ấy khi buổi livestream kết thúc.**
 
-Do đó, dự án AIRI mang đến một lựa chọn khác: **cho phép bạn sở hữu thực thể số của riêng mình, dễ dàng, mọi lúc, mọi nơi.**
+Do đó, dự án Aori mang đến một lựa chọn khác: **cho phép bạn sở hữu thực thể số của riêng mình, dễ dàng, mọi lúc, mọi nơi.**
 
 ## DevLog và câu chuyện gần đây
 
 - [DevLog @ 2026.03.23: Hiệu năng di động và hướng đi với game engine](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - ngày 23 tháng 3, 2026
 - [DevLog @ 2026.03.14: Vòng đời, bộ nhớ đệm và khả năng quan sát cho sân khấu VRM](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - ngày 14 tháng 3, 2026
 - [DevLog @ 2026.02.16: Thu thập dữ liệu Dome Keeper và pipeline huấn luyện](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - ngày 16 tháng 2, 2026
-- [DevLog @ 2026.01.01: AIRI Pocket và thử nghiệm bộ nhớ trong FlowChat](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - ngày 1 tháng 1, 2026
+- [DevLog @ 2026.01.01: Aori Pocket và thử nghiệm bộ nhớ trong FlowChat](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - ngày 1 tháng 1, 2026
 - [DevLog @ 2025.10.20: Chuyển sang Electron, model mới và cập nhật Moeru AI](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - ngày 20 tháng 10, 2025
 - [DevLog @ 2025.08.26: Tiến triển hướng thị giác thuần túy cho airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - ngày 26 tháng 8, 2025
-- [DevLog @ 2025.08.05: Điểm nổi bật của AIRI v0.7](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - ngày 5 tháng 8, 2025
+- [DevLog @ 2025.08.05: Điểm nổi bật của Aori v0.7](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - ngày 5 tháng 8, 2025
 - [DevLog @ 2025.08.01: Hoạt ảnh văn bản streaming và grapheme cluster](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - ngày 1 tháng 8, 2025
 - [DevLog @ 2025.07.18: Nghĩ lại về airi-factorio với Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - ngày 18 tháng 7, 2025
-- [DreamLog 0x1: Câu chuyện phía sau Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - ngày 16 tháng 6, 2025
+- [DreamLog 0x1: Câu chuyện phía sau Project Aori](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - ngày 16 tháng 6, 2025
 - ...xem thêm tại [docs page](https://airi.moeru.ai/docs)
 
 ## Dự Án Này Có Gì Đặc Biệt?
@@ -201,7 +201,7 @@ Khác với các dự án VTuber AI mã nguồn mở khác, **アイリ** đư�
 > [!TIP]
 > Bạn lo lắng về hiệu năng khi chúng tôi dùng công nghệ Web?
 >
-> Đừng lo, phiên bản chạy trên trình duyệt chỉ nhằm minh hoạ khả năng có thể đạt được trong browser và webview. Phiên bản desktop của AIRI mặc định có thể dùng [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit) và [Apple Metal](https://developer.apple.com/metal/) (nhờ HuggingFace & dự án [candle](https://github.com/huggingface/candle)), mà không cần quản lý phụ thuộc phức tạp. Đồ hoạ, bố cục, animation, và hệ thống plugin (WIP) vẫn tận dụng công nghệ Web để mở rộng dễ dàng.
+> Đừng lo, phiên bản chạy trên trình duyệt chỉ nhằm minh hoạ khả năng có thể đạt được trong browser và webview. Phiên bản desktop của Aori mặc định có thể dùng [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit) và [Apple Metal](https://developer.apple.com/metal/) (nhờ HuggingFace & dự án [candle](https://github.com/huggingface/candle)), mà không cần quản lý phụ thuộc phức tạp. Đồ hoạ, bố cục, animation, và hệ thống plugin (WIP) vẫn tận dụng công nghệ Web để mở rộng dễ dàng.
 
 Điều này có nghĩa là **アイリ có thể chạy trên các trình duyệt và thiết bị hiện đại**, kể cả thiết bị di động (đã hỗ trợ PWA). Điều này mở ra nhiều khả năng để chúng tôi (nhà phát triển) nâng VTuber アイリ lên tầm cao mới, đồng thời vẫn để người dùng linh hoạt bật các tính năng cần TCP hoặc công nghệ ngoài Web như kết nối kênh thoại Discord hay chơi Minecraft, Factorio với bạn bè.
 
@@ -229,7 +229,7 @@ Khác với các dự án VTuber AI mã nguồn mở khác, **アイリ** đư�
 > - Three.js
 > - WebXR ([xem thêm dự án khác](https://github.com/moeru-ai/chat) của tổ chức @moeru-ai)
 >
-> **Nếu bạn hứng thú, hãy giới thiệu bản thân ở đây: [Muốn tham gia cùng chúng tôi xây dựng AIRI?](https://github.com/moeru-ai/airi/discussions/33)**
+> **Nếu bạn hứng thú, hãy giới thiệu bản thân ở đây: [Muốn tham gia cùng chúng tôi xây dựng Aori?](https://github.com/moeru-ai/airi/discussions/33)**
 
 ## Tiến độ hiện tại và lộ trình
 
@@ -391,7 +391,7 @@ npx bumpp --no-commit --no-tag
 - [WebAI: Realtime Voice Chat](https://github.com/proj-airi/webai-realtime-voice-chat): Ví dụ đầy đủ về việc triển khai voice realtime của ChatGPT từ đầu với VAD + STT + LLM + TTS.
 - [`@proj-airi/drizzle-duckdb-wasm`](https://github.com/moeru-ai/airi/tree/main/packages/drizzle-duckdb-wasm/README.md): Trình điều khiển Drizzle ORM cho DuckDB WASM
 - [`@proj-airi/duckdb-wasm`](https://github.com/moeru-ai/airi/tree/main/packages/duckdb-wasm/README.md): Wrapper dễ sử dụng cho `@duckdb/duckdb-wasm`
-- [AIRI Factorio](https://github.com/moeru-ai/airi-factorio): Cho phép AIRI chơi Factorio
+- [Aori Factorio](https://github.com/moeru-ai/airi-factorio): Cho phép Aori chơi Factorio
 - [Factorio RCON API](https://github.com/nekomeowww/factorio-rcon-api): RESTful API wrapper cho console máy chủ headless Factorio
 - [`autorio`](https://github.com/moeru-ai/airi-factorio/tree/main/packages/autorio): Thư viện tự động hóa Factorio
 - [`tstl-plugin-reload-factorio-mod`](https://github.com/moeru-ai/airi-factorio/tree/main/packages/tstl-plugin-reload-factorio-mod): Tự động tải tạo lại mod Factorio khi đang phát triển
@@ -491,16 +491,16 @@ flowchart LR
 ## Nhà tài trợ
 
 <p align="center">
-  <strong>Cảm ơn bạn đã hỗ trợ Project AIRI qua OpenCollective, Patreon và Ko-fi.</strong>
+  <strong>Cảm ơn bạn đã hỗ trợ Project Aori qua OpenCollective, Patreon và Ko-fi.</strong>
 </p>
 
 <p align="center">
-  <img src="./content/public/assets/sponsors/sponsors.svg" alt="Project AIRI supporters" />
+  <img src="./content/public/assets/sponsors/sponsors.svg" alt="Project Aori supporters" />
 </p>
 
 ## Lời cảm ơn đặc biệt
 
-Đặc biệt cảm ơn tất cả những người đóng góp vì những đóng góp của họ cho Project AIRI ❤️
+Đặc biệt cảm ơn tất cả những người đóng góp vì những đóng góp của họ cho Project Aori ❤️
 
 <a href="https://github.com/moeru-ai/airi/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=moeru-ai/airi" />

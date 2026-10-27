@@ -1,9 +1,9 @@
 ---
 title: Minecraft 智能体
-description: 在受信任的 Minecraft 服务器上运行 AIRI 的本地游戏智能体
+description: 在受信任的 Minecraft 服务器上运行 Aori 的本地游戏智能体
 ---
 
-Minecraft 集成会通过 Mineflayer 连接 AIRI 与 Minecraft 服务器，让智能体接收上下文、执行游戏内动作并回传状态。它面向本地开发和维护；当前实现正计划迁移到 Fabric 运行时，不建议围绕它开发新的长期功能。
+Minecraft 集成会通过 Mineflayer 连接 Aori 与 Minecraft 服务器，让智能体接收上下文、执行游戏内动作并回传状态。它面向本地开发和维护；当前实现正计划迁移到 Fabric 运行时，不建议围绕它开发新的长期功能。
 
 ::: warning 温馨提示
 目前 Minecraft 智能体仅支持从源码安装使用，参考[这里](https://airi.moeru.ai/docs/zh-Hans/docs/contributing/)建立本地开发环境以体验。
@@ -18,12 +18,12 @@ pnpm i
 ~~~
 
 * 可访问的本地或受信任 Minecraft 服务器；连接地址与端口由配置文件提供。
-* 可用的 AIRI 与模型服务配置。
+* 可用的 Aori 与模型服务配置。
 * 可用的 openai 兼容 API。
 
 ::: warning 凭据安全
 API Key、服务地址和 Minecraft 服务器凭据只应保存在本地 **.env.local** 文件中。不要提交、截图或发送这些配置。
-这里配置的 API Key 与 AIRI 本体不相同且不互通，建议为 Minecraft 服务配置独立的Key。
+这里配置的 API Key 与 Aori 本体不相同且不互通，建议为 Minecraft 服务配置独立的Key。
 :::
 
 ## 配置
@@ -32,9 +32,9 @@ API Key、服务地址和 Minecraft 服务器凭据只应保存在本地 **.env.
 cp integrations/minecraft/.env integrations/minecraft/.env.local
 ~~~
 
-编辑 **integrations/minecraft/.env.local**，填写 Minecraft 服务器、AIRI 与模型服务所需的配置。
+编辑 **integrations/minecraft/.env.local**，填写 Minecraft 服务器、Aori 与模型服务所需的配置。
 
-在桌面版中，打开 **设置 → 连接**。显示并复制 **Auth Token**。然后添加以下 AIRI 通道配置：
+在桌面版中，打开 **设置 → 连接**。显示并复制 **Auth Token**。然后添加以下 Aori 通道配置：
 
 ~~~env
 AIRI_WS_BASEURL=ws://localhost:6121/ws
@@ -63,8 +63,8 @@ AIRI_WS_TOKEN=<Auth Token from Settings → Connection>
 pnpm -F @proj-airi/minecraft-bot dev
 ~~~
 
-启动后，智能体会连接 AIRI 和 Minecraft 服务器。开发环境可查看终端日志确认连接和动作状态。
-在游戏中发送文字即可与 AIRI 交互
+启动后，智能体会连接 Aori 和 Minecraft 服务器。开发环境可查看终端日志确认连接和动作状态。
+在游戏中发送文字即可与 Aori 交互
 
 ## 安全与限制
 

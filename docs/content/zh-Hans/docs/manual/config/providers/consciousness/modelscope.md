@@ -1,9 +1,9 @@
 ---
 title: ModelScope
-description: 在 AIRI 中配置 ModelScope 聊天模型
+description: 在 Aori 中配置 ModelScope 聊天模型
 ---
 
-ModelScope 在 AIRI 中通过其推理 API 提供聊天模型。
+ModelScope 在 Aori 中通过其推理 API 提供聊天模型。
 
 ::: info 为什么选择 ModelScope？
 如果你已在 ModelScope 中管理模型访问，使用此卡片可以直接填写对应 API Key。
@@ -17,7 +17,7 @@ ModelScope 在 AIRI 中通过其推理 API 提供聊天模型。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → ModelScope**，填写 **API Key**。默认 Base URL 为 `https://api-inference.modelscope.cn/v1/`。
 

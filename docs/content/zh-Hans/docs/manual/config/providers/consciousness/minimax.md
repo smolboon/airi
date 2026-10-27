@@ -1,10 +1,10 @@
 ---
 title: MiniMax（中国大陆）
-description: 在 AIRI 中配置中国大陆版 MiniMax 作为大模型服务商
+description: 在 Aori 中配置中国大陆版 MiniMax 作为大模型服务商
 is_openai_compatible: true
 ---
 
-本页适用于在中国大陆 MiniMax 开放平台创建的 API Key。MiniMax 提供兼容 OpenAI 格式的聊天 API；完成配置后，AIRI 可以在“意识”中使用其模型。
+本页适用于在中国大陆 MiniMax 开放平台创建的 API Key。MiniMax 提供兼容 OpenAI 格式的聊天 API；完成配置后，Aori 可以在“意识”中使用其模型。
 
 ::: info 为什么选择 MiniMax？
 如果你在中国大陆 MiniMax 开放平台创建 API Key，应选择此服务商。海外平台创建的 Key 请使用 [MiniMax Global](./minimax-global.md)。
@@ -20,7 +20,7 @@ is_openai_compatible: true
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 MiniMax 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → MiniMax**。
 2. 将 API Key 粘贴到基础设置。

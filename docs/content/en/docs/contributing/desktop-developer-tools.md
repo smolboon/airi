@@ -58,7 +58,7 @@ When investigating flickering, pages that do not unload, or slow transitions, te
 
 ### useMagicKeys
 
-This page shows keyboard shortcut and modifier-key state so you can confirm that the app receives key events correctly. It has no regular user settings. To change AIRI's Spotlight shortcut, use **Settings → System → Window Shortcuts** instead.
+This page shows keyboard shortcut and modifier-key state so you can confirm that the app receives key events correctly. It has no regular user settings. To change Aori's Spotlight shortcut, use **Settings → System → Window Shortcuts** instead.
 
 ### useElectronWindowMouse, Displays, and Relative Mouse
 
@@ -66,13 +66,13 @@ These tools show pointer positions in different coordinate systems:
 
 - **useElectronWindowMouse** shows the pointer in the desktop coordinate space formed by all displays.
 - **Displays** shows connected displays and the pointer's current location. Use it for multi-display, scaling, or external-monitor problems.
-- **Relative Mouse** shows the pointer relative to the AIRI window. Use it to test hit areas and dragging inside the window.
+- **Relative Mouse** shows the pointer relative to the Aori window. Use it to test hit areas and dragging inside the window.
 
 When reporting window-following, click-offset, or multi-display positioning problems, include the display arrangement, scale factors, primary display, and reproduction steps.
 
 ### Widgets Calling
 
-Widgets Calling creates overlay widgets and validates the component props passed to them. It is intended for desktop-overlay and component-call development; regular AIRI use does not require it.
+Widgets Calling creates overlay widgets and validates the component props passed to them. It is intended for desktop-overlay and component-call development; regular Aori use does not require it.
 
 ### Beat Sync Visualizer
 
@@ -82,7 +82,7 @@ Beat Sync Visualizer plots beat-synchronized V-motion targets, paths, and Y/Z sc
 
 ### Context Flow
 
-Context Flow shows context updates entering the chat pipeline and chat-stream events sent to services. It is useful for confirming that context from plugins, VS Code, and other external sources reaches AIRI.
+Context Flow shows context updates entering the chat pipeline and chat-stream events sent to services. It is useful for confirming that context from plugins, VS Code, and other external sources reaches Aori.
 
 Open the tool first, perform the smallest reproduction, and then compare the input context and output events in chronological order. Context can contain filenames, conversations, or other private information; redact logs before sharing them.
 
@@ -114,7 +114,7 @@ For routine updates, prefer the **About** window. Do not override the update sou
 
 Screen Capture can capture an application window or an entire display and create a video or audio stream. It is primarily a test page for screen-sharing and capture behavior.
 
-The operating system may request screen-recording permission on first use. On macOS, if AIRI is not listed, enable or add it under **System Settings → Privacy & Security → Screen & System Audio Recording**, restart AIRI, and try again. Permission prompts on Windows and Linux depend on the operating system, desktop environment, and Electron version.
+The operating system may request screen-recording permission on first use. On macOS, if Aori is not listed, enable or add it under **System Settings → Privacy & Security → Screen & System Audio Recording**, restart Aori, and try again. Permission prompts on Windows and Linux depend on the operating system, desktop environment, and Electron version.
 
 In the tool, **Applications** lists application windows and **Displays** lists entire screens. The current implementation does not supply external sources to the **Devices** tab, so that tab remains empty. Use **Refetch** after connecting or disconnecting a display, opening a window, or changing permissions. After stopping, confirm that the preview has closed so the stream no longer uses system resources or permissions.
 
@@ -128,10 +128,10 @@ To test screen vision:
 2. Open **Settings → Modules → Vision**, then select the configured provider and an image-capable model.
 3. Open **Settings → System → Developer → Vision Capture** and grant the operating system's screen-recording permission.
 4. Choose a window or display, then select **Start ticker** to begin capturing and analyzing frames.
-5. Enable **Publish to character** only when you want recognition results added to AIRI's conversation context.
+5. Enable **Publish to character** only when you want recognition results added to Aori's conversation context.
 6. Select **Stop ticker** when finished. Leaving the page also stops the capture loop.
 
-If the page remains on a permission prompt, grant permission in the operating system, fully quit AIRI, restart it, and reopen the tool. Never publish captures that show a personal desktop, notifications, or content from other applications.
+If the page remains on a permission prompt, grant permission in the operating system, fully quit Aori, restart it, and reopen the tool. Never publish captures that show a personal desktop, notifications, or content from other applications.
 
 ## Global shortcuts
 

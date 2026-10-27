@@ -1,10 +1,10 @@
 ---
 title: OpenPaths
-description: 在 AIRI 中配置 OpenPaths 作为大模型服务商
+description: 在 Aori 中配置 OpenPaths 作为大模型服务商
 is_openai_compatible: true
 ---
 
-OpenPaths 是一个兼容 OpenAI 格式的聊天 API 服务商。完成本页配置后，AIRI 可以在"意识"中使用 OpenPaths 提供的聊天模型。
+OpenPaths 是一个兼容 OpenAI 格式的聊天 API 服务商。完成本页配置后，Aori 可以在"意识"中使用 OpenPaths 提供的聊天模型。
 
 ::: info 为什么选择 OpenPaths？
 如果你已经拥有 OpenPaths API Key，或希望使用其提供的模型，可以直接选择此服务商。
@@ -19,7 +19,7 @@ OpenPaths 是一个兼容 OpenAI 格式的聊天 API 服务商。完成本页配
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 OpenPaths 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → OpenPaths**。
 2. 将 API Key 粘贴到基础设置。

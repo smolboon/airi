@@ -1,13 +1,13 @@
 ---
 title: DeepSeek
-description: 在 AIRI 中配置 DeepSeek 作为大模型服务商
+description: 在 Aori 中配置 DeepSeek 作为大模型服务商
 is_openai_compatible: true
 ---
 
-DeepSeek 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 可以在“意识”中使用 DeepSeek 提供的模型。
+DeepSeek 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，Aori 可以在“意识”中使用 DeepSeek 提供的模型。
 
 ::: info 为什么选择 DeepSeek？
-如果你希望在 AIRI 中使用 DeepSeek 模型，或已经拥有 DeepSeek API Key，可以直接选择此服务商。
+如果你希望在 Aori 中使用 DeepSeek 模型，或已经拥有 DeepSeek API Key，可以直接选择此服务商。
 :::
 
 ## 第一步：获取 API 密钥
@@ -20,7 +20,7 @@ DeepSeek 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 DeepSeek 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → DeepSeek**。
 2. 将 API Key 粘贴到基础设置。

@@ -1,6 +1,6 @@
 ---
 title: Azure OpenAI
-description: 在 AIRI 中配置 Azure OpenAI 聊天模型
+description: 在 Aori 中配置 Azure OpenAI 聊天模型
 ---
 
 Azure OpenAI 通过你的 Azure 资源端点和部署访问模型。
@@ -17,10 +17,10 @@ Azure OpenAI 通过你的 Azure 资源端点和部署访问模型。
 不要将 Azure API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Azure OpenAI**，填写 **API Key** 和 Azure OpenAI 端点。
-2. 建议填写控制台提供的完整 Chat Completions 地址；如果地址中包含部署名与 `api-version`，AIRI 会据此识别配置。
+2. 建议填写控制台提供的完整 Chat Completions 地址；如果地址中包含部署名与 `api-version`，Aori 会据此识别配置。
 
 ## 第三步：验证配置
 

@@ -1,10 +1,10 @@
 ---
 title: Groq
-description: 在 AIRI 中配置 Groq 作为大模型服务商
+description: 在 Aori 中配置 Groq 作为大模型服务商
 is_openai_compatible: true
 ---
 
-Groq 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 可以在“意识”中使用 Groq 提供的模型。
+Groq 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，Aori 可以在“意识”中使用 Groq 提供的模型。
 
 ::: info 为什么选择 Groq？
 如果你重视对话响应速度，并且目标模型在 Groq 中可用，可以尝试此服务商。
@@ -20,7 +20,7 @@ Groq 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 可�
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 Groq 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Groq**。
 2. 将 API Key 粘贴到基础设置。

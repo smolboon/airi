@@ -4,7 +4,7 @@ Status: Accepted
 
 ## Context
 
-The desktop main view reports nothing about what AIRI is doing. A model turn
+The desktop main view reports nothing about what Aori is doing. A model turn
 looks the same as an idle window, and messages that arrive while the chat window
 is hidden leave no trace on the stage. A user who leaves speech-to-text enabled
 can spend provider quota for a long time before anything on screen suggests it.
@@ -88,7 +88,7 @@ stateDiagram-v2
   in the same frame as the model.
 - The bubble needs no `data-ambient-light-opaque` marker. That marker exists for
   overlays outside the canvas; the ambient-light mask reads canvas alpha and
-  already counts anything drawn in the scene as AIRI's own pixels.
+  already counts anything drawn in the scene as Aori's own pixels.
 - Unread requires a read cursor, which this repository does not have. The chat
   window is a separate Electron window and `electronOpenChat` toggles it without
   reporting the result, so the main window cannot currently tell whether the chat

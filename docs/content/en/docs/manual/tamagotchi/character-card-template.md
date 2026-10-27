@@ -1,12 +1,12 @@
 ---
 title: Character Card Template
-description: Character Card V3 card.json template for an AIRI Card package
+description: Character Card V3 card.json template for an Aori Card package
 ---
 
-This is a minimal Character Card V3 template for the `card.json` file inside an AIRI Card package. Replace the example content with your own character details while keeping the field names and hierarchy unchanged.
+This is a minimal Character Card V3 template for the `card.json` file inside an Aori Card package. Replace the example content with your own character details while keeping the field names and hierarchy unchanged.
 
 ::: warning The JSON file cannot be imported by itself
-The current AIRI Card upload control accepts a `.zip` package containing both `manifest.json` and `card.json` at its root. Saving only the JSON shown below and uploading it directly will fail.
+The current Aori Card upload control accepts a `.zip` package containing both `manifest.json` and `card.json` at its root. Saving only the JSON shown below and uploading it directly will fail.
 :::
 
 ::: tip Editing tips
@@ -36,10 +36,10 @@ Use this minimal `manifest.json`:
 }
 ```
 
-An AIRI-exported package may also contain a supported display model under `models/` and describe it in `manifest.json`. The two-file structure above is sufficient for a card without a bundled display model.
+An Aori-exported package may also contain a supported display model under `models/` and describe it in `manifest.json`. The two-file structure above is sufficient for a card without a bundled display model.
 
-::: warning AIRI Card packages are not lossless CCv3 backups
-AIRI imports an explicit whitelist of character fields and AIRI module settings. It preserves the fields shown in the template below, but discards unsupported CCv3 metadata such as `group_only_greetings`, `mes_example`, `creator`, and `tags`. Third-party extensions and unsupported fields inside `extensions.airi` are also removed. Keep a separate copy of the original card if you need a lossless backup.
+::: warning Aori Card packages are not lossless CCv3 backups
+Aori imports an explicit whitelist of character fields and Aori module settings. It preserves the fields shown in the template below, but discards unsupported CCv3 metadata such as `group_only_greetings`, `mes_example`, `creator`, and `tags`. Third-party extensions and unsupported fields inside `extensions.airi` are also removed. Keep a separate copy of the original card if you need a lossless backup.
 :::
 
 ## `card.json` template

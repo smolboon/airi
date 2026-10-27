@@ -1,13 +1,13 @@
 ---
 title: Perplexity
-description: 在 AIRI 中配置 Perplexity 作为大模型服务商
+description: 在 Aori 中配置 Perplexity 作为大模型服务商
 is_openai_compatible: true
 ---
 
-Perplexity 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 可以在“意识”中使用 Perplexity 提供的模型。
+Perplexity 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，Aori 可以在“意识”中使用 Perplexity 提供的模型。
 
 ::: info 为什么选择 Perplexity？
-如果你已有 Perplexity API 账户，并希望在 AIRI 中使用其可用模型，可以选择此服务商。
+如果你已有 Perplexity API 账户，并希望在 Aori 中使用其可用模型，可以选择此服务商。
 :::
 
 ## 第一步：获取 API 密钥
@@ -20,7 +20,7 @@ Perplexity 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIR
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 Perplexity 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Perplexity**。
 2. 将 API Key 粘贴到基础设置。

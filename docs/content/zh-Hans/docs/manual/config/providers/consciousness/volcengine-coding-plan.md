@@ -1,9 +1,9 @@
 ---
 title: 火山引擎 Coding Plan
-description: 在 AIRI 中配置火山引擎 Coding Plan 聊天模型
+description: 在 Aori 中配置火山引擎 Coding Plan 聊天模型
 ---
 
-火山引擎 Coding Plan 在 AIRI 中以独立服务商卡片提供。
+火山引擎 Coding Plan 在 Aori 中以独立服务商卡片提供。
 
 ::: info 为什么选择火山引擎 Coding Plan？
 如果你的账户使用火山引擎 Coding Plan，应选择该卡片以匹配对应服务计划。
@@ -17,7 +17,7 @@ description: 在 AIRI 中配置火山引擎 Coding Plan 聊天模型
 不要将 API Key 或端点凭据提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Volcengine Coding Plan**，按火山引擎控制台填写该计划的 API Key、端点和模型信息。
 

@@ -13,7 +13,7 @@ import airiFactorioYoloV0PlaygroundVnc from '../../../en/blog/DevLog-2025.08.26/
 import NmsIou from '../../../en/blog/DevLog-2025.08.26/components/nms-iou.vue'
 </script>
 
-오랜만입니다, 여러분! AIRI 메인테이너 중 한 명인 [@LemonNeko](https://github.com/LemonNekoGH)입니다. ~~아, 이렇게 시작하는 것도 슬슬 지겹네요. 꼭 LLM 같잖아요.~~
+오랜만입니다, 여러분! Aori 메인테이너 중 한 명인 [@LemonNeko](https://github.com/LemonNekoGH)입니다. ~~아, 이렇게 시작하는 것도 슬슬 지겹네요. 꼭 LLM 같잖아요.~~
 
 지난 [DevLog](../DevLog-2025.07.18/)에서는 [Factorio Learning Environment](https://arxiv.org/abs/2503.09617) 논문을 간단히 살펴보고 `airi-factorio`를 어떻게 개선할지 이야기했습니다. 그런데... 오늘 나눌 이야기는 그것이 아니라 순수 비전 방향에서의 진전입니다.
 

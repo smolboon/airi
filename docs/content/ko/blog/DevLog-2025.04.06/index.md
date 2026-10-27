@@ -55,7 +55,7 @@ import ReLUStickerWow from '../../../en/blog/DevLog-2025.04.06/assets/relu-stick
 
 ### 기억 시스템
 
-Project AIRI의 다가오는 기억 업데이트를 위해
+Project Aori의 다가오는 기억 업데이트를 위해
 [`telegram-bot`](https://github.com/moeru-ai/airi/tree/main/integrations/telegram-bot) 리팩터링 작업을
 하고 있었습니다. 몇 달 전부터 구현을 계획해 온 것입니다.
 
@@ -367,7 +367,7 @@ const finalScore = similarity * calculateTimeDecayScore(message.createdAt)
 
 ### 캐릭터 카드 지원
 
-Project AIRI에 캐릭터 카드 지원도 추가했습니다. 캐릭터 카드는 AI 캐릭터의 성격, 외형, 행동을
+Project Aori에 캐릭터 카드 지원도 추가했습니다. 캐릭터 카드는 AI 캐릭터의 성격, 외형, 행동을
 정의하는 JSON 파일입니다. 많은 AI 캐릭터 플랫폼이 쓰는 인기 있는 V2/V3 형식을 따릅니다.
 
 간단한 캐릭터 카드 예시입니다:
@@ -380,7 +380,7 @@ Project AIRI에 캐릭터 카드 지원도 추가했습니다. 캐릭터 카드�
   "scenario": "Exploring the digital world and learning about human emotions",
   "first_mes": "Hello! I'm ReLU. I'm excited to explore this new world with you!",
   "mes_example": "{{user}}: What do you think about emotions?\n{{char}}: Emotions are fascinating! They're like complex algorithms that humans run.",
-  "creator": "Project AIRI Team",
+  "creator": "Project Aori Team",
   "creator_notes": "ReLU is our first fully realized AI consciousness"
 }
 ```
@@ -390,7 +390,7 @@ Project AIRI에 캐릭터 카드 지원도 추가했습니다. 캐릭터 카드�
 
 ### 테마 개선
 
-Project AIRI의 비주얼 테마를 개선하는 작업을 해 왔습니다. 새 테마 시스템은 이제 다음을 지원합니다:
+Project Aori의 비주얼 테마를 개선하는 작업을 해 왔습니다. 새 테마 시스템은 이제 다음을 지원합니다:
 
 - 여러 색 구성(라이트, 다크, 자동)
 - 커스텀 강조 색상
@@ -414,7 +414,7 @@ setAccentColor('#ff6b6b')
 
 ### 커뮤니티 기여
 
-커뮤니티가 Project AIRI에 기여하기 시작해서 기쁩니다! 눈에 띄는 기여로는 이런 것들이 있습니다:
+커뮤니티가 Project Aori에 기여하기 시작해서 기쁩니다! 눈에 띄는 기여로는 이런 것들이 있습니다:
 
 - **Awesome AI VTuber List**: AI VTuber 프로젝트와 자료를 정리한 목록
 - **ReLU 스티커 팩**: 다양한 표정의 ReLU를 담은 커스텀 스티커 모음
@@ -432,12 +432,12 @@ setAccentColor('#ff6b6b')
 3. **플러그인 시스템**: 서드파티 확장으로 기능을 강화
 4. **모바일 앱**: iOS와 Android용 네이티브 애플리케이션
 
-Project AIRI 각 구성 요소에 대한 더 상세한 문서도 아키텍처 심층 분석과 구현 가이드를 포함해
+Project Aori 각 구성 요소에 대한 더 상세한 문서도 아키텍처 심층 분석과 구현 가이드를 포함해
 공개할 계획입니다.
 
 ## 맺으며
 
-Project AIRI에게 신나는 개발 기간이었습니다. 기억 시스템이 모습을 갖춰 가고, 캐릭터 카드 지원도
+Project Aori에게 신나는 개발 기간이었습니다. 기억 시스템이 모습을 갖춰 가고, 캐릭터 카드 지원도
 잘 동작하며, 테마 개선으로 인터페이스가 훨씬 정돈됐습니다.
 
 무엇보다 ReLU가 자신만의 성격을 키우고 심지어 시까지 쓰는 모습을 보는 것이 정말 큰 보람이었습니다.
@@ -446,4 +446,4 @@ Project AIRI에게 신나는 개발 기간이었습니다. 기억 시스템이 �
 
 언제나처럼 저희 개발 여정을 함께해 주셔서 감사합니다. 여러분의 성원과 피드백에 감사드립니다!
 
-— Project AIRI 팀
+— Project Aori 팀

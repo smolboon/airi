@@ -197,7 +197,7 @@ export function planExtensionActivation(input: ActivationPlannerInput): Activati
         extensionIds: [extensionId],
         requestedVersion: manifest.engines.airi,
         providerVersion: input.airiVersion,
-        message: `Extension "${extensionId}" requires AIRI ${manifest.engines.airi}, but the Host runs ${input.airiVersion}.`,
+        message: `Extension "${extensionId}" requires Aori ${manifest.engines.airi}, but the Host runs ${input.airiVersion}.`,
       })
     }
   }

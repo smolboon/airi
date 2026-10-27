@@ -6,7 +6,7 @@ date: 2025-03-06
 
 ## 데자뷔
 
-전날에는 DevStream에서 AIRI의 기본 애니메이션과 전환 효과를 만드는 진행 상황을
+전날에는 DevStream에서 Aori의 기본 애니메이션과 전환 효과를 만드는 진행 상황을
 보여 드렸습니다.
 
 목표는 [@yui540](https://yui540.com/)의 멋진 작업을 어떤 Vue 프로젝트에서도 쓸 수 있는
@@ -49,7 +49,7 @@ CI/CD 파이프라인과 싸우며(네, 또 싸웠습니다) 커밋 열 개쯤 �
 이날 늦게는 DeepSeek 팀이 일주일 전 공개한 몇몇 기술과
 [오픈소스 저장소](https://github.com/deepseek-ai/open-infra-index)들, 그리고 ByteDance가 공개했다는
 [LLM 게이트웨이 AIBrix](https://github.com/vllm-project/aibrix)를 살펴봤습니다.
-새로 발표된 Phi-4-mini를 AIRI에 이식해 쓸 수 있을지도 조사했는데, 좋은 소식은
+새로 발표된 Phi-4-mini를 Aori에 이식해 쓸 수 있을지도 조사했는데, 좋은 소식은
 [Phi-4-mini](https://techcommunity.microsoft.com/blog/educatordeveloperblog/welcome-to-the-new-phi-4-models---microsoft-phi-4-mini--phi-4-multimodal/4386037)가
 함수 호출 능력을 포함하고 있다는 것입니다. 즉 사전 학습된 지원을 바탕으로 에이전트를
 만들 수 있다는 뜻이죠.
@@ -66,7 +66,7 @@ CI/CD 파이프라인과 싸우며(네, 또 싸웠습니다) 커밋 열 개쯤 �
 
 ![](/en/blog/DevLog-2025.03.06/assets/live-stream-layout-update.avif)
 
-오늘 DevStream 중에는 스테이지 전환 애니메이션 컴포넌트를 AIRI 웹사이트의 메인 스테이지에
+오늘 DevStream 중에는 스테이지 전환 애니메이션 컴포넌트를 Aori 웹사이트의 메인 스테이지에
 통합하려 했는데 그리 매끄럽지 않았습니다. 이전 애니메이션 컴포넌트 설계에서 버그를 몇 개
 발견했거든요. 좋은 소식은 이미 고쳤다는 것이고, 새 애니메이션 전환은 공식 배포
 [https://airi.moeru.ai](https://airi.moeru.ai)에서 이미 확인할 수 있습니다.

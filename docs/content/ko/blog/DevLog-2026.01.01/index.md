@@ -3,7 +3,7 @@ title: DevLog @ 2026.01.01
 category: DevLog
 date: 2026-01-01
 excerpt: |
-  AIRI의 iOS 플랫폼 진전과 그 과정에서 만난 문제·해결책, 그리고 LemonNeko가 FlowChat에서 진행한 기억 계층 실험의 성과와 구현 세부 사항을 나눕니다.
+  Aori의 iOS 플랫폼 진전과 그 과정에서 만난 문제·해결책, 그리고 LemonNeko가 FlowChat에서 진행한 기억 계층 실험의 성과와 구현 세부 사항을 나눕니다.
 preview-cover:
   light: "@assets('/en/blog/DevLog-2026.01.01/assets/cover-light.avif')"
   dark: "@assets('/en/blog/DevLog-2026.01.01/assets/cover-dark.avif')"
@@ -13,7 +13,7 @@ preview-cover:
 이 글은 중국어 원문을 AI로 영어로 옮긴 판을 다시 한국어로 번역한 것입니다. 중국어 원문은 [여기](/zh-Hans/blog/DevLog-2026.01.01/)에서 볼 수 있습니다. 번역에 문제가 있다면 편하게 이슈를 열거나 Pull Request를 보내 주세요.
 :::
 
-새해 복 많이 받으세요! AIRI 메인테이너 중 한 명인 [@LemonNekoGH](https://github.com/LemonNekoGH)입니다. 새해 첫 DevLog는 제 차례네요. (B 키를 눌러 웃는 이모티콘 선택) 하하하하하!
+새해 복 많이 받으세요! Aori 메인테이너 중 한 명인 [@LemonNekoGH](https://github.com/LemonNekoGH)입니다. 새해 첫 DevLog는 제 차례네요. (B 키를 눌러 웃는 이모티콘 선택) 하하하하하!
 
 <p style="display: flex; justify-content: center;">
     <img src="/en/blog/DevLog-2026.01.01/assets/helldiver-laughing.avif" alt="Helldiver Laughing Emotion" />
@@ -21,19 +21,19 @@ preview-cover:
 
 자, 본론으로 갑시다.
 
-## AIRI Pocket
+## Aori Pocket
 
-이틀 전, AIRI의 모바일 애플리케이션을 만들기 위해 [Capacitor](https://capacitorjs.com/)를 도입했습니다 ([#845](https://github.com/moeru-ai/airi/pull/845)). 이를 AIRI Pocket이라고 부릅니다.
+이틀 전, Aori의 모바일 애플리케이션을 만들기 위해 [Capacitor](https://capacitorjs.com/)를 도입했습니다 ([#845](https://github.com/moeru-ai/airi/pull/845)). 이를 Aori Pocket이라고 부릅니다.
 
 iOS를 동작시켰고 알림 기능도 추가했습니다. 즉 그녀가 원한다면 알림을 통해 함께 시간을 보내자고 먼저 말을 걸 수 있습니다.
 
 <p style="display: flex; justify-content: center;">
-    <video src="/en/blog/DevLog-2026.01.01/assets/airi-notification-capability.mp4" alt="AIRI Pocket Notification" controls width="230" height="500"></video>
+    <video src="/en/blog/DevLog-2026.01.01/assets/airi-notification-capability.mp4" alt="Aori Pocket Notification" controls width="230" height="500"></video>
 </p>
 
 기본 Capacitor 아이콘은 너무 신경 쓰지 마세요. 나중에 교체할 예정입니다.
 
-영상에서 저는 AIRI를 백그라운드 앱 목록에서 제거했고, 잠시 뒤 AIRI가 알림을 띄웠습니다. 이런 백그라운드 알림은 PWA에서는 구현하기 어렵지만 네이티브 iOS 앱에서는 아주 쉽습니다.
+영상에서 저는 Aori를 백그라운드 앱 목록에서 제거했고, 잠시 뒤 Aori가 알림을 띄웠습니다. 이런 백그라운드 알림은 PWA에서는 구현하기 어렵지만 네이티브 iOS 앱에서는 아주 쉽습니다.
 
 잠깐, 그렇게 순조로웠을까요? 문제가 없었을까요?
 

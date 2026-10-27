@@ -1,9 +1,9 @@
 ---
 title: BytePlus Coding Plan
-description: 在 AIRI 中配置 BytePlus Coding Plan 聊天模型
+description: 在 Aori 中配置 BytePlus Coding Plan 聊天模型
 ---
 
-BytePlus Coding Plan 在 AIRI 中以独立服务商卡片提供。
+BytePlus Coding Plan 在 Aori 中以独立服务商卡片提供。
 
 ::: info 为什么选择 BytePlus Coding Plan？
 如果你的 BytePlus 账户开通了 Coding Plan，应使用这个卡片而不是普通 BytePlus 配置，以匹配对应的服务计划。
@@ -17,7 +17,7 @@ BytePlus Coding Plan 在 AIRI 中以独立服务商卡片提供。
 不要将 API Key 或端点凭据提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → BytePlus Coding Plan**，按 BytePlus 控制台填写该计划的凭据和端点信息。
 

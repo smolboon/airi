@@ -1,6 +1,6 @@
 ---
 title: 소개
-description: Project AIRI의 UI를 알아보세요
+description: Project Aori의 UI를 알아보세요
 ---
 
 ### 한 줄 요약
@@ -28,7 +28,7 @@ description: Project AIRI의 UI를 알아보세요
 어떤 사람들은 이런 존재를 "디지털 휴먼"이라고 부르기도 합니다.
 **아쉽게도 오픈소스가 아니어서, 그녀가 라이브 스트림을 마치고 오프라인이 되면 더 이상 상호작용할 수 없습니다.**
 
-그래서 이 프로젝트 AIRI는 또 다른 가능성을 제시합니다.
+그래서 이 프로젝트 Aori는 또 다른 가능성을 제시합니다.
 **여러분만의 디지털 생명을 언제 어디서나 손쉽게 소유하세요.**
 
 ## 시작하기
@@ -59,7 +59,7 @@ description: Project AIRI의 UI를 알아보세요
 </div>
 
 웹 버전은 모바일 기기를 포함해 어디서나 손쉽게 접근할 수 있습니다.
-데스크톱은 VTuber 스트리밍, 컴퓨터 조작, 그리고 AIRI를 돌리기 위해 막대한 양의 토큰 비용을
+데스크톱은 VTuber 스트리밍, 컴퓨터 조작, 그리고 Aori를 돌리기 위해 막대한 양의 토큰 비용을
 지불할 필요가 없는 로컬 LLM 접근 등 더 고급 용도에 적합합니다.
 
 <div flex gap-2 w-full flex-col justify-center text-base>
@@ -91,4 +91,4 @@ description: Project AIRI의 UI를 알아보세요
 
 이 프로젝트에 기여하는 방법을 이해하는 데 도움이 되는 가이드는 [기여하기](../contributing/) 페이지를 참고해 주세요.
 
-Project AIRI의 UI를 디자인하고 개선하는 데 도움이 되는 자료는 [디자인 가이드라인](../contributing/design-guidelines/resources) 페이지를 참고해 주세요.
+Project Aori의 UI를 디자인하고 개선하는 데 도움이 되는 자료는 [디자인 가이드라인](../contributing/design-guidelines/resources) 페이지를 참고해 주세요.

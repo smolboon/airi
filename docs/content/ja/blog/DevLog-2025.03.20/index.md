@@ -19,7 +19,7 @@ import SteinsGateMayori from '../../../en/blog/DevLog-2025.03.20/assets/steins-g
 
 またお会いしましたね！前回の開発ログから10日が経ちました。
 
-ユーザーインターフェースに多くの改善を加え、より多くの LLM プロバイダーや音声プロバイダーを統合できるようにし、Discord、bilibili、その他多くのソーシャルメディアプラットフォームで初めて AIRI を公開しました。
+ユーザーインターフェースに多くの改善を加え、より多くの LLM プロバイダーや音声プロバイダーを統合できるようにし、Discord、bilibili、その他多くのソーシャルメディアプラットフォームで初めて Aori を公開しました。
 
 お伝えしたいことがたくさんあります。
 
@@ -29,7 +29,7 @@ import SteinsGateMayori from '../../../en/blog/DevLog-2025.03.20/assets/steins-g
 
 <img :src="Gelbana" alt="Gelbana" />
 
-> ああ、心配しないでください。私たちが愛する [AIRI](https://github.com/moeru-ai/airi) はこのようなゲルバナにはなりません。でも、もし [_Steins;Gate_](https://myanimelist.net/anime/9253/Steins_Gate) アニメシリーズを見たことがないなら、ぜひ見てみることを強くお勧めします〜！
+> ああ、心配しないでください。私たちが愛する [Aori](https://github.com/moeru-ai/airi) はこのようなゲルバナにはなりません。でも、もし [_Steins;Gate_](https://myanimelist.net/anime/9253/Steins_Gate) アニメシリーズを見たことがないなら、ぜひ見てみることを強くお勧めします〜！
 
 初期設定 UI デザインの開発を続けており、アニメーション効果が改善され、10日前にはカスタマイズ可能なテーマカラーが実装されました。私たち全員にとって本当に忙しい一週間でした（特に私たちは皆パートタイムでこのプロジェクトに参加していますから（笑）。もしよろしければ、ぜひ参加してください。🥺（懇願））。
 
@@ -59,7 +59,7 @@ import SteinsGateMayori from '../../../en/blog/DevLog-2025.03.20/assets/steins-g
 
 <ThemedVideo muted autoplay src="/en/blog/DevLog-2025.03.20/assets/histoire-first-look.mp4" />
 
-OKLCH パレット全体を一度にキャンバスに展開して参照することができます。しかし、色を試して Project AIRI のテーマと同じ感覚を得るには、少し不完全ですよね？
+OKLCH パレット全体を一度にキャンバスに展開して参照することができます。しかし、色を試して Project Aori のテーマと同じ感覚を得るには、少し不完全ですよね？
 
 そこで、まずカラースライダーを再実装して、より適切な感じにしました：
 
@@ -68,7 +68,7 @@ OKLCH パレット全体を一度にキャンバスに展開して参照する�
 
 これでスライダーがよりプロフェッショナルになりました。
 
-ロゴとデフォルトの緑色は、AIRI のテーマに合わせて置き換えることができます。そのため、UI ページ専用に別のロゴをデザインしました：
+ロゴとデフォルトの緑色は、Aori のテーマに合わせて置き換えることができます。そのため、UI ページ専用に別のロゴをデザインしました：
 
 <img class="light" :src="HistoireLogo" alt="project airi logo for histoire" />
 <img class="dark" :src="HistoireLogoDark" alt="project airi logo for histoire" />

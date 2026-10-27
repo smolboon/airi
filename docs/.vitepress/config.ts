@@ -160,7 +160,7 @@ export default defineConfig<ThemeConfig>({
                   ] },
                   { text: 'Service Providers', collapsed: true, items: [
                     { text: 'Chat', collapsed: true, items: [
-                      { text: 'AIRI Official Provider', link: withBase('/en/docs/manual/config/providers/consciousness/official') },
+                      { text: 'Aori Official Provider', link: withBase('/en/docs/manual/config/providers/consciousness/official') },
                       { text: 'AIHubMix', link: withBase('/en/docs/manual/config/providers/consciousness/aihubmix') },
                       { text: 'Amazon Bedrock', link: withBase('/en/docs/manual/config/providers/consciousness/amazon-bedrock') },
                       { text: 'Anthropic', link: withBase('/en/docs/manual/config/providers/consciousness/anthropic') },
@@ -410,7 +410,7 @@ export default defineConfig<ThemeConfig>({
                   ] },
                   { text: '服务商', collapsed: true, items: [
                     { text: '聊天服务商', collapsed: true, items: [
-                      { text: 'AIRI 官方提供商', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/official') },
+                      { text: 'Aori 官方提供商', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/official') },
                       { text: 'AIHubMix', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/aihubmix') },
                       { text: 'Amazon Bedrock', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/amazon-bedrock') },
                       { text: 'Anthropic', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/anthropic') },
@@ -449,7 +449,7 @@ export default defineConfig<ThemeConfig>({
                       { text: '火山引擎 Coding Plan', link: withBase('/zh-Hans/docs/manual/config/providers/consciousness/volcengine-coding-plan') },
                     ] },
                     { text: '语音合成（TTS）', collapsed: true, items: [
-                      { text: 'AIRI 官方语音合成', link: withBase('/zh-Hans/docs/manual/config/providers/speech/official') },
+                      { text: 'Aori 官方语音合成', link: withBase('/zh-Hans/docs/manual/config/providers/speech/official') },
                       { text: '阿里云百炼', link: withBase('/zh-Hans/docs/manual/config/providers/speech/alibaba-cloud-model-studio') },
                       { text: '浏览器本地语音合成', link: withBase('/zh-Hans/docs/manual/config/providers/speech/browser-local') },
                       { text: 'CometAPI', link: withBase('/zh-Hans/docs/manual/config/providers/speech/comet-api') },
@@ -468,7 +468,7 @@ export default defineConfig<ThemeConfig>({
                       { text: '火山引擎', link: withBase('/zh-Hans/docs/manual/config/providers/speech/volcengine') },
                     ] },
                     { text: '语音识别（ASR/STT）', collapsed: true, items: [
-                      { text: 'AIRI 官方语音识别', link: withBase('/zh-Hans/docs/manual/config/providers/transcription/official') },
+                      { text: 'Aori 官方语音识别', link: withBase('/zh-Hans/docs/manual/config/providers/transcription/official') },
                       { text: '阿里云智能语音服务', link: withBase('/zh-Hans/docs/manual/config/providers/transcription/aliyun') },
                       { text: '浏览器本地语音识别', link: withBase('/zh-Hans/docs/manual/config/providers/transcription/browser-local') },
                       { text: '浏览器 Web Speech API', link: withBase('/zh-Hans/docs/manual/config/providers/transcription/web-speech-api') },
@@ -778,7 +778,7 @@ export default defineConfig<ThemeConfig>({
                   ] },
                   { text: '서비스 제공자', collapsed: true, items: [
                     { text: '채팅', collapsed: true, items: [
-                      { text: 'AIRI 공식 제공자', link: withBase('/ko/docs/manual/config/providers/consciousness/official') },
+                      { text: 'Aori 공식 제공자', link: withBase('/ko/docs/manual/config/providers/consciousness/official') },
                       { text: 'AIHubMix', link: withBase('/ko/docs/manual/config/providers/consciousness/aihubmix') },
                       { text: 'Amazon Bedrock', link: withBase('/ko/docs/manual/config/providers/consciousness/amazon-bedrock') },
                       { text: 'Anthropic', link: withBase('/ko/docs/manual/config/providers/consciousness/anthropic') },

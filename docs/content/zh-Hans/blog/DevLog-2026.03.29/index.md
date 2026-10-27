@@ -3,13 +3,13 @@ title: DevLog @ 2026.03.29
 category: DevLog
 date: 2026-03-29
 excerpt: |
-  我们应该如何在 Godot 中嵌入 WebView？关于 AIRI 改用 Godot 引擎进行场景渲染但是依然用 Web 技术来实现 UI 和逻辑。
+  我们应该如何在 Godot 中嵌入 WebView？关于 Aori 改用 Godot 引擎进行场景渲染但是依然用 Web 技术来实现 UI 和逻辑。
 preview-cover:
   light: "@assets('./assets/cover-light.avif')"
   dark: "@assets('./assets/cover-dark.avif')"
 ---
 
-欢迎回来，这里是 [@LemonNekoGH](https://github.com/LemonNekoGH)，AIRI 维护者之一，距离柠猫的上一篇 DevLog 已经过去一个月了，这段时间里又整了一点点小活，今天就来和大家分享一下。
+欢迎回来，这里是 [@LemonNekoGH](https://github.com/LemonNekoGH)，Aori 维护者之一，距离柠猫的上一篇 DevLog 已经过去一个月了，这段时间里又整了一点点小活，今天就来和大家分享一下。
 
 我们在两个月前引入了 Capacitor 来构建基于 WebView 的原生移动端应用，以便利用移动端设备的一些特有功能，比如后台任务驻留、闹钟、日历、计步器什么的。
 
@@ -53,7 +53,7 @@ preview-cover:
           webview.getSettings().setDomStorageEnabled(true);
       webview.setWebContentsDebuggingEnabled(true);
 
-      // 对 AIRI 来说很重要，因为我们需要透过 UI 来看 Godot 的场景
+      // 对 Aori 来说很重要，因为我们需要透过 UI 来看 Godot 的场景
       webview.setBackgroundColor(Color.TRANSPARENT);
 
       webview.loadUrl("https://lemonbookpro.local:5273/");

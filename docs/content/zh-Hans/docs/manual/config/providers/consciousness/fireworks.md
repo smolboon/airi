@@ -1,10 +1,10 @@
 ---
 title: Fireworks AI
-description: 在 AIRI 中配置 Fireworks AI 作为大模型服务商
+description: 在 Aori 中配置 Fireworks AI 作为大模型服务商
 is_openai_compatible: true
 ---
 
-Fireworks AI 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，AIRI 可以在“意识”中使用 Fireworks AI 提供的模型。
+Fireworks AI 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，Aori 可以在“意识”中使用 Fireworks AI 提供的模型。
 
 ::: info 为什么选择 Fireworks AI？
 如果你已在 Fireworks AI 中管理模型或推理服务，可以直接复用同一套 API 凭据。
@@ -20,7 +20,7 @@ Fireworks AI 提供兼容 OpenAI 格式的聊天 API。完成本页配置后，A
 不要将 API Key 提交到仓库、放入截图，或发送给他人。密钥泄露后，请立即在 Fireworks AI 控制台撤销它并创建新密钥。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Fireworks AI**。
 2. 将 API Key 粘贴到基础设置。

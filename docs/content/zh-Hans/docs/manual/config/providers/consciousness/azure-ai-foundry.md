@@ -1,6 +1,6 @@
 ---
 title: Azure AI Foundry
-description: 在 AIRI 中配置 Azure AI Foundry 聊天模型
+description: 在 Aori 中配置 Azure AI Foundry 聊天模型
 ---
 
 Azure AI Foundry 需要资源名称、模型部署信息和 API Key。
@@ -17,7 +17,7 @@ Azure AI Foundry 需要资源名称、模型部署信息和 API Key。
 不要将 Azure API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 聊天 → Azure AI Foundry**，填写 **API Key**、资源名称和模型 ID。
 2. 如控制台要求特定 API 版本，请在界面中填写；不要将普通模型名误作部署名。

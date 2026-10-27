@@ -1,9 +1,9 @@
 ---
 title: Satori Bot
-description: Bridge AIRI to multiple messaging platforms through Koishi and the Satori protocol
+description: Bridge Aori to multiple messaging platforms through Koishi and the Satori protocol
 ---
 
-The Satori bot connects to messaging platforms such as QQ, Telegram, Discord, and Lark through Koishi's Satori service. The current standalone core is transitional and is suitable for experiments and maintenance; it should not be treated as a stable AIRI Core integration.
+The Satori bot connects to messaging platforms such as QQ, Telegram, Discord, and Lark through Koishi's Satori service. The current standalone core is transitional and is suitable for experiments and maintenance; it should not be treated as a stable Aori Core integration.
 
 ## Prerequisites
 

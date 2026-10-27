@@ -3,7 +3,7 @@ title: DevLog @ 2025.10.20
 category: DevLog
 date: 2025-10-20
 excerpt: |
-  Tauri에서 Electron으로의 마이그레이션, 새 Live2D 모델, 그리고 여러 오픈소스 프로젝트 업데이트까지 AIRI 프로젝트의 최근 진행 상황을 나눕니다.
+  Tauri에서 Electron으로의 마이그레이션, 새 Live2D 모델, 그리고 여러 오픈소스 프로젝트 업데이트까지 Aori 프로젝트의 최근 진행 상황을 나눕니다.
 preview-cover:
 # TODO
 ---
@@ -52,7 +52,7 @@ Controls Island
 
  >"[Vue](https://velin-dev.netlify.app/#/)로 프롬프트를 작성할 수 있습니다"!
 
-5월에 저희 프롬프트 라이브러리를 소개했던 걸 기억하시나요? RainbowBird의 노력과 기여 덕분에 Velin이 이제 정식으로 Moeru AI의 일부가 됐습니다! AIRI의 거의 모든 프롬프트가 Velin으로 돌아가는데, 크로스 플랫폼 걱정은 마세요. Velin은 Node.js 환경에서도 잘 동작합니다!
+5월에 저희 프롬프트 라이브러리를 소개했던 걸 기억하시나요? RainbowBird의 노력과 기여 덕분에 Velin이 이제 정식으로 Moeru AI의 일부가 됐습니다! Aori의 거의 모든 프롬프트가 Velin으로 돌아가는데, 크로스 플랫폼 걱정은 마세요. Velin은 Node.js 환경에서도 잘 동작합니다!
 
 <img src="/en/blog/DevLog-2025.10.20/assets/velin.avif" alt="velin.avif" />
 
@@ -66,7 +66,7 @@ Vercel AI SDK와 비슷한 방식으로 브라우저에서 순수 로컬 추론�
 
 ## 프로젝트 개발 현황
 
-이제 Moeru AI와 Project AIRI는 거대한 조직으로 성장해, 머신러닝·데이터 처리·프론트엔드·백엔드 등을 아우르는 50개 이상의 자체 저장소를 TypeScript/Python/Rust/Go 등 여러 언어로 운영하고 있습니다.
+이제 Moeru AI와 Project Aori는 거대한 조직으로 성장해, 머신러닝·데이터 처리·프론트엔드·백엔드 등을 아우르는 50개 이상의 자체 저장소를 TypeScript/Python/Rust/Go 등 여러 언어로 운영하고 있습니다.
 
 전체 팔로워 수는 800명을 넘었습니다. 1년 전 처음 시작할 때는 상상도 못 했던 일입니다. 정말로, 성원해 주셔서 진심으로 감사합니다!
 
@@ -77,7 +77,7 @@ Moeru AI
 
 <img src="/en/blog/DevLog-2025.10.20/assets/project-airi.avif" alt="project-airi.avif" />
 <div style="text-align: center; font-size: 0.875rem; color: #666; margin-top: 0.5rem;">
-Project AIRI
+Project Aori
 </div>
 
 ## 순수 Rust TTS 구현

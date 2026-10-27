@@ -1,9 +1,9 @@
 ---
 title: MiniMax Speech（TTS）
-description: 在 AIRI 中配置 MiniMax 语音合成
+description: 在 Aori 中配置 MiniMax 语音合成
 ---
 
-MiniMax Speech 可在 AIRI 中提供语音合成模型和预设声音。
+MiniMax Speech 可在 Aori 中提供语音合成模型和预设声音。
 
 ::: info 为什么选择 MiniMax Speech？
 如果你已经使用 MiniMax，并希望直接使用其中文或英文预设声音，可以选择它。
@@ -19,7 +19,7 @@ MiniMax Speech 可在 AIRI 中提供语音合成模型和预设声音。
 不要将 API Key 提交到仓库、截图或发送给他人。
 :::
 
-## 第二步：在 AIRI 中配置
+## 第二步：在 Aori 中配置
 
 1. 打开 **设置 → 服务商 → 语音合成 → MiniMax Speech**，粘贴 API Key。
 2. 保留默认服务地址 `https://api.minimax.io`，除非服务商明确提供了其他地址。

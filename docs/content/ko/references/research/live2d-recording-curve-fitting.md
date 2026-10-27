@@ -12,7 +12,7 @@
 
 Visvalingam-Whyatt를 1차 피팅 방법으로 사용하지 않습니다. 이 방식의 면적 측정값은 값의 최대 오차에 대한 직접적인 상한을 제공하지 않습니다.
 
-## 현재 AIRI 계약
+## 현재 Aori 계약
 
 현재 `airi-live2d-motion/v6` 포맷은 순서가 있는 밀리초 단위 샘플을 저장합니다. 각 샘플은 정규화된 13개의 스칼라 채널을 포함합니다. 이 중 11개 채널은 에디터에 표시됩니다. `eyeOpen`은 `1 - eyeSquint`의 에디터 투영값입니다. 나머지 두 개의 오프셋 채널은 숨겨져 있습니다. [녹화 스키마](../../../../../apps/stage-tamagotchi/src/renderer/composables/live2d-motion-recording.ts)와 [포즈 계약](../../../../../packages/stage-ui-live2d/src/stores/motion-control.ts)을 참고합니다.
 
@@ -37,7 +37,7 @@ Ramer는 구간을 그 양 끝점을 잇는 선으로 근사합니다. 알고리
 
 이 지표는 스케일링 없이는 부적합합니다. 20,000ms 길이의 구간은 값 범위 2를 압도합니다. 시간을 스케일링하면 어떤 세부 사항이 남는지가 달라집니다. 화면 좌표 기반 스케일은 결과가 에디터 크기에 의존하게 만듭니다.
 
-AIRI에서는 후보 선을 평가할 때만 시간을 사용합니다. 각 원본 샘플에서 수직 잔차(vertical residual)를 측정합니다.
+Aori에서는 후보 선을 평가할 때만 시간을 사용합니다. 각 원본 샘플에서 수직 잔차(vertical residual)를 측정합니다.
 
 ```text
 u = (sampleTime - leftTime) / (rightTime - leftTime)
@@ -65,7 +65,7 @@ Schneider는 또한 일치하는 점들을 전처리하고, 코너나 불연속 
 
 Cubism은 이미 선형, 3차 베지어, 스텝(stepped), 역스텝(inverse-stepped) 모션 세그먼트를 정의하고 있습니다. Cubism의 제한된 3차 세그먼트는 제어 시간을 세그먼트 지속 시간의 3분의 1과 3분의 2 지점에 둡니다. [공식 `motion3.json` 사양](https://github.com/Live2D/CubismSpecs/blob/master/FileFormats/motion3.json.md)이 이 세그먼트들을 정의합니다.
 
-AIRI에서는 Schneider를 스칼라 시간 함수에 맞게 다음과 같이 조정합니다.
+Aori에서는 Schneider를 스칼라 시간 함수에 맞게 다음과 같이 조정합니다.
 
 - 각 세그먼트의 끝점 시간을 고정합니다.
 - 두 제어 시간을 지속 시간의 3분의 1, 3분의 2 지점에 고정합니다.
@@ -74,9 +74,9 @@ AIRI에서는 Schneider를 스칼라 시간 함수에 맞게 다음과 같이 �
 - 모든 소스 시간에서 최대 수직 오차를 측정합니다.
 - 오차가 가장 큰 지점에서 분할하고 각 쪽을 다시 피팅합니다.
 
-이 조정은 피팅에서 시간 스케일링을 제거합니다. 또한 Cubism의 제한된 베지어 표현에 직접 대응하는 곡선을 생성합니다. 이는 Schneider의 논문에서 주장하는 내용이 아니라, AIRI의 설계 권장 사항입니다.
+이 조정은 피팅에서 시간 스케일링을 제거합니다. 또한 Cubism의 제한된 베지어 표현에 직접 대응하는 곡선을 생성합니다. 이는 Schneider의 논문에서 주장하는 내용이 아니라, Aori의 설계 권장 사항입니다.
 
-Schneider의 범용 알고리즘을 TypeScript로 포팅한 [`odiak/fit-curve`](https://github.com/odiak/fit-curve/blob/master/packages/fit-curve/src/index.ts)가 존재합니다. 참고자료나 실험용으로 유용합니다. 다만 파라메트릭한 2차원 오차를 여전히 사용하므로, 조정 없이는 AIRI가 요구하는 시간 대비 값 보장을 제공하지 않습니다.
+Schneider의 범용 알고리즘을 TypeScript로 포팅한 [`odiak/fit-curve`](https://github.com/odiak/fit-curve/blob/master/packages/fit-curve/src/index.ts)가 존재합니다. 참고자료나 실험용으로 유용합니다. 다만 파라메트릭한 2차원 오차를 여전히 사용하므로, 조정 없이는 Aori가 요구하는 시간 대비 값 보장을 제공하지 않습니다.
 
 ### 평활 스플라인(smoothing spline)
 
@@ -124,7 +124,7 @@ Ramer는 허용 오차가 크면 중요한 특징이 사라질 수 있다고 지
 
 | 옵션 | 용도 |
 | --- | --- |
-| 작은 로컬 수직 RDP 함수 | 권장 기준선. AIRI의 스칼라 오차 규칙에 부합하며 별도 의존성이 필요 없음 |
+| 작은 로컬 수직 RDP 함수 | 권장 기준선. Aori의 스칼라 오차 규칙에 부합하며 별도 의존성이 필요 없음 |
 | `simplify-js` | 표준 기하학적 RDP 실험에 적합함. `highQuality: true`로 방사형 사전 패스(radial pre-pass)를 건너뜀. 여전히 좌표 스케일링이 필요함 |
 | 조정된 로컬 3차 피팅 함수 | 권장 프로덕션 목표. 분할, 앵커, 검증 로직을 수직 RDP와 공유할 수 있음 |
 | `odiak/fit-curve` | Schneider 참고자료 및 프로토타입용으로 적합함. 스칼라 타임라인 곡선에는 그대로 채택하지 않음 |

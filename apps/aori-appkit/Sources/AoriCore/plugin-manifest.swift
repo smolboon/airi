@@ -46,7 +46,7 @@ enum PluginManifestReader {
             diagnostics.append(PluginDiagnostic(path: "manifestVersion", message: "Use manifest version 2."))
         }
         if jsonString(object["kind"]) != "manifest.extension.airi.moeru.ai" {
-            diagnostics.append(PluginDiagnostic(path: "kind", message: "The kind is not an AIRI extension manifest."))
+            diagnostics.append(PluginDiagnostic(path: "kind", message: "The kind is not an Aori extension manifest."))
         }
         let id = jsonString(object["id"])?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if !validIdentifier(id) {

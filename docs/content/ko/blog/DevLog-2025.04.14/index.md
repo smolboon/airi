@@ -6,7 +6,7 @@ date: 2025-04-14
 
 ## 들어가며
 
-[지난번](../DevLog-2025.04.06/#기억-시스템)에는 AIRI의 기억 시스템을 이야기했습니다. 오늘은 이렇게 복잡한 기억 시스템을 어떻게 구현할지 더 깊이 파고들고 앞으로의 전망도 살펴보겠습니다.
+[지난번](../DevLog-2025.04.06/#기억-시스템)에는 Aori의 기억 시스템을 이야기했습니다. 오늘은 이렇게 복잡한 기억 시스템을 어떻게 구현할지 더 깊이 파고들고 앞으로의 전망도 살펴보겠습니다.
 
 ## 검색 엔진에서 시작하기
 
@@ -96,11 +96,11 @@ RAG는 이제 reranking model이라는 새로운 과정을 대중화했습니다
 
 하지만 reranking으로도 기억 계층의 여러 문제를 풀 수는 없습니다. 망각 곡선, 기억 강화, 무작위 기억 회상, 감정이 영향을 미치는 재정렬 점수 같은 것들은 reranking 모델이 다룰 수 있는 영역이 아닙니다.
 
-AIRI를 위한 좋은 기억 계층을 만들려면 RAG의 기본 능력과 과거 검색 엔진의 재정렬 경험을 결합해 좋은 재정렬 메커니즘을 세워야 합니다.
+Aori를 위한 좋은 기억 계층을 만들려면 RAG의 기본 능력과 과거 검색 엔진의 재정렬 경험을 결합해 좋은 재정렬 메커니즘을 세워야 합니다.
 
 ## 기억 계층 실험 플랫폼
 
-[Project AIRI Memory Driver @duckdb/duckdb-wasm Playground](https://drizzle-orm-duckdb-wasm.netlify.app/#/memory-decay)
+[Project Aori Memory Driver @duckdb/duckdb-wasm Playground](https://drizzle-orm-duckdb-wasm.netlify.app/#/memory-decay)
 
 ![](/en/blog/DevLog-2025.04.14/assets/memory-driver.avif)
 
@@ -143,9 +143,9 @@ original은 무엇일까요? 초기화 시점의 점수입니다.
 
 마지막으로 근육 기억은 기억의 한 종류라기보다 이미 형성된 조건 반사에 가깝습니다.
 
-## AIRI는 어떻게 설계해야 할까?
+## Aori는 어떻게 설계해야 할까?
 
-여기서 AIRI의 구현 원리를 엿볼 수 있습니다:
+여기서 Aori의 구현 원리를 엿볼 수 있습니다:
 
 - 작업 기억은 messages 배열 같은 것
 - 단기 기억은 잘 회상되지 않는 RAG 기억 항목 같은 것으로, 새로운 것일수록 회상되기 쉬움

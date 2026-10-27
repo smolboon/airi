@@ -4,8 +4,8 @@ Status: accepted
 
 ## Context
 
-Issue #1491 asks AIRI to read and control Home Assistant. A user wants to say
-"turn off the living room light" and have AIRI do it.
+Issue #1491 asks Aori to read and control Home Assistant. A user wants to say
+"turn off the living room light" and have Aori do it.
 
 `plugins/airi-plugin-homeassistant` was a scaffold. Commit `4401b96c9`
 (2025-12-29) added a `package.json`, a `tsconfig.json`, a tsdown config, and a

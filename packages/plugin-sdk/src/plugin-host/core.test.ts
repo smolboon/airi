@@ -397,7 +397,7 @@ describe('for ExtensionHost', () => {
       engines: { airi: '>=99.0.0', runtimes: ['node'] },
       permissions: {},
       entrypoints: { node: './missing-entrypoint.mjs' },
-    })).rejects.toThrow('requires AIRI `>=99.0.0`')
+    })).rejects.toThrow('requires Aori `>=99.0.0`')
   })
 
   it('runs extension setup and registers multiple module sessions', async () => {
