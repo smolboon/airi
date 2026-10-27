@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useTheme } from '@proj-airi/ui'
 import { useLocalStorage } from '@vueuse/core'
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuRoot, DropdownMenuTrigger } from 'reka-ui'
 import { computed, ref } from 'vue'
@@ -11,20 +10,7 @@ import ChatToolbarButton from './ChatToolbarButton.vue'
 
 import { BackgroundDialogPicker } from '../Backgrounds'
 
-const { themeMode, switchToNextTheme } = useTheme()
 const { t } = useI18n()
-
-// The button shows the current theme, and its label tells what a press selects.
-const themeIcons = {
-  light: 'i-solar:sun-2-outline',
-  dark: 'i-solar:moon-outline',
-  auto: 'i-lucide:contrast',
-} as const
-const themeLabel = computed(() => ({
-  light: t('stage.theme.switch-to-dark'),
-  dark: t('stage.theme.switch-to-system'),
-  auto: t('stage.theme.switch-to-light'),
-})[themeMode.value])
 
 const SEND_MODES = ['enter', 'ctrl-enter', 'double-enter'] as const
 type SendMode = (typeof SEND_MODES)[number]
@@ -89,15 +75,6 @@ const sendModeLabels = computed<Record<SendMode, string>>(() => ({
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenuRoot>
-    <ChatToolbarButton
-      :title="themeLabel"
-      :aria-label="themeLabel"
-      @click="switchToNextTheme"
-    >
-      <Transition name="fade" mode="out-in">
-        <div :key="themeMode" :class="[themeIcons[themeMode], 'size-5']" />
-      </Transition>
-    </ChatToolbarButton>
     <ChatToolbarButton
       data-testid="about-button"
       title="About"

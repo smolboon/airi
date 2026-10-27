@@ -151,6 +151,7 @@ async function handleSubmit() {
       // For now, we only support Create in this dialog fully or partial updates if we map correctly.
       // Since UpdateCharacterSchema is partial, we'd need a separate flow.
       // The current store.update takes UpdateCharacterPayload which is limited.
+
       // Let's assume Create for now or minimal Update.
       // Actually, let's just use create for new and warn for edit.
       await characterStore.update(props.character.id, {

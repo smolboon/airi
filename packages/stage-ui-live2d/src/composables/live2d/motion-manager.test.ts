@@ -39,7 +39,7 @@ function createContext(overrides: Partial<MotionManagerPluginContext> = {}): Mot
     model,
     now: 1000,
     timeDelta: 16,
-    internalModel: {
+    internalModel: castUnknown<(PixiLive2DInternalModel)>({
       eyeBlink: {
         updateParameters: vi.fn((targetModel: typeof model) => {
           targetModel.setParameterValueById('ParamEyeLOpen', 0.5)
@@ -47,12 +47,12 @@ function createContext(overrides: Partial<MotionManagerPluginContext> = {}): Mot
         }),
       },
       coreModel: model,
-    } as unknown as PixiLive2DInternalModel,
-    motionManager: {
+    }),
+    motionManager: castUnknown<(PixiLive2DInternalModel['motionManager'])>({
       stopAllMotions: vi.fn(),
       state: { currentGroup: undefined },
       groups: { idle: 'Idle' },
-    } as unknown as PixiLive2DInternalModel['motionManager'],
+    }),
     modelParameters: ref({
       leftEyeOpen: 1,
       rightEyeOpen: 1,
@@ -70,7 +70,7 @@ function createContext(overrides: Partial<MotionManagerPluginContext> = {}): Mot
     }),
   }
 
-  return Object.assign(context, overrides) as unknown as MotionManagerPluginContext
+  return castUnknown<(MotionManagerPluginContext)>(Object.assign(context, overrides))
 }
 
 describe('live2d motion manager plugins', () => {
@@ -571,3 +571,7 @@ describe('light squint plugin', () => {
     expect(context.model.setParameterValueById).not.toHaveBeenCalled()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

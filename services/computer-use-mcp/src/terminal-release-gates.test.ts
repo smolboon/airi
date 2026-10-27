@@ -38,11 +38,11 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _schema: unknown, handler: ToolHandler) {
         handlers.set(name, handler)
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -62,7 +62,7 @@ function makeSuccessResult(text = 'ok', structuredContent?: Record<string, unkno
 }
 
 function createRuntime(stateManager: RunStateManager, approvalMode: 'never' | 'actions' = 'never') {
-  return {
+  return castUnknown<(ComputerUseServerRuntime)>({
     config: createTestConfig({ approvalMode }),
     stateManager,
     session: {
@@ -70,7 +70,7 @@ function createRuntime(stateManager: RunStateManager, approvalMode: 'never' | 'a
       listPendingActions: vi.fn(() => []),
       record: vi.fn().mockResolvedValue(undefined),
     },
-  } as unknown as ComputerUseServerRuntime
+  })
 }
 
 function makeSingleStepTask(params: {
@@ -440,4 +440,8 @@ describe('terminal release gates', () => {
 
 function projectPathFromTask(_task: ActiveTask) {
   return '/workspace/airi'
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

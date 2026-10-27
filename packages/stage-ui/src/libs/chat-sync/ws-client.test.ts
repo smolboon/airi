@@ -131,6 +131,7 @@ describe('ws_CLOSE_UNAUTHORIZED', () => {
   // network drop. VueUse's `useWebSocket.autoReconnect` then hammers the
   // same stale token forever.
   //
+
   // The server accepts the upgrade and closes with this custom code so
   // the client can distinguish "auth failed, stop reconnecting" from
   // "network blip, keep retrying". The matching server-side constant must
@@ -192,6 +193,7 @@ describe('wS_CLOSE_UNAUTHORIZED', () => {
   // network drop. VueUse's `useWebSocket.autoReconnect` then hammers the
   // same stale token forever.
   //
+
   // The server accepts the upgrade and closes with this custom code so
   // the client can distinguish "auth failed, stop reconnecting" from
   // "network blip, keep retrying". The matching server-side constant must

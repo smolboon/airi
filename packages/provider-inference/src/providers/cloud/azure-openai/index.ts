@@ -102,7 +102,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function isJsonSchema(value: unknown): value is JsonSchema {
-  return isRecord(value)
+  if (!isRecord(value))
+    return false
+  return true
 }
 
 /**

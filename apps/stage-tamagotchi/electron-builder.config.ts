@@ -53,6 +53,7 @@ export default {
   // // profiles to enable these security features.
   // //
   // // https://www.bigbinary.com/blog/code-sign-notorize-mac-desktop-app
+
   // // https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
   // afterSign: async (context) => {
   //   const { electronPlatformName, appOutDir } = context
@@ -163,11 +164,13 @@ export default {
       // reuses that expanded channel string when deciding which `*.yml` file to fetch.
       //
       // Without this, the updater would look for `latest-mac.yml` for both x64 and arm64 macOS builds,
+
       // which means the x64 build would be used for arm64 (Apple Silicon) users, causing suboptimal performance and higher resource usage. By embedding `${arch}`
       // into the channel name, we ensure that the updater looks for `latest-x64-mac.yml` and `latest-arm64-mac.yml` respectively.
       //
       // This is how channel name was constructed:
       //
+
       // 1. `expandPublishConfig(...)` expands string values in the publish config.
       //    That is where `latest-${arch}` becomes `latest-x64` or `latest-arm64`.
       //    https://github.com/electron-userland/electron-builder/blob/ed422f36540a93e9bd2a19bc7a5e729bf2b033ea/packages/app-builder-lib/src/publish/PublishManager.ts#L521-L532
@@ -177,6 +180,7 @@ export default {
       //    `channel: latest-arm64`, not the literal template string.
       //    https://github.com/electron-userland/electron-builder/blob/ed422f36540a93e9bd2a19bc7a5e729bf2b033ea/packages/app-builder-lib/src/publish/PublishManager.ts#L93-L96
       //
+
       // 3. electron-builder also uses that expanded channel when generating update
       //    metadata files. `getUpdateInfoFileName(channel, packager, arch)` builds the
       //    filename as:
@@ -189,6 +193,7 @@ export default {
       //      `latest-arm64` -> `latest-arm64-mac.yml`
       //    This is the publish-time side of the behavior.
       //
+
       // 5. At runtime, electron-updater reads the embedded `app-update.yml` and takes
       //    its `channel` value. It does not reconstruct `latest-${arch}` itself; it
       //    consumes the already-expanded value from step 2.
@@ -197,6 +202,7 @@ export default {
       //    - macOS -> `-mac`
       //    - Windows -> ``
       //    - Linux x64 -> `-linux`
+
       //    - Linux non-x64 -> `-linux-${arch}`
       //    https://github.com/electron-userland/electron-builder/blob/ed422f36540a93e9bd2a19bc7a5e729bf2b033ea/packages/electron-updater/src/providers/Provider.ts#L44-L52
       //
@@ -215,6 +221,7 @@ export default {
       //    https://github.com/electron-userland/electron-builder/blob/ed422f36540a93e9bd2a19bc7a5e729bf2b033ea/packages/electron-updater/src/providers/GitHubProvider.ts#L132-L145
       //
       // Resulting filenames with this config:
+
       // - macOS x64 -> `latest-x64-mac.yml`
       // - macOS arm64 -> `latest-arm64-mac.yml`
       // - Windows x64 -> `latest-x64.yml`

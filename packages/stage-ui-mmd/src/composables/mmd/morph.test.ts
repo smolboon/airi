@@ -15,7 +15,7 @@ function fakeMesh(names: string[]): SkinnedMesh {
     morphTargetDictionary: dictionary,
     morphTargetInfluences: Array.from({ length: names.length }).fill(0),
   }
-  return mesh as unknown as SkinnedMesh
+  return castUnknown<(SkinnedMesh)>(mesh)
 }
 
 describe('createMorphController', () => {
@@ -88,3 +88,7 @@ describe('createMorphController', () => {
     expect(morphs.get('vowelA')).toBe(0)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

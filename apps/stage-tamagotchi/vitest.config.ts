@@ -25,6 +25,7 @@ export default defineConfig({
       // Source: loadConfig in node_modules/@unocss/config/dist/index.mjs uses
       // Object.assign(defaults, inlineConfig, result.config ?? {}).
       // When discovery preserves inline content.filesystem, remove configFile: false
+
       // and the explicit unoConfig import and spreads. Verify the shuffled browser suite.
       configFile: false,
       // Generate the initial stylesheet before parallel browser files mount.

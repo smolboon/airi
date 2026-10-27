@@ -35,6 +35,7 @@ export function createV1Routes(input: CreateV1RoutesDeps) {
   // mirror an actual OpenAI public endpoint belong here. Audio used to live
   // under this prefix too, but the `/audio/voices` listing endpoint isn't a
   // real OpenAI route and the streaming TTS protocol has nothing to do with
+
   // OpenAI — keeping them here mislabelled the surface, so audio now mounts
   // at /api/v1/audio (see `audioRoutes` below).
 

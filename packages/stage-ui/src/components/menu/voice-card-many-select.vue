@@ -138,6 +138,7 @@ function getAudioElement(voice: Voice): HTMLAudioElement | null {
   // forces the browser to enforce CORS on the media fetch — if the preview
   // host (e.g. Azure CDN) doesn't return Access-Control-Allow-Origin, the
   // load is rejected with NotSupportedError. Skip it when the visualizer is
+
   // off so plain playback works regardless of origin headers.
   if (props.showVisualizer)
     audio.crossOrigin = 'anonymous'

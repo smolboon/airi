@@ -68,6 +68,7 @@ describe('presence bubble mode', () => {
     //
     //   expect(mode).toBe(choosePresenceBubbleMode(atBoundary))
     //
+
     // Removing the band left both tests passing. The head now sways where the
     // right has between `bubbleWidth - switchHysteresis` and `bubbleWidth` of
     // room: enough to keep, not enough to take, and the left is roomier, so

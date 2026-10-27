@@ -42,12 +42,12 @@ function makeConfig(): RouterConfig {
 }
 
 function makeMockConfigKV(value: RouterConfig | null): ConfigKVService {
-  return {
+  return castUnknown<(ConfigKVService)>({
     getOptional: vi.fn(async (key: string) => (key === 'LLM_ROUTER_CONFIG' ? value : null)),
     getOrThrow: vi.fn(),
     get: vi.fn(),
     set: vi.fn(),
-  } as unknown as ConfigKVService
+  })
 }
 
 describe('createConfigLoader', () => {
@@ -161,3 +161,7 @@ describe('createConfigLoader', () => {
     }
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

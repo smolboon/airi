@@ -265,8 +265,8 @@ describe('better-ws server runtime', () => {
     // than better-ws needs here. The fake only models the fields used by the
     // adapter, so the cast stays local to this adapter-boundary test.
     // Remove this when CrossWS provides a small public testing fixture type.
-    hooks.open?.(peer as unknown as CrossWsPeer)
-    hooks.message?.(peer as unknown as CrossWsPeer, { text: () => 'hello' } as unknown as CrossWsMessage)
+    hooks.open?.(castUnknown<(CrossWsPeer)>(peer))
+    hooks.message?.(castUnknown<(CrossWsPeer)>(peer), castUnknown<(CrossWsMessage)>({ text: () => 'hello' }))
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(received).toEqual(['hello'])
@@ -286,8 +286,8 @@ describe('better-ws server runtime', () => {
     // CrossWS close hooks receive runtime-owned peers. This fake keeps the test
     // focused on better-ws registry cleanup instead of depending on CrossWS
     // internals. Remove this when CrossWS exposes a narrow fake peer helper.
-    hooks.open?.(peer as unknown as CrossWsPeer)
-    await hooks.close?.(peer as unknown as CrossWsPeer, { code: 1000, reason: 'done' })
+    hooks.open?.(castUnknown<(CrossWsPeer)>(peer))
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(peer), { code: 1000, reason: 'done' })
 
     expect(server.peers.has('crossws-peer')).toBe(false)
     expect(peer.close).not.toHaveBeenCalled()
@@ -310,8 +310,8 @@ describe('better-ws server runtime', () => {
       close: vi.fn(),
     }
 
-    hooks.open?.(peer as unknown as CrossWsPeer)
-    await hooks.close?.(peer as unknown as CrossWsPeer, { code: 1001, reason: 'runtime close' })
+    hooks.open?.(castUnknown<(CrossWsPeer)>(peer))
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(peer), { code: 1001, reason: 'runtime close' })
 
     expect(closed).toEqual([{ peerId: 'crossws-peer', code: 1001, reason: 'runtime close' }])
   })
@@ -466,8 +466,8 @@ describe('better-ws server runtime', () => {
     // adapter fields better-ws consumes, keeping the replacement behavior under
     // test without coupling to CrossWS internals.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(firstRawPeer.send).not.toHaveBeenCalled()
@@ -493,9 +493,9 @@ describe('better-ws server runtime', () => {
     // close event. These fakes keep the test focused on adapter cache
     // isolation for repeated ids.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
-    await hooks.close?.(firstRawPeer as unknown as CrossWsPeer, { code: 1000, reason: 'stale' })
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(firstRawPeer), { code: 1000, reason: 'stale' })
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(server.peers.has('crossws-peer')).toBe(true)
@@ -526,9 +526,9 @@ describe('better-ws server runtime', () => {
     // peers share an id but have different object identity, which is the
     // adapter-level ownership boundary under test.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
-    hooks.message?.(firstRawPeer as unknown as CrossWsPeer, { text: () => 'stale-message' } as unknown as CrossWsMessage)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
+    hooks.message?.(castUnknown<(CrossWsPeer)>(firstRawPeer), castUnknown<(CrossWsMessage)>({ text: () => 'stale-message' }))
 
     expect(received).toEqual([])
     expect(server.peers.has('crossws-peer')).toBe(true)
@@ -552,10 +552,10 @@ describe('better-ws server runtime', () => {
       close: vi.fn(),
     }
 
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
-    await hooks.close?.(secondRawPeer as unknown as CrossWsPeer, { code: 1000, reason: 'new closed' })
-    hooks.message?.(firstRawPeer as unknown as CrossWsPeer, { text: () => 'stale-after-close' } as unknown as CrossWsMessage)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(secondRawPeer), { code: 1000, reason: 'new closed' })
+    hooks.message?.(castUnknown<(CrossWsPeer)>(firstRawPeer), castUnknown<(CrossWsMessage)>({ text: () => 'stale-after-close' }))
 
     expect(received).toEqual([])
     expect(server.peers.has('crossws-peer')).toBe(false)
@@ -581,9 +581,9 @@ describe('better-ws server runtime', () => {
     // same-id server peer. The fake peers keep that object identity distinction
     // visible at the CrossWS adapter boundary.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
-    await hooks.close?.(firstRawPeer as unknown as CrossWsPeer, { code: 1000, reason: 'stale' })
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(firstRawPeer), { code: 1000, reason: 'stale' })
 
     expect(close).toHaveBeenCalledOnce()
     expect(close.mock.calls[0]?.[0].peer).toBeUndefined()
@@ -609,13 +609,13 @@ describe('better-ws server runtime', () => {
     // rather than a second CrossWS open. A late raw close from the adapter cache
     // must not remove the current same-id server peer.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
     server.accept({
       id: 'crossws-peer',
       send: message => secondRawPeer.send(message),
       close: (code, reason) => secondRawPeer.close(code, reason),
     })
-    await hooks.close?.(firstRawPeer as unknown as CrossWsPeer, { code: 1000, reason: 'stale' })
+    await hooks.close?.(castUnknown<(CrossWsPeer)>(firstRawPeer), { code: 1000, reason: 'stale' })
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(server.peers.has('crossws-peer')).toBe(true)
@@ -646,13 +646,13 @@ describe('better-ws server runtime', () => {
     // must stay stale. Re-accepting it would remove the current same-id peer
     // and route messages through the wrong raw connection.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
     server.accept({
       id: 'crossws-peer',
       send: message => secondRawPeer.send(message),
       close: (code, reason) => secondRawPeer.close(code, reason),
     })
-    hooks.message?.(firstRawPeer as unknown as CrossWsPeer, { text: () => 'stale-message' } as unknown as CrossWsMessage)
+    hooks.message?.(castUnknown<(CrossWsPeer)>(firstRawPeer), castUnknown<(CrossWsMessage)>({ text: () => 'stale-message' }))
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(received).toEqual([])
@@ -679,14 +679,14 @@ describe('better-ws server runtime', () => {
       close: vi.fn(),
     }
 
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
     const replacement = server.accept({
       id: 'crossws-peer',
       send: message => secondRawPeer.send(message),
       close: (code, reason) => secondRawPeer.close(code, reason),
     })
     replacement.close()
-    hooks.message?.(firstRawPeer as unknown as CrossWsPeer, { text: () => 'stale-after-server-close' } as unknown as CrossWsMessage)
+    hooks.message?.(castUnknown<(CrossWsPeer)>(firstRawPeer), castUnknown<(CrossWsMessage)>({ text: () => 'stale-after-server-close' }))
 
     expect(received).toEqual([])
     expect(server.peers.has('crossws-peer')).toBe(false)
@@ -710,9 +710,9 @@ describe('better-ws server runtime', () => {
     // shape than better-ws needs. These fakes model only text reads and peer IO
     // used by this adapter-boundary test.
     // Remove this when CrossWS exposes small public testing fixtures.
-    hooks.open?.(rawPeer as unknown as CrossWsPeer)
+    hooks.open?.(castUnknown<(CrossWsPeer)>(rawPeer))
     server.peers.get('crossws-peer')?.close()
-    hooks.message?.(rawPeer as unknown as CrossWsPeer, { text: () => 'fresh-message' } as unknown as CrossWsMessage)
+    hooks.message?.(castUnknown<(CrossWsPeer)>(rawPeer), castUnknown<(CrossWsMessage)>({ text: () => 'fresh-message' }))
     server.peers.get('crossws-peer')?.send('fresh-send')
 
     expect(received).toEqual(['fresh-message'])
@@ -740,9 +740,9 @@ describe('better-ws server runtime', () => {
     // adapter fields better-ws consumes, keeping cache refresh behavior under
     // test without depending on CrossWS internals.
     // Remove this when CrossWS exposes a narrow fake peer helper.
-    await hooks.open?.(firstRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(firstRawPeer))
     server.close()
-    await hooks.open?.(secondRawPeer as unknown as CrossWsPeer)
+    await hooks.open?.(castUnknown<(CrossWsPeer)>(secondRawPeer))
     server.peers.get('crossws-peer')?.send('reply')
 
     expect(firstRawPeer.close).toHaveBeenCalledOnce()
@@ -2487,3 +2487,7 @@ describe('better-ws integrated runtime', () => {
     expect(server.peers.has('client-1')).toBe(false)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

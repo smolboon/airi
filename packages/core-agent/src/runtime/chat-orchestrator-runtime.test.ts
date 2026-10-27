@@ -486,6 +486,7 @@ describe('createChatOrchestratorRuntime', () => {
   // AIRI stored only UI slices, then removed those slices from the next provider request.
   //
   // We fixed this by storing the provider generated turn on the finalized UI message.
+
   // The next request expands that generated turn back into chronological provider messages.
   it('includes completed tool rounds in the next provider request', async () => {
     const harness = createHarness()
@@ -1085,6 +1086,7 @@ describe('createChatOrchestratorRuntime', () => {
   // target did not change the session generation, so the queued message stored a
   // dangling relation and projected the missing id into the provider prompt.
   //
+
   // The send must revalidate the relation against current session history after
   // asynchronous composition and immediately before append.
   it('drops a queued reply relation when its target is deleted before append', async () => {

@@ -14,7 +14,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { Format, LogLevel, setGlobalFormat, setGlobalHookPostLog, setGlobalLogLevel, useLogg } from '@guiiai/logg'
 import { createContext } from '@moeru/eventa/adapters/electron/main'
 import { hasSelectedScreenCaptureSource, initScreenCaptureForMain } from '@proj-airi/electron-screen-capture/main'
-import { app, ipcMain, protocol, session } from 'electron'
+import { app, ipcMain, nativeTheme, protocol, session } from 'electron'
 import { noop } from 'es-toolkit'
 import { createLoggLogger, injeca, lifecycle } from 'injeca'
 import { isLinux } from 'std-env'
@@ -103,6 +103,7 @@ if (isLinux) {
   // appendSwitch('enable-features', ...) call overwrites the previous value and
   // only the last feature survives.
   // Source: Chromium base::CommandLine behavior; see
+
   // https://github.com/electron/electron/issues/41763 for the WebGPU setup this supports.
   // Removal condition: never for the join itself; this block can be deleted once
   // WebGPU works on Linux Electron without manual feature switches.
@@ -137,6 +138,7 @@ if (isLinux) {
     // Vulkan surfaces.
     // Source: Chromium Ozone/Wayland surface factory; workaround tracked via
     // https://github.com/electron/electron/issues/41763 (WebGPU on Linux).
+
     // Removal condition: when Chromium/Electron supports Vulkan with the Wayland
     // Ozone backend, drop the isWayland guard and always push 'Vulkan'.
     enabledFeatures.push('Vulkan')
@@ -164,6 +166,8 @@ if (shouldStartMainProcess) {
 
 let fileLogger: FileLoggerHandle = nullFileLoggerHandle
 let skipFileLogging = false
+
+nativeTheme.themeSource = 'dark'
 
 app.whenReady().then(async () => {
   if (!shouldStartMainProcess) {

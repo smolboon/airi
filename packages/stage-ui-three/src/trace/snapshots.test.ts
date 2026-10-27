@@ -74,7 +74,7 @@ describe('stage three runtime snapshots', () => {
 
     const summary = createVrmSceneSummarySnapshot({
       mixer: { _actions: [1, 2, 3] } as any,
-      vrm: { scene } as unknown as VRM,
+      vrm: castUnknown<(VRM)>({ scene }),
     })
 
     expect(summary.sceneChildCount).toBe(2)
@@ -85,3 +85,7 @@ describe('stage three runtime snapshots', () => {
     expect(summary.animationActionCount).toBe(3)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -167,6 +167,7 @@ export async function executeToolCallRerun<TToolset extends string = string>(
     // inspect the same context the UI is updating. xsai types narrow
     // `messages` to provider `Message[]`, while AIRI history can also contain
     // local-only `error` entries. Keep the cast at this boundary instead of
+
     // filtering messages and silently changing the tool's context.
     // Removal condition: xsai exposes a tool execution context type that can
     // accept runtime-owned message envelopes.

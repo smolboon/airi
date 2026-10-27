@@ -27,6 +27,10 @@ export default defineConfig({
     '**/flatpak-repo/**',
     'apps/stage-pocket/ios/**',
     'apps/stage-pocket/android/**',
+    'apps/aori-appkit/.build/**',
+    'apps/aori-appkit/build/**',
+    'apps/aori-appkit/plugins/**',
+    'apps/aori-appkit/rust/target/**',
     '**/drizzle/**',
     '**/.astro/**',
     'docs/superpowers/**',
@@ -65,6 +69,7 @@ export default defineConfig({
     // pattern AGENTS.md forbids. The selector matches a ConditionalExpression
     // whose test is `<x> instanceof Error` and whose consequent is `<x>.message`,
     // so it does NOT false-positive on `error instanceof Error ? error : new Error(...)`
+
     // (where the consequent is the error itself, not its `.message`). Antfu's
     // default no-restricted-syntax patterns are preserved alongside.
     'no-restricted-syntax': [

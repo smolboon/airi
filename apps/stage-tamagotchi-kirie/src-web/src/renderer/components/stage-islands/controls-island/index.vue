@@ -2,7 +2,7 @@
 import { useHostAlwaysOnTop, useHostAppQuit, useHostChat, useHostEventaInvoke, useHostMouseInElement, useHostWindowCenter, useHostWindowMove } from '@proj-airi/stage-host-context'
 import { IS_DEV } from '@proj-airi/stage-shared'
 import { useSettings, useSettingsAudioDevice } from '@proj-airi/stage-ui/stores/settings'
-import { ScrollableArea, useTheme } from '@proj-airi/ui'
+import { ScrollableArea } from '@proj-airi/ui'
 import { refDebounced, useIntervalFn, useMouseInElement, useMousePressed } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { computed, reactive, ref, useId, useTemplateRef, watch } from 'vue'
@@ -31,25 +31,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-const { themeMode, switchToNextTheme } = useTheme()
 const { t } = useI18n()
-
-// The button shows the current theme, and its label tells what a press selects.
-const themeIcons = {
-  light: 'i-solar:sun-2-outline',
-  dark: 'i-solar:moon-outline',
-  auto: 'i-lucide:contrast',
-} as const
-const themeActions = {
-  light: 'switch_to_dark_mode',
-  dark: 'switch_to_system_mode',
-  auto: 'switch_to_light_mode',
-} as const
-const themeLabel = computed(() => ({
-  light: t('tamagotchi.stage.controls-island.switch-to-dark-mode'),
-  dark: t('tamagotchi.stage.controls-island.switch-to-system-mode'),
-  auto: t('tamagotchi.stage.controls-island.switch-to-light-mode'),
-})[themeMode.value])
 const placement = useControlsIslandPlacement()
 const { dock, isLeft, isTop, motionPhase } = placement
 
@@ -119,11 +101,13 @@ defineExpose({
 // Source: https://github.com/moeru-ai/airi/issues/2521 (CachyOS + KDE
 // Plasma, Flatpak). OR it with the DOM-based `isOutsideByDom`
 // (useMouseInElement), which self-corrects on every pointermove and needs
+
 // no OS-level cursor query, so a broken cursor signal cannot force a false
 // collapse. The Electron-cursor signal stays the one used elsewhere (e.g.
 // hit-testing over click-through regions, where DOM events never reach the
 // renderer). Removal condition: once Ozone/Wayland reports the absolute
 // cursor position reliably upstream, or the click-through hit-testing no
+
 // longer depends on this composable.
 const { isOutside: isOutsideByCursor } = useHostMouseInElement(islandElement)
 const { isOutside: isOutsideByDom } = useMouseInElement(islandElement)
@@ -245,10 +229,6 @@ function startDraggingWindow() {
     .catch(error => console.error('[host-context] Failed to begin moving the host window.', error))
 }
 
-function refreshWindow() {
-  window.location.reload()
-}
-
 /**
  * Requests the main process to move the AIRI desktop window back to screen center.
  */
@@ -352,7 +332,7 @@ function resetMainWindowPosition() {
                       v-track-button="{ name: 'controls_island_action', action: 'refresh_window' }"
                       :button-style="adjustStyleClasses.button"
                       :aria-label="t('tamagotchi.stage.controls-island.refresh')"
-                      @click="refreshWindow"
+                      @click="window.location.reload()"
                     >
                       <div i-solar:refresh-linear :class="adjustStyleClasses.icon" text="neutral-800 dark:neutral-300" />
                     </ControlButton>
@@ -372,25 +352,6 @@ function resetMainWindowPosition() {
                     </ControlButton>
                     <template #tooltip>
                       {{ t('tamagotchi.stage.controls-island.center-main-window') }}
-                    </template>
-                  </ControlButtonTooltip>
-
-                  <ControlButtonTooltip disable-hoverable-content>
-                    <ControlButton
-                      v-track-button="{
-                        name: 'controls_island_action',
-                        action: themeActions[themeMode],
-                      }"
-                      :button-style="adjustStyleClasses.button"
-                      :aria-label="themeLabel"
-                      @click="switchToNextTheme"
-                    >
-                      <Transition name="fade" mode="out-in">
-                        <div :key="themeMode" :class="[themeIcons[themeMode], adjustStyleClasses.icon]" text="neutral-800 dark:neutral-300" />
-                      </Transition>
-                    </ControlButton>
-                    <template #tooltip>
-                      {{ themeLabel }}
                     </template>
                   </ControlButtonTooltip>
 

@@ -55,6 +55,7 @@ describe('speech provider configuration persistence', () => {
   // initializeProvider sees that entry and skips creation of the persisted provider.
   // Input changes then mutate a plain object, so the playground keeps its cached
   // missing-key state and localStorage stays empty. These tests fail if the page
+
   // and initialization flow stop writing through the provider store.
   // https://github.com/moeru-ai/airi/issues/2449
   it('enables Test Voice after the user enters an API key (Issue #2449)', async () => {

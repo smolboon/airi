@@ -34,6 +34,7 @@ describe('artistry store', () => {
   // global and active provider options then have equal values but different
   // object identities. Watching the global object and assigning it to the
   // active object creates a second mutation after the synchronized patch.
+
   // That mutation broadcasts another full snapshot and repeats indefinitely.
   //
   // We fixed this by making global-to-active resolution an explicit store

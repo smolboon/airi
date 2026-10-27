@@ -78,6 +78,7 @@ export function createKeyRotator(
           // config poisoning / forged-blob attempts. Source: plan U3 test
           // scenario (3) "Decrypt failure on one key … does NOT silently
           // skip (security: silent skip would hide config-poisoning)".
+
           // Removal condition: never — security-critical surfacing.
           throw createServiceUnavailableError(
             `Failed to decrypt key ${entry.id} for model ${modelName}: ${errorMessageFrom(err) ?? 'unknown error'}`,

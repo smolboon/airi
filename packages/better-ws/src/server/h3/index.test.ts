@@ -41,11 +41,11 @@ describe('better-ws H3 adapter', () => {
     // type, while this mock exposes its resolver for assertion. The cast stays
     // inside the test so production code does not depend on mock-only shape.
     // Remove this if Srvx/CrossWS exposes an inspectable plugin test helper.
-    const mockedPlugin = plugin as unknown as {
+    const mockedPlugin = castUnknown<({
       options: {
         resolve: (request: Request) => Promise<Partial<Hooks> | undefined>
       }
-    }
+    })>(plugin)
     const resolved = await mockedPlugin.options.resolve(new Request('http://localhost/ws'))
 
     expect(plugin).toMatchObject({ kind: 'crossws-plugin' })
@@ -53,3 +53,7 @@ describe('better-ws H3 adapter', () => {
     expect(resolved).toEqual({ open: expect.any(Function) })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

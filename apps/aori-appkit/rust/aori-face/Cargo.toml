@@ -1,0 +1,18 @@
+[package]
+name = "aori-face"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Skin, raster, and glTF read for the Aori companion."
+
+[lib]
+name = "aori_face"
+path = "src/lib.rs"
+crate-type = [
+  "lib",
+  "staticlib",
+]
+
+[dependencies]
+png = "0.17"
+serde_json = "1"

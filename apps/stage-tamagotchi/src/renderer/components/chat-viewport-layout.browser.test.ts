@@ -183,6 +183,7 @@ describe('desktop chat viewport layout', () => {
   // that the transform placed behind the composer.
   //
   // The short-list transform must reserve the composer inset. Long histories
+
   // still use the viewport spacer and can scroll behind the translucent layer.
   it('keeps a short virtualized history above the fixed composer', async () => {
     const messages: ChatHistoryItem[] = [{

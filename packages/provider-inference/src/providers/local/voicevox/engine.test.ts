@@ -48,7 +48,7 @@ function fakeEngine(overrides: { synthesis?: () => Response } = {}) {
     }
   })
 
-  return { calls, fetch: fetchImpl as unknown as typeof globalThis.fetch }
+  return { calls, fetch: castUnknown<(typeof globalThis.fetch)>(fetchImpl) }
 }
 
 describe('engine request', () => {
@@ -118,7 +118,7 @@ describe('engine request', () => {
   it('names the endpoint and the status when the engine rejects the request', async () => {
     const failing = vi.fn(async () => new Response('speaker not found', { status: 422, statusText: 'Unprocessable Entity' }))
 
-    await expect(fetchSpeakers('http://localhost:50021/', { fetch: failing as unknown as typeof globalThis.fetch }))
+    await expect(fetchSpeakers('http://localhost:50021/', { fetch: castUnknown<(typeof globalThis.fetch)>(failing) }))
       .rejects
       .toThrow(/422 Unprocessable Entity for \/speakers: speaker not found/)
   })
@@ -205,7 +205,7 @@ describe('fetchSpeakers', () => {
   it('reports a body that is not JSON as a wrong Base URL rather than as a parse error', async () => {
     const html = vi.fn(async () => new Response('<!doctype html><html></html>'))
 
-    await expect(fetchSpeakers('http://localhost:8080/', { fetch: html as unknown as typeof globalThis.fetch }))
+    await expect(fetchSpeakers('http://localhost:8080/', { fetch: castUnknown<(typeof globalThis.fetch)>(html) }))
       .rejects
       .toThrow(/points at a VOICEVOX-compatible engine/)
   })
@@ -218,3 +218,7 @@ describe('fetchEngineVersion', () => {
     expect(await fetchEngineVersion('http://localhost:50021/', { fetch: engine.fetch })).toBe('0.24.1')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

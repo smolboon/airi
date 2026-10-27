@@ -135,6 +135,7 @@ describe('official provider module defaults', () => {
   // the partial state forever.
   //
   // We fixed this by repairing official modules and configuring each empty
+
   // module independently.
   it('repairs a partial official configuration after authentication', async () => {
     const consciousnessStore = useConsciousnessStore()
@@ -266,6 +267,7 @@ describe('official provider module defaults', () => {
   // therefore hid the official choice even while the user was signed in.
   //
   // We fixed this by configuring every standard official provider after login
+
   // while applying official module selections only to empty modules.
   it('configures official choices without replacing custom module selections', async () => {
     const consciousnessStore = useConsciousnessStore()
@@ -306,6 +308,7 @@ describe('official provider module defaults', () => {
   // the authenticated session that grants access no longer existed.
   //
   // We fixed this by unconfiguring official records on logout and clearing only
+
   // module selections that belong to those records. Custom selections remain.
   it('removes authenticated official configuration on logout', async () => {
     const consciousnessStore = useConsciousnessStore()

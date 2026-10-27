@@ -39,7 +39,7 @@ describe('mcpReplServer', () => {
     vi.clearAllMocks()
 
     // Mock Brain
-    brain = {
+    brain = castUnknown<(Brain)>({
       getDebugSnapshot: vi.fn().mockReturnValue({
         isProcessing: false,
         queueLength: 0,
@@ -72,7 +72,7 @@ describe('mcpReplServer', () => {
         messageCount: 2,
         estimatedTokens: 10,
       }]),
-    } as unknown as Brain
+    })
 
     void new McpReplServer(brain)
   })
@@ -244,3 +244,7 @@ describe('mcpReplServer', () => {
     expect(text).toContain('"estimatedTokens":10')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

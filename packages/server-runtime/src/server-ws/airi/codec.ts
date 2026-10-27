@@ -54,6 +54,7 @@ export function parseEvent(text: string): WebSocketEvent {
   // use superjson.parse instead of message.json() or plain JSON.parse first.
   // JSON.parse on a superjson-encoded string returns the wrapper object
   // `{ json: {...}, meta: {...} }` with no protocol `type`, which breaks routing.
+
   // Keep this until all AIRI websocket clients share one non-wrapper wire format.
   let parsed: WebSocketEvent | undefined
   try {

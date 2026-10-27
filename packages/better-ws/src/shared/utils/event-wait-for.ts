@@ -65,7 +65,7 @@ export function createEventWaitFor<TEvent, TResult = TEvent>(
 ): EventWaitFor<TEvent, TResult> {
   const {
     match = () => true,
-    select = (event: TEvent) => event as unknown as TResult,
+    select = (event: TEvent) => castUnknown<(TResult)>(event),
     abortMessage = 'Wait aborted.',
     timeoutMessage = 'Timed out waiting for event.',
     signals = [],
@@ -182,4 +182,8 @@ export function createEventWaitFor<TEvent, TResult = TEvent>(
     emit: event => events.emit(waitEvent, event),
     dispose: reason => rejectWith(abortMessage, reason),
   }
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

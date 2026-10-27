@@ -17,12 +17,12 @@ vi.mock('@huggingface/transformers', async (importOriginal) => {
 })
 
 function createProbabilityModel(probabilities: number[]) {
-  return vi.fn(async (input: { state: unknown }) => ({
+  return castUnknown<(PreTrainedModel)>(vi.fn(async (input: { state: unknown }) => ({
     stateN: input.state,
     output: {
       data: new Float32Array([probabilities.shift() ?? 0]),
     },
-  })) as unknown as PreTrainedModel
+  })))
 }
 
 describe('vad speech duration', () => {
@@ -89,6 +89,7 @@ describe('vad speech duration', () => {
     // state even though model inference itself was queued. The first segment
     // could complete while the second segment never reached a valid transition.
     //
+
     // We serialize the complete detection and state transition for every chunk.
     const probabilities = [
       ...Array.from<number>({ length: 30 }).fill(0.9),
@@ -112,3 +113,7 @@ describe('vad speech duration', () => {
     expect(onSpeechReady).toHaveBeenCalledTimes(2)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

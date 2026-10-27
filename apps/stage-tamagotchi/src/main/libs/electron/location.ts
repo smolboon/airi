@@ -65,14 +65,17 @@ export async function load(window: BrowserWindow, url: string | { url: string, o
           // ```
           //
           // and this will cause the `load(...)` promise to reject, while `#${hash content}` is in fact the correct URL expected by
+
           // electron, but from `new URL(...)` standard API, the output URL with hash will include at least one `/` before `#${hash content}`,
           // which causes the mismatch and thus the error.
           //
           // This is more likely a URL scheme standard mismatch between Electron and Node.js, and currently we can only catch and
+
           // ignore this error, since the URL with hash is actually loaded correctly in Electron, and the error is just a false alarm.
           //
           // Navigation started: {url: 'http://localhost:5173/#/notice/fade-on-hover?id=fade-on-hover', isSameDocument: false, isMainFrame: true, isInPlace: false}
           // Navigation started: {url: 'http://localhost:5173/#/notice/fade-on-hover?id=fade-on-hover', isSameDocument: false, isMainFrame: true, isInPlace: false}
+
           // Navigation started: {url: 'http://localhost:5173/#/notice/fade-on-hover?id=fade-on-hover', isSameDocument: false, isMainFrame: true, isInPlace: false}
           //
           // https://github.com/electron/electron/issues/17526

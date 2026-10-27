@@ -63,6 +63,7 @@ describe('adaptive input geometry', () => {
     //
     // Before the fix, the chat layer used visualViewport.height - keyboardShift as its bottom edge.
     //
+
     // We fixed this by using height + pageTop as the bottom edge in document coordinates.
     // Only the chat layer uses this value.
     const layout = calculateVisualViewportLayout({
@@ -107,6 +108,7 @@ describe('adaptive input geometry', () => {
     //
     // Before the fix, blur disabled keyboardVisible but kept height and visibleBottom at 404px.
     //
+
     // We fixed this by restoring the stable layout height as soon as the owned input loses focus.
     // Later Visual Viewport events cannot compress this input region again during keyboard close.
     const layout = calculateVisualViewportLayout({

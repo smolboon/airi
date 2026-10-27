@@ -20,12 +20,12 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _summaryOrSchema: unknown, schemaOrHandler: unknown, maybeHandler?: ToolHandler) {
         const handler = (maybeHandler ?? schemaOrHandler) as ToolHandler
         handlers.set(name, handler)
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -44,7 +44,7 @@ describe('registerChromeSessionTools', () => {
   beforeEach(() => {
     pendingActions = []
 
-    runtime = {
+    runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({
         executor: 'macos-local',
         approvalMode: 'never',
@@ -111,7 +111,7 @@ describe('registerChromeSessionTools', () => {
         begin: vi.fn(() => ({ id: 'desktop-session-1' })),
         addOwnedWindow: vi.fn(),
       },
-    } as unknown as ComputerUseServerRuntime
+    })
   })
 
   it('returns approval_required instead of launching Chrome when approvals are enabled', async () => {
@@ -216,3 +216,7 @@ describe('registerChromeSessionTools', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A11111111111111111111113 /* AoriCore in Frameworks */ = {isa = PBXBuildFile; productRef = A11111111111111111111111 /* AoriCore */; };
+		A11111111111111111111114 /* AoriProviders in Frameworks */ = {isa = PBXBuildFile; productRef = A11111111111111111111112 /* AoriProviders */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A11111111111111111111104 /* Aori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aori.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A11111111111111111111103 /* AoriApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Sources/AoriApp;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A11111111111111111111108 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A11111111111111111111113 /* AoriCore in Frameworks */,
+				A11111111111111111111114 /* AoriProviders in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A11111111111111111111105 = {
+			isa = PBXGroup;
+			children = (
+				A11111111111111111111103 /* AoriApp */,
+				A11111111111111111111106 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A11111111111111111111106 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A11111111111111111111104 /* Aori.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A11111111111111111111102 /* Aori */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1111111111111111111110B /* Build configuration list for PBXNativeTarget "Aori" */;
+			buildPhases = (
+				A11111111111111111111115 /* Build the face library */,
+				A11111111111111111111107 /* Sources */,
+				A11111111111111111111108 /* Frameworks */,
+				A11111111111111111111109 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A11111111111111111111103 /* AoriApp */,
+			);
+			name = Aori;
+			packageProductDependencies = (
+				A11111111111111111111111 /* AoriCore */,
+				A11111111111111111111112 /* AoriProviders */,
+			);
+			productName = Aori;
+			productReference = A11111111111111111111104 /* Aori.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A11111111111111111111101 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A11111111111111111111102 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A1111111111111111111110A /* Build configuration list for PBXProject "AoriAppKit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A11111111111111111111105;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A11111111111111111111110 /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A11111111111111111111106 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A11111111111111111111102 /* Aori */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A11111111111111111111109 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A11111111111111111111115 /* Build the face library */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build the face library";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\nexport PATH=\"$HOME/.cargo/bin:$PATH\"\ncd \"$PROJECT_DIR/rust\"\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  cargo build --release -p aori-face\nelse\n  cargo build -p aori-face\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A11111111111111111111107 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1111111111111111111110C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A1111111111111111111110D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A1111111111111111111110E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Aori.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Aori;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aori uses the microphone to hear you.";
+				INFOPLIST_KEY_NSScreenCaptureUsageDescription = "Aori reads the screen when you allow screen capture.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aori uses speech recognition to turn your voice into chat text.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"ScreenCaptureKit",
+					"-L$(PROJECT_DIR)/rust/target/debug",
+					"-laori_face",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ai.moeru.aori.appkit;
+				PRODUCT_NAME = Aori;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A1111111111111111111110F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Aori.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Aori;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aori uses the microphone to hear you.";
+				INFOPLIST_KEY_NSScreenCaptureUsageDescription = "Aori reads the screen when you allow screen capture.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aori uses speech recognition to turn your voice into chat text.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"ScreenCaptureKit",
+					"-L$(PROJECT_DIR)/rust/target/release",
+					"-laori_face",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ai.moeru.aori.appkit;
+				PRODUCT_NAME = Aori;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1111111111111111111110A /* Build configuration list for PBXProject "AoriAppKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1111111111111111111110C /* Debug */,
+				A1111111111111111111110D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1111111111111111111110B /* Build configuration list for PBXNativeTarget "Aori" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1111111111111111111110E /* Debug */,
+				A1111111111111111111110F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A11111111111111111111110 /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A11111111111111111111111 /* AoriCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A11111111111111111111110 /* XCLocalSwiftPackageReference "." */;
+			productName = AoriCore;
+		};
+		A11111111111111111111112 /* AoriProviders */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A11111111111111111111110 /* XCLocalSwiftPackageReference "." */;
+			productName = AoriProviders;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A11111111111111111111101 /* Project object */;
+}

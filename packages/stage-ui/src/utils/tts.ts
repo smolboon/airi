@@ -98,6 +98,7 @@ export async function* chunkTTSInput(
 
               // REVIEW: @Lilia-Chen I think we need to remove the below line
               // 1. Not sensible to let the previousValue to be the value of the next value
+
               // 2. after the continue (jump to the bottom of the while loop), the previousValue will be reset to value, so this value assignment doesn't work at all
               // previousValue = next.value
 
@@ -193,6 +194,7 @@ export async function* chunkTTSInput(
           // ".." is not a legal punctuation so ignored.
           // The first "." had been consumed during hard flush
           // next.value = second '.'
+
           // afterNext.value = 'y', so we just need to care about 'y'
           // In case 'y' is not just a useless blank. It's OK if 'y' is blank since we have `text = chunk.trim()`
           current = afterNext

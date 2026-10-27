@@ -344,6 +344,7 @@ export function createChatWsClient(options: CreateChatWsClientOptions): ChatWsCl
       // signal we get is the close `code` (the close `reason` body is
       // also delivered but not used for routing here). 4001 is our
       // protocol signal for "this token will never succeed without
+
       // rotation"; calling `ws.close()` here sets
       // useWebSocket's internal `explicitlyClosed` flag so the next
       // onclose path skips the reconnect schedule. A token change below
@@ -367,6 +368,7 @@ export function createChatWsClient(options: CreateChatWsClientOptions): ChatWsCl
   // setup, which gives us a parent effect scope for `watch` to attach to.
   // NOTICE:
   // We intentionally do NOT stop this watcher in `disconnect()`; previous
+
   // behavior killed it permanently and any caller that did `disconnect()`
   // followed by `connect()` silently stopped receiving status events. The
   // watcher is idle while the socket is closed, so leaving it attached
@@ -411,6 +413,7 @@ export function createChatWsClient(options: CreateChatWsClientOptions): ChatWsCl
   // a reconnect, `context` is rebuilt; a captured reference would point at a
   // disposed context. eventa's native ws adapter installs wsDisconnectedEvent
   // and wsErrorEvent as abortOnEvents, so any invoke whose socket dies before
+
   // a response arrives rejects with a real Error instead of hanging.
   const invokeSendMessages = defineInvoke(getContext, sendMessages)
   const invokePullMessages = defineInvoke(getContext, pullMessages)

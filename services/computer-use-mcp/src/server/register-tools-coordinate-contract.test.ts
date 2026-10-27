@@ -14,7 +14,7 @@ function createMockServer() {
   const schemas = new Map<string, SchemaShape>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, schemaOrSummary: unknown, schemaOrHandler?: unknown) {
         const schema = typeof schemaOrSummary === 'string'
           ? schemaOrHandler
@@ -24,13 +24,13 @@ function createMockServer() {
 
         return { disable: vi.fn() }
       },
-    } as unknown as McpServer,
+    }),
     schemas,
   }
 }
 
 function createRegistrationRuntime() {
-  return {
+  return castUnknown<(ComputerUseServerRuntime)>({
     config: createTestConfig(),
     stateManager: new RunStateManager(),
     session: {},
@@ -41,7 +41,7 @@ function createRegistrationRuntime() {
     chromeSessionManager: {},
     desktopSessionController: {},
     taskMemory: {},
-  } as unknown as ComputerUseServerRuntime
+  })
 }
 
 describe('registerComputerUseTools coordinate contract', () => {
@@ -63,3 +63,7 @@ describe('registerComputerUseTools coordinate contract', () => {
     expect(schemas.get('desktop_scroll')?.y.description).toBe('Optional global logical screen Y coordinate to move to before scrolling')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

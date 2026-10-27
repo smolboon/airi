@@ -1,0 +1,15 @@
+menu:
+  appName: Aori
+  about: Acerca de Aori
+  settings: Ajustes…
+  quit: Salir de Aori
+  newChat: Nuevo chat
+  openVRM: Abrir VRM…
+  memory: Memoria
+  showMainWindow: Mostrar ventana principal
+  showCompanion: Mostrar compañero
+  hideCompanion: Ocultar compañero
+  alwaysOnTop: Compañero siempre visible
+  clickThrough: Pulsar a través
+  language: Idioma
+  statusItem: Aori

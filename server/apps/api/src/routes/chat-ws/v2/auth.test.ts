@@ -48,6 +48,7 @@ describe('v2 chat WebSocket authentication', () => {
   // concurrent requests to repeat the resolver work.
   //
   // The authentication session now accepts one attempt, marks the socket
+
   // inactive before it closes, and refuses a late resolver result.
   it('does not authenticate after disconnecting during authentication', async () => {
     const deferred = createDeferred<string | null>()

@@ -1,0 +1,9 @@
+.build/
+__pycache__/
+*.pyc
+.swiftpm/
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+Aori.app/

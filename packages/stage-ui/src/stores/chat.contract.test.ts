@@ -684,6 +684,7 @@ describe('chat store contract', () => {
     // chat runtime, so the leader window kept generating the LLM response.
     //
     // Cancellation is now a synchronized action. The follower RPC reaches the
+
     // leader-owned AbortController and waits for the active send to settle.
     const namespace = `chat-cancellation:${crypto.randomUUID()}`
     const leaderPinia = createPinia()
@@ -1087,6 +1088,7 @@ describe('chat store contract', () => {
     //
     // The chat store now owns the leadership subscription. It starts the
     // session consumers after promotion and stops local consumers after
+
     // demotion or disposal.
     let leadershipListener: ((isLeader: boolean) => void) | undefined
     const stopLeadershipListener = vi.fn()

@@ -101,6 +101,7 @@ const EnvSchema = intersect([S3EnvironmentSchema, object({
   // Stored as base64-encoded 32 random bytes. Validator decodes + asserts the
   // 32-byte length at parse time so a misconfigured key fails the deploy
   // rather than passing readiness and breaking on first router request.
+
   // Required: the router has no fallback path, so an unset master key means
   // chat completions cannot serve at all.
   LLM_ROUTER_MASTER_KEY: pipe(
@@ -163,6 +164,7 @@ const EnvSchema = intersect([S3EnvironmentSchema, object({
   // (success_url / cancel_url / portal return_url) when a request has no trusted
   // browser origin — notably the Electron desktop renderer, which loads from
   // file:// and sends no usable web origin. Web/mobile requests keep returning to
+
   // their own origin; only origin-less clients fall back to this.
   WEB_APP_URL: optional(string(), 'https://airi.moeru.ai'),
 })])

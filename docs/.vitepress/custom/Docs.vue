@@ -23,6 +23,10 @@ import { flatten } from '../utils/flatten'
 
 import * as authorsData from '../functions/authors.data'
 
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
+
 const { t } = useI18n()
 const { theme, frontmatter } = useData()
 const { path } = toRefs(useRoute())
@@ -105,7 +109,7 @@ const publishedAt = computed(() => {
 })
 
 const authors = computed(() => {
-  const data = (authorsData as unknown as { data: Array<{ url: string, authors: Author[] }> }).data
+  const data = castUnknown<({ data: Array<{ url: string, authors: Author[] }> })>(authorsData).data
   const currentPath = normalizeDocumentPath(path.value)
 
   return data.find(item =>

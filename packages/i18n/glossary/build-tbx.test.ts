@@ -225,6 +225,7 @@ describe('terms.yaml', () => {
     // term may live in prose rather than in a string. `Project AIRI` appears six times in
     // README.md and in no interface string, and `Neuro Sama` only under docs/content/en.
     //
+
     // The check still has teeth. A term that appears in none of these places can never match
     // in the editor, so it cannot help a translator. `Ayaka Neko` was such a term, and it is
     // the reason this check runs over the documentation rather than being deleted.
@@ -261,6 +262,7 @@ describe('terms.yaml', () => {
     // A context shows the term in use. Usually it is a real interface string, but for the
     // two codenames it cannot be: every interface string containing them is one this
     // glossary rules against. So the check is not "does the locale contain it" but "does it
+
     // mention its own term", which catches a sentence pasted onto the wrong entry.
     const unrelated = concepts.flatMap(c => c.terms
       .filter(t => t.context && !t.context.toLowerCase().includes(t.text.toLowerCase()))

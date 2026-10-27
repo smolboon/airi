@@ -8,17 +8,17 @@ import { createAuthRoutes } from '../routes'
 
 async function createApp(trustedProxy?: 'railway') {
   const routes = await createAuthRoutes({
-    auth: {
+    auth: castUnknown<(Parameters<typeof createAuthRoutes>[0]['auth'])>({
       handler: vi.fn(async () => new Response(null, { status: 200 })),
       api: { getSession: vi.fn(async () => null) },
-    } as unknown as Parameters<typeof createAuthRoutes>[0]['auth'],
-    db: {} as unknown as Parameters<typeof createAuthRoutes>[0]['db'],
-    env: {
+    }),
+    db: castUnknown<(Parameters<typeof createAuthRoutes>[0]['db'])>({}),
+    env: castUnknown<(Parameters<typeof createAuthRoutes>[0]['env'])>({
       PUBLIC_URL: 'https://api.airi.build',
       AUTH_UI_URL: 'https://accounts.airi.build/ui',
       ADDITIONAL_TRUSTED_ORIGINS: [],
       RATE_LIMIT_TRUSTED_PROXY: trustedProxy,
-    } as unknown as Parameters<typeof createAuthRoutes>[0]['env'],
+    }),
     rateLimitMetrics: null,
   })
 
@@ -72,6 +72,7 @@ describe('auth API rate limiting behind Railway', () => {
     // public custom domain to Caddy first disabled X-Real-IP. The replacement
     // then allowed only IPv4 proxy sockets, while Railway connected Caddy to
     // ts-api over private IPv6, so callers still shared the Caddy socket bucket.
+
     // AFTER: the explicit deployment setting owns proxy trust; the middleware
     // validates X-Real-IP without coupling it to the proxy transport family.
     const server = await listen(await createApp('railway'), '::1')
@@ -88,3 +89,7 @@ describe('auth API rate limiting behind Railway', () => {
     }
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

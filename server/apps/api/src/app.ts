@@ -762,6 +762,7 @@ export async function createApp() {
   //   1. give it a `deleteAllForUser(userId)` method
   //   2. add one `service.register(...)` line below
   // Domain knowledge stays inside each service instead of being copied into
+
   // a parallel handler file. See `server/apps/api/docs/ai-context/account-deletion.md`.
   const userDeletionService = injeca.provide('services:userDeletion', {
     dependsOn: { paymentService, fluxService, providerService, characterService, characterCardService, chatService },

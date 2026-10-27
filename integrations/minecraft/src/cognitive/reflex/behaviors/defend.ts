@@ -51,6 +51,7 @@ export const defendBehavior: ReflexBehavior = {
     // Yield while another reflex already owns the body (e.g. an in-progress survival bite from
     // auto-eat, or an escape-hazard climb): preempting it here would let attackEntity re-equip a weapon
     // and cancel that reflex mid-action. The reflex releases reflexEngaged when it finishes, after which
+
     // a still-active attacker re-triggers defend on the next tick.
     if (ctx.autonomy.reflexEngaged)
       return false
@@ -68,7 +69,7 @@ export const defendBehavior: ReflexBehavior = {
     try {
       // NOTICE: recentAttacker stores the live mineflayer entity (the damage_event source); it is
       // typed narrowly as AttackerEntity, so widen it back to Entity for attackEntity/pvp.
-      await attackEntity(api.bot, attacker as unknown as Entity, true)
+      await attackEntity(api.bot, castUnknown<(Entity)>(attacker), true)
     }
     catch {
       // Mob despawned / unreachable / fight interrupted — the next tick re-evaluates.
@@ -78,4 +79,8 @@ export const defendBehavior: ReflexBehavior = {
       api.context.updateAutonomy({ reflexEngaged: false })
     }
   },
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

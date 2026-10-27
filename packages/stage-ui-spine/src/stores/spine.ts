@@ -113,6 +113,7 @@ export const useSpine = defineStore('spine', () => {
   // are bound to the same `settings/spine/*` keys. They used to be declared
   // here too, which created two refs per key and two competing sources of
   // truth. Stage, the preview, and the settings panel all read the
+
   // `useSettingsSpine` copies, so the duplicates were removed from this store.
   // Removal condition: keep these settings owned by a single store.
 

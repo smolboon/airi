@@ -168,7 +168,7 @@ describe('createWebSearchTools', () => {
   })
 
   it('treats a 2xx body with a non-array results field as no results', async () => {
-    stubTavily({ results: 'oops' } as unknown as { results?: TavilyResult[] })
+    stubTavily(castUnknown<({ results?: TavilyResult[] })>({ results: 'oops' }))
 
     const [tool] = await createWebSearchTools({ apiKey: 'key' })
     const result = await tool.execute({ query: 'weird', max_results: 1 }, ctx) as string
@@ -227,3 +227,7 @@ describe('createWebSearchTools', () => {
     ])
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

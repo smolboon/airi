@@ -145,13 +145,13 @@ code,kbd,samp,pre {
     // Version 1.1.4 embeds @unocss/core types in its generated shared declaration file.
     // Source: node_modules/@proj-airi/unocss-preset-chromatic/dist/shared-3Rd5ey9i.d.mts.
     // Remove this when the package emits imports for UnoCSS types instead of bundling them.
-    presetChromatic({
+    castUnknown<(Preset<object>)>(presetChromatic({
       baseHue: 220.44,
       colors: {
         complementary: 180,
         primary: 0,
       },
-    }) as unknown as Preset<object>,
+    })),
   ],
   rules: [
     [/^bg-gradient-radial-\[(.+)\]$/, ([, d]) => ({ 'background-image': `radial-gradient(${d})` })],
@@ -313,3 +313,7 @@ code,kbd,samp,pre {
     transformerVariantGroup(),
   ],
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

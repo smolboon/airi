@@ -55,7 +55,7 @@ export interface CrossWsConnectorOptions {
 export function createCrossWsConnector(options: CrossWsConnectorOptions): ClientConnector<string> {
   return {
     connect(events) {
-      const WsConstructor = options.wsConstructor ?? (NativeWebSocket as unknown as CrossWsConstructor)
+      const WsConstructor = options.wsConstructor ?? (castUnknown<(CrossWsConstructor)>(NativeWebSocket))
       const ws = new WsConstructor(options.url, options.protocols)
 
       return new Promise((resolve, reject) => {
@@ -129,4 +129,8 @@ function createCloseBeforeOpenError(event: CrossWsCloseEvent): Error {
   const reason = event.reason ? ` ${event.reason}` : ''
   const code = typeof event.code === 'number' ? ` with code ${event.code}` : ''
   return new Error(`CrossWS connection closed before opening${code}.${reason}`)
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

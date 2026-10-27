@@ -41,7 +41,7 @@ function stubCanvas() {
     fillText: () => {},
   }
 
-  return { width: 0, height: 0, getContext: () => context } as unknown as HTMLCanvasElement
+  return castUnknown<(HTMLCanvasElement)>({ width: 0, height: 0, getContext: () => context })
 }
 
 function createAdvancer() {
@@ -237,3 +237,7 @@ describe('presence bubble advancer', () => {
     expect(after.mode).toBe('left')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

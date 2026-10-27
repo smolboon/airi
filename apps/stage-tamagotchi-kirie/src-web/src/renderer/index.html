@@ -1,8 +1,15 @@
 <!doctype html>
-<html>
+<html class="dark" style="color-scheme: dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, viewport-fit=cover" />
+    <script>
+      document.documentElement.classList.add('dark')
+      document.documentElement.style.colorScheme = 'dark'
+    </script>
+    <style>
+      html, body { background: #171717; color-scheme: dark; }
+    </style>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!-- <meta
       http-equiv="Content-Security-Policy"

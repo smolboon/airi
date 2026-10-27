@@ -66,7 +66,7 @@ createApp(App)
   .use(synced.vue)
   .use(MotionPlugin)
   // TODO: Fix autoAnimatePlugin type error
-  .use(autoAnimatePlugin as unknown as Plugin)
+  .use(castUnknown<(Plugin)>(autoAnimatePlugin))
   .use(router)
   .use(pinia)
   .use(PiniaColada)
@@ -114,4 +114,8 @@ if (import.meta.env.DEV && !import.meta.env.SSR) {
   // Disconnect on timeout in case the MutationObserver is left here forever.
   // `observer.disconnect()` is idempotent, so it's safe to call it multiple times.
   setTimeout(() => observer.disconnect(), 15 * 1000)
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

@@ -261,6 +261,7 @@ function requestDeleteConfirmation(message: string): boolean {
   // Root cause: `no-alert` rejects direct `confirm(...)` calls before this page
   // has a shared confirmation-dialog primitive wired into the card settings flow.
   // Source/context: this component already used native confirm for journal delete.
+
   // Removal condition: replace with the shared modal confirmation component.
   const confirmAction = globalThis.confirm.bind(globalThis)
   return confirmAction(message)

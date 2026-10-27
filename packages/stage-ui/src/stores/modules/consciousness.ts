@@ -96,6 +96,7 @@ export const useConsciousnessStore = defineStore('consciousness', () => {
   // clear the selection whenever the provider changes. This used to live only
   // in the consciousness settings page, so provider changes made elsewhere
   // (onboarding, character cards, provider deletion) kept the previous
+
   // provider's model and chat requests failed upstream with model_not_found.
   //
   // The watcher is synchronous on purpose: call sites assign the provider
@@ -103,6 +104,7 @@ export const useConsciousnessStore = defineStore('consciousness', () => {
   // deferred reset would wipe the model they just chose. Synchronous flush
   // makes "set provider, then set model" a safe, ordered operation.
   //
+
   // Issue #1761: https://github.com/moeru-ai/airi/issues/1761
   watch(activeProvider, (provider, oldProvider) => {
     if (provider === oldProvider)

@@ -237,6 +237,7 @@ describe('media permissions', () => {
     // desktop capture request arrives with an empty `mediaTypes` list.
     //
     // `shouldGrantElectronPermission` returned early for every `media` operation and demanded audio-only
+
     // details, so screen capture was denied before the allowlisted `display-capture` entry was reached:
     //
     // if (permission === 'media')
@@ -276,6 +277,7 @@ describe('media permissions', () => {
     // `setDisplayMediaRequestHandler`. Granting on empty `mediaTypes` alone therefore also handed a local
     // page the full desktop through `getUserMedia()`, skipping AIRI's own source selection:
     //
+
     // const allowlistPermission = isDisplayCaptureMediaPermission(permission, details) ? 'display-capture' : permission
     //
     // We fixed this by additionally requiring an authorized capture source, which only AIRI's selected

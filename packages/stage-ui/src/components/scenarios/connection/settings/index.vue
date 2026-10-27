@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
 })
 
 const { t } = useI18n()
-const { websocketUrl } = storeToRefs(useModsServerChannelStore())
+const { serverUrlConfigured, websocketUrl } = storeToRefs(useModsServerChannelStore())
 
 const websocketUrlModel = computed({
   get() {
@@ -24,6 +24,8 @@ const websocketUrlModel = computed({
     if (value === undefined)
       return
 
+    // A hosted page ignores the automatic local address until the user saves one.
+    serverUrlConfigured.value = true
     websocketUrl.value = value
   },
 })

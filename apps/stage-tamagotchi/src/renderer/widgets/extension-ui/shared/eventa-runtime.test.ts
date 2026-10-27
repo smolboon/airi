@@ -40,7 +40,7 @@ class MockWindow {
     } as MessageEvent
 
     for (const listener of this.listeners.get('message')?.values() ?? []) {
-      listener(messageEvent as unknown as Event)
+      listener(castUnknown<(Event)>(messageEvent))
     }
   }
 }
@@ -68,15 +68,15 @@ describe('createContext', () => {
 
     const host = createContext({
       channel: 'test:extension-ui',
-      currentWindow: parentWindow as unknown as Window,
-      expectedSource: () => iframeWindow as unknown as Window,
-      targetWindow: () => iframeWindow as unknown as Window,
+      currentWindow: castUnknown<(Window)>(parentWindow),
+      expectedSource: () => castUnknown<(Window)>(iframeWindow),
+      targetWindow: () => castUnknown<(Window)>(iframeWindow),
     })
     const iframe = createContext({
       channel: 'test:extension-ui',
-      currentWindow: iframeWindow as unknown as Window,
-      expectedSource: () => parentWindow as unknown as Window,
-      targetWindow: () => parentWindow as unknown as Window,
+      currentWindow: castUnknown<(Window)>(iframeWindow),
+      expectedSource: () => castUnknown<(Window)>(parentWindow),
+      targetWindow: () => castUnknown<(Window)>(parentWindow),
     })
 
     const initPayload = new Promise<{ moduleId: string }>((resolve) => {
@@ -138,15 +138,15 @@ describe('createContext', () => {
 
     const host = createContext({
       channel: 'test:extension-ui',
-      currentWindow: parentWindow as unknown as Window,
-      expectedSource: () => iframeWindow as unknown as Window,
-      targetWindow: () => iframeWindow as unknown as Window,
+      currentWindow: castUnknown<(Window)>(parentWindow),
+      expectedSource: () => castUnknown<(Window)>(iframeWindow),
+      targetWindow: () => castUnknown<(Window)>(iframeWindow),
     })
     const iframe = createContext({
       channel: 'test:extension-ui',
-      currentWindow: iframeWindow as unknown as Window,
-      expectedSource: () => parentWindow as unknown as Window,
-      targetWindow: () => parentWindow as unknown as Window,
+      currentWindow: castUnknown<(Window)>(iframeWindow),
+      expectedSource: () => castUnknown<(Window)>(parentWindow),
+      targetWindow: () => castUnknown<(Window)>(parentWindow),
     })
 
     defineInvokeHandler(iframe.context, gameletIframeRequest, ({ payload }) => {
@@ -167,3 +167,7 @@ describe('createContext', () => {
     iframe.dispose()
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

@@ -50,6 +50,7 @@ const qrCodeSource = computed(() => {
   // which is what the previous theme-aware palette produced in dark mode.
   // See https://github.com/moeru-ai/airi/issues/1606 and
   // https://github.com/ionic-team/capacitor-barcode-scanner/issues/60 for context.
+
   // Removal condition: once the Android scanner reliably recognizes light-on-dark QRs
   // (e.g. after migrating to ML Kit with `TryInverted` enabled), this can revert to
   // a theme-aware palette.

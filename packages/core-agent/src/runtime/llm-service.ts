@@ -351,6 +351,7 @@ export function isToolRelatedError(error: unknown): boolean {
 // The first pattern matches the Rust/serde wire-level error format used by
 // many strict OpenAI-compatible gateways (e.g. DeepSeek-style servers):
 //   "Failed to deserialize the JSON body into the target type:
+
 //    messages[7]: invalid type: sequence, expected a string at line 1 column …"
 // The second pattern covers Python/Pydantic-style errors like
 //   "messages.0.content: Input should be a valid string"

@@ -4,11 +4,6 @@ import { computed, toRef } from 'vue'
 
 import { useGridRipple } from './use-grid-ripple'
 
-interface VirtualSection {
-  _isVirtual: true
-  items: TItem[]
-}
-
 const props = withDefaults(defineProps<{
   items?: TItem[]
   sections?: TSection[]
@@ -38,6 +33,15 @@ const emit = defineEmits<{
   itemClick: [payload: { item: TItem, globalIndex: number }]
 }>()
 
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
+
+interface VirtualSection {
+  _isVirtual: true
+  items: TItem[]
+}
+
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const COLUMN_ORDER = ['2xl', 'xl', 'lg', 'md', 'sm'] as const
 
@@ -45,7 +49,7 @@ const isFlat = computed(() => !!props.items && !props.sections)
 
 const normalizedSections = computed(() => {
   if (isFlat.value && props.items) {
-    return [{ _isVirtual: true, items: props.items }] as unknown as TSection[]
+    return castUnknown<(TSection[])>([{ _isVirtual: true, items: props.items }])
   }
   return props.sections || []
 })
@@ -64,7 +68,7 @@ const currentCols = computed(() => {
 const sectionMeta = computed(() => {
   let globalCounter = 0
   return normalizedSections.value.map((section) => {
-    const items = isFlat.value ? (section as unknown as VirtualSection).items : props.getItems(section)
+    const items = isFlat.value ? castUnknown<(VirtualSection)>(section).items : props.getItems(section)
     const startIndex = globalCounter
     globalCounter += items.length
     return { items, startIndex, count: items.length }

@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { providerAivisSpeech, providerVoicevox } from '.'
 import { getProviderValidationIntervalMs } from '../../../validators/run'
 
-const translate = ((key: string) => key) as unknown as ProviderTranslator
+const translate = castUnknown<(ProviderTranslator)>((key: string) => key)
 
 interface EngineCall {
   init: RequestInit
@@ -195,3 +195,7 @@ describe('vOICEVOX speech provider', () => {
       .toThrow(/No voice selected/)
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

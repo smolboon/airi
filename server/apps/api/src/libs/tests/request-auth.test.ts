@@ -43,7 +43,7 @@ function createUser(overrides: Partial<RequestAuthSession['user']> = {}): Reques
 }
 
 function createDb(user: RequestAuthSession['user'] | null, failure?: Error): Database {
-  return {
+  return castUnknown<(Database)>({
     query: {
       user: {
         findFirst: vi.fn(async () => {
@@ -53,7 +53,7 @@ function createDb(user: RequestAuthSession['user'] | null, failure?: Error): Dat
         }),
       },
     },
-  } as unknown as Database
+  })
 }
 
 function mockValidJwt(subject = 'user-1') {
@@ -213,3 +213,7 @@ describe('resolveRequestAuth', () => {
     )).rejects.toThrow('database unavailable')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

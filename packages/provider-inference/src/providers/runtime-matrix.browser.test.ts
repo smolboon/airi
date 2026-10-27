@@ -10,7 +10,9 @@ const localApiProviderIds = new Set([
   'aivis-speech',
   'index-tts-vllm',
   'lm-studio',
+  'mlx-serve',
   'ollama',
+  'tensorfold',
   'player2-speech',
   'voicevox',
 ])

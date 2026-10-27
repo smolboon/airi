@@ -86,7 +86,7 @@ const needsApiKey = computed(() => {
   // Providers with custom onboarding fields handle their own auth
   if (hasOnboardingFields.value)
     return false
-  return props.selectedProvider.id !== 'ollama' && props.selectedProvider.id !== 'player2'
+  return !['ollama', 'player2', 'mlx-serve', 'tensorfold'].includes(props.selectedProvider.id)
 })
 
 const needsBaseUrl = computed(() => {

@@ -16,14 +16,15 @@ describe('useExpressionController', () => {
     // ID at setup time, so model B expressions were registered as model A.
     //
     // We fixed this by passing the identity of each completed model load into
+
     // the matching expression initialization.
     setActivePinia(createPinia())
 
-    const internalModel = shallowRef({
+    const internalModel = shallowRef(castUnknown<(PixiLive2DInternalModel)>({
       coreModel: {
         getParameterDefaultValueById: () => 0,
       },
-    } as unknown as PixiLive2DInternalModel)
+    }))
     const controller = useExpressionController({ internalModel })
     const expressionStore = useExpressionStore()
     const expressionRefs = [{ Name: 'Happy', File: 'happy.exp3.json' }]
@@ -39,3 +40,7 @@ describe('useExpressionController', () => {
     expect(expressionStore.modelId).toBe('model-b')
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

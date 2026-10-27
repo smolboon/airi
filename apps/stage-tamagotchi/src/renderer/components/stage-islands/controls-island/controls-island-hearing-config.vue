@@ -21,6 +21,7 @@ const { volumeLevel, startAnalyzer, stopAnalyzer } = useAudioAnalyzer()
 // `useSettingsAudioDevice()` already owns the mic stream lifecycle via the persisted `enabled` state.
 // We previously toggled the stream here as well, which introduced a second lifecycle controller: the
 // dialog could recreate the MediaStream while the page-level transcription pipeline still believed
+
 // the old session was active.
 //
 // That produced the "VAD still works, but no transcript arrives" failure after retoggling the mic.

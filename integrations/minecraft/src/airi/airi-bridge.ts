@@ -59,10 +59,12 @@ export class AiriBridge {
       // trigger a fresh decision (Conscious) cycle, never be silently filed into history — so we
       // always route it through handleActionIntent (→ signal:airi_command → enqueueEvent → decision cycle).
       //
+
       // We intentionally do not special-case `intent === 'context'`: that branch used to emit
       // signal:airi_context which Brain pushes to conversationHistory WITHOUT waking the loop, so a
       // command that mislabels its intent as "context" would be silently dropped from action. True
       // passive context still has its own dedicated channel — `context:update` (see
+
       // contextUpdateHandler) — which remains history-only and is unaffected by this routing.
       this.handleActionIntent(cmd)
     }
@@ -199,6 +201,7 @@ export class AiriBridge {
     // `airi_command` signal so the brain runs a fresh decision cycle
     // (resetNoActionFollowupBudget('airi_command'), normal Conscious wake-up) instead of silently
     // filing it into history. The directive is attributed to the AIRI server as a neutral source,
+
     // not to any specific in-game player. The status context tells Stage when this relay is available
     // while this bridge remains the final receiver-side availability gate.
     const firstOption = cmd.guidance?.options?.[0]

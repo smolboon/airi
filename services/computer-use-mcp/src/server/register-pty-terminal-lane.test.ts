@@ -45,11 +45,11 @@ function createMockServer() {
   const handlers = new Map<string, ToolHandler>()
 
   return {
-    server: {
+    server: castUnknown<(McpServer)>({
       tool(name: string, _schema: unknown, handler: ToolHandler) {
         handlers.set(name, handler)
       },
-    } as unknown as McpServer,
+    }),
     async invoke(name: string, args: Record<string, unknown> = {}) {
       const handler = handlers.get(name)
       if (!handler) {
@@ -70,7 +70,7 @@ describe('register-pty: terminal lane', () => {
 
   beforeEach(() => {
     pendingActions = []
-    runtime = {
+    runtime = castUnknown<(ComputerUseServerRuntime)>({
       config: createTestConfig({ approvalMode: 'never' }),
       stateManager: new RunStateManager(),
       session: {
@@ -82,7 +82,7 @@ describe('register-pty: terminal lane', () => {
         listPendingActions: vi.fn(() => pendingActions),
         record: vi.fn().mockResolvedValue(undefined),
       },
-    } as unknown as ComputerUseServerRuntime
+    })
     vi.clearAllMocks()
   })
 
@@ -495,3 +495,7 @@ describe('register-pty: terminal lane', () => {
     })
   })
 })
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}

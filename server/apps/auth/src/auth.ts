@@ -511,6 +511,7 @@ export function createAuth(
       // reset. Without this, social-only users who later set a password via
       // "forgot password" stay stuck with emailVerified=false (better-auth's
       // /reset-password handler only writes the password, see
+
       // node_modules/better-auth/dist/api/routes/password.mjs L120-166) and
       // get rejected on the next email/password sign-in by
       // `requireEmailVerification: true`.
@@ -584,6 +585,7 @@ export function createAuth(
       // and calls `beforeDelete` BEFORE `internalAdapter.deleteUser`. External
       // authorizations are revoked first, then resource data is soft-deleted.
       // Both operations are idempotent so a partial failure can be retried.
+
       // Throw from `beforeDelete` to abort: the user row and verification
       // token stay intact, so the same callback can resume the attempt.
       // Soft-delete handlers must be idempotent because retrying a partial
@@ -629,6 +631,7 @@ export function createAuth(
       // "valid session" view for up to maxAge seconds even after the DB row is
       // gone. /oauth2/end-session deletes the DB session row but does not
       // expire that cookie (oauth-provider/dist/index.mjs L1069-1090 only calls
+
       // internalAdapter.deleteSession). The next /oauth2/authorize then reads
       // the cached session via getSessionFromCtx (better-auth/dist/api/routes/session.mjs L93+),
       // binds an authorization code to the deleted session.id, and /oauth2/token
@@ -636,12 +639,14 @@ export function createAuth(
       // (oauth-provider/dist/index.mjs L557-567) — locking users out for the
       // entire cookieCache TTL window after each logout.
       //
+
       // Trade-off: every getSession / authorize now hits the DB once. With the
       // current AIRI flow the cost is negligible: cookie-based /get-session is
       // only used by ui-server-auth pages, and /oauth2/authorize is rare.
       // Bearer-token sessions (the hot path for stage-web/electron/pocket) bypass
       // this entirely in the HTTP route boundary.
       //
+
       // Removal condition: oauth-provider's end-session itself clears session
       // cookies upstream, OR cookieCache TTL is reduced to a window short
       // enough that "session no longer exists" is not user-visible.
@@ -665,6 +670,7 @@ export function createAuth(
     // still validates a signed state cookie (state.mjs L89-94). In Capacitor,
     // OAuth opens a system browser with a separate cookie jar from the WebView,
     // so the signed cookie is always missing → state_security_mismatch.
+
     // https://github.com/better-auth/better-auth/issues/5892
     account: {
       skipStateCookieCheck: true,
@@ -693,6 +699,7 @@ export function createAuth(
         // requireEmailVerification gate in emailAndPassword above doesn't
         // reject legitimate Google-OAuth users on a follow-up password sign-in.
         // Source: node_modules/@better-auth/core/dist/social-providers/google.mjs L95.
+
         // Removal condition: never — Google emails are always verified before
         // OAuth issuance, so the override is correct in all cases.
         mapProfileToUser: profile => ({
@@ -716,6 +723,7 @@ export function createAuth(
         // (`<id>+<login>@users.noreply.github.com`) which is not present in
         // the /user/emails list. The result is `?? false`, leaving brand-new
         // GitHub users at emailVerified=false → blocked from email/password
+
         // sign-in after a password reset.
         // Source: node_modules/@better-auth/core/dist/social-providers/github.mjs L77.
         // Removal condition: GitHub OAuth itself enforces a verified email
@@ -766,6 +774,7 @@ export function createAuth(
         // sessionToken / sessionData cookies. With cookieCache.enabled=true the
         // signed sessionData cookie keeps a stale "valid session" view alive
         // for up to maxAge seconds. The next /oauth2/authorize then picks up
+
         // the cached old session, binds the auth code to a now-deleted
         // session.id, and /oauth2/token fails with "session no longer exists".
         // We mirror /sign-out's deleteSessionCookie call here so RP-Initiated
@@ -773,6 +782,7 @@ export function createAuth(
         // Source: node_modules/@better-auth/oauth-provider/dist/index.mjs L1069-1090
         // (deleteSession only) vs node_modules/better-auth/dist/api/routes/sign-out.mjs L19-27.
         // Removal condition: oauth-provider's end-session itself starts clearing
+
         // session cookies upstream.
         if (ctx.path === '/oauth2/end-session')
           deleteSessionCookie(ctx)
@@ -798,10 +808,12 @@ export function createAuth(
           // hook fires. oauthProvider's /oauth2/token refresh grant
           // (node_modules/@better-auth/oauth-provider/dist/index.mjs L718) loads
           // the user without checking `banned`, so a banned user could otherwise
+
           // mint a fresh access token from a live refresh token. That token is
           // already rejected on every resource path by isUserBannedNow, but we
           // delete the tokens here so the ban severs credentials at the source.
           // Idempotent; fires on every user update but only acts when banned.
+
           // Removal condition: oauthProvider checks `banned` in its refresh path.
           after: async (user) => {
             if ((user as { banned?: boolean | null }).banned !== true)

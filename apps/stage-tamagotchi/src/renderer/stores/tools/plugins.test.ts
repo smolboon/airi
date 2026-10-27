@@ -122,6 +122,7 @@ describe('useTamagotchiPluginToolsStore', async () => {
     //
     // Before the fix, this wait never settled.
     //
+
     // We fixed this by letting optional plugin tool listing time out and
     // complete registration with an empty tool list.
     const refresh = store.refresh()

@@ -10,10 +10,12 @@ import {
 // multiple app_ids, each capped at a small concurrency limit (e.g. 10). To use
 // the pooled capacity without overshooting any single app_id, we track in-flight
 // requests per pool in Redis (shared across replicas — the server is multi-instance
+
 // on Railway). A check-then-INCR done in two round-trips would race between
 // replicas and overshoot the cap, so the check + increment happen inside one Lua
 // script. The EXPIRE bounds leakage: if a replica crashes between acquire and
 // release, the counter self-heals after `inflightTtlSeconds` instead of pinning
+
 // the pool as permanently full. Source: flux-meter.ts ACCUMULATE_SCRIPT (same
 // "INCR + EXPIRE, TTL survives crash" shape).
 const ACQUIRE_SCRIPT = `
@@ -38,6 +40,7 @@ return -1
 // drive the counter negative (Redis DECR on a nonexistent key yields -1), which
 // would then let the pool accept more than `max` concurrent requests. Guarding
 // with GET>0 inside Lua keeps release idempotent against the TTL self-heal: if
+
 // the inflight key already expired, release is a no-op rather than a corruption.
 const RELEASE_SCRIPT = `
 local inflightKey = KEYS[1]

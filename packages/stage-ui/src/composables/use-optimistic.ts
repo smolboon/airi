@@ -61,7 +61,7 @@ export function useOptimisticMutation<T, R = T, E = unknown>(options: UseOptimis
       if (onSuccess) {
         return await onSuccess(result)
       }
-      return result as unknown as R
+      return castUnknown<(R)>(result)
     }
     catch (err) {
       const allowRollback = shouldRollback ? await shouldRollback(err as E) : true
@@ -74,4 +74,8 @@ export function useOptimisticMutation<T, R = T, E = unknown>(options: UseOptimis
       throw err
     }
   }, { immediate: !lazy })
+}
+
+function castUnknown<T>(value: unknown): T {
+  return value as T
 }

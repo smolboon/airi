@@ -6,6 +6,7 @@ const providersPattern = /Chat|Speech|Transcription/i
 // also matched the providers page, which renders a `Chat` / `聊天` provider category
 // immediately before this step. That allowed the readiness check to pass against stale
 // providers DOM and silently produce a mislabeled screenshot. `打开` was also too
+
 // generic because it appears on multiple pages as button labels. `Open app data folder`
 // is the desktop-folder section title and is literal English across every locale file.
 const dataPattern = /Open app data folder/i
@@ -20,6 +21,7 @@ const developerPattern = /Open DevTools|打开|Markdown|Lag|Vision Capture|Scree
 // and `当前模型` / `Current model` only appear when a model is already selected.
 // Fresh environments with no providers configured would hang without this pattern.
 //
+
 // Caveat: vision.vue reuses the same i18n key, so this also matches on
 // /settings/modules/vision. That remains safe because this step is reached from
 // developer, which does not render either phrase. If the step order changes,

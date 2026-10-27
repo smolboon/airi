@@ -12,6 +12,10 @@ const props = withDefaults(defineProps<{
   maxFreq: 4000, // Default human voice upper bound (~255Hz)
 })
 
+function castUnknown<T>(value: unknown): T {
+  return value as T
+}
+
 const frequencies = ref<number[]>(Array.from<number>({ length: props.bars }).fill(0))
 
 onMounted(() => {
@@ -25,7 +29,7 @@ function handleAnalyze() {
     return
   }
 
-  const audioContext = new (window.AudioContext || (window as unknown as any).webkitAudioContext)()
+  const audioContext = new (window.AudioContext || castUnknown<(any)>(window).webkitAudioContext)()
   const source = audioContext.createMediaStreamSource(props.stream)
   const analyser = audioContext.createAnalyser()
 

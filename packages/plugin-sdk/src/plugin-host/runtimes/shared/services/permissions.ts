@@ -197,6 +197,7 @@ function mergePermissionScopes<T extends PermissionScope>(
     // - incoming = [{ key: 'plugin.resource.settings', actions: ['write'] }]
     //
     // The first pass seeds the map with ['read']; the second pass extends it to
+
     // ['read', 'write'] for the same key.
     for (const spec of list) {
       // `spec` is one concrete scope such as:

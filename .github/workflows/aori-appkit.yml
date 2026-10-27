@@ -1,0 +1,122 @@
+name: Aori AppKit
+
+on:
+  pull_request:
+    paths:
+      - "apps/aori-appkit/**"
+      - ".github/workflows/aori-appkit.yml"
+      - "docs/APPKIT_PORT.md"
+      - "docs/AUDIT.md"
+      - "packages/i18n/src/locales/**/aori.yaml"
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/aori-appkit/**"
+      - ".github/workflows/aori-appkit.yml"
+      - "docs/APPKIT_PORT.md"
+      - "docs/AUDIT.md"
+      - "packages/i18n/src/locales/**/aori.yaml"
+  workflow_dispatch:
+
+jobs:
+  test-linux:
+    name: Test core on Linux
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/aori-appkit
+    steps:
+      - uses: actions/checkout@v6
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0.3"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.99.0"
+      - name: Install GPUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y g++ pkg-config libsqlite3-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libvulkan-dev libx11-dev libxcb1-dev libxcursor-dev libfontconfig1-dev libfreetype6-dev
+      - name: Check the vision mock
+        run: python3 scripts/test-mock-vision.py
+      - name: Test
+        run: swift test
+      - name: Test the face library
+        working-directory: apps/aori-appkit/rust
+        run: cargo test -p aori-face
+      - name: Check the GPUI window
+        working-directory: apps/aori-appkit/rust
+        run: cargo check -p aori-gpui
+      - name: Write the GPUI raster
+        working-directory: apps/aori-appkit/rust
+        run: |
+          mkdir -p ../build
+          export LIBRARY_PATH="$(dirname "$(g++ -print-file-name=libstdc++.so)")${LIBRARY_PATH:+:$LIBRARY_PATH}"
+          AORI_GPUI_PNG="$PWD/../build/aori-gpui-frame.png" cargo run -q -p aori-gpui
+          python3 ../scripts/check-gpui-png.py ../build/aori-gpui-frame.png
+      - name: Upload the GPUI raster
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aori-gpui-frame
+          if-no-files-found: warn
+          path: apps/aori-appkit/build/aori-gpui-frame.png
+
+  build-and-test-macos:
+    name: Build the AppKit target and test on macOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: apps/aori-appkit
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.99.0"
+      - name: Build the face library
+        working-directory: apps/aori-appkit/rust
+        run: cargo build -p aori-face
+      - name: Test
+        run: swift test -Xlinker -L -Xlinker "$PWD/rust/target/debug" -Xlinker -laori_face
+      - name: Test the face library
+        working-directory: apps/aori-appkit/rust
+        run: cargo test -p aori-face
+      - name: Check the GPUI window
+        working-directory: apps/aori-appkit/rust
+        run: cargo check -p aori-gpui
+      - name: Build the AppKit target
+        run: ./scripts/build-app.sh
+      - name: Build the Xcode project
+        run: xcodebuild -project AoriAppKit.xcodeproj -scheme Aori -configuration Debug -destination 'platform=macOS' CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=YES ENABLE_APP_SANDBOX=YES build
+      - name: Assemble the app bundle
+        run: ./scripts/assemble-app.sh
+      - name: Build the on-device recognizer
+        run: ./scripts/fetch-whisper.sh
+      - name: Launch the app and capture the window
+        run: ./scripts/screenshot-app.sh
+      - name: Open the GPUI window
+        run: ./scripts/capture-gpui-window.sh
+      - name: Capture expression faces
+        run: ./scripts/capture-expression-faces.sh
+      - name: Upload the companion capture
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aori-companion-window
+          if-no-files-found: warn
+          path: |
+            apps/aori-appkit/build/aori-framebuffer.png
+            apps/aori-appkit/build/aori-window.png
+            apps/aori-appkit/build/aori-launch.log
+            apps/aori-appkit/build/aori-chat-window.png
+            apps/aori-appkit/build/aori-memory-window.png
+            apps/aori-appkit/build/aori-speech.wav
+            apps/aori-appkit/build/aori-visemes.log
+            apps/aori-appkit/build/aori-gpui-window.png
+            apps/aori-appkit/build/aori-gpui.log
+            apps/aori-appkit/build/aori-settings-window.png
+            apps/aori-appkit/build/aori-face-happy.png
+            apps/aori-appkit/build/aori-face-sad.png
+            apps/aori-appkit/build/aori-face-surprised.png
+            apps/aori-appkit/build/aori-face-happy.log
+            apps/aori-appkit/build/aori-face-sad.log
+            apps/aori-appkit/build/aori-face-surprised.log

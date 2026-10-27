@@ -18,6 +18,7 @@ import { defineConfig, loadEnv } from 'vite'
 // Root cause: the old asset cache policy outlived the deployment that restored
 // those files, so affected browsers cannot observe corrected response headers.
 // Source/context: `apps/ui-server-auth/public/_headers` and `public/404.html`.
+
 // Removal condition: keep the namespace permanently; reusing `/assets/` can
 // reactivate poisoned browser entries that remain fresh for up to one year.
 const assetsDirectory = 'assets-v2'

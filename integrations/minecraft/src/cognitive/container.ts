@@ -96,6 +96,7 @@ export function createAgentContainer(airiClient: Client) {
           // "/D:/.../rules" (leading slash before the drive), which fs.existsSync/readdirSync cannot
           // resolve, so the rule loader silently found 0 rules and the whole perception rule engine
           // (damage/punch/movement signals) was dead. The rest of the codebase already uses
+
           // fileURLToPath; this line was the lone deviation.
           rulesDir: fileURLToPath(new URL('./perception/rules', import.meta.url)),
           slotMs: 20,
