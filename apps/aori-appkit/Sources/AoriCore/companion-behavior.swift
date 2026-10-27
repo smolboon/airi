@@ -103,11 +103,8 @@ public struct CompanionGame: Equatable, Sendable {
 }
 
 public enum GameScaffold {
-    public static let status = "not connected"
-
     public static func report() -> String {
-        let names = CompanionGame.catalog.map(\.title).joined(separator: " and ")
-        return "Games: \(names). Each game is not connected."
+        "Games: Factorio and Minecraft. Factorio accepts a local hello. A remote host is refused. Minecraft is not connected."
     }
 }
 

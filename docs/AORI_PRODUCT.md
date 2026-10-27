@@ -4,7 +4,9 @@ Aori is a desktop companion for macOS. The Vue apps use the same name.
 
 The companion is a character on the desktop. The window is transparent. You can drag it. It can stay above other windows. Clear pixels pass clicks through the window. Opaque pixels and the caption keep the click.
 
-Settings stores a name, a nickname, a description, a personality, a scenario, and a greeting. Settings also stores creator notes, lore, tags, alternate greetings, a system prompt, post-history instructions, a card version, and modules. Settings stores a keyword lorebook. Settings lists Factorio and Minecraft. Each game is not connected.
+Settings stores a name, a nickname, a description, a personality, a scenario, and a greeting. Settings also stores creator notes, lore, tags, alternate greetings, a system prompt, post-history instructions, a card version, and modules. Settings stores a keyword lorebook.
+
+Settings lists Factorio and Minecraft. Factorio accepts a local hello. A remote host is refused. Minecraft is not connected.
 
 Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori stores an event draft only.
 
