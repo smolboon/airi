@@ -225,7 +225,9 @@ Add games, character cards, cloud provider sync, and the remaining chat protocol
 
 The first slice stores a scenario and a greeting on the character card. The scenario enters the system prompt when the text is not empty. The greeting is the first local line when the text is not empty.
 
-This slice stores creator notes, lore, and tags. When the text is not empty, lore enters the system prompt. Creator notes and tags stay out of that prompt. Games, a keyword lorebook, cloud provider sync, and the other chat protocols stay absent.
+This slice stores creator notes, lore, and tags. When the text is not empty, lore enters the system prompt. Creator notes and tags stay out of that prompt.
+
+This slice stores a nickname, a description, alternate greetings, a system prompt, post-history instructions, a card version, and modules. When the description is not empty, it enters the system prompt. When the system prompt text is not empty, that text enters the system prompt. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, and the card version stay out of the prompt. A keyword lorebook, games, cloud provider sync, and the other chat protocols stay absent.
 
 ## What this checkout did not run
 

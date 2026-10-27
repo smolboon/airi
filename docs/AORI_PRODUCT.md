@@ -4,9 +4,11 @@ Aori is a desktop companion for macOS. The Vue apps use the same name.
 
 The companion is a character on the desktop. The window is transparent. You can drag it. It can stay above other windows. Clear pixels pass clicks through the window. Opaque pixels and the caption keep the click.
 
-Settings stores a name, a personality, a scenario, a greeting, creator notes, lore, and tags. The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
+Settings stores a name, a nickname, a description, a personality, a scenario, and a greeting. Settings also stores creator notes, lore, tags, alternate greetings, a system prompt, post-history instructions, a card version, and modules.
 
-When the lore is not empty, it enters the system prompt. Creator notes and tags stay out of that prompt. A keyword lorebook is absent.
+The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
+
+When the lore is not empty, it enters the system prompt. When the description is not empty, it enters the system prompt. When the system prompt text is not empty, that text enters the system prompt. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. A keyword lorebook is absent.
 
 ## Sources
 

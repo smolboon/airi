@@ -1,13 +1,44 @@
 import Foundation
 
+public enum CompanionModule: String, Codable, CaseIterable, Sendable {
+    case chat
+    case speech
+    case vision
+    case memory
+    case plugins
+
+    public static let defaultIDs = ["chat", "speech", "vision", "memory", "plugins"]
+
+    /// Keeps known module ids. An empty list uses the default modules.
+    public static func resolved(_ ids: [String]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for raw in ids {
+            let key = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            guard let module = CompanionModule(rawValue: key), seen.insert(module.rawValue).inserted else {
+                continue
+            }
+            result.append(module.rawValue)
+        }
+        return result.isEmpty ? defaultIDs : result
+    }
+}
+
 public struct CompanionPersona: Codable, Equatable, Sendable {
     public var name: String
+    public var nickname: String
+    public var description: String
     public var personality: String
     public var scenario: String
     public var greeting: String
+    public var alternateGreetings: [String]
     public var creatorNotes: String
     public var lore: String
     public var tags: [String]
+    public var systemPrompt: String
+    public var postHistoryInstructions: String
+    public var cardVersion: String
+    public var modules: [String]
 
     public init(
         name: String,
@@ -16,15 +47,50 @@ public struct CompanionPersona: Codable, Equatable, Sendable {
         greeting: String = "",
         creatorNotes: String = "",
         lore: String = "",
-        tags: [String] = []
+        tags: [String] = [],
+        nickname: String = "",
+        description: String = "",
+        alternateGreetings: [String] = [],
+        systemPrompt: String = "",
+        postHistoryInstructions: String = "",
+        cardVersion: String = "",
+        modules: [String] = []
     ) {
         self.name = name
+        self.nickname = nickname
+        self.description = description
         self.personality = personality
         self.scenario = scenario
         self.greeting = greeting
+        self.alternateGreetings = Self.normalizedGreetings(alternateGreetings)
         self.creatorNotes = creatorNotes
         self.lore = lore
         self.tags = Self.normalizedTags(tags)
+        self.systemPrompt = systemPrompt
+        self.postHistoryInstructions = postHistoryInstructions
+        self.cardVersion = cardVersion
+        self.modules = CompanionModule.resolved(modules)
+    }
+
+    /// Trims text fields. An empty name uses the fallback name.
+    public func trimmed(fallbackName: String) -> CompanionPersona {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return CompanionPersona(
+            name: trimmedName.isEmpty ? fallbackName : trimmedName,
+            personality: personality.trimmingCharacters(in: .whitespacesAndNewlines),
+            scenario: scenario.trimmingCharacters(in: .whitespacesAndNewlines),
+            greeting: greeting.trimmingCharacters(in: .whitespacesAndNewlines),
+            creatorNotes: creatorNotes.trimmingCharacters(in: .whitespacesAndNewlines),
+            lore: lore.trimmingCharacters(in: .whitespacesAndNewlines),
+            tags: tags,
+            nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines),
+            description: description.trimmingCharacters(in: .whitespacesAndNewlines),
+            alternateGreetings: alternateGreetings,
+            systemPrompt: systemPrompt.trimmingCharacters(in: .whitespacesAndNewlines),
+            postHistoryInstructions: postHistoryInstructions.trimmingCharacters(in: .whitespacesAndNewlines),
+            cardVersion: cardVersion.trimmingCharacters(in: .whitespacesAndNewlines),
+            modules: modules
+        )
     }
 
     /// Splits a comma-separated tag field. Blank tags drop out. Repeated tags keep the first spelling.
@@ -68,8 +134,59 @@ public struct CompanionPersona: Codable, Equatable, Sendable {
         tags.joined(separator: ", ")
     }
 
+    /// Splits greetings on "|" or a new line. Blank greetings drop out.
+    public static func greetings(from text: String) -> [String] {
+        let parts = text.split(whereSeparator: { $0 == "|" || $0.isNewline }).map(String.init)
+        return normalizedGreetings(parts)
+    }
+
+    public static func normalizedGreetings(_ greetings: [String]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for raw in greetings {
+            let greeting = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !greeting.isEmpty, seen.insert(greeting).inserted else {
+                continue
+            }
+            result.append(greeting)
+        }
+        return result
+    }
+
+    public static func stringListJSON(_ values: [String]) -> String {
+        guard JSONSerialization.isValidJSONObject(values),
+              let data = try? JSONSerialization.data(withJSONObject: values),
+              let text = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return text
+    }
+
+    public static func stringList(fromJSON text: String) -> [String] {
+        guard let data = text.data(using: .utf8),
+              let values = try? JSONSerialization.jsonObject(with: data) as? [String]
+        else {
+            return []
+        }
+        return values
+    }
+
+    public var alternateGreetingsText: String {
+        alternateGreetings.joined(separator: " | ")
+    }
+
+    public var modulesText: String {
+        modules.joined(separator: ", ")
+    }
+
+    /// Splits a comma-separated module field. Unknown ids drop out. An empty field uses the default modules.
+    public static func modules(from text: String) -> [String] {
+        CompanionModule.resolved(text.split(separator: ",").map(String.init))
+    }
+
     // NOTICE:
-    // Older companion.json files omit scenario, greeting, creator notes, lore, and tags.
+    // Older companion.json files omit the card fields added after name and personality.
     // The JSON import in SQLiteCompanionStore reads those files.
     // Source: companion.json next to companion.sqlite.
     // Remove this decoder when that JSON import is removed.
@@ -82,6 +199,15 @@ public struct CompanionPersona: Codable, Equatable, Sendable {
         creatorNotes = try container.decodeIfPresent(String.self, forKey: .creatorNotes) ?? ""
         lore = try container.decodeIfPresent(String.self, forKey: .lore) ?? ""
         tags = Self.normalizedTags(try container.decodeIfPresent([String].self, forKey: .tags) ?? [])
+        nickname = try container.decodeIfPresent(String.self, forKey: .nickname) ?? ""
+        description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        alternateGreetings = Self.normalizedGreetings(
+            try container.decodeIfPresent([String].self, forKey: .alternateGreetings) ?? []
+        )
+        systemPrompt = try container.decodeIfPresent(String.self, forKey: .systemPrompt) ?? ""
+        postHistoryInstructions = try container.decodeIfPresent(String.self, forKey: .postHistoryInstructions) ?? ""
+        cardVersion = try container.decodeIfPresent(String.self, forKey: .cardVersion) ?? ""
+        modules = CompanionModule.resolved(try container.decodeIfPresent([String].self, forKey: .modules) ?? [])
     }
 
     public static let standard = CompanionPersona(
@@ -209,8 +335,16 @@ public enum CompanionPrompt {
     public static func system(persona: CompanionPersona, memory: UserMemory) -> String {
         var lines = [
             "You are \(persona.name), a desktop companion on macOS.",
-            persona.personality,
         ]
+        let systemPrompt = persona.systemPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !systemPrompt.isEmpty {
+            lines.append(systemPrompt)
+        }
+        let description = persona.description.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !description.isEmpty {
+            lines.append("The description is \(description).")
+        }
+        lines.append(persona.personality)
         let scenario = persona.scenario.trimmingCharacters(in: .whitespacesAndNewlines)
         if !scenario.isEmpty {
             lines.append("The scene is \(scenario).")
@@ -227,6 +361,30 @@ public enum CompanionPrompt {
             text += " You remember these facts about the user.\n\(lines)"
         }
         return text
+    }
+
+    public static func postHistory(persona: CompanionPersona) -> String {
+        persona.postHistoryInstructions.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Builds the provider messages. Post-history instructions follow the chat history.
+    public static func messages(
+        persona: CompanionPersona,
+        memory: UserMemory,
+        history: [ChatMessage],
+        recalled: String = ""
+    ) -> [ChatMessage] {
+        var systemPrompt = system(persona: persona, memory: memory)
+        if !recalled.isEmpty {
+            systemPrompt += "\n\(recalled)"
+        }
+        var items = [ChatMessage(role: .system, content: systemPrompt)]
+        items.append(contentsOf: history)
+        let post = postHistory(persona: persona)
+        if !post.isEmpty {
+            items.append(ChatMessage(role: .system, content: post))
+        }
+        return items
     }
 }
 

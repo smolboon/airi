@@ -101,16 +101,7 @@ public final class ChatViewModel {
     }
 
     public func updatePersona(_ persona: CompanionPersona) {
-        let name = persona.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        self.persona = CompanionPersona(
-            name: name.isEmpty ? CompanionPersona.standard.name : name,
-            personality: persona.personality.trimmingCharacters(in: .whitespacesAndNewlines),
-            scenario: persona.scenario.trimmingCharacters(in: .whitespacesAndNewlines),
-            greeting: persona.greeting.trimmingCharacters(in: .whitespacesAndNewlines),
-            creatorNotes: persona.creatorNotes.trimmingCharacters(in: .whitespacesAndNewlines),
-            lore: persona.lore.trimmingCharacters(in: .whitespacesAndNewlines),
-            tags: persona.tags
-        )
+        self.persona = persona.trimmed(fallbackName: CompanionPersona.standard.name)
         if !showsModelTitle {
             presentation.title = self.persona.name
         }
@@ -264,15 +255,12 @@ public final class ChatViewModel {
     }
 
     private func requestMessages() -> [ChatMessage] {
-        var systemPrompt = CompanionPrompt.system(persona: persona, memory: memory)
-        let related = MemoryRecall.prompt(lines: recalledLines)
-        if !related.isEmpty {
-            systemPrompt += "\n\(related)"
-        }
-        var items = [ChatMessage(role: .system, content: systemPrompt)]
-        let history = messages.dropLast()
-        items.append(contentsOf: history)
-        return items
+        CompanionPrompt.messages(
+            persona: persona,
+            memory: memory,
+            history: Array(messages.dropLast()),
+            recalled: MemoryRecall.prompt(lines: recalledLines)
+        )
     }
 
     private func storeEmbedding(_ text: String) async {
