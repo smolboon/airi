@@ -63,7 +63,7 @@ Stage Tamagotchi draws transparent Electron windows. Some of those windows stay 
 | Live2D | `stage-ui-live2d` | Flat layers | Live2D parameter ids and motion3.json curves. Not Cubism moc3 |
 | MMD and Spine | stage UI packages | Absent | Decide after VRM |
 | Plugins | `plugin-sdk` | Manifest v2 host and one JavaScriptCore script | The grant is `aori.companion.*`. A `.mjs` file is rejected |
-| Integrations | `integrations/` | Drafts for VS Code, Home Assistant, chess, the web extension, and stickers. Web search is unavailable | Port one host at a time |
+| Integrations | `integrations/` | Drafts include stickers and beat sync. Web search is unavailable | Port one host at a time |
 | Companion window | Electron | Transparent, draggable, always on top, and a status item | Click-through comes later |
 | Vision and games | stage modules, integrations | Opt-in ticker with a rate limit | Factorio and Minecraft accept a local hello |
 
@@ -258,6 +258,8 @@ This slice stores a chess move draft. The draft has two squares. No engine runs.
 This slice stores a web extension page draft. The draft has a title and text. A URL is refused. No token is stored.
 
 This slice lists sticker emotions only. No image is stored. A URL is refused.
+
+This slice names a beat-sync style from a tempo. The microphone stays off. Screen capture stays off.
 
 ## What this checkout did not run
 

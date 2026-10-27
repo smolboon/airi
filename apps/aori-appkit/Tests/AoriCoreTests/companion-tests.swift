@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension", "stickers"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension", "stickers", "beat-sync"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -233,6 +233,18 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertNil(StickerScaffold.draft(name: "Glad", emotion: "joy"))
         XCTAssertNil(StickerScaffold.draft(name: "https://example.com", emotion: "happy"))
         XCTAssertNil(StickerScaffold.draft(name: "Airi", emotion: "happy"))
+    }
+
+    func testBeatSyncNamesAStyleFromTempo() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("Beat sync names a style from a tempo."))
+        XCTAssertTrue(text.contains("The microphone stays off."))
+        XCTAssertTrue(text.contains("Screen capture stays off."))
+        XCTAssertEqual(BeatSyncScaffold.style(bpm: 90), "swing-lr")
+        XCTAssertEqual(BeatSyncScaffold.style(bpm: 120), "balanced-v")
+        XCTAssertEqual(BeatSyncScaffold.style(bpm: 180), "punchy-v")
+        XCTAssertNil(BeatSyncScaffold.style(bpm: 0))
+        XCTAssertNil(BeatSyncScaffold.style(bpm: 301))
     }
 
     func testFactorioAcceptsALocalHello() {
