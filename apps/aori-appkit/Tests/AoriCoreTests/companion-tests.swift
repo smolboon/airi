@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -167,6 +167,22 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertNil(VscodeScaffold.draft(folder: " ", text: "Hello"))
         XCTAssertNil(VscodeScaffold.draft(folder: "https://example.com", text: "Hello"))
         XCTAssertNil(VscodeScaffold.draft(folder: "apps", text: "see https://example.com"))
+    }
+
+    func testHomeAssistantEntityDraftDropsCredentials() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("Home Assistant is an entity draft only."))
+        XCTAssertTrue(text.contains("Credential fields are dropped."))
+        let draft = HomeAssistantScaffold.draft(entity: " Light.Kitchen_Lamp ")
+        XCTAssertEqual(draft, HomeAssistantScaffold.Draft(entity: "light.kitchen_lamp"))
+        XCTAssertNil(HomeAssistantScaffold.draft(entity: "http://127.0.0.1"))
+        XCTAssertNil(HomeAssistantScaffold.draft(entity: "light"))
+        let kept = HomeAssistantScaffold.kept([
+            "token": "secret",
+            "url": "http://127.0.0.1:8123",
+            "note": "lamp",
+        ])
+        XCTAssertEqual(kept, ["note": "lamp"])
     }
 
     func testFactorioAcceptsALocalHello() {

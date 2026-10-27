@@ -136,13 +136,14 @@ public struct CompanionIntegration: Equatable, Sendable {
 
     public static let catalog = [
         CompanionIntegration(id: "vscode", title: "VS Code"),
+        CompanionIntegration(id: "home-assistant", title: "Home Assistant"),
     ]
 }
 
 public enum IntegrationScaffold {
     /// Names the integrations. No token is included.
     public static func report() -> String {
-        "Integrations: VS Code is a context draft only. No token is stored."
+        "Integrations: VS Code is a context draft only. Home Assistant is an entity draft only. Credential fields are dropped. No token is stored."
     }
 }
 
