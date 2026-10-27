@@ -52,6 +52,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("Home Assistant is an entity draft only."))
         XCTAssertTrue(text.contains("Web search is unavailable."))
         XCTAssertTrue(text.contains("Chess stores a move draft only."))
+        XCTAssertTrue(text.contains("The web extension is a page draft only."))
         XCTAssertTrue(text.contains("Credential fields are dropped."))
         XCTAssertTrue(text.contains("No token is stored."))
     }
