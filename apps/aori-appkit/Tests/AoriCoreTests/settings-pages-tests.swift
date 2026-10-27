@@ -39,7 +39,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("1 saved facts."))
         XCTAssertTrue(text.contains("2 messages in companion.sqlite."))
         XCTAssertTrue(text.contains("locale ja."))
-        XCTAssertTrue(text.contains("Chat protocols: Discord is a message draft only. Telegram and Satori are not connected."))
+        XCTAssertTrue(text.contains("Chat protocols: Discord is a message draft only. Telegram is a preview only. Satori is not connected."))
         XCTAssertTrue(text.contains("X is unavailable."))
         XCTAssertTrue(text.contains("No token is stored."))
         XCTAssertTrue(text.contains("Account sync is absent."))

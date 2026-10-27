@@ -124,10 +124,14 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertTrue(text.contains("No token is stored."))
         XCTAssertTrue(text.contains("X is unavailable."))
         XCTAssertTrue(text.contains("Discord is a message draft only."))
+        XCTAssertTrue(text.contains("Telegram is a preview only."))
         XCTAssertFalse(text.contains("token="))
         let draft = DiscordScaffold.draft(channel: " general ", text: " Hello ")
         XCTAssertEqual(draft, DiscordScaffold.Draft(channel: "general", text: "Hello"))
         XCTAssertNil(DiscordScaffold.draft(channel: " ", text: "Hello"))
+        let preview = TelegramScaffold.preview(chatID: " ci ", text: " Hello ")
+        XCTAssertEqual(preview, TelegramScaffold.Preview(chatID: "ci", text: "Hello"))
+        XCTAssertNil(TelegramScaffold.preview(chatID: "ci", text: " "))
     }
 
     func testGameScaffoldListsFactorioAndMinecraft() {
