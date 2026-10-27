@@ -6,7 +6,7 @@ The companion is a character on the desktop. The window is transparent. You can 
 
 Settings stores a name, a nickname, a description, a personality, a scenario, and a greeting. Settings also stores creator notes, lore, tags, alternate greetings, a system prompt, post-history instructions, a card version, and modules. Settings stores a keyword lorebook. Settings lists Factorio and Minecraft. Each game is not connected.
 
-Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori is not connected. X is unavailable. No token is stored.
+Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori stores an event draft only. X is unavailable. No token is stored.
 
 The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
 
