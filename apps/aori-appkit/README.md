@@ -6,7 +6,7 @@ Aori is the native macOS companion. The windows are AppKit. The chat core is pla
 
 The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. A status item lists the companion, the chat, and Settings.
 
-Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. Say "remember that" in chat to store a fact. The provider list has OpenAI-compatible, MLX-Serve, TensorFold, and Ollama. MLX-Serve uses port 11234, TensorFold uses port 8080, and Ollama uses port 11434. Other catalogs are absent.
+Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. Say "remember that" in chat to store a fact. The provider list has OpenAI-compatible, MLX-Serve, TensorFold, Ollama, and LM Studio. MLX-Serve uses port 11234, TensorFold uses port 8080, Ollama uses port 11434, and LM Studio uses port 1234. Other catalogs are absent.
 
 Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 

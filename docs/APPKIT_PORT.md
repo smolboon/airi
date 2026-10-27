@@ -265,6 +265,8 @@ This slice drops an MCP server command. MCP stays unavailable. No token is store
 
 This slice adds Ollama to the provider list. The default base URL is http://localhost:11434/v1/. An empty URL takes that default. A custom URL stays. No key is stored for that choice. Other catalogs stay absent.
 
+This slice adds LM Studio to the provider list. The default base URL is http://localhost:1234/v1/. An empty URL takes that default. A custom URL stays. No key is stored for that choice. Other catalogs stay absent.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.
