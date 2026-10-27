@@ -161,7 +161,7 @@ final class SettingsWindowController: NSWindowController {
         protocolsLabel.maximumNumberOfLines = 4
         protocolsLabel.textColor = .secondaryLabelColor
         let integrationsLabel = NSTextField(wrappingLabelWithString: IntegrationScaffold.report())
-        integrationsLabel.maximumNumberOfLines = 4
+        integrationsLabel.maximumNumberOfLines = 8
         integrationsLabel.textColor = .secondaryLabelColor
         alternateGreetingsField.placeholderString = "Separate greetings with |"
         modulesField.placeholderString = CompanionModule.defaultIDs.joined(separator: ", ")
@@ -172,7 +172,7 @@ final class SettingsWindowController: NSWindowController {
         let keyLabel = NSTextField(labelWithString: "API key")
         let memoryLabel = NSTextField(labelWithString: "Saved facts")
         let pagesLabel = NSTextField(labelWithString: "Pages")
-        pageLabel.maximumNumberOfLines = 16
+        pageLabel.maximumNumberOfLines = 20
         pageLabel.textColor = .secondaryLabelColor
         pageLabel.setAccessibilityLabel("Settings pages")
         sourceLabel.maximumNumberOfLines = 3
