@@ -3,10 +3,27 @@ import Foundation
 public struct CompanionPersona: Codable, Equatable, Sendable {
     public var name: String
     public var personality: String
+    public var scenario: String
+    public var greeting: String
 
-    public init(name: String, personality: String) {
+    public init(name: String, personality: String, scenario: String = "", greeting: String = "") {
         self.name = name
         self.personality = personality
+        self.scenario = scenario
+        self.greeting = greeting
+    }
+
+    // NOTICE:
+    // Older companion.json files store only a name and a personality.
+    // The JSON import in SQLiteCompanionStore reads those files.
+    // Source: companion.json next to companion.sqlite.
+    // Remove this decoder when that JSON import is removed.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        personality = try container.decode(String.self, forKey: .personality)
+        scenario = try container.decodeIfPresent(String.self, forKey: .scenario) ?? ""
+        greeting = try container.decodeIfPresent(String.self, forKey: .greeting) ?? ""
     }
 
     public static let standard = CompanionPersona(
@@ -132,12 +149,17 @@ public enum MemoryCapture {
 
 public enum CompanionPrompt {
     public static func system(persona: CompanionPersona, memory: UserMemory) -> String {
-        var text = [
+        var lines = [
             "You are \(persona.name), a desktop companion on macOS.",
             persona.personality,
-            "Reply in short spoken sentences. Do not use markdown.",
-            "Name a feeling in the first sentence when you feel happy, sad, or surprised.",
-        ].joined(separator: " ")
+        ]
+        let scenario = persona.scenario.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !scenario.isEmpty {
+            lines.append("The scene is \(scenario).")
+        }
+        lines.append("Reply in short spoken sentences. Do not use markdown.")
+        lines.append("Name a feeling in the first sentence when you feel happy, sad, or surprised.")
+        var text = lines.joined(separator: " ")
         if !memory.notes.isEmpty {
             let lines = memory.notes.map { "- \($0.text)" }.joined(separator: "\n")
             text += " You remember these facts about the user.\n\(lines)"
@@ -148,6 +170,10 @@ public enum CompanionPrompt {
 
 public enum CompanionGreeting {
     public static func opening(persona: CompanionPersona, memory: UserMemory) -> String {
+        let greeting = persona.greeting.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !greeting.isEmpty {
+            return greeting
+        }
         if let note = memory.notes.last?.text {
             return "Hello. I am \(persona.name). I still remember this. \(note)."
         }

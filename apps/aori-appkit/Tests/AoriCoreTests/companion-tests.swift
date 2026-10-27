@@ -1,4 +1,9 @@
 import XCTest
+#if canImport(SQLite3)
+import SQLite3
+#else
+import CSQLite
+#endif
 @testable import AoriCore
 
 final class CompanionBehaviorTests: XCTestCase {
@@ -34,6 +39,23 @@ final class CompanionBehaviorTests: XCTestCase {
             CompanionGreeting.opening(persona: .standard, memory: .empty),
             "Hello. I am Aori. I am here on your desktop."
         )
+        let card = CompanionPersona(
+            name: "Nova",
+            personality: "Stay calm.",
+            scenario: "A night desk.",
+            greeting: "Good evening."
+        )
+        let cardPrompt = CompanionPrompt.system(persona: card, memory: .empty)
+        XCTAssertTrue(cardPrompt.contains("The scene is A night desk."))
+        XCTAssertEqual(CompanionGreeting.opening(persona: card, memory: memory), "Good evening.")
+        XCTAssertFalse(prompt.contains("The scene is"))
+    }
+
+    func testOlderCardJSONOmitsScenarioAndGreeting() throws {
+        let json = #"{"persona":{"name":"Nova","personality":"Stay calm."},"memory":{"notes":[]}}"#
+        let profile = try JSONDecoder().decode(CompanionProfile.self, from: Data(json.utf8))
+        XCTAssertEqual(profile.persona.scenario, "")
+        XCTAssertEqual(profile.persona.greeting, "")
     }
 
     func testEmotionWords() {
@@ -130,6 +152,36 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(try again.loadLocale(), "fr")
         XCTAssertEqual(try again.loadMessages(), expectedMessages)
         XCTAssertEqual(try again.load(), expectedProfile)
+        let card = CompanionPersona(
+            name: "Nova",
+            personality: "Stay calm.",
+            scenario: "A night desk.",
+            greeting: "Good evening."
+        )
+        try again.save(CompanionProfile(persona: card, memory: memory))
+        XCTAssertEqual(try again.load().persona, card)
+        try FileManager.default.removeItem(at: directory)
+    }
+
+    func testSQLiteAddsCardColumnsToAnOlderFile() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("aori-sqlite-card-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let database = directory.appendingPathComponent("companion.sqlite")
+        var handle: OpaquePointer?
+        XCTAssertEqual(sqlite3_open(database.path, &handle), SQLITE_OK)
+        let sql = "CREATE TABLE persona (id INTEGER PRIMARY KEY, name TEXT NOT NULL, personality TEXT NOT NULL);"
+        XCTAssertEqual(sqlite3_exec(handle, sql, nil, nil, nil), SQLITE_OK)
+        sqlite3_close(handle)
+        let store = try SQLiteCompanionStore(fileURL: database)
+        let card = CompanionPersona(
+            name: "Nova",
+            personality: "Stay calm.",
+            scenario: "A night desk.",
+            greeting: "Good evening."
+        )
+        try store.save(CompanionProfile(persona: card, memory: .empty))
+        XCTAssertEqual(try store.load().persona, card)
         try FileManager.default.removeItem(at: directory)
     }
 

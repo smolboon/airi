@@ -223,6 +223,8 @@ Run 38359062380 logged `aori_embed_recall=tea`. `tea please` is closer to `I lik
 
 Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project Aori today.
 
+The first slice stores a scenario and a greeting on the character card. The scenario enters the system prompt when the text is not empty. The greeting is the first local line when the text is not empty. Creator notes, lore, tags, and games stay absent. Cloud provider sync and the other chat protocols stay absent.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.

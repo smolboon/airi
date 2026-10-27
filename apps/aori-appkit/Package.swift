@@ -9,10 +9,12 @@ var products: [Product] = [
 ]
 
 var coreDependencies: [Target.Dependency] = []
+var coreTestDependencies: [Target.Dependency] = ["AoriCore"]
 var coreLinker: [LinkerSetting] = []
 var providerLinker: [LinkerSetting] = []
 #if os(Linux)
 coreDependencies.append("CSQLite")
+coreTestDependencies.append("CSQLite")
 #endif
 #if os(macOS)
 coreLinker.append(.linkedFramework("JavaScriptCore"))
@@ -37,7 +39,7 @@ targets.append(contentsOf: [
         linkerSettings: coreLinker
     ),
     .target(name: "AoriProviders", dependencies: ["AoriCore"], linkerSettings: providerLinker),
-    .testTarget(name: "AoriCoreTests", dependencies: ["AoriCore"]),
+    .testTarget(name: "AoriCoreTests", dependencies: coreTestDependencies),
     .testTarget(name: "AoriProvidersTests", dependencies: ["AoriProviders"]),
 ])
 
