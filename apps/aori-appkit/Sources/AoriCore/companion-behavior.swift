@@ -130,6 +130,22 @@ public enum ChatProtocolScaffold {
     }
 }
 
+public struct CompanionIntegration: Equatable, Sendable {
+    public var id: String
+    public var title: String
+
+    public static let catalog = [
+        CompanionIntegration(id: "vscode", title: "VS Code"),
+    ]
+}
+
+public enum IntegrationScaffold {
+    /// Names the integrations. No token is included.
+    public static func report() -> String {
+        "Integrations: VS Code is a context draft only. No token is stored."
+    }
+}
+
 public enum CompanionModule: String, Codable, CaseIterable, Sendable {
     case chat
     case speech

@@ -156,6 +156,19 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertFalse(text.contains("Each game is not connected."))
     }
 
+    func testVscodeContextDraftStoresNoToken() {
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode"])
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("VS Code is a context draft only."))
+        XCTAssertTrue(text.contains("No token is stored."))
+        XCTAssertFalse(text.contains("token="))
+        let draft = VscodeScaffold.draft(folder: " apps/aori-appkit ", text: " Hello ")
+        XCTAssertEqual(draft, VscodeScaffold.Draft(folder: "apps/aori-appkit", text: "Hello"))
+        XCTAssertNil(VscodeScaffold.draft(folder: " ", text: "Hello"))
+        XCTAssertNil(VscodeScaffold.draft(folder: "https://example.com", text: "Hello"))
+        XCTAssertNil(VscodeScaffold.draft(folder: "apps", text: "see https://example.com"))
+    }
+
     func testFactorioAcceptsALocalHello() {
         XCTAssertTrue(LocalHello.allows(" localhost "))
         XCTAssertTrue(LocalHello.allows("127.0.0.1"))
