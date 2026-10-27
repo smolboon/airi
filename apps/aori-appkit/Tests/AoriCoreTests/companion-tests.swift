@@ -150,8 +150,9 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(CompanionGame.catalog.map(\.id), ["factorio", "minecraft"])
         let text = GameScaffold.report()
         XCTAssertTrue(text.contains("Factorio accepts a local hello."))
+        XCTAssertTrue(text.contains("Minecraft accepts a local hello."))
         XCTAssertTrue(text.contains("A remote host is refused."))
-        XCTAssertTrue(text.contains("Minecraft is not connected."))
+        XCTAssertFalse(text.contains("Minecraft is not connected."))
         XCTAssertFalse(text.contains("Each game is not connected."))
     }
 
@@ -176,13 +177,42 @@ final class CompanionBehaviorTests: XCTestCase {
             XCTFail("bind")
             return
         }
-        let box = HelloBox()
+        let box = HelloBox<Result<FactorioLink.Hello, LocalHelloError>>()
         DispatchQueue.global().async {
             box.set(FactorioLink.hello(host: "localhost", port: server.port, player: " Aori "))
         }
         let served = server.serveOne()
         XCTAssertEqual(served, "OK Aori")
         XCTAssertEqual(box.wait(), .success(FactorioLink.Hello(player: "Aori", reply: "OK Aori")))
+    }
+
+    func testMinecraftAcceptsALocalHello() {
+        XCTAssertTrue(MinecraftLink.isUsername("Aori_1"))
+        XCTAssertFalse(MinecraftLink.isUsername("Steve!"))
+        XCTAssertFalse(MinecraftLink.isUsername("ABCDEFGHIJKLMNOPQ"))
+        XCTAssertEqual(
+            MinecraftLink.hello(host: "203.0.113.10", port: 25565, username: "Steve"),
+            .failure(.refused)
+        )
+        XCTAssertEqual(
+            MinecraftLink.hello(host: "127.0.0.1", port: 1, username: "Steve!"),
+            .failure(.refused)
+        )
+        XCTAssertEqual(
+            MinecraftLink.hello(host: "127.0.0.1", port: 1, username: " "),
+            .failure(.refused)
+        )
+        guard let server = LocalHelloServer.bind() else {
+            XCTFail("bind")
+            return
+        }
+        let box = HelloBox<Result<MinecraftLink.Hello, LocalHelloError>>()
+        DispatchQueue.global().async {
+            box.set(MinecraftLink.hello(host: "127.0.0.1", port: server.port, username: " Aori_1 "))
+        }
+        let served = server.serveOne()
+        XCTAssertEqual(served, "OK Aori_1")
+        XCTAssertEqual(box.wait(), .success(MinecraftLink.Hello(username: "Aori_1", reply: "OK Aori_1")))
     }
 
     func testLorebookEntersThePromptOnlyOnAKeyword() {
@@ -487,19 +517,19 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 }
 
-private final class HelloBox: @unchecked Sendable {
+private final class HelloBox<Value: Sendable>: @unchecked Sendable {
     private let lock = NSLock()
     private let ready = DispatchSemaphore(value: 0)
-    private var value: Result<FactorioLink.Hello, LocalHelloError>?
+    private var value: Value?
 
-    func set(_ value: Result<FactorioLink.Hello, LocalHelloError>) {
+    func set(_ value: Value) {
         lock.lock()
         self.value = value
         lock.unlock()
         ready.signal()
     }
 
-    func wait() -> Result<FactorioLink.Hello, LocalHelloError>? {
+    func wait() -> Value? {
         ready.wait()
         lock.lock()
         defer { lock.unlock() }
