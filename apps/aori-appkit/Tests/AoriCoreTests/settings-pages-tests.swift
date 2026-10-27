@@ -27,6 +27,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("Selected OpenAI-compatible."))
         XCTAssertTrue(text.contains("MLX-Serve"))
         XCTAssertTrue(text.contains("TensorFold"))
+        XCTAssertTrue(text.contains("Ollama"))
         XCTAssertTrue(text.contains("Other catalogs are absent."))
         XCTAssertTrue(text.contains("Games: Factorio and Minecraft."))
         XCTAssertTrue(text.contains("Factorio accepts a local hello."))
