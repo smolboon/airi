@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension", "stickers", "beat-sync"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search", "chess", "web-extension", "stickers", "beat-sync", "mcp"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -245,6 +245,21 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(BeatSyncScaffold.style(bpm: 180), "punchy-v")
         XCTAssertNil(BeatSyncScaffold.style(bpm: 0))
         XCTAssertNil(BeatSyncScaffold.style(bpm: 301))
+    }
+
+    func testMcpDropsTheServerCommand() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("MCP is unavailable."))
+        XCTAssertTrue(text.contains("A server command is dropped."))
+        let kept = McpScaffold.kept([
+            "server-cmd": "local-tool",
+            "server-args": "local-tool",
+            "token": "secret",
+            "note": "public",
+        ])
+        XCTAssertEqual(kept, ["note": "public"])
+        XCTAssertFalse(kept.values.contains("local-tool"))
+        XCTAssertFalse(kept.values.contains("secret"))
     }
 
     func testFactorioAcceptsALocalHello() {

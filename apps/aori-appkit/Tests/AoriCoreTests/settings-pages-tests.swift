@@ -58,6 +58,8 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertTrue(text.contains("Beat sync names a style from a tempo."))
         XCTAssertTrue(text.contains("The microphone stays off."))
         XCTAssertTrue(text.contains("Screen capture stays off."))
+        XCTAssertTrue(text.contains("MCP is unavailable."))
+        XCTAssertTrue(text.contains("A server command is dropped."))
         XCTAssertFalse(text.lowercased().contains("airi"))
         XCTAssertTrue(text.contains("Credential fields are dropped."))
         XCTAssertTrue(text.contains("No token is stored."))

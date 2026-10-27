@@ -52,6 +52,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - The web extension is a page draft only. The draft has a title and text. A URL is refused. No token is stored.
 - Stickers list emotions only. No image is stored. A URL is refused.
 - Beat sync names a style from a tempo. The microphone stays off. Screen capture stays off.
+- MCP is unavailable. A server command is dropped. No token is stored. No command runs.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.
