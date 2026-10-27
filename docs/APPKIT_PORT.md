@@ -223,7 +223,9 @@ Run 38359062380 logged `aori_embed_recall=tea`. `tea please` is closer to `I lik
 
 Add games, character cards, cloud provider sync, and the remaining chat protocols. Port integrations one at a time. These features exist in Project Aori today.
 
-The first slice stores a scenario and a greeting on the character card. The scenario enters the system prompt when the text is not empty. The greeting is the first local line when the text is not empty. Creator notes, lore, tags, and games stay absent. Cloud provider sync and the other chat protocols stay absent.
+The first slice stores a scenario and a greeting on the character card. The scenario enters the system prompt when the text is not empty. The greeting is the first local line when the text is not empty.
+
+This slice stores creator notes, lore, and tags. When the text is not empty, lore enters the system prompt. Creator notes and tags stay out of that prompt. Games, a keyword lorebook, cloud provider sync, and the other chat protocols stay absent.
 
 ## What this checkout did not run
 

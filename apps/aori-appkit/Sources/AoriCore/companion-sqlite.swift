@@ -144,7 +144,10 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
                 name TEXT NOT NULL,
                 personality TEXT NOT NULL,
                 scenario TEXT NOT NULL DEFAULT '',
-                greeting TEXT NOT NULL DEFAULT ''
+                greeting TEXT NOT NULL DEFAULT '',
+                creator_notes TEXT NOT NULL DEFAULT '',
+                lore TEXT NOT NULL DEFAULT '',
+                tags TEXT NOT NULL DEFAULT '[]'
             );
             CREATE TABLE IF NOT EXISTS notes (
                 id TEXT PRIMARY KEY NOT NULL,
@@ -161,6 +164,9 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         try? execute("ALTER TABLE settings ADD COLUMN voice TEXT NOT NULL DEFAULT ''")
         try? execute("ALTER TABLE persona ADD COLUMN scenario TEXT NOT NULL DEFAULT ''")
         try? execute("ALTER TABLE persona ADD COLUMN greeting TEXT NOT NULL DEFAULT ''")
+        try? execute("ALTER TABLE persona ADD COLUMN creator_notes TEXT NOT NULL DEFAULT ''")
+        try? execute("ALTER TABLE persona ADD COLUMN lore TEXT NOT NULL DEFAULT ''")
+        try? execute("ALTER TABLE persona ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'")
     }
 
     // NOTICE:
@@ -214,7 +220,7 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
     }
 
     private func readPersona() throws -> CompanionPersona? {
-        let sql = "SELECT name, personality, scenario, greeting FROM persona WHERE id = 1"
+        let sql = "SELECT name, personality, scenario, greeting, creator_notes, lore, tags FROM persona WHERE id = 1"
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
             throw CompanionStoreError.queryFailed(errorMessage())
@@ -227,7 +233,10 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
             name: columnText(statement, 0),
             personality: columnText(statement, 1),
             scenario: columnText(statement, 2),
-            greeting: columnText(statement, 3)
+            greeting: columnText(statement, 3),
+            creatorNotes: columnText(statement, 4),
+            lore: columnText(statement, 5),
+            tags: CompanionPersona.tags(fromJSON: columnText(statement, 6))
         )
     }
 
@@ -372,7 +381,7 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
     }
 
     private func insertPersona(_ persona: CompanionPersona) throws {
-        let sql = "INSERT INTO persona (id, name, personality, scenario, greeting) VALUES (1, ?, ?, ?, ?)"
+        let sql = "INSERT INTO persona (id, name, personality, scenario, greeting, creator_notes, lore, tags) VALUES (1, ?, ?, ?, ?, ?, ?, ?)"
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
             throw CompanionStoreError.queryFailed(errorMessage())
@@ -382,6 +391,9 @@ public final class SQLiteCompanionStore: CompanionProfileStore, @unchecked Senda
         bind(persona.personality, at: 2, statement: statement)
         bind(persona.scenario, at: 3, statement: statement)
         bind(persona.greeting, at: 4, statement: statement)
+        bind(persona.creatorNotes, at: 5, statement: statement)
+        bind(persona.lore, at: 6, statement: statement)
+        bind(CompanionPersona.tagsJSON(persona.tags), at: 7, statement: statement)
         guard sqlite3_step(statement) == SQLITE_DONE else {
             throw CompanionStoreError.queryFailed(errorMessage())
         }

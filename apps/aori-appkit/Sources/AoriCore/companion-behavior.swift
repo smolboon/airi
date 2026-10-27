@@ -5,16 +5,71 @@ public struct CompanionPersona: Codable, Equatable, Sendable {
     public var personality: String
     public var scenario: String
     public var greeting: String
+    public var creatorNotes: String
+    public var lore: String
+    public var tags: [String]
 
-    public init(name: String, personality: String, scenario: String = "", greeting: String = "") {
+    public init(
+        name: String,
+        personality: String,
+        scenario: String = "",
+        greeting: String = "",
+        creatorNotes: String = "",
+        lore: String = "",
+        tags: [String] = []
+    ) {
         self.name = name
         self.personality = personality
         self.scenario = scenario
         self.greeting = greeting
+        self.creatorNotes = creatorNotes
+        self.lore = lore
+        self.tags = Self.normalizedTags(tags)
+    }
+
+    /// Splits a comma-separated tag field. Blank tags drop out. Repeated tags keep the first spelling.
+    public static func tags(from text: String) -> [String] {
+        normalizedTags(text.split(separator: ",").map(String.init))
+    }
+
+    public static func normalizedTags(_ tags: [String]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for raw in tags {
+            let tag = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !tag.isEmpty, seen.insert(tag.lowercased()).inserted else {
+                continue
+            }
+            result.append(tag)
+        }
+        return result
+    }
+
+    public static func tagsJSON(_ tags: [String]) -> String {
+        let values = normalizedTags(tags)
+        guard let data = try? JSONSerialization.data(withJSONObject: values),
+              let text = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return text
+    }
+
+    public static func tags(fromJSON text: String) -> [String] {
+        guard let data = text.data(using: .utf8),
+              let values = try? JSONSerialization.jsonObject(with: data) as? [String]
+        else {
+            return []
+        }
+        return normalizedTags(values)
+    }
+
+    public var tagsText: String {
+        tags.joined(separator: ", ")
     }
 
     // NOTICE:
-    // Older companion.json files store only a name and a personality.
+    // Older companion.json files omit scenario, greeting, creator notes, lore, and tags.
     // The JSON import in SQLiteCompanionStore reads those files.
     // Source: companion.json next to companion.sqlite.
     // Remove this decoder when that JSON import is removed.
@@ -24,6 +79,9 @@ public struct CompanionPersona: Codable, Equatable, Sendable {
         personality = try container.decode(String.self, forKey: .personality)
         scenario = try container.decodeIfPresent(String.self, forKey: .scenario) ?? ""
         greeting = try container.decodeIfPresent(String.self, forKey: .greeting) ?? ""
+        creatorNotes = try container.decodeIfPresent(String.self, forKey: .creatorNotes) ?? ""
+        lore = try container.decodeIfPresent(String.self, forKey: .lore) ?? ""
+        tags = Self.normalizedTags(try container.decodeIfPresent([String].self, forKey: .tags) ?? [])
     }
 
     public static let standard = CompanionPersona(
@@ -156,6 +214,10 @@ public enum CompanionPrompt {
         let scenario = persona.scenario.trimmingCharacters(in: .whitespacesAndNewlines)
         if !scenario.isEmpty {
             lines.append("The scene is \(scenario).")
+        }
+        let lore = persona.lore.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !lore.isEmpty {
+            lines.append("The lore is \(lore).")
         }
         lines.append("Reply in short spoken sentences. Do not use markdown.")
         lines.append("Name a feeling in the first sentence when you feel happy, sad, or surprised.")

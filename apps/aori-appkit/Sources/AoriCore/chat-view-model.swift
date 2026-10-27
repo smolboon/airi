@@ -106,7 +106,10 @@ public final class ChatViewModel {
             name: name.isEmpty ? CompanionPersona.standard.name : name,
             personality: persona.personality.trimmingCharacters(in: .whitespacesAndNewlines),
             scenario: persona.scenario.trimmingCharacters(in: .whitespacesAndNewlines),
-            greeting: persona.greeting.trimmingCharacters(in: .whitespacesAndNewlines)
+            greeting: persona.greeting.trimmingCharacters(in: .whitespacesAndNewlines),
+            creatorNotes: persona.creatorNotes.trimmingCharacters(in: .whitespacesAndNewlines),
+            lore: persona.lore.trimmingCharacters(in: .whitespacesAndNewlines),
+            tags: persona.tags
         )
         if !showsModelTitle {
             presentation.title = self.persona.name
