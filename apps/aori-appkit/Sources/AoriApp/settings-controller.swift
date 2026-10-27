@@ -124,8 +124,12 @@ final class SettingsWindowController: NSWindowController {
         sourceLabel.maximumNumberOfLines = 3
         sourceLabel.textColor = .secondaryLabelColor
 
-        providerPopup.addItem(withTitle: "OpenAI-compatible")
-        providerPopup.lastItem?.representedObject = "openai"
+        for option in LocalProviderCatalog.options {
+            providerPopup.addItem(withTitle: option.title)
+            providerPopup.lastItem?.representedObject = option.id
+        }
+        providerPopup.target = self
+        providerPopup.action = #selector(providerChanged)
         providerPopup.setAccessibilityLabel("Provider")
 
         voicePopup.addItem(withTitle: "System default")
@@ -187,6 +191,14 @@ final class SettingsWindowController: NSWindowController {
             pageLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ])
         keyField.setAccessibilityLabel(AccessibilityCopy.apiKey)
+    }
+
+    @objc private func providerChanged() {
+        let provider = memoryValue(providerPopup, fallback: "openai")
+        baseField.stringValue = LocalProviderCatalog.resolvedBaseURL(
+            provider: provider,
+            current: baseField.stringValue
+        )
     }
 
     @objc private func save() {

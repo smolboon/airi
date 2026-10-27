@@ -83,23 +83,15 @@
 
 - id: airi
   subject: product
-  # TODO: open question. Should this concept be translatable? Interface strings in all 8
-  # locales keep "Aori". But the project uses the Japanese form アイリ in prose, and also in
-  # the English README.
   translatable: false
   definition: The application that this project makes, an animated character that speaks, listens, and sees.
   note: >
-    Keep the Latin letters in every language; only prose may write the Japanese form アイリ.
+    Keep the Latin letters Aori in every language.
   terms:
     - text: Aori
       part-of-speech: proper noun
       status: preferred
       context: Welcome to Aori!
-    - text: Project AIRI
-      part-of-speech: proper noun
-      status: preferred
-      type: fullForm
-      note: The full name, used on first mention.
 
 - id: tamagotchi
   subject: product

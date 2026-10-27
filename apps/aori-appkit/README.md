@@ -1,12 +1,14 @@
 # Aori
 
-Aori is the native macOS companion. It is based on Project AIRI. The windows are AppKit. The chat core is plain Swift.
+Aori is the native macOS companion. The windows are AppKit. The chat core is plain Swift.
 
 ## What it does
 
 The app opens a main window and a transparent companion window. The companion window stays above other apps. You can drag it. A status item lists the companion, the chat, and Settings.
 
-Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. Say "remember that" in chat to store a fact. The provider list has one entry. Other providers are absent. Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
+Settings lists scene, providers, modules, the character card, memory, data, connection, models, and system. Say "remember that" in chat to store a fact. The provider list has OpenAI-compatible, MLX-Serve, and TensorFold. MLX-Serve uses port 11234. TensorFold uses port 8080. Other catalogs are absent.
+
+Launch shows a greeting and speaks it. The character blinks while idle. The humanoid rig sways the neck and the head, and it turns the eyes. A few words change blend shapes.
 
 Speak uses `AVSpeechSynthesizer`. Visemes come from the audio level and the zero-crossing rate. The audio level scales that shape. The app listens without a Speak press. A quiet tail ends the utterance. Listen uses the Speech framework when permission is granted. When it is not, the app runs `whisper-cli` on the recorded WAV. Set `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` for that path. When the API key is empty, chat uses a local template. A key uses the OpenAI-compatible provider. The bundled character is Butter, a CC0 VRM by Polygonal Mind, with a color texture. A Rust library skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
 

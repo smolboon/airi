@@ -215,7 +215,7 @@ onMounted(async () => {
         hostContext.platform.notifications.show({
           body: t('tamagotchi.settings.spotlight.errors.shortcutRegistrationFailed'),
           id: 'spotlight-shortcut-failed',
-          title: 'AIRI',
+          title: 'Aori',
         }).catch((notificationError) => {
           console.warn('[App] Failed to show the Spotlight shortcut error notification:', notificationError)
         })

@@ -2348,7 +2348,7 @@ sections:
 theme:
   title: Theme
   description: |
-    Use the light theme, the dark theme, or the theme of your system.
+    Aori uses the dark theme.
   auto: System
   light: Light
   dark: Dark

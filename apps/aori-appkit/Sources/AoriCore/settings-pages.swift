@@ -29,7 +29,7 @@ public enum SettingsPages {
     ) -> String {
         [
             "Scene: \(sceneTitle). \(sceneDetail) Avatar \(avatar). Cubism, MMD, and Spine are absent.",
-            "Providers: \(provider). Other providers are absent.",
+            "Providers: OpenAI-compatible, MLX-Serve, and TensorFold. Selected \(LocalProviderCatalog.title(for: provider)). Other catalogs are absent.",
             "Modules: chat, speech, vision, memory, and plugins. Games are absent.",
             "Character card: \(personaName). Other card fields are absent.",
             "Memory: \(noteCount) saved facts.",

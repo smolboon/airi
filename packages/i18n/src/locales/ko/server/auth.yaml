@@ -5,13 +5,13 @@ electronCallback:
     signedIn: 로그인 되었습니다
     signInFailed: 가입 실패
     finishSignInInAiri: Aori 가입 끝내기
-    openAiriToContinue: AORI를 열어서 계속해 주세요
+    openAiriToContinue: Aori를 열어서 계속해 주세요
   message:
-    checkingResponse: 가입 응답을 확인하고 AORI에 핸드오프를 준비합니다.
-    passingToAiri: 가입 정보를 AORI로 전달합니다. 이 창은 잠시 후 닫힐 것입니다.
+    checkingResponse: 가입 응답을 확인하고 Aori에 핸드오프를 준비합니다.
+    passingToAiri: 가입 정보를 Aori로 전달합니다. 이 창은 잠시 후 닫힐 것입니다.
     syncedAndSafeToClose: 가입을 시도했던 Aori 클라이언트에 알림을 보냈습니다.
     invalidResponse: 잘못된 응답 형식입니다. 이 정보를 사용할 수 없습니다.
-    loopbackUnreachable: 브라우저가 로컬 반환 포트를 통해 AORI에 도달하지 못했습니다.
+    loopbackUnreachable: 브라우저가 로컬 반환 포트를 통해 Aori에 도달하지 못했습니다.
     tryOpenDirectly: 로컬 핸드오프를 직접 실행합니다. 실패할 경우, 하단의 버튼을 사용해 주세요.
     automaticHandoffFailed: 자동 핸드오프가 이 브라우저 세션에서 끝나지 못했습니다.
   label:

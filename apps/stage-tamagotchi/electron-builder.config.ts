@@ -42,7 +42,7 @@ else {
 
 export default {
   appId: 'ai.moeru.airi',
-  productName: 'AIRI',
+  productName: 'Aori',
   directories: {
     output: 'dist',
     buildResources: 'build',
@@ -230,11 +230,11 @@ export default {
       channel: 'latest-${arch}',
     },
     extendInfo: {
-      NSAppleEventsUsageDescription: 'AIRI uses Automation to control apps for computer-use tasks.',
-      NSMicrophoneUsageDescription: 'AIRI requires microphone access for voice interaction',
-      NSSpeechRecognitionUsageDescription: 'AIRI uses Apple Speech to transcribe voice interactions on this device',
-      NSCameraUsageDescription: 'AIRI requires camera access for vision understanding',
-      NSBluetoothAlwaysUsageDescription: 'AIRI uses Bluetooth to read game controller input',
+      NSAppleEventsUsageDescription: 'Aori uses Automation to control apps for computer-use tasks.',
+      NSMicrophoneUsageDescription: 'Aori requires microphone access for voice interaction',
+      NSSpeechRecognitionUsageDescription: 'Aori uses Apple Speech to transcribe voice interactions on this device',
+      NSCameraUsageDescription: 'Aori requires camera access for vision understanding',
+      NSBluetoothAlwaysUsageDescription: 'Aori uses Bluetooth to read game controller input',
     },
     // For self-publishing, testing, and distribution after modified the code without access to
     // an Apple Developer account, comment and uncomment the following 4 lines.
@@ -264,7 +264,7 @@ export default {
     },
     category: 'Utility',
     synopsis: 'AI VTuber/Waifu chatbot app inspired by Neuro-sama.',
-    description: 'AIRI is an AI VTuber/Waifu chatbot supporting Live2D/VRM avatars, featuring human-like interactions and modular stage-based rendering.',
+    description: 'Aori is an AI VTuber/Waifu chatbot supporting Live2D/VRM avatars, featuring human-like interactions and modular stage-based rendering.',
     executableName: 'airi',
     artifactName: '${productName}-${version}-linux-${arch}.${ext}',
     icon: 'build/icons/icon.png',

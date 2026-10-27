@@ -9,7 +9,7 @@ animations:
     title: 페이지별 전환 사용
 dialogs:
   onboarding:
-    title: AORI에 오신 것을 환영합니다!
+    title: Aori에 오신 것을 환영합니다!
     description: 시작하기 위해 당신의 첫 번째 AI 제공자를 설정해 보겠습니다.
     selectProvider: AI 제공자를 선택해주세요
     configureProvider: '{provider} 구성'
@@ -30,9 +30,9 @@ dialogs:
     next: 다음
     retry: 다시 시도
     credentialsSafeLocal: >-
-      AORI는 PC에서 온전히 로컬에서 실행되며 AI / LLM 제공 업체에 대한 자격 증명을 절대 훔치지 않아요. 당신의 API 키는 민감한 정보라는 점을 명심해주세요. 보안에 신경써주시고 절대 누구와도 공유하지 마세요.
+      Aori는 PC에서 온전히 로컬에서 실행되며 AI / LLM 제공 업체에 대한 자격 증명을 절대 훔치지 않아요. 당신의 API 키는 민감한 정보라는 점을 명심해주세요. 보안에 신경써주시고 절대 누구와도 공유하지 마세요.
     credentialsSafeOpenSource: >-
-      AORI는 {github}에서 오픈 소스입니다. 당신의 자격 증명을 처리하는 방법을 확인하려면 언제든지 코드를 검사하실 수 있어요.
+      Aori는 {github}에서 오픈 소스입니다. 당신의 자격 증명을 처리하는 방법을 확인하려면 언제든지 코드를 검사하실 수 있어요.
     enableChatCheck: >-
       Aori가 첫 모델에게 "Ping" 메시지를 보낼 수 있도록 허용하기
     start: 그럼 시작합시다!
@@ -51,7 +51,7 @@ dialogs:
       notificationsTitle: 알림
       notificationsDescription: 미리 알림과 중요한 상태 업데이트를 허용합니다.
       microphoneTitle: 마이크
-      microphoneDescription: AORI가 음성 입력 및 텍스트 변환에 마이크를 사용하도록 허용합니다.
+      microphoneDescription: Aori가 음성 입력 및 텍스트 변환에 마이크를 사용하도록 허용합니다.
       requestAction: 액세스 요청
       optionalHint: 이 권한을 허용하지 않아도 계속할 수 있어요.
       stateGranted: 허용됨
@@ -358,13 +358,13 @@ pages:
             title: 모델 옵션
             thinking:
               required-description: 이 모델은 Thinking이 필요합니다.
-              provider-default-description: AORI에서 이 모델의 Thinking 정보를 찾지 못했습니다. OpenRouter 기본 설정을 적용합니다.
+              provider-default-description: Aori에서 이 모델의 Thinking 정보를 찾지 못했습니다. OpenRouter 기본 설정을 적용합니다.
       title: 의식
     description: 사고, 시각, 음성 합성, 게임 등.
     gaming-factorio:
       description: Factorio 플레이 중!
       enable: Factorio 통합 사용
-      enable-description: AORI가 Factorio를 접근하기 위해 허용
+      enable-description: Aori가 Factorio를 접근하기 위해 허용
       server-address: 서버 주소
       server-address-description: Factorio 서버의 IP 주소 및 호스트 이름
       server-address-placeholder: '서버 주소 입력 (예시: localhost 및 192.168.1.100)'
@@ -394,7 +394,7 @@ pages:
     messaging-discord:
       description: Discord를 통한 채팅 및 음성 채팅
       enable: Discord 통합 사용
-      enable-description: AORI가 Discord를 접근하기 위해 허용
+      enable-description: Aori가 Discord를 접근하기 위해 허용
       token: 봇 토큰
       token-description: 당신의 Discord 봇 토큰
       token-placeholder: Discord 봇 토큰을 입력해주세요
@@ -446,7 +446,7 @@ pages:
       description: X / 트위터 탐색 및 사용량
       title: X / 트위터
       enable: X / 트위터 통합 사용
-      enable-description: AORI가 X / 트위터를 접근하기 위해 허용
+      enable-description: Aori가 X / 트위터를 접근하기 위해 허용
       api-key: API 키
       api-key-description: X / 트위터의 API 키
       api-key-placeholder: X / 트위터의 API 키를 입력해주세요
@@ -565,7 +565,7 @@ pages:
     helpinfo:
       title: 여기 처음 오셨나요?
       description: >
-        AORI는 적어도 하나의 {chat} 제공자가 올바르게 생각하고 행동하도록 구성되어야 합니다. Aori 시스템에 거주하는 캐릭터의 두뇌라고 생각할 수 있습니다.
+        Aori는 적어도 하나의 {chat} 제공자가 올바르게 생각하고 행동하도록 구성되어야 합니다. Aori 시스템에 거주하는 캐릭터의 두뇌라고 생각할 수 있습니다.
     explained:
       chat: '텍스트 생성 모델 제공자를 구성합니다. (예시: OpenRouter, OpenAI, Ollama)'
       Speech: '음성(TTS) 모델 제공자를 구성합니다. (예시: ElevenLabs, Azure Speech)'
@@ -834,7 +834,7 @@ pages:
             default:
               colors:
                 color-1: Aori 녹색
-              description: AORI가 가져온 기본 녹색 테마 색상!
+              description: Aori가 가져온 기본 녹색 테마 색상!
               title: 기본 색상
             morandi:
               colors:
@@ -910,7 +910,7 @@ sections:
 theme:
   title: 테마
   description: |
-    AORI의 전반적인 테마를 바꿉니다.
+    Aori의 전반적인 테마를 바꿉니다.
 title: 설정
 voices: 음성
 vrm:

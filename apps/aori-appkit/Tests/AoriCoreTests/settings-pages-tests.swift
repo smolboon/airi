@@ -22,7 +22,10 @@ final class SettingsPagesTests: XCTestCase {
             XCTAssertTrue(text.contains(name), name)
         }
         XCTAssertTrue(text.contains("Cubism, MMD, and Spine are absent."))
-        XCTAssertTrue(text.contains("Other providers are absent."))
+        XCTAssertTrue(text.contains("Selected OpenAI-compatible."))
+        XCTAssertTrue(text.contains("MLX-Serve"))
+        XCTAssertTrue(text.contains("TensorFold"))
+        XCTAssertTrue(text.contains("Other catalogs are absent."))
         XCTAssertTrue(text.contains("Games are absent."))
         XCTAssertTrue(text.contains("1 saved facts."))
         XCTAssertTrue(text.contains("2 messages in companion.sqlite."))

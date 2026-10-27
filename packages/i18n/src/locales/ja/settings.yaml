@@ -311,7 +311,7 @@ pages:
     delete: 削除
     delete_card: カードを削除
     delete_confirmation: このカードを削除してもよろしいですか？
-    description: AORIキャラクターカードプリセットを使用する
+    description: Aoriキャラクターカードプリセットを使用する
     description_label: 説明
     drop_here: アップロードするにはここにドラッグ
     create_card: 新しいカードを作成
@@ -381,7 +381,7 @@ pages:
       model: 発話/モデル
       voice: 発話/音声
     systemprompt: システムプロンプト
-    title: AORIカード
+    title: Aoriカード
     try_different_search: 別の検索ワードを試してください
     export: エクスポート
     exported: カードパックをエクスポートしました
@@ -396,7 +396,7 @@ pages:
     title: 記憶
   data:
     title: データ
-    description: AORIデータの保存、エクスポート、およびリセットの管理
+    description: Aoriデータの保存、エクスポート、およびリセットの管理
     sections:
       chats:
         title: チャット セッション
@@ -429,7 +429,7 @@ pages:
         open: フォルダを開く
       desktop:
         title: デスクトップの設定と状態をリセット
-        description: AORIデスクトップの設定と実行時の状態を消去します。
+        description: Aoriデスクトップの設定と実行時の状態を消去します。
         center: デスクトップウィンドウを画面中央に配置
         reset: デスクトップのデータをリセット
     confirmations:
@@ -603,7 +603,7 @@ pages:
     gaming-factorio:
       description: Factorioをプレイ！
       enable: Factorio連携を有効にする
-      enable-description: AORIがFactorioゲームと通信できるようにする
+      enable-description: AoriがFactorioゲームと通信できるようにする
       server-address: サーバーアドレス
       server-address-description: FactorioサーバーのIPアドレスまたはホスト名
       server-address-placeholder: サーバーアドレスを入力 (例： localhostまたは192.168.1.100)
@@ -681,7 +681,7 @@ pages:
     messaging-discord:
       description: Discordでのチャットとボイスチャット
       enable: Discord連携を有効にする
-      enable-description: AORIがDiscordを介して対話できるようにする
+      enable-description: AoriがDiscordを介して対話できるようにする
       token: ボットトークン
       token-description: あなたのDiscordボットトークン
       token-placeholder: Discordボットトークンを入力
@@ -738,7 +738,7 @@ pages:
     x:
       description: X / Twitterの閲覧と使用
       enable: X / Twitter連携を有効にする
-      enable-description: AORIがX / Twitterと対話できるようにする
+      enable-description: AoriがX / Twitterと対話できるようにする
       api-key: APIキー
       api-key-description: あなたのX / Twitter APIキー
       api-key-placeholder: あなたのX / Twitter APIキーを入力
@@ -1015,7 +1015,7 @@ pages:
     helpinfo:
       title: ここを初めて利用しますか？
       description: >
-        AORIが正常に思考し動作するためには、少なくとも1つの{chat}プロバイダーの設定が必要です。 これはAORIシステム内に存在するキャラクターの脳と考えることができます。
+        Aoriが正常に思考し動作するためには、少なくとも1つの{chat}プロバイダーの設定が必要です。 これはAoriシステム内に存在するキャラクターの脳と考えることができます。
     explained:
       chat: テキスト生成モデルプロバイダー。例： OpenRouter, OpenAI, Ollama。
       Speech: 音声 (テキスト読み上げ) モデルプロバイダー。例： ElevenLabs, Azure Speech。
@@ -1416,8 +1416,8 @@ pages:
           presets:
             default:
               colors:
-                color-1: AORIグリーン
-              description: AORIによって用意された、デフォルトの緑がかったテーマカラー！
+                color-1: Aoriグリーン
+              description: Aoriによって用意された、デフォルトの緑がかったテーマカラー！
               title: デフォルトカラー
             morandi:
               colors:
@@ -1518,7 +1518,7 @@ sections:
 theme:
   title: テーマ
   description: |
-    AORIの基本テーマをライトモードまたはダークモードに切り替えます。
+    Aoriの基本テーマをライトモードまたはダークモードに切り替えます。
 title: 設定
 voices: 音声
 vrm:

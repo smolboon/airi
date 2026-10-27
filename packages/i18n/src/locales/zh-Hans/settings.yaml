@@ -757,7 +757,7 @@ pages:
       description: 一起玩 Factorio！
       title: 异星工厂 Factorio
       enable: 启用异星工厂集成
-      enable-description: 允许AORI与异星工厂游戏互动
+      enable-description: 允许Aori与异星工厂游戏互动
       server-address: 服务器地址
       server-address-description: 异星工厂服务器的IP地址或主机名
       server-address-placeholder: 输入服务器地址（例如：localhost或192.168.1.100）
@@ -865,7 +865,7 @@ pages:
     messaging-discord:
       description: Discord 发消息和语音聊天
       enable: 启用Discord集成
-      enable-description: 允许AORI通过Discord进行互动
+      enable-description: 允许Aori通过Discord进行互动
       token: 机器人令牌
       token-description: 您的Discord机器人令牌
       token-placeholder: 输入您的Discord机器人令牌
@@ -948,7 +948,7 @@ pages:
     x:
       description: X / Twitter 的浏览和使用
       enable: 启用X / Twitter集成
-      enable-description: 允许AORI与X / Twitter互动
+      enable-description: 允许Aori与X / Twitter互动
       api-key: API密钥
       api-key-description: 您的X / Twitter API密钥
       api-key-placeholder: 输入您的X / Twitter API密钥
@@ -1840,7 +1840,7 @@ pages:
       prompt-api:
         description: 借助 Prompt API，您可以向 Chrome 中的基础模型发送自然语言请求。
       official:
-        title: AORI官方提供商
+        title: Aori官方提供商
         description: 登录后即可使用的服务来源
         speech-title: Aori 官方语音合成服务
         speech-description: 登录后即可使用的发声单元服务

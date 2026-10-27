@@ -50,8 +50,8 @@ devtools:
     context-flow:
       title: コンテキストのフロー
     editor:
-      title: AORIエディタ
-      description: AORIエディタウィンドウを開く
+      title: Aoriエディタ
+      description: Aoriエディタウィンドウを開く
       button: エディタを開く
     lag-visualizer:
       title: ラグビジュアライザー
@@ -102,5 +102,5 @@ screen-capture:
     dismiss: 閉じる
     instructions:
       step-1: '「システム設定」を開き、サイドバーから「プライバシーとセキュリティ」を選択します。'
-      step-2: '「画面&システム音声録音」および「システム音声録音のみ」のセクションで、AORI用のスイッチをオンにしてください。'
-      step-2-note: AORIが表示されていない場合は、「+」ボタンをクリックして「アプリケーション」フォルダから「Aori」を選択して手動で追加してください。
+      step-2: '「画面&システム音声録音」および「システム音声録音のみ」のセクションで、Aori用のスイッチをオンにしてください。'
+      step-2-note: Aoriが表示されていない場合は、「+」ボタンをクリックして「アプリケーション」フォルダから「Aori」を選択して手動で追加してください。
