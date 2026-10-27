@@ -154,6 +154,9 @@ final class SettingsWindowController: NSWindowController {
         let postHistoryLabel = NSTextField(labelWithString: "Post-history instructions")
         let cardVersionLabel = NSTextField(labelWithString: "Card version")
         let modulesLabel = NSTextField(labelWithString: "Modules")
+        let gamesLabel = NSTextField(wrappingLabelWithString: GameScaffold.report())
+        gamesLabel.maximumNumberOfLines = 3
+        gamesLabel.textColor = .secondaryLabelColor
         alternateGreetingsField.placeholderString = "Separate greetings with |"
         modulesField.placeholderString = CompanionModule.defaultIDs.joined(separator: ", ")
         let providerLabel = NSTextField(labelWithString: "Provider")
@@ -213,6 +216,7 @@ final class SettingsWindowController: NSWindowController {
             postHistoryLabel, postHistoryField,
             cardVersionLabel, cardVersionField,
             modulesLabel, modulesField,
+            gamesLabel,
             providerLabel, providerPopup,
             voiceLabel, voicePopup,
             baseLabel, baseField,
@@ -258,6 +262,7 @@ final class SettingsWindowController: NSWindowController {
             voicePopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             memoryPopup.widthAnchor.constraint(equalTo: stack.widthAnchor),
             pageLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            gamesLabel.widthAnchor.constraint(equalTo: stack.widthAnchor),
         ]
         for field in cardFields {
             constraints.append(field.widthAnchor.constraint(equalTo: stack.widthAnchor))

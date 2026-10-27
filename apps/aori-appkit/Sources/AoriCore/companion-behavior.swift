@@ -92,6 +92,25 @@ public enum Lorebook {
     }
 }
 
+public struct CompanionGame: Equatable, Sendable {
+    public var id: String
+    public var title: String
+
+    public static let catalog = [
+        CompanionGame(id: "factorio", title: "Factorio"),
+        CompanionGame(id: "minecraft", title: "Minecraft"),
+    ]
+}
+
+public enum GameScaffold {
+    public static let status = "not connected"
+
+    public static func report() -> String {
+        let names = CompanionGame.catalog.map(\.title).joined(separator: " and ")
+        return "Games: \(names). Each game is not connected."
+    }
+}
+
 public enum CompanionModule: String, Codable, CaseIterable, Sendable {
     case chat
     case speech
