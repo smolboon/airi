@@ -3,13 +3,18 @@ import XCTest
 
 final class LocalProviderCatalogTests: XCTestCase {
     func testCatalogOffersMlxServeAndTensorFold() {
-        XCTAssertEqual(LocalProviderCatalog.options.map(\.id), ["openai", "mlx-serve", "tensorfold", "ollama"])
+        XCTAssertEqual(
+            LocalProviderCatalog.options.map(\.id),
+            ["openai", "mlx-serve", "tensorfold", "ollama", "lm-studio"]
+        )
         XCTAssertEqual(LocalProviderCatalog.title(for: "mlx-serve"), "MLX-Serve")
         XCTAssertEqual(LocalProviderCatalog.title(for: "tensorfold"), "TensorFold")
         XCTAssertEqual(LocalProviderCatalog.title(for: "ollama"), "Ollama")
+        XCTAssertEqual(LocalProviderCatalog.title(for: "lm-studio"), "LM Studio")
         XCTAssertEqual(LocalProviderCatalog.defaultBaseURL(for: "mlx-serve"), "http://localhost:11234/v1/")
         XCTAssertEqual(LocalProviderCatalog.defaultBaseURL(for: "tensorfold"), "http://127.0.0.1:8080/v1/")
         XCTAssertEqual(LocalProviderCatalog.defaultBaseURL(for: "ollama"), "http://localhost:11434/v1/")
+        XCTAssertEqual(LocalProviderCatalog.defaultBaseURL(for: "lm-studio"), "http://localhost:1234/v1/")
     }
 
     func testSelectingALocalProviderFillsItsDefaultURL() {
@@ -34,6 +39,17 @@ final class LocalProviderCatalogTests: XCTestCase {
         XCTAssertEqual(
             LocalProviderCatalog.resolvedBaseURL(provider: "ollama", current: ""),
             "http://localhost:11434/v1/"
+        )
+        XCTAssertEqual(
+            LocalProviderCatalog.resolvedBaseURL(provider: "lm-studio", current: ""),
+            "http://localhost:1234/v1/"
+        )
+        XCTAssertEqual(
+            LocalProviderCatalog.resolvedBaseURL(
+                provider: "lm-studio",
+                current: "http://localhost:11434/v1/"
+            ),
+            "http://localhost:1234/v1/"
         )
         XCTAssertEqual(
             LocalProviderCatalog.resolvedBaseURL(

@@ -42,7 +42,7 @@ Animates is a separate product from Animation Inc. The site at animates.ai says 
 
 The sample character is Butter, a CC0 VRM by Polygonal Mind. Rust skins the mesh, lights it, and fills a depth buffer. AppKit shows that image.
 
-Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve, TensorFold, or Ollama. Those choices fill the local base URL. The same client sends the chat. Ollama uses port 11434. No key is stored for that choice.
+Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve, TensorFold, Ollama, or LM Studio. Those choices fill the local base URL. The same client sends the chat. Ollama uses port 11434 and LM Studio uses port 1234. No key is stored for those choices.
 
 When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
 
