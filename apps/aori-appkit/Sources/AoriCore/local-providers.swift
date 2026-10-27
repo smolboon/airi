@@ -18,6 +18,7 @@ public enum LocalProviderCatalog {
         Option(id: "openai", title: "OpenAI-compatible", baseURL: "https://api.openai.com/v1"),
         Option(id: "mlx-serve", title: "MLX-Serve", baseURL: "http://localhost:11234/v1/"),
         Option(id: "tensorfold", title: "TensorFold", baseURL: "http://127.0.0.1:8080/v1/"),
+        Option(id: "ollama", title: "Ollama", baseURL: "http://localhost:11434/v1/"),
     ]
 
     public static func title(for id: String) -> String {
