@@ -157,7 +157,7 @@ final class CompanionBehaviorTests: XCTestCase {
     }
 
     func testVscodeContextDraftStoresNoToken() {
-        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant"])
+        XCTAssertEqual(CompanionIntegration.catalog.map(\.id), ["vscode", "home-assistant", "web-search"])
         let text = IntegrationScaffold.report()
         XCTAssertTrue(text.contains("VS Code is a context draft only."))
         XCTAssertTrue(text.contains("No token is stored."))
@@ -183,6 +183,18 @@ final class CompanionBehaviorTests: XCTestCase {
             "note": "lamp",
         ])
         XCTAssertEqual(kept, ["note": "lamp"])
+    }
+
+    func testWebSearchDropsTheApiKey() {
+        let text = IntegrationScaffold.report()
+        XCTAssertTrue(text.contains("Web search is unavailable."))
+        XCTAssertFalse(text.contains("api_key="))
+        let kept = WebSearchScaffold.kept([
+            "api_key": "secret",
+            "token": "secret",
+            "note": "public",
+        ])
+        XCTAssertEqual(kept, ["note": "public"])
     }
 
     func testFactorioAcceptsALocalHello() {
