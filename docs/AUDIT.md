@@ -54,6 +54,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Beat sync names a style from a tempo. The microphone stays off. Screen capture stays off.
 - MCP is unavailable. A server command is dropped. No token is stored. No command runs.
 - The provider list includes Ollama and LM Studio. Ollama uses port 11434. LM Studio uses port 1234. No key is stored for those choices.
+- An empty key calls the chat server only when the base URL host is localhost or 127.0.0.1. A remote URL stays on the device template. The request omits the authorization header. Vision stays on the template when the key is empty.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

@@ -267,6 +267,8 @@ This slice adds Ollama to the provider list. The default base URL is http://loca
 
 This slice adds LM Studio to the provider list. The default base URL is http://localhost:1234/v1/. An empty URL takes that default. A custom URL stays. No key is stored for that choice. Other catalogs stay absent.
 
+This slice calls the chat server when the base URL is loopback and the key is empty. The host must be localhost or 127.0.0.1. A remote URL with an empty key stays on the device template. The request omits the authorization header. Vision stays on the template when the key is empty.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.
