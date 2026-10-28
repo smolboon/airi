@@ -34,6 +34,8 @@ When the lore is not empty, it enters the system prompt. When the description is
 
 The chat server receives the latest 24 transcript lines. Older lines stay in companion.sqlite. The system prompt and the post-history text still wrap that window.
 
+The system prompt stops at 1600 characters. The name line stays. The newest memory notes stay. Older notes stay in companion.sqlite.
+
 ## Sources
 
 The Vue apps supply the companion idea, the chat flow, and the VRM stage. The transparent window comes from Stage Tamagotchi.

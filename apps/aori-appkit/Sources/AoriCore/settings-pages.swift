@@ -35,7 +35,7 @@ public enum SettingsPages {
             "Modules: chat, speech, vision, memory, and plugins. \(GameScaffold.report())",
             IntegrationScaffold.report(),
             "Character card: \(personaName). Fields: name, nickname, description, personality, scenario, greeting, alternate greetings, creator notes, lore, tags, system prompt, post-history instructions, card version, modules, and a keyword lorebook. Card modules: \(cardModules). Keyword lorebook: \(lorebookCount) entries.",
-            "Memory: \(noteCount) saved facts.",
+            "Memory: \(noteCount) saved facts. The system prompt keeps the newest facts inside \(CompanionPrompt.systemCharacterLimit) characters.",
             "Data: \(messageCount) messages in companion.sqlite. The chat server receives the latest \(CompanionPrompt.providerHistoryLimit) lines.",
             "Connection: \(baseURL). Key source \(keySource).",
             "Models: \(model). Voice \(voice). The embedding file is aori-minilm.mlmodel. Speech keeps three sentences and drops markdown.",

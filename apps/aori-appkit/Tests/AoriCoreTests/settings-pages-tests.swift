@@ -43,6 +43,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertFalse(text.contains("A keyword lorebook is absent."))
         XCTAssertFalse(text.contains("Creator notes and lore are absent."))
         XCTAssertTrue(text.contains("1 saved facts."))
+        XCTAssertTrue(text.contains("inside 1600 characters."))
         XCTAssertTrue(text.contains("2 messages in companion.sqlite."))
         XCTAssertTrue(text.contains("The chat server receives the latest 24 lines."))
         XCTAssertTrue(text.contains("Speech keeps three sentences and drops markdown."))

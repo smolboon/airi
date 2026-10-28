@@ -494,6 +494,8 @@ public enum MemoryCapture {
 }
 
 public enum CompanionPrompt {
+    public static let systemCharacterLimit = 1600
+
     public static func system(persona: CompanionPersona, memory: UserMemory, context: String = "") -> String {
         var lines = [
             "You are \(persona.name), a desktop companion on macOS.",
@@ -520,12 +522,33 @@ public enum CompanionPrompt {
         }
         lines.append("Reply in short spoken sentences. Do not use markdown.")
         lines.append("Name a feeling in the first sentence when you feel happy, sad, or surprised.")
-        var text = lines.joined(separator: " ")
-        if !memory.notes.isEmpty {
-            let lines = memory.notes.map { "- \($0.text)" }.joined(separator: "\n")
-            text += " You remember these facts about the user.\n\(lines)"
+        let base = lines.joined(separator: " ")
+        return fit(base, notes: memory.notes)
+    }
+
+    /// Keeps the persona text. Drops the oldest notes first when the prompt is past the limit.
+    static func fit(_ base: String, notes: [MemoryNote]) -> String {
+        let clippedBase: String
+        if base.count > systemCharacterLimit {
+            clippedBase = String(base.prefix(systemCharacterLimit))
+        } else {
+            clippedBase = base
         }
-        return text
+        let header = " You remember these facts about the user.\n"
+        var newestFirst: [String] = []
+        for note in notes.reversed() {
+            let trial = newestFirst + [note.text]
+            let body = trial.reversed().map { "- \($0)" }.joined(separator: "\n")
+            if clippedBase.count + header.count + body.count > systemCharacterLimit {
+                continue
+            }
+            newestFirst.append(note.text)
+        }
+        guard !newestFirst.isEmpty else {
+            return clippedBase
+        }
+        let lines = newestFirst.reversed().map { "- \($0)" }.joined(separator: "\n")
+        return clippedBase + header + lines
     }
 
     public static func postHistory(persona: CompanionPersona) -> String {
@@ -554,6 +577,9 @@ public enum CompanionPrompt {
         var systemPrompt = system(persona: persona, memory: memory, context: context)
         if !recalled.isEmpty {
             systemPrompt += "\n\(recalled)"
+        }
+        if systemPrompt.count > systemCharacterLimit {
+            systemPrompt = String(systemPrompt.prefix(systemCharacterLimit))
         }
         var items = [ChatMessage(role: .system, content: systemPrompt)]
         items.append(contentsOf: window)
