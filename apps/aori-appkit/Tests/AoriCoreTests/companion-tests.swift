@@ -94,6 +94,25 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(CompanionGreeting.opening(persona: card, memory: .empty), "Hello. I am Nova. I am here on your desktop.")
     }
 
+    func testSystemPromptDropsTheOldestNotesFirst() {
+        var memory = UserMemory.empty
+        for index in 0 ..< 30 {
+            let text = String(repeating: "n", count: 80) + " \(index)"
+            XCTAssertTrue(memory.remember(text))
+        }
+        let prompt = CompanionPrompt.system(persona: .standard, memory: memory)
+        XCTAssertLessThanOrEqual(prompt.count, CompanionPrompt.systemCharacterLimit)
+        XCTAssertTrue(prompt.contains("You are Aori"))
+        XCTAssertTrue(prompt.contains(" 29"))
+        XCTAssertFalse(prompt.contains(" 0"))
+        let short = CompanionPrompt.system(
+            persona: .standard,
+            memory: UserMemory(notes: [MemoryNote(text: "tea")])
+        )
+        XCTAssertTrue(short.contains("tea"))
+        XCTAssertLessThanOrEqual(short.count, CompanionPrompt.systemCharacterLimit)
+    }
+
     func testProviderHistoryKeepsTheLatestLines() {
         var history: [ChatMessage] = []
         for index in 0 ..< 30 {
