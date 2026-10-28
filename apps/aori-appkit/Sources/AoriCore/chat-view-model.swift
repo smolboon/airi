@@ -239,6 +239,9 @@ public final class ChatViewModel {
                     publish()
                 }
             }
+            assistant.content = SpokenReply.prepare(assistant.content)
+            messages[messages.count - 1] = assistant
+            presentation.emotion = CompanionEmotion.infer(from: assistant.content)
             if assistant.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 phase = .failed("The provider returned no text.")
                 statusText = "The provider returned no text."
@@ -248,6 +251,11 @@ public final class ChatViewModel {
             }
             publish()
         } catch {
+            if !messages.isEmpty, messages[messages.count - 1].role == .assistant {
+                assistant.content = SpokenReply.prepare(assistant.content)
+                messages[messages.count - 1] = assistant
+                presentation.emotion = CompanionEmotion.infer(from: assistant.content)
+            }
             phase = .failed(String(describing: error))
             statusText = String(describing: error)
             publish()

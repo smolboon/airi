@@ -38,7 +38,7 @@ public enum SettingsPages {
             "Memory: \(noteCount) saved facts.",
             "Data: \(messageCount) messages in companion.sqlite. The chat server receives the latest \(CompanionPrompt.providerHistoryLimit) lines.",
             "Connection: \(baseURL). Key source \(keySource).",
-            "Models: \(model). Voice \(voice). The embedding file is aori-minilm.mlmodel.",
+            "Models: \(model). Voice \(voice). The embedding file is aori-minilm.mlmodel. Speech keeps three sentences and drops markdown.",
             "System: locale \(locale). \(ChatProtocolScaffold.report()) Account sync is absent.",
         ].joined(separator: "\n")
     }

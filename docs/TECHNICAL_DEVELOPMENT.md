@@ -38,7 +38,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Memory | 7 | `UserMemory.remember` keeps 40 notes. `EmbeddingMemoryStore` uses cosine recall. Lorebook matches whole words. The chat server gets 24 lines. | Linux cannot run the Core ML file. There is no memory graph. |
 | Soundness | 6 | Focused Swift tests passed on Linux for chat, memory, loopback, and the history window. | `docs/AORI_ARCHITECTURE.md` disagrees with `ChatRoute`. |
 | Security | 7 | Keychain store, secret redaction, sandbox notes in `docs/AUDIT.md`. `LocalLoopback` allows only `localhost` and `127.0.0.1`. | A Developer ID profile is absent. CI still stages files in the app container. |
-| Safety | 7 | Plugin file reads are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. | Spoken text is not checked before speech. Click-through defaults to on. |
+| Safety | 8 | Plugin file reads are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and code fences. | Click-through defaults to on. A fence still drops any text after it. |
 | UX | 6 | Settings title is Aori Settings. The page list has nine areas. Dark appearance is fixed in the settings controller. | This Linux host cannot open the Mac window. Full provider catalogs are absent. |
 | Token cost | 6 | `CompanionPrompt.providerHistoryLimit` is 24. Memory notes stop at 40. | The system prompt has no character budget. Lore text can grow without a cap. |
 | Peer capability and unique points | 7 | Transparent window, click-through, local loopback chat, on-device whisper, and a CC0 face file. | Cubism, MMD, and Spine are absent. Most integrations are drafts. |
@@ -48,7 +48,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Mergeable and separate parts | 7 | `AoriCore` and `AoriProviders` stay free of AppKit. Scaffolds live in core. | A scaffold that grows a socket must move behind a boundary. None has a socket now. |
 | Ergonomics | 6 | Local providers fill a default URL. The key placeholder says a loopback key is optional. | The settings body is one long label. |
 | RAM usage | 5 | `RuntimeMetrics.memoryMegabytes` reads resident memory. | No test fails when memory passes a budget. This audit did not record a live megabyte value. |
-| Verify in the loop | 4 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. | The reply text is not checked against the speech contract. |
+| Verify in the loop | 5 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. `SpokenReply.prepare` runs before the reply is stored. | The check does not judge facts. It only shapes speech text. |
 | Lightweightness | 6 | The native host is Swift and Rust. It does not embed Electron. Whisper weights stay out of git. | The Vue apps remain a large separate stack. The MiniLM file is bundled. |
 | Capabilities | 5 | Chat, speech, opt-in vision, memory, and one plugin run in code. Games accept a local hello only. | Live tools, live search, and Cubism are absent. |
 | Features | 5 | The card stores the field set in `SettingsPages.report`. Integrations are drafts or refusals. | A user cannot complete a Discord, search, or MCP task. |
@@ -56,7 +56,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Wiring over allow | 5 | `ChatRoute` and `RoutingChatClient` choose the server. Scaffolds only filter fields. | Discord, chess, and MCP drafts are not on the send path. |
 | Wiring questions and answers | 5 | A lorebook keyword adds one line to the system prompt. | There is no question router and no cited source list. |
 | End-to-end testing | 4 | `apps/aori-appkit/scripts/screenshot-app.sh` launches the app on macOS. | This Linux host cannot run that script. |
-| Agent self-reflection | 2 | `CompanionEmotion.infer` maps a few words to a face. | The app does not revise a reply. |
+| Agent self-reflection | 3 | `SpokenReply.prepare` revises the stored reply. `CompanionEmotion.infer` then reads that text. | The check does not ask a second model. It does not score truth. |
 | Sanity | 6 | Settings text must not contain `airi`. Loopback rejects a remote host. | The architecture page still describes the old empty-key route. |
 | Hygiene | 6 | Swift files use kebab-case. Product notes name Aori. | One architecture paragraph is stale. |
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
@@ -67,7 +67,7 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 
 `docs/AORI_ARCHITECTURE.md` says an empty key always uses the device template. `ChatRoute.usesDeviceTemplate` calls the server when the host is loopback. That split is the sharpest soundness gap.
 
-Speech trusts the provider text. The system prompt asks for short spoken sentences and no markdown. Nothing enforces that request.
+`SpokenReply` now strips markdown and keeps three sentences. It does not judge facts. Click-through still starts on.
 
 ## Steelman
 
@@ -83,7 +83,7 @@ A draft list can look like a finished product. The settings report names Discord
 
 An empty-key call to loopback is right only when the host check stays exact. A later change that resolves DNS breaks that rule.
 
-The speech path can read markdown aloud. A long provider reply can pass the 24-line input cap and still produce a long spoken answer.
+A long provider reply can pass the 24-line input cap. The speech check keeps three sentences. It does not check facts.
 
 The last macOS proof is run 38377354859. Later commits, including the loopback route and the 24-line window, have Linux tests only.
 
@@ -108,7 +108,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 
 | Order | Item | Moves | Done when |
 | --- | --- | --- | --- |
-| 1 | Spoken reply check | Verify in the loop, self-reflection, safety | Markdown is gone. At most three sentences remain. A test covers a fenced reply. |
+| 1 | Spoken reply check | Verify in the loop, self-reflection, safety | Done. Markdown leaves the text. At most three sentences remain. |
 | 2 | Architecture route text | Soundness, sanity, hygiene | The architecture page matches `ChatRoute` and the vision exception. |
 | 3 | System prompt budget | Token cost, memory | A long note list is cut. The persona line stays. A test shows the cut. |
 | 4 | Click-through sentence | Default-on and opt-in, UX | The settings report says click-through starts on. |
@@ -125,4 +125,5 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 
 | Date | Change | Scores that moved |
 | --- | --- | --- |
-| 2026-10-28 | Baseline after pull request 27. No product code in this change. | None. The table above is the baseline. |
+| 2026-10-28 | Baseline after pull request 27. No product code in this change. | None. The first table was the baseline. |
+| 2026-10-28 | Spoken reply check. `SpokenReply` and `ChatViewModel.send`. | Safety 7 to 8. Verify in the loop 4 to 5. Agent self-reflection 2 to 3. |

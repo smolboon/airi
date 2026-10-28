@@ -271,6 +271,8 @@ This slice calls the chat server when the base URL is loopback and the key is em
 
 This slice sends the latest 24 transcript lines to the chat server. Older lines stay in companion.sqlite. The system prompt still comes first. Post-history text still follows the window. A shorter transcript is sent in full.
 
+This slice checks the reply before it stays in the transcript. Markdown leaves the text. At most three sentences remain. The old brand name becomes Aori. An open code fence drops the rest of that reply.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.

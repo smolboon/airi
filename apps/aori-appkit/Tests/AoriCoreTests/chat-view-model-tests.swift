@@ -20,6 +20,17 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(recorded.first?.first?.content, ChatPrompt.companion)
     }
 
+    func testSendStoresTheSpokenForm() async throws {
+        let client = ScriptedChatClient(events: [.delta("**Hi** there. Four words. Five. Six stay out."), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Hello")
+        await model.send()
+        let messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "Hi there. Four words. Five.")
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+    }
+
     func testHoldSpeechPoseRestoresTheOpenMouth() async {
         let model = await ChatViewModel(client: ScriptedChatClient(events: [.finished]), configuration: testConfiguration())
         await model.setMouthLevel(0.8)
@@ -248,7 +259,7 @@ private final class PartialChatClient: ChatCompletionClient, @unchecked Sendable
     ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
         _ = nextCall()
         return AsyncThrowingStream { continuation in
-            continuation.yield(.delta("Partial"))
+            continuation.yield(.delta("**Partial**"))
             continuation.finish(throwing: ChatProviderError.httpStatus(500, "down"))
         }
     }
