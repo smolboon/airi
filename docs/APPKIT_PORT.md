@@ -269,6 +269,8 @@ This slice adds LM Studio to the provider list. The default base URL is http://l
 
 This slice calls the chat server when the base URL is loopback and the key is empty. The host must be localhost or 127.0.0.1. A remote URL with an empty key stays on the device template. The request omits the authorization header. Vision stays on the template when the key is empty.
 
+This slice sends the latest 24 transcript lines to the chat server. Older lines stay in companion.sqlite. The system prompt still comes first. Post-history text still follows the window. A shorter transcript is sent in full.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.

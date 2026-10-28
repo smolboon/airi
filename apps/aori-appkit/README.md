@@ -14,7 +14,7 @@ Speak uses `AVSpeechSynthesizer`. Visemes come from the audio level and the zero
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. The mouth, the eyes, and the head angle use Live2D parameter ids. The art is original. The app does not read a Cubism moc3 file.
 
-Chat, provider settings, the persona, and the locale id are stored in `companion.sqlite`. The first open copies the old JSON files. The chat panel can search messages and memory notes. Each locale under `packages/i18n` has Aori menu keys.
+Chat, provider settings, the persona, and the locale id are stored in `companion.sqlite`. The first open copies the old JSON files. The chat panel can search messages and memory notes. The chat server receives the latest 24 lines. Each locale under `packages/i18n` has Aori menu keys.
 
 `AORI_PLUGINS` selects a plugin directory. The app reads `extension.airi.json` and a JSON command list. The host grant is `aori.companion.*` snapshot. The sample `aori-greeting` logs `Plugin greeting.`. A call to `aori.files.read` is denied.
 

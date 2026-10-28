@@ -44,6 +44,7 @@ final class SettingsPagesTests: XCTestCase {
         XCTAssertFalse(text.contains("Creator notes and lore are absent."))
         XCTAssertTrue(text.contains("1 saved facts."))
         XCTAssertTrue(text.contains("2 messages in companion.sqlite."))
+        XCTAssertTrue(text.contains("The chat server receives the latest 24 lines."))
         XCTAssertTrue(text.contains("locale ja."))
         XCTAssertTrue(text.contains("Chat protocols: Discord is a message draft only. Telegram is a preview only. Satori is an event draft only."))
         XCTAssertTrue(text.contains("X is unavailable."))
