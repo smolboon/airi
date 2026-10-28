@@ -33,10 +33,10 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 
 | Dimension | Score | Evidence | Gap to 10 |
 | --- | --- | --- | --- |
-| Architecture | 7 | `docs/AORI_ARCHITECTURE.md`. `Package.swift` keeps AppKit off Linux. | The routing paragraph is stale. It still says an empty key always uses the template. |
+| Architecture | 8 | `docs/AORI_ARCHITECTURE.md` matches `ChatRoute`. `Package.swift` keeps AppKit off Linux. | The page still omits the Vue app map. |
 | Mapping | 6 | `SettingsPages.ids` has nine pages. `LocalProviderCatalog` maps five chat servers. | Integration ids are a report string. They are not a module map. |
 | Memory | 7 | `UserMemory.remember` keeps 40 notes. `EmbeddingMemoryStore` uses cosine recall. Lorebook matches whole words. The chat server gets 24 lines. | Linux cannot run the Core ML file. There is no memory graph. |
-| Soundness | 6 | Focused Swift tests passed on Linux for chat, memory, loopback, and the history window. | `docs/AORI_ARCHITECTURE.md` disagrees with `ChatRoute`. |
+| Soundness | 7 | Focused Swift tests passed on Linux for chat, memory, loopback, the history window, and the spoken reply. `docs/AORI_ARCHITECTURE.md` matches `ChatRoute`. | There is no property test for the host check. |
 | Security | 7 | Keychain store, secret redaction, sandbox notes in `docs/AUDIT.md`. `LocalLoopback` allows only `localhost` and `127.0.0.1`. | A Developer ID profile is absent. CI still stages files in the app container. |
 | Safety | 8 | Plugin file reads are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and code fences. | Click-through defaults to on. A fence still drops any text after it. |
 | UX | 6 | Settings title is Aori Settings. The page list has nine areas. Dark appearance is fixed in the settings controller. | This Linux host cannot open the Mac window. Full provider catalogs are absent. |
@@ -57,15 +57,15 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Wiring questions and answers | 5 | A lorebook keyword adds one line to the system prompt. | There is no question router and no cited source list. |
 | End-to-end testing | 4 | `apps/aori-appkit/scripts/screenshot-app.sh` launches the app on macOS. | This Linux host cannot run that script. |
 | Agent self-reflection | 3 | `SpokenReply.prepare` revises the stored reply. `CompanionEmotion.infer` then reads that text. | The check does not ask a second model. It does not score truth. |
-| Sanity | 6 | Settings text must not contain `airi`. Loopback rejects a remote host. | The architecture page still describes the old empty-key route. |
-| Hygiene | 6 | Swift files use kebab-case. Product notes name Aori. | One architecture paragraph is stale. |
+| Sanity | 7 | Settings text must not contain `airi`. Loopback rejects a remote host. The architecture page matches `ChatRoute`. | A Mac launch of the new route is not in a completed job. |
+| Hygiene | 7 | Swift files use kebab-case. Product notes name Aori. The architecture route text matches the code. | Later commits still lack a new macOS job id. |
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
 
 ## Findings
 
 The native core is real. Chat, the card, memory, and the loopback rule have tests. Many Milestone 8 names are drafts. They drop secrets and they do not perform the outside task.
 
-`docs/AORI_ARCHITECTURE.md` says an empty key always uses the device template. `ChatRoute.usesDeviceTemplate` calls the server when the host is loopback. That split is the sharpest soundness gap.
+`docs/AORI_ARCHITECTURE.md` now matches `ChatRoute`. The remaining soundness gap is the lack of a property test and a new macOS job.
 
 `SpokenReply` now strips markdown and keeps three sentences. It does not judge facts. Click-through still starts on.
 
@@ -109,7 +109,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | Order | Item | Moves | Done when |
 | --- | --- | --- | --- |
 | 1 | Spoken reply check | Verify in the loop, self-reflection, safety | Done. Markdown leaves the text. At most three sentences remain. |
-| 2 | Architecture route text | Soundness, sanity, hygiene | The architecture page matches `ChatRoute` and the vision exception. |
+| 2 | Architecture route text | Soundness, sanity, hygiene | Done. The architecture page matches `ChatRoute` and the vision exception. |
 | 3 | System prompt budget | Token cost, memory | A long note list is cut. The persona line stays. A test shows the cut. |
 | 4 | Click-through sentence | Default-on and opt-in, UX | The settings report says click-through starts on. |
 | 5 | Memory budget test | RAM usage | A test reads `RuntimeMetrics.memoryMegabytes` and fails above a stated cap. |
@@ -127,3 +127,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | --- | --- | --- |
 | 2026-10-28 | Baseline after pull request 27. No product code in this change. | None. The first table was the baseline. |
 | 2026-10-28 | Spoken reply check. `SpokenReply` and `ChatViewModel.send`. | Safety 7 to 8. Verify in the loop 4 to 5. Agent self-reflection 2 to 3. |
+| 2026-10-28 | Architecture route text matches `ChatRoute`. | Architecture 7 to 8. Soundness 6 to 7. Sanity 6 to 7. Hygiene 6 to 7. |
