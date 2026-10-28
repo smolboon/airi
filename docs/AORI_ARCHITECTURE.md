@@ -4,7 +4,7 @@ Aori splits the native app into three Swift modules, one macOS SceneKit tool, an
 
 ## Modules
 
-`AoriCore` owns chat state, the persona, memory notes, WAV helpers, the locale catalog, and the local reply. `SQLiteCompanionStore` stores the locale id in `companion.sqlite`. `AoriProviders` owns the OpenAI-compatible stream. `AoriApp` owns AppKit windows, Speech, AVFoundation, and the Keychain. `RoutingChatClient` picks the local reply when the key is empty or the model is `local`. A key sends the same messages to the remote provider.
+`AoriCore` owns chat state, the persona, memory notes, WAV helpers, the locale catalog, and the local reply. `SQLiteCompanionStore` stores the locale id in `companion.sqlite`. `AoriProviders` owns the OpenAI-compatible stream. `AoriApp` owns AppKit windows, Speech, AVFoundation, and the Keychain. `RoutingChatClient` uses the device template when the model is `local`, or when the key is empty and the host is not loopback. A loopback host with an empty key calls the chat server, and a saved key calls that server too.
 
 `aori-face` reads the sample glTF, skins positions and normals, and rasterizes RGBA. A Lambert term uses one fixed light plus ambient. `aori-gpui` is a separate binary. `AORI_GPUI_PNG` makes that binary write one lit raster and exit. Set `AORI_GPUI_EXIT_MS` to open the window titled Aori GPUI and quit after that many milliseconds. Run 38295099387 opened that window.
 
@@ -32,7 +32,7 @@ Run 38357544156 logged `aori_memory_source=endpoint` and `aori_window_mouth=open
 
 The screenshot path speaks "Hello papa" and writes a WAV. Voice activity marks speech on that file. The Speech framework transcribes the WAV when permission is granted. That grant logs `aori_stt_auth=authorized`. When `AORI_WHISPER_BIN` and `AORI_WHISPER_MODEL` point at real files, `OnDeviceRecognizer` runs `whisper-cli` and the log line is `aori_stt_auth=whisper`. The parser reads the CLI text. An empty parse stays empty. The app does not invent a transcript.
 
-A non-empty line becomes the user message. The local template answers when the key is empty or the model is `local`. The reply is spoken. That path logs `aori_llm=local`. A key with any other model calls the provider. That path logs `aori_llm=sent` and `aori_llm_reply`.
+A non-empty line becomes the user message. The device template answers when the model is `local`, or when the key is empty and the host is not loopback. The reply is spoken. A loopback host with an empty key logs `aori_llm=sent`. A saved key calls the provider and logs `aori_llm=sent` and `aori_llm_reply`. Vision stays on the template when the key is empty.
 
 ## Secrets and errors
 
