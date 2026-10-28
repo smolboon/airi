@@ -42,7 +42,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | UX | 6 | Settings title is Aori Settings. The page list has nine areas. Dark appearance is fixed in the settings controller. | This Linux host cannot open the Mac window. Full provider catalogs are absent. |
 | Token cost | 7 | `CompanionPrompt.providerHistoryLimit` is 24. Memory notes stop at 40. The system prompt stops at 1600 characters. | Lore inside the persona block can still fill the budget before notes. |
 | Peer capability and unique points | 7 | Transparent window, click-through, local loopback chat, on-device whisper, and a CC0 face file. | Cubism, MMD, and Spine are absent. Most integrations are drafts. |
-| Default-on and opt-in | 7 | Vision ticker is opt-in. Plugins need `AORI_PLUGINS`. Click-through starts on in `CompanionWindowPolicy`. | The click-through default is easy to miss. The settings report does not state it. |
+| Default-on and opt-in | 8 | Vision ticker is opt-in. Plugins need `AORI_PLUGINS`. The settings report says click-through starts on. | The user still cannot turn that default off from the report text alone. The menu item does that. |
 | Loop engineering | 5 | Linux `swift test` filters cover the core. `docs/AUDIT.md` cites macOS run 38377354859. | Commits after that run have no new macOS proof in this audit. |
 | Skills and tools | 4 | `PluginHost` runs one `.js` greeting. Tool calls stay out. Scaffolds do not run commands. | A second real tool, with a deny path, is absent. |
 | Mergeable and separate parts | 7 | `AoriCore` and `AoriProviders` stay free of AppKit. Scaffolds live in core. | A scaffold that grows a socket must move behind a boundary. None has a socket now. |
@@ -111,7 +111,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 1 | Spoken reply check | Verify in the loop, self-reflection, safety | Done. Markdown leaves the text. At most three sentences remain. |
 | 2 | Architecture route text | Soundness, sanity, hygiene | Done. The architecture page matches `ChatRoute` and the vision exception. |
 | 3 | System prompt budget | Token cost, memory | Done. A long note list is cut. The name line stays. |
-| 4 | Click-through sentence | Default-on and opt-in, UX | The settings report says click-through starts on. |
+| 4 | Click-through sentence | Default-on and opt-in, UX | Done. The settings report says click-through starts on. |
 | 5 | Memory budget test | RAM usage | A test reads `RuntimeMetrics.memoryMegabytes` and fails above a stated cap. |
 | 6 | Second denied tool | Skills and tools, safety | A plugin call outside the grant returns denied. The greeting still succeeds. |
 | 7 | Mac launch proof | End-to-end testing, loop engineering, functionality | A macOS job launches the app and saves the log. |
@@ -129,3 +129,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-28 | Spoken reply check. `SpokenReply` and `ChatViewModel.send`. | Safety 7 to 8. Verify in the loop 4 to 5. Agent self-reflection 2 to 3. |
 | 2026-10-28 | Architecture route text matches `ChatRoute`. | Architecture 7 to 8. Soundness 6 to 7. Sanity 6 to 7. Hygiene 6 to 7. |
 | 2026-10-28 | System prompt stops at 1600 characters. | Token cost 6 to 7. |
+| 2026-10-28 | Settings report says click-through starts on. | Default-on and opt-in 7 to 8. |

@@ -58,6 +58,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - The chat server receives the latest 24 transcript lines. Older lines stay in companion.sqlite.
 - Speech keeps at most three sentences. Markdown leaves that text. The old brand name becomes Aori.
 - The system prompt stops at 1600 characters. The newest memory notes stay. Older notes stay in companion.sqlite.
+- Click-through starts on. An opaque pixel keeps the click.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

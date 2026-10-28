@@ -275,6 +275,8 @@ This slice checks the reply before it stays in the transcript. Markdown leaves t
 
 This slice stops the system prompt at 1600 characters. The name line stays. The newest memory notes stay. Older notes stay in companion.sqlite. Recalled text that does not fit is cut.
 
+This slice states the click-through default in Settings. Click-through starts on. An opaque pixel keeps the click.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.
