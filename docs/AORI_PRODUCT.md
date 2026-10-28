@@ -44,7 +44,7 @@ The sample character is Butter, a CC0 VRM by Polygonal Mind. Rust skins the mesh
 
 Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve, TensorFold, Ollama, or LM Studio. Those choices fill the local base URL. The same client sends the chat. Ollama uses port 11434 and LM Studio uses port 1234. No key is stored for those choices.
 
-When the API key is empty, a local reply runs on the device. That reply is a template. It is not a neural model.
+When the API key is empty, a remote base URL uses a local reply on the device. That reply is a template. It is not a neural model. A loopback base URL calls the chat server with no key. The host must be localhost or 127.0.0.1. Vision stays on the template when the key is empty.
 
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 

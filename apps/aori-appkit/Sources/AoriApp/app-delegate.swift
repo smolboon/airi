@@ -94,7 +94,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let launchStatus {
             model.setStatus(launchStatus)
         } else if configuration.keySource == .missing {
-            model.setStatus("No API key is set. Open Settings, or set AORI_OPENAI_API_KEY.")
+            model.setStatus(ChatRoute.missingKeyStatus(baseURL: configuration.baseURL))
         }
 
         let mainWindow = MainWindowController(model: model)
@@ -730,7 +730,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let turnStarted = Date()
         await model.send()
         turnLatencyMilliseconds = Date().timeIntervalSince(turnStarted) * 1000
-        let usesLocal = model.configuration.apiKey.isEmpty || model.configuration.model == "local"
+        let usesLocal = ChatRoute.usesDeviceTemplate(model.configuration)
         logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
         let channel = ChatChannelFlag.kind(raw: ProcessInfo.processInfo.environment["AORI_CHAT_CHANNEL"])
         logLine("aori_chat_channel=\(channel.rawValue)")
@@ -1028,7 +1028,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Task {
             await self.model?.send()
             let reply = self.model?.textForSpeech() ?? ""
-            let usesLocal = self.model?.configuration.apiKey.isEmpty != false || self.model?.configuration.model == "local"
+            let usesLocal = self.model.map { ChatRoute.usesDeviceTemplate($0.configuration) } ?? true
             logLine(usesLocal ? "aori_llm=local" : "aori_llm=sent")
             if !reply.isEmpty, case .speak = self.turn.acceptReply(reply) {
                 self.announceSpeech(reply)

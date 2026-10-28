@@ -7,7 +7,7 @@ struct RoutingChatClient: ChatCompletionClient {
         messages: [ChatMessage],
         configuration: ProviderConfiguration
     ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
-        if configuration.apiKey.isEmpty || configuration.model == "local" {
+        if ChatRoute.usesDeviceTemplate(configuration) {
             return try await LocalChatClient().streamChat(messages: messages, configuration: configuration)
         }
         return try await OpenAICompatibleClient().streamChat(messages: messages, configuration: configuration)

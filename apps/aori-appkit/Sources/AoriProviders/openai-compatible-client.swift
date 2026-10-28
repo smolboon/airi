@@ -12,7 +12,7 @@ public struct OpenAICompatibleClient: ChatCompletionClient, VisionCompletionClie
         messages: [ChatMessage],
         configuration: ProviderConfiguration
     ) async throws -> AsyncThrowingStream<ChatStreamEvent, Error> {
-        guard !configuration.apiKey.isEmpty else {
+        if configuration.apiKey.isEmpty, !LocalLoopback.allows(configuration.baseURL) {
             throw ChatProviderError.missingAPIKey
         }
         let request = try makeRequest(messages: messages, configuration: configuration)
@@ -132,14 +132,17 @@ public struct OpenAICompatibleClient: ChatCompletionClient, VisionCompletionClie
             stream: true
         )
         let data = try JSONEncoder().encode(body)
+        var headers = [
+            "Content-Type": "application/json",
+            "Accept": "text/event-stream",
+        ]
+        if !configuration.apiKey.isEmpty {
+            headers["Authorization"] = "Bearer \(configuration.apiKey)"
+        }
         return HTTPRequest(
             url: configuration.chatCompletionsURL,
             method: "POST",
-            headers: [
-                "Content-Type": "application/json",
-                "Accept": "text/event-stream",
-                "Authorization": "Bearer \(configuration.apiKey)",
-            ],
+            headers: headers,
             body: data
         )
     }

@@ -95,6 +95,34 @@ final class OpenAICompatibleClientTests: XCTestCase {
         XCTAssertEqual(transport.requests().count, 1)
     }
 
+    func testLoopbackEmptyKeyOmitsTheAuthorizationHeader() async throws {
+        let transport = ScriptedTransport(
+            status: 200,
+            chunks: [Data("data: {\"choices\":[{\"delta\":{\"content\":\"OK\"}}]}\n\ndata: [DONE]\n\n".utf8)]
+        )
+        let client = OpenAICompatibleClient(transport: transport)
+        let stream = try await client.streamChat(
+            messages: [ChatMessage(role: .user, content: "Hi")],
+            configuration: ProviderConfiguration(
+                baseURL: URL(string: "http://127.0.0.1:11434/v1/")!,
+                model: "test-model",
+                apiKey: "",
+                keySource: .missing
+            )
+        )
+        var text = ""
+        for try await event in stream {
+            if case .delta(let piece) = event {
+                text += piece
+            }
+        }
+        XCTAssertEqual(text, "OK")
+        let request = try XCTUnwrap(transport.requests().first)
+        XCTAssertEqual(request.url.absoluteString, "http://127.0.0.1:11434/v1/chat/completions")
+        XCTAssertNil(request.headers["Authorization"])
+        XCTAssertFalse(String(data: request.body, encoding: .utf8)?.contains("Bearer") ?? true)
+    }
+
     func testVisionRequestUsesTheSameProviderAndKeepsTheKeyOutOfTheBody() async throws {
         let transport = ScriptedTransport(
             status: 200,

@@ -98,7 +98,10 @@ final class SettingsWindowController: NSWindowController {
         select(popup: providerPopup, value: stored?.provider ?? "openai")
         select(popup: voicePopup, value: stored?.voice ?? "")
         showNotes(notes)
-        keyField.placeholderString = configuration.apiKey.isEmpty ? "API key" : "Saved. Type a new key to replace it."
+        keyField.placeholderString = ChatRoute.keyPlaceholder(
+            baseURL: configuration.baseURL,
+            keyIsEmpty: configuration.apiKey.isEmpty
+        )
         sourceLabel.stringValue = "Key source: \(configuration.keySource.rawValue). The key is not shown."
         let avatar = AvatarKind.resolve(ProcessInfo.processInfo.environment["AORI_AVATAR"]) == .layered ? "live2d" : "vrm"
         let voice = voicePopup.titleOfSelectedItem ?? "System default"
@@ -287,6 +290,10 @@ final class SettingsWindowController: NSWindowController {
             provider: provider,
             current: baseField.stringValue
         )
+        if keyField.placeholderString != "Saved. Type a new key to replace it.",
+           let url = URL(string: baseField.stringValue) {
+            keyField.placeholderString = ChatRoute.keyPlaceholder(baseURL: url, keyIsEmpty: true)
+        }
     }
 
     @objc private func save() {
