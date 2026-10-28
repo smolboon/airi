@@ -30,7 +30,7 @@ public enum SettingsPages {
         lorebookCount: Int
     ) -> String {
         [
-            "Scene: \(sceneTitle). \(sceneDetail) Avatar \(avatar). Cubism, MMD, and Spine are absent.",
+            "Scene: \(sceneTitle). \(sceneDetail) Avatar \(avatar). Cubism, MMD, and Spine are absent. Click-through starts on. An opaque pixel keeps the click.",
             "Providers: OpenAI-compatible, MLX-Serve, TensorFold, Ollama, and LM Studio. Selected \(LocalProviderCatalog.title(for: provider)). Other catalogs are absent.",
             "Modules: chat, speech, vision, memory, and plugins. \(GameScaffold.report())",
             IntegrationScaffold.report(),
