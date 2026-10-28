@@ -48,6 +48,8 @@ Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve, Tens
 
 When the API key is empty, a remote base URL uses a local reply on the device. That reply is a template. It is not a neural model. A loopback base URL calls the chat server with no key. The host must be localhost or 127.0.0.1. Vision stays on the template when the key is empty.
 
+Speech keeps at most three sentences. Markdown and the old brand name leave that text.
+
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 
 When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. Rust draws the layers. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust can sample a motion3.json curve. This path does not load Cubism Core or a moc3 file. Run 38295099387 showed that character in the companion window and in the chat sidebar.
