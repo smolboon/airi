@@ -94,6 +94,24 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertEqual(CompanionGreeting.opening(persona: card, memory: .empty), "Hello. I am Nova. I am here on your desktop.")
     }
 
+    func testProviderHistoryKeepsTheLatestLines() {
+        var history: [ChatMessage] = []
+        for index in 0 ..< 30 {
+            history.append(ChatMessage(role: .user, content: "line \(index)"))
+        }
+        let window = CompanionPrompt.providerHistory(history)
+        XCTAssertEqual(window.count, CompanionPrompt.providerHistoryLimit)
+        XCTAssertEqual(window.first?.content, "line 6")
+        XCTAssertEqual(window.last?.content, "line 29")
+        let sent = CompanionPrompt.messages(persona: .standard, memory: .empty, history: history)
+        let transcript = sent.filter { $0.role != .system }
+        XCTAssertEqual(transcript.count, 24)
+        XCTAssertFalse(sent.contains { $0.content == "line 0" })
+        XCTAssertEqual(transcript.last?.content, "line 29")
+        let short = CompanionPrompt.providerHistory([ChatMessage(role: .user, content: "Hi")])
+        XCTAssertEqual(short.map(\.content), ["Hi"])
+    }
+
     func testTagsKeepTheFirstSpelling() {
         XCTAssertEqual(CompanionPersona.tags(from: " Night, night, , Desk "), ["Night", "Desk"])
         XCTAssertEqual(CompanionPersona.tags(fromJSON: "not-json"), [])

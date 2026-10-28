@@ -36,7 +36,7 @@ public enum SettingsPages {
             IntegrationScaffold.report(),
             "Character card: \(personaName). Fields: name, nickname, description, personality, scenario, greeting, alternate greetings, creator notes, lore, tags, system prompt, post-history instructions, card version, modules, and a keyword lorebook. Card modules: \(cardModules). Keyword lorebook: \(lorebookCount) entries.",
             "Memory: \(noteCount) saved facts.",
-            "Data: \(messageCount) messages in companion.sqlite.",
+            "Data: \(messageCount) messages in companion.sqlite. The chat server receives the latest \(CompanionPrompt.providerHistoryLimit) lines.",
             "Connection: \(baseURL). Key source \(keySource).",
             "Models: \(model). Voice \(voice). The embedding file is aori-minilm.mlmodel.",
             "System: locale \(locale). \(ChatProtocolScaffold.report()) Account sync is absent.",

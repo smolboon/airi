@@ -532,6 +532,16 @@ public enum CompanionPrompt {
         persona.postHistoryInstructions.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    public static let providerHistoryLimit = 24
+
+    /// Keeps the latest lines for the chat server. Older lines stay in the saved transcript.
+    public static func providerHistory(_ history: [ChatMessage]) -> [ChatMessage] {
+        guard history.count > providerHistoryLimit else {
+            return history
+        }
+        return Array(history.suffix(providerHistoryLimit))
+    }
+
     /// Builds the provider messages. Post-history instructions follow the chat history.
     public static func messages(
         persona: CompanionPersona,
@@ -539,13 +549,14 @@ public enum CompanionPrompt {
         history: [ChatMessage],
         recalled: String = ""
     ) -> [ChatMessage] {
-        let context = history.last(where: { $0.role == .user })?.content ?? ""
+        let window = providerHistory(history)
+        let context = window.last(where: { $0.role == .user })?.content ?? ""
         var systemPrompt = system(persona: persona, memory: memory, context: context)
         if !recalled.isEmpty {
             systemPrompt += "\n\(recalled)"
         }
         var items = [ChatMessage(role: .system, content: systemPrompt)]
-        items.append(contentsOf: history)
+        items.append(contentsOf: window)
         let post = postHistory(persona: persona)
         if !post.isEmpty {
             items.append(ChatMessage(role: .system, content: post))

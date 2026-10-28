@@ -32,6 +32,8 @@ The app stores facts that you mark with "remember that". Launch shows a greeting
 
 When the lore is not empty, it enters the system prompt. When the description is not empty, it enters the system prompt. When the system prompt text is not empty, that text enters the system prompt. When the post-history text is not empty, it follows the chat history. A nickname, alternate greetings, the card version, creator notes, and tags stay out of the prompt. When the user text contains a lorebook keyword, that entry enters the system prompt.
 
+The chat server receives the latest 24 transcript lines. Older lines stay in companion.sqlite. The system prompt and the post-history text still wrap that window.
+
 ## Sources
 
 The Vue apps supply the companion idea, the chat flow, and the VRM stage. The transparent window comes from Stage Tamagotchi.
