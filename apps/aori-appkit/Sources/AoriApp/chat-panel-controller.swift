@@ -37,7 +37,8 @@ final class ChatPanelController: NSViewController {
         transcriptView.isRichText = false
         transcriptView.font = .systemFont(ofSize: 14)
         transcriptView.textColor = .labelColor
-        transcriptView.drawsBackground = false
+        transcriptView.drawsBackground = true
+        transcriptView.backgroundColor = AccentPalette.textScrim
         transcriptView.insertionPointColor = AccentPalette.fill
         transcriptView.selectedTextAttributes = [
             .backgroundColor: AccentPalette.fill,

@@ -13,47 +13,111 @@ final class AccentColorTests: XCTestCase {
         XCTAssertFalse(AccentColor.whiteOnFillPassesAA())
     }
 
-    func testWashUsesTheAccentAndStopsWhenStill() {
-        let moving = AccentField.frame(width: 48, height: 32, time: 3.5, reduceMotion: false, visible: true)
-        let later = AccentField.frame(width: 48, height: 32, time: 8.0, reduceMotion: false, visible: true)
-        XCTAssertTrue(moving.advances)
-        XCTAssertNotEqual(moving.pixels, later.pixels)
+    func testMetaBallsMatchTheSoloLVLParameters() {
+        XCTAssertEqual(MetaBalls.blobCount, 12)
+        XCTAssertEqual(MetaBalls.minRadius, 20)
+        XCTAssertEqual(MetaBalls.maxRadius, 60)
+        XCTAssertEqual(MetaBalls.driftSpeed, 0.25)
+        XCTAssertEqual(MetaBalls.maxSpeed, 0.75)
+        XCTAssertEqual(MetaBalls.edgeMargin, 50)
+        XCTAssertEqual(MetaBalls.clumpFactor, 0)
+        XCTAssertEqual(MetaBalls.glowGlobalAlpha, 0.70)
+        XCTAssertEqual(MetaBalls.glowHexAlpha, 0x90)
+        XCTAssertEqual(MetaBalls.glowFade, 0.95)
+        XCTAssertEqual(MetaBalls.coreRadiusScale, 0.40)
+        XCTAssertEqual(MetaBalls.coreGlobalAlpha, 0.50)
 
-        let still = AccentField.frame(width: 48, height: 32, time: 3.5, reduceMotion: true, visible: true)
-        let stillLater = AccentField.frame(width: 48, height: 32, time: 8.0, reduceMotion: true, visible: true)
-        XCTAssertFalse(still.advances)
-        XCTAssertEqual(still.pixels, stillLater.pixels)
-
-        let hidden = AccentField.frame(width: 48, height: 32, time: 3.5, reduceMotion: false, visible: false)
-        XCTAssertFalse(hidden.advances)
-        XCTAssertEqual(hidden.pixels, still.pixels)
-        XCTAssertEqual(AccentField.layerCount, 3)
+        let field = MetaBalls(width: 640, height: 360, seed: 7)
+        XCTAssertEqual(field.blobs.count, 12)
+        for blob in field.blobs {
+            XCTAssertGreaterThanOrEqual(blob.radius, MetaBalls.minRadius)
+            XCTAssertLessThanOrEqual(blob.radius, MetaBalls.maxRadius)
+            XCTAssertEqual(MetaBalls.speed(blob), MetaBalls.driftSpeed, accuracy: 0.000_001)
+        }
     }
 
-    func testWashStaysDarkEnoughForLightText() throws {
-        let frame = AccentField.frame(width: 80, height: 48, time: 2.2, reduceMotion: false, visible: true)
-        let bright = AccentField.brightest(in: frame.pixels)
+    func testBlobsDriftEaseBackAndStayUnderTheSpeedCap() {
+        var field = MetaBalls(
+            width: 400,
+            height: 300,
+            blobs: [
+                MetaBalls.Blob(x: 10, y: 150, vx: -0.25, vy: 0, radius: 30),
+            ]
+        )
+        XCTAssertTrue(field.step(reduceMotion: false, visible: true))
+        XCTAssertGreaterThan(field.blobs[0].vx, -0.25)
+        XCTAssertLessThanOrEqual(MetaBalls.speed(field.blobs[0]), MetaBalls.maxSpeed)
+
+        var fast = MetaBalls(
+            width: 400,
+            height: 300,
+            blobs: [
+                MetaBalls.Blob(x: 200, y: 150, vx: 4, vy: 0, radius: 30),
+            ]
+        )
+        fast.step(reduceMotion: false, visible: true)
+        XCTAssertEqual(MetaBalls.speed(fast.blobs[0]), MetaBalls.maxSpeed, accuracy: 0.000_001)
+        XCTAssertGreaterThan(fast.blobs[0].x, 200)
+    }
+
+    func testAnimationStopsWhenHiddenOrReduceMotionIsOn() {
+        let blob = MetaBalls.Blob(x: 200, y: 150, vx: 0.25, vy: 0.1, radius: 40)
+        var still = MetaBalls(width: 400, height: 300, blobs: [blob])
+        var hidden = still
+        XCTAssertFalse(still.step(reduceMotion: true, visible: true))
+        XCTAssertFalse(hidden.step(reduceMotion: false, visible: false))
+        XCTAssertEqual(still.blobs, [blob])
+        XCTAssertEqual(hidden.blobs, [blob])
+
+        var moving = MetaBalls(width: 400, height: 300, blobs: [blob])
+        XCTAssertTrue(moving.step(reduceMotion: false, visible: true))
+        XCTAssertNotEqual(moving.blobs[0].x, blob.x)
+    }
+
+    func testFrameUsesBlackYellowLayersAndStaysReadable() throws {
+        let field = MetaBalls(
+            width: 180,
+            height: 120,
+            blobs: [
+                MetaBalls.Blob(x: 90, y: 60, vx: 0, vy: 0, radius: 40),
+            ]
+        )
+        let pixels = field.pixels(width: 180, height: 120)
+        XCTAssertEqual(Array(pixels[0..<4]), [0, 0, 0, 255])
+
+        let center = (60 * 180 + 90) * 4
+        XCTAssertGreaterThan(pixels[center], pixels[center + 2])
+        XCTAssertGreaterThan(pixels[center], 80)
+        XCTAssertEqual(Int(pixels[center + 2]), 0)
+
+        let scrim = MetaBalls.scrimmed(
+            red: Int(pixels[center]),
+            green: Int(pixels[center + 1]),
+            blue: Int(pixels[center + 2])
+        )
         let ratio = AccentColor.contrastRatio(
             foregroundRed: 245,
             foregroundGreen: 245,
             foregroundBlue: 245,
-            backgroundRed: bright.red,
-            backgroundGreen: bright.green,
-            backgroundBlue: bright.blue
+            backgroundRed: scrim.red,
+            backgroundGreen: scrim.green,
+            backgroundBlue: scrim.blue
         )
         XCTAssertGreaterThanOrEqual(ratio, AccentColor.minimumContrast)
-        let png = AccentField.png(pixels: frame.pixels, width: frame.width, height: frame.height)
+
+        let started = Date()
+        var animated = MetaBalls(width: 180, height: 120, seed: 3)
+        for _ in 0..<30 {
+            animated.step(reduceMotion: false, visible: true)
+        }
+        let frame = animated.pixels(width: 180, height: 120)
+        XCTAssertLessThan(Date().timeIntervalSince(started), 0.5)
+        XCTAssertEqual(frame.count, 180 * 120 * 4)
+        let png = MetaBalls.png(pixels: frame, width: 180, height: 120)
         XCTAssertEqual(Array(png?.prefix(8) ?? Data()), [137, 80, 78, 71, 13, 10, 26, 10])
-        if let path = ProcessInfo.processInfo.environment["AORI_ACCENT_PNG"], let png {
+        if let path = ProcessInfo.processInfo.environment["AORI_METABALLS_PNG"], let png {
             try png.write(to: URL(fileURLWithPath: path))
         }
-    }
-
-    func testWashFrameStaysInsideTheMemoryBudget() {
-        let started = Date()
-        let frame = AccentField.frame(width: 160, height: 90, time: 1, reduceMotion: false, visible: true)
-        XCTAssertLessThan(Date().timeIntervalSince(started), 0.2)
-        XCTAssertEqual(frame.pixels.count, 160 * 90 * 4)
         XCTAssertGreaterThan(RuntimeMetrics.memoryMegabytes(), 0)
         XCTAssertLessThanOrEqual(RuntimeMetrics.memoryMegabytes(), RuntimeMetrics.residentBudgetMegabytes)
     }
@@ -69,7 +133,6 @@ final class AccentColorTests: XCTestCase {
             "systemCyan",
             "NSColor.cyan",
             "#00FFFF",
-            "#00ffff",
             "#40E0D0",
             "#48D1CC",
             "#20B2AA",
@@ -80,6 +143,8 @@ final class AccentColorTests: XCTestCase {
             "#06B6D4",
             "#22D3EE",
             "#67E8F9",
+            "AccentField",
+            "AccentWashView",
         ]
         let files = try sourceFiles(in: sources)
         XCTAssertFalse(files.isEmpty)

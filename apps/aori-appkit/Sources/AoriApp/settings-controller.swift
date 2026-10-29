@@ -140,7 +140,7 @@ final class SettingsWindowController: NSWindowController {
     private func build() {
         let root = NSView()
         window?.contentView = root
-        let wash = AccentWashView(frame: .zero)
+        let wash = MetaBallsView(frame: .zero)
         wash.translatesAutoresizingMaskIntoConstraints = false
         root.addSubview(wash)
 
@@ -261,7 +261,8 @@ final class SettingsWindowController: NSWindowController {
         let scroll = NSScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.hasVerticalScroller = true
-        scroll.drawsBackground = false
+        scroll.drawsBackground = true
+        scroll.backgroundColor = AccentPalette.textScrim
         scroll.borderType = .noBorder
         scroll.documentView = stack
         root.addSubview(scroll)
