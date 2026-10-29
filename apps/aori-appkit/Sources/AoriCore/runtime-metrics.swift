@@ -13,6 +13,9 @@ public struct RuntimeSample: Equatable, Sendable {
 }
 
 public enum RuntimeMetrics {
+    /// Process budget for the resident-memory test. This is not a measured app size.
+    public static let residentBudgetMegabytes = 1024.0
+
     /// Frames per second for one captured frame.
     public static func framesPerSecond(frameMilliseconds: Double) -> Double {
         guard frameMilliseconds > 0 else {
