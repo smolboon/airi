@@ -273,6 +273,8 @@ This slice sends the latest 24 transcript lines to the chat server. Older lines 
 
 This slice checks the reply before it stays in the transcript. Markdown leaves the text. At most three sentences remain. The old brand name becomes Aori. An open code fence drops the rest of that reply.
 
+This slice stores notes with that reply. The notes name a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
+
 This slice stops the system prompt at 1600 characters. The name line stays. The newest memory notes stay. Older notes stay in companion.sqlite. Recalled text that does not fit is cut.
 
 This slice states the click-through default in Settings. Click-through starts on. An opaque pixel keeps the click.

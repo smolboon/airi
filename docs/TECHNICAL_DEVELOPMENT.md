@@ -44,7 +44,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Mergeable and separate parts | 7 | `AoriCore` and `AoriProviders` stay free of AppKit. Scaffolds live in core. | A scaffold that grows a socket must move behind a boundary. None has a socket now. |
 | Ergonomics | 6 | Local providers fill a default URL. The key placeholder says a loopback key is optional. | The settings body is one long label. |
 | RAM usage | 5 | `RuntimeMetrics.memoryMegabytes` reads resident memory. | No test fails when memory passes a budget. This audit did not record a live megabyte value. |
-| Verify in the loop | 5 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. `SpokenReply.prepare` runs before the reply is stored. | The check does not judge facts. It only shapes speech text. |
+| Verify in the loop | 5 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. `SpokenReply.review` runs before the reply is stored. | The check does not judge facts. It records the edits and shapes speech text. |
 | Lightweightness | 6 | The native host is Swift and Rust. It does not embed Electron. Whisper weights stay out of git. | The Vue apps remain a large separate stack. The MiniLM file is bundled. |
 | Capabilities | 5 | Chat, speech, opt-in vision, memory, and one plugin run in code. Games accept a local hello only. | Live tools, live search, and Cubism are absent. |
 | Features | 5 | The card stores the field set in `SettingsPages.report`. Integrations are drafts or refusals. | A user cannot complete a Discord, search, or MCP task. |
@@ -52,7 +52,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Wiring over allow | 5 | `ChatRoute` and `RoutingChatClient` choose the server. Scaffolds only filter fields. | Discord, chess, and MCP drafts are not on the send path. |
 | Wiring questions and answers | 5 | A lorebook keyword adds one line to the system prompt. | There is no question router and no cited source list. |
 | End-to-end testing | 4 | `apps/aori-appkit/scripts/screenshot-app.sh` launches the app on macOS. | This Linux host cannot run that script. |
-| Agent self-reflection | 3 | `SpokenReply.prepare` revises the stored reply. `CompanionEmotion.infer` then reads that text. | The check does not ask a second model. It does not score truth. |
+| Agent self-reflection | 4 | `SpokenReply.review` stores notes for a fence, markdown, the brand, cut sentences, cut characters, and an empty result. `ChatViewModel.send` keeps that review. | The notes do not ask a second model. They do not score truth. |
 | Sanity | 7 | Settings text must not contain `airi`. Loopback rejects a remote host. The architecture page matches `ChatRoute`. | A Mac launch of the new route is not in a completed job. |
 | Hygiene | 7 | Swift files use kebab-case. Product notes name Aori. The architecture route text matches the code. | Later commits still lack a new macOS job id. |
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
@@ -67,7 +67,7 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 
 `docs/AORI_ARCHITECTURE.md` now matches `ChatRoute`. The remaining soundness gap is the lack of a property test and a new macOS job.
 
-`SpokenReply` now strips markdown and keeps three sentences. It does not judge facts. Click-through still starts on.
+`SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through still starts on.
 
 Steelman, scrutiny, hardness, and creative brainstorm have scores. They stay in this file as review methods. A score of 10 needs a counter-design, a full re-check, closed Mac work, or a new ranked list.
 
@@ -120,6 +120,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 8 | Developer ID | Security, polish | The signed app has a Developer ID profile. |
 | 9 | Wired tool on the send path | Wiring over allow, capabilities | One local tool runs from chat and cannot open a remote host. |
 | 10 | Face proof | Polish, peer capability | A completed macOS job shows `aori-face.vrm` with eyes, a nose, and a mouth. |
+| 11 | Reply review notes | Agent self-reflection | Done. The send path stores fence, markdown, brand, sentence, character, and empty notes. |
 
 Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot close them.
 
@@ -133,3 +134,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-28 | System prompt stops at 1600 characters. | Token cost 6 to 7. |
 | 2026-10-28 | Settings report says click-through starts on. | Default-on and opt-in 7 to 8. |
 | 2026-10-29 | Review methods have scores. No product code in this change. | Steelman 6. Scrutiny 6. Hardness 5. Creative brainstorm 6. Product scores stay at the round 1 end. |
+| 2026-10-29 | Reply review notes on `ChatViewModel.send`. | Agent self-reflection 3 to 4. |
