@@ -24,7 +24,7 @@ final class MainWindowController: NSWindowController {
         window.minSize = NSSize(width: 720, height: 480)
         super.init(window: window)
 
-        characterView.clearsBackground = false
+        characterView.clearsBackground = true
         characterView.dragsWindow = false
         characterView.translatesAutoresizingMaskIntoConstraints = true
 
@@ -38,7 +38,7 @@ final class MainWindowController: NSWindowController {
         let root = NSView()
         window.contentView = root
         if let content = window.contentView {
-            let wash = AccentWashView(frame: content.bounds)
+            let wash = MetaBallsView(frame: content.bounds)
             wash.autoresizingMask = [.width, .height]
             split.frame = content.bounds
             split.autoresizingMask = [.width, .height]

@@ -62,7 +62,8 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Click-through starts on. An opaque pixel keeps the click.
 - A test fails when resident memory passes 1024 MB. That number is a process budget. It is not a measured Mac app size.
 - The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not start speech.
-- The accent is `#FFEA00`. Text on that yellow is `#141414`. A slow wash sits behind the main window and Settings. The wash stops when Reduce Motion is on or the window is hidden.
+- The accent is `#FFEA00`. Text on that yellow is `#141414`.
+- The window background is 12 MetaBalls in that yellow. It stops when Reduce Motion is on or the window is hidden.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

@@ -66,7 +66,7 @@ A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
 
 The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not start speech.
 
-Buttons, text selection, and the vision badge use `#FFEA00`. Text on that yellow is `#141414`. A slow wash sits behind the main window and Settings. The wash stops when Reduce Motion is on or the window is hidden.
+Buttons, text selection, and the vision badge use `#FFEA00`. Text on that yellow is `#141414`. The window background is the SoloLVL MetaBalls field in `#FFEA00`. It stops when Reduce Motion is on or the window is hidden. Chat and Settings text sits on a dark scrim.
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 
