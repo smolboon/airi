@@ -37,8 +37,12 @@ final class ChatPanelController: NSViewController {
         transcriptView.isRichText = false
         transcriptView.font = .systemFont(ofSize: 14)
         transcriptView.textColor = .labelColor
-        transcriptView.drawsBackground = true
-        transcriptView.backgroundColor = .textBackgroundColor
+        transcriptView.drawsBackground = false
+        transcriptView.insertionPointColor = AccentPalette.fill
+        transcriptView.selectedTextAttributes = [
+            .backgroundColor: AccentPalette.fill,
+            .foregroundColor: AccentPalette.ink,
+        ]
         transcriptView.textContainerInset = NSSize(width: 8, height: 8)
         transcriptView.setAccessibilityLabel(AccessibilityCopy.transcript)
         scrollView.setAccessibilityLabel(AccessibilityCopy.transcript)
@@ -184,6 +188,7 @@ final class ChatPanelController: NSViewController {
         button.target = self
         button.action = action
         button.bezelStyle = .rounded
+        AccentPalette.apply(to: button)
         button.setAccessibilityLabel(label)
         button.translatesAutoresizingMaskIntoConstraints = false
     }

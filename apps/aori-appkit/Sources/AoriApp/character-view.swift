@@ -163,10 +163,10 @@ final class CharacterView: NSView {
         caption.addSubview(subtitleLabel)
         addSubview(caption)
         visionBadge.font = .systemFont(ofSize: 12, weight: .bold)
-        visionBadge.textColor = .white
+        visionBadge.textColor = AccentPalette.ink
         visionBadge.alignment = .center
         visionBadge.wantsLayer = true
-        visionBadge.layer?.backgroundColor = NSColor.systemOrange.cgColor
+        visionBadge.layer?.backgroundColor = AccentPalette.fill.cgColor
         visionBadge.layer?.cornerRadius = 6
         visionBadge.isHidden = true
         visionBadge.setAccessibilityLabel("Screen vision is on")

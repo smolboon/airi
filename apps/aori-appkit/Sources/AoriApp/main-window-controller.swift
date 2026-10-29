@@ -35,9 +35,15 @@ final class MainWindowController: NSWindowController {
         split.addArrangedSubview(characterView)
         split.addArrangedSubview(chatPanel.view)
         split.setPosition(300, ofDividerAt: 0)
-        window.contentView = split
+        let root = NSView()
+        window.contentView = root
         if let content = window.contentView {
+            let wash = AccentWashView(frame: content.bounds)
+            wash.autoresizingMask = [.width, .height]
             split.frame = content.bounds
+            split.autoresizingMask = [.width, .height]
+            content.addSubview(wash)
+            content.addSubview(split)
         }
 
         chatPanel.onSend = { [weak self] in self?.onSend?() }

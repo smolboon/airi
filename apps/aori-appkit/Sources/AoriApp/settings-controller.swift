@@ -140,6 +140,9 @@ final class SettingsWindowController: NSWindowController {
     private func build() {
         let root = NSView()
         window?.contentView = root
+        let wash = AccentWashView(frame: .zero)
+        wash.translatesAutoresizingMaskIntoConstraints = false
+        root.addSubview(wash)
 
         let nameLabel = NSTextField(labelWithString: "Name")
         let nicknameLabel = NSTextField(labelWithString: "Nickname")
@@ -201,11 +204,14 @@ final class SettingsWindowController: NSWindowController {
 
         let save = NSButton(title: "Save", target: self, action: #selector(save))
         save.bezelStyle = .rounded
+        AccentPalette.apply(to: save)
         save.keyEquivalent = "\r"
         let remove = NSButton(title: "Remove Key", target: self, action: #selector(removeKey))
         remove.bezelStyle = .rounded
+        AccentPalette.apply(to: remove)
         let deleteNote = NSButton(title: "Delete Fact", target: self, action: #selector(deleteFact))
         deleteNote.bezelStyle = .rounded
+        AccentPalette.apply(to: deleteNote)
         deleteNote.setAccessibilityLabel("Delete saved fact")
 
         let stack = NSStackView(views: [
@@ -261,6 +267,10 @@ final class SettingsWindowController: NSWindowController {
         root.addSubview(scroll)
 
         var constraints = [
+            wash.leadingAnchor.constraint(equalTo: root.leadingAnchor),
+            wash.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+            wash.topAnchor.constraint(equalTo: root.topAnchor),
+            wash.bottomAnchor.constraint(equalTo: root.bottomAnchor),
             scroll.leadingAnchor.constraint(equalTo: root.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: root.trailingAnchor),
             scroll.topAnchor.constraint(equalTo: root.topAnchor),

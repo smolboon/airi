@@ -283,6 +283,8 @@ This slice fails a test when resident memory passes 1024 MB. The number is a pro
 
 This slice answers `tool greeting` from chat. The reply is `Plugin greeting.`. The command does not call the chat server. It does not start speech. It does not load a plugin directory.
 
+This slice sets the accent to `#FFEA00`. Text on that yellow is `#141414`. A slow wash sits behind the main window and Settings. The wash stops when the window is hidden or when Reduce Motion is on. `github.com/smolboon/SoloLVL-rs` was not available, so this wash is not a copy of that repository.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.
