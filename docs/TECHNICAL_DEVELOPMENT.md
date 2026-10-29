@@ -46,10 +46,10 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | RAM usage | 6 | `RuntimeMetrics.residentBudgetMegabytes` is 1024. The resident-memory test fails above that cap. | The cap is a process budget. It is not a measured Mac app size. |
 | Verify in the loop | 5 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. `SpokenReply.review` runs before the reply is stored. | The check does not judge facts. It records the edits and shapes speech text. |
 | Lightweightness | 6 | The native host is Swift and Rust. It does not embed Electron. Whisper weights stay out of git. | The Vue apps remain a large separate stack. The MiniLM file is bundled. |
-| Capabilities | 5 | Chat, speech, opt-in vision, memory, and one plugin run in code. Games accept a local hello only. | Live tools, live search, and Cubism are absent. |
+| Capabilities | 6 | Chat, speech, opt-in vision, memory, one plugin, and `tool greeting` run in code. Games accept a local hello only. | A general tool router is absent. Live search and Cubism are absent. |
 | Features | 5 | The card stores the field set in `SettingsPages.report`. Integrations are drafts or refusals. | A user cannot complete a Discord, search, or MCP task. |
 | Functionality | 6 | The chat path has unit tests. Loopback chat uses a scripted transport. | This host did not launch the Mac app. |
-| Wiring over allow | 5 | `ChatRoute` and `RoutingChatClient` choose the server. Scaffolds only filter fields. | Discord, chess, and MCP drafts are not on the send path. |
+| Wiring over allow | 6 | `ChatRoute` and `RoutingChatClient` choose the server. `LocalTool` answers `tool greeting` without a server. | Discord, chess, and MCP drafts are not on the send path. The command does not load a plugin directory. |
 | Wiring questions and answers | 5 | A lorebook keyword adds one line to the system prompt. | There is no question router and no cited source list. |
 | End-to-end testing | 4 | `apps/aori-appkit/scripts/screenshot-app.sh` launches the app on macOS. | This Linux host cannot run that script. |
 | Agent self-reflection | 4 | `SpokenReply.review` stores notes for a fence, markdown, the brand, cut sentences, cut characters, and an empty result. `ChatViewModel.send` keeps that review. | The notes do not ask a second model. They do not score truth. |
@@ -58,7 +58,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
 | Steelman | 6 | The Steelman section defends the `AoriCore` split, draft integrations, and the 24-line cap. | The section does not compare a counter-design. It does not try a single-module app. |
 | Scrutiny | 6 | The Scrutiny section names draft lists, the exact host check, the fact gap in speech, and run 38377354859. | The section does not re-check every score after each merge. It has no test of its own. |
-| Hardness | 6 | Orders 5 and 6 are done. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A local chat tool is still absent. |
+| Hardness | 7 | The named code items through order 11 are done, except the Mac items. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A property test and a question router stay open. |
 | Creative brainstorm | 7 | The Brainstorm table lists six ideas. All six are done, and parked work is named. | The list does not rank cost. It adds no new idea. |
 
 ## Findings
@@ -72,6 +72,8 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 The sample plugin asks for a file read and for speech. Both calls are denied. The greeting still succeeds. The host does not start speech.
 
 A test fails when resident memory passes 1024 MB. That number is a process budget. It is not a measured Mac app size.
+
+The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not load a plugin directory.
 
 Steelman, scrutiny, hardness, and creative brainstorm have scores. They stay in this file as review methods. A score of 10 needs a counter-design, a full re-check, closed Mac work, or a new ranked list.
 
@@ -122,7 +124,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 6 | Second denied tool | Skills and tools, safety | Done. The greeting succeeds. `aori.files.read` and `aori.speech.speak` are denied. |
 | 7 | Mac launch proof | End-to-end testing, loop engineering, functionality | A macOS job launches the app and saves the log. |
 | 8 | Developer ID | Security, polish | The signed app has a Developer ID profile. |
-| 9 | Wired tool on the send path | Wiring over allow, capabilities | One local tool runs from chat and cannot open a remote host. |
+| 9 | Wired tool on the send path | Wiring over allow, capabilities | Done. `tool greeting` returns on this machine and does not call the chat server. |
 | 10 | Face proof | Polish, peer capability | A completed macOS job shows `aori-face.vrm` with eyes, a nose, and a mouth. |
 | 11 | Reply review notes | Agent self-reflection | Done. The send path stores fence, markdown, brand, sentence, character, and empty notes. |
 
@@ -141,3 +143,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-29 | Reply review notes on `ChatViewModel.send`. | Agent self-reflection 3 to 4. |
 | 2026-10-29 | Second denied plugin call. The greeting still succeeds. | Skills and tools 4 to 5. Safety stays 8. |
 | 2026-10-29 | Resident memory budget of 1024 MB. | RAM usage 5 to 6. Hardness 5 to 6. Creative brainstorm 6 to 7. |
+| 2026-10-29 | `tool greeting` answers on this machine. | Wiring over allow 5 to 6. Capabilities 5 to 6. Hardness 6 to 7. |

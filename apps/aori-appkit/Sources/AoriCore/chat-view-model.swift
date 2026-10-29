@@ -194,6 +194,18 @@ public final class ChatViewModel {
         }
 
         draft = ""
+        if let local = LocalTool.reply(to: text) {
+            messages.append(ChatMessage(role: .user, content: text))
+            var assistant = ChatMessage(role: .assistant, content: "")
+            messages.append(assistant)
+            assistant.content = applySpokenReply(local)
+            messages[messages.count - 1] = assistant
+            presentation.emotion = CompanionEmotion.infer(from: assistant.content)
+            phase = .idle
+            statusText = ""
+            publish()
+            return
+        }
         if let note = MemoryCapture.note(from: text), memory.remember(note) {
             await storeEmbedding(note)
             onProfileChange?()
