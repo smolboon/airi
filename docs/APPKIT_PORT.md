@@ -197,9 +197,9 @@ The Live2D Cubism Core library is proprietary. Live2D does not publish that libr
 
 ### Milestone 5, plugins
 
-The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the Aori range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting and for `aori.files.read`.
+The native host reads `extension.airi.json`. Unknown fields fail. The id, the version, and the Aori range use the Manifest v2 checks. `AORI_PLUGINS` selects the directory. The host grant is `aori.companion.*` with action snapshot. The sample `plugins/aori-greeting` asks for that greeting, for `aori.files.read`, and for `aori.speech.speak`.
 
-The greeting returns `Plugin greeting.`. The file call is denied. The entrypoint must stay inside the plugin directory.
+The greeting returns `Plugin greeting.`. The file call and the speech call are denied. The host does not start speech. The entrypoint must stay inside the plugin directory.
 
 A `.js` file runs in JavaScriptCore. The script can call `aori.call`. A call outside the grant returns denied. A `.mjs` or `.cjs` file is rejected. The host does not embed Electron. This grant is not the macOS App Sandbox.
 

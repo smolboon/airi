@@ -9,6 +9,11 @@
       "area": "capabilities",
       "action": "snapshot",
       "key": "aori.files.read"
+    },
+    {
+      "area": "capabilities",
+      "action": "snapshot",
+      "key": "aori.speech.speak"
     }
   ]
 }

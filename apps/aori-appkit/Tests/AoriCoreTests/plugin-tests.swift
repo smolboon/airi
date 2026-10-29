@@ -21,7 +21,7 @@ private struct GrantScriptRuntime: PluginScriptRuntime {
 }
 
 final class PluginHostTests: XCTestCase {
-    func testSampleGreetingIsGrantedAndFileReadIsDenied() throws {
+    func testGreetingSucceedsWhenFileReadAndSpeechAreDenied() throws {
         let directory = appKitRoot().appendingPathComponent("plugins/aori-greeting")
         let report = PluginHost.run(directory: directory)
         XCTAssertEqual(report.lines, [
@@ -29,8 +29,10 @@ final class PluginHostTests: XCTestCase {
             "aori_plugin_call=aori.companion.greeting",
             "aori_plugin_result=Plugin greeting.",
             "aori_plugin_denied=aori.files.read",
+            "aori_plugin_denied=aori.speech.speak",
         ])
         XCTAssertFalse(report.lines.joined(separator: "\n").contains("/"))
+        XCTAssertEqual(report.lines.filter { $0.hasPrefix("aori_plugin_result=") }, ["aori_plugin_result=Plugin greeting."])
     }
 
     func testEmptyAndMissingDirectoriesLogNone() {

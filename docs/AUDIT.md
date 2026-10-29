@@ -70,6 +70,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - `aori-face.vrm` is an original CC0 portrait. It has eye, nose, and mouth meshes. Joy, sorrow, and surprised move the mouth and the brows. A macOS SceneKit image of this file is not in a completed job.
 - When `AORI_AVATAR` is `live2d`, the companion draws a flat layered character. The mouth, the eyes, and the head angle use Live2D parameter ids. Rust samples motion3.json curves. The art is original. Run 38298286037 showed it in the companion window.
 - A native Manifest v2 host. `AORI_PLUGINS` selects the directory. Run 38355635403 logged `aori_plugin=loaded id=aori-greeting`, `aori_plugin_result=Plugin greeting.`, and `aori_plugin_denied=aori.files.read`. The same run logged `aori_plugin_js=greeting=Plugin greeting. files=denied`.
+- The sample plugin also asks for `aori.speech.speak`. That call is denied. The greeting still succeeds. The host does not start speech.
 - One opt-in vision ticker. Run 38377354859 logged `aori_vision_reply=Mock vision from CI.` The mock decodes the PNG. A bad image returns an error. The companion window shows an orange Vision badge.
 - SQLite embedding memory. Run 38359062380 logged `aori_memory_source=endpoint`, `aori_embed_coreml=ok`, `aori_embed_recall=tea`, `aori_memory_recall=I like tea`, and `aori_memory_delete=ok`. The Memory window then showed `The cat is orange`. The bundled file is a conversion of all-MiniLM-L6-v2.
 - Phoneme visemes for hello and papa. Other words use letters. RMS scales the open vowel.

@@ -60,7 +60,9 @@ When `AORI_AVATAR` is `live2d`, the companion window draws a flat character. Rus
 
 Menu strings exist for en, es, fr, ja, ko, ru, vi, zh-Hans, and zh-Hant. The API key can live in the Keychain. A provider error retries once before any reply text. VoiceOver labels are on the chat controls, the character, and both windows. The screenshot path reads those live labels. It then tries to start VoiceOver.
 
-The app reads an Aori Manifest v2 file named `extension.airi.json`. The host grant is `aori.companion.*` with the snapshot action. A JSON command list asks for capabilities. The sample plugin `aori-greeting` receives the greeting text. A request for `aori.files.read` is denied. A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
+The app reads an Aori Manifest v2 file named `extension.airi.json`. The host grant is `aori.companion.*` with the snapshot action. A JSON command list asks for capabilities. The sample plugin `aori-greeting` receives the greeting text. A request for `aori.files.read` or `aori.speech.speak` is denied.
+
+A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
 
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 
