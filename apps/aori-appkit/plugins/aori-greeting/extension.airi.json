@@ -19,6 +19,10 @@
       {
         "key": "aori.files.read",
         "actions": ["snapshot"]
+      },
+      {
+        "key": "aori.speech.speak",
+        "actions": ["snapshot"]
       }
     ]
   }

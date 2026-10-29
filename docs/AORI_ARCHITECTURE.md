@@ -14,7 +14,7 @@ Run 38377354859 saved a Butter image. Butter's texture paints the word BUTTER. T
 
 `aori-face` also draws a flat layered character. `AORI_AVATAR=live2d` selects it in the companion window. The parameters are Live2D ids. The crate samples motion3.json curves. It does not read moc3. Run 38295099387 showed that character in the companion window.
 
-`PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting and for `aori.files.read`. The greeting returns `Plugin greeting.`. The file call is denied.
+`PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting, for `aori.files.read`, and for `aori.speech.speak`. The greeting returns `Plugin greeting.`. The file call and the speech call are denied.
 
 A `.js` file runs in JavaScriptCore through `aori.call`. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
