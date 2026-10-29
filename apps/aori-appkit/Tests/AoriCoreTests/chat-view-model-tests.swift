@@ -20,6 +20,28 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(recorded.first?.first?.content, ChatPrompt.companion)
     }
 
+    func testToolGreetingStaysOnThisMachine() async throws {
+        let client = ScriptedChatClient(events: [.delta("remote"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("  tool greeting  ")
+        await model.send()
+
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["tool greeting", "Plugin greeting."])
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+        XCTAssertEqual(client.recordedMessages().count, 0)
+        let review = await model.replyReview
+        XCTAssertEqual(review.text, "Plugin greeting.")
+        XCTAssertEqual(review.notes, [])
+
+        await model.setDraft("tool greetings")
+        await model.send()
+        XCTAssertEqual(client.recordedMessages().count, 1)
+        let after = await model.messages
+        XCTAssertEqual(after.last?.content, "remote")
+    }
+
     func testSendStoresTheSpokenForm() async throws {
         let client = ScriptedChatClient(events: [.delta("**Hi** there. Four words. Five. Six stay out."), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

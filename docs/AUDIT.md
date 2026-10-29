@@ -61,6 +61,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - The system prompt stops at 1600 characters. The newest memory notes stay. Older notes stay in companion.sqlite.
 - Click-through starts on. An opaque pixel keeps the click.
 - A test fails when resident memory passes 1024 MB. That number is a process budget. It is not a measured Mac app size.
+- The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not start speech.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.
 - A local launch greeting. The app then speaks that line. The greeting does not call the provider.
 - Idle blink, neck sway, head sway, arm sway, and eye look-at. Keyword faces for glad, sorry, and wow.

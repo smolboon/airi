@@ -281,6 +281,8 @@ This slice states the click-through default in Settings. Click-through starts on
 
 This slice fails a test when resident memory passes 1024 MB. The number is a process budget. It is not a measured Mac app size.
 
+This slice answers `tool greeting` from chat. The reply is `Plugin greeting.`. The command does not call the chat server. It does not start speech. It does not load a plugin directory.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.

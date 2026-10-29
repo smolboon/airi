@@ -64,6 +64,8 @@ The app reads an Aori Manifest v2 file named `extension.airi.json`. The host gra
 
 A `.js` file runs in JavaScriptCore. The script can call `aori.call`.
 
+The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not start speech.
+
 Run 38298286037 logged `aori_plugin=loaded id=aori-greeting` and `aori_plugin_denied=aori.files.read`. The companion window still shows the flat character. The hair is above the blue body.
 
 The screenshot path asks ScreenCaptureKit for one frame. When permission is denied, the app sends a PNG fixture through the OpenAI-compatible client. The workload is `screen:interpret`. A granted capture sends that frame to the configured provider. The mock does not read the pixels.

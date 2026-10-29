@@ -16,6 +16,8 @@ Run 38377354859 saved a Butter image. Butter's texture paints the word BUTTER. T
 
 `PluginHost` in `AoriCore` reads Manifest v2. `AORI_PLUGINS` is the path of one plugin directory. The grant is `aori.companion.*` snapshot. The sample command list asks for a greeting, for `aori.files.read`, and for `aori.speech.speak`. The greeting returns `Plugin greeting.`. The file call and the speech call are denied.
 
+`LocalTool` answers `tool greeting` from chat. The reply is `Plugin greeting.`. The command does not call the chat server and does not start speech.
+
 A `.js` file runs in JavaScriptCore through `aori.call`. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
 `VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.
