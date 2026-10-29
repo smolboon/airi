@@ -27,6 +27,9 @@ final class ChatViewModelTests: XCTestCase {
         await model.send()
         let messages = await model.messages
         XCTAssertEqual(messages.last?.content, "Hi there. Four words. Five.")
+        let review = await model.replyReview
+        XCTAssertEqual(review.text, "Hi there. Four words. Five.")
+        XCTAssertEqual(review.notes, ["markdown removed", "sentences cut"])
         let phase = await model.phase
         XCTAssertEqual(phase, .idle)
     }
@@ -60,6 +63,9 @@ final class ChatViewModelTests: XCTestCase {
         await model.send()
         let messages = await model.messages
         XCTAssertEqual(messages.last?.content, "Partial")
+        let review = await model.replyReview
+        XCTAssertEqual(review.text, "Partial")
+        XCTAssertEqual(review.notes, ["markdown removed"])
         let phase = await model.phase
         XCTAssertEqual(phase, .failed("The provider returned HTTP 500. down"))
         XCTAssertEqual(client.callCount(), 1)

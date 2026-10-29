@@ -57,6 +57,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - An empty key calls the chat server only when the base URL host is localhost or 127.0.0.1. A remote URL stays on the device template. The request omits the authorization header. Vision stays on the template when the key is empty.
 - The chat server receives the latest 24 transcript lines. Older lines stay in companion.sqlite.
 - Speech keeps at most three sentences. Markdown leaves that text. The old brand name becomes Aori.
+- The stored reply keeps notes for a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
 - The system prompt stops at 1600 characters. The newest memory notes stay. Older notes stay in companion.sqlite.
 - Click-through starts on. An opaque pixel keeps the click.
 - Local memory notes from "remember that", stored with the persona in `companion.sqlite`.

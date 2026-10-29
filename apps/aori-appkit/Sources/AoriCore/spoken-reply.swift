@@ -1,19 +1,58 @@
 import Foundation
 
+/// Notes from one local pass over provider text. The notes do not score facts.
+public struct ReplyReview: Equatable, Sendable {
+    public var notes: [String]
+    public var text: String
+
+    public init(notes: [String], text: String) {
+        self.notes = notes
+        self.text = text
+    }
+}
+
 /// Prepares provider text for the transcript and for speech.
 public enum SpokenReply {
     public static let sentenceLimit = 3
     public static let characterLimit = 400
 
     public static func prepare(_ raw: String) -> String {
-        var text = stripFences(raw)
-        text = text.replacingOccurrences(of: "\r\n", with: "\n")
-        let lines = text.split(separator: "\n", omittingEmptySubsequences: false).map { stripLine(String($0)) }
-        text = collapse(lines.joined(separator: " "))
-        text = renameBrand(text)
-        text = limitSentences(text, limit: sentenceLimit)
-        text = limitCharacters(text, limit: characterLimit)
-        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+        review(raw).text
+    }
+
+    /// Records which edits `prepare` made. The notes are fixed phrases.
+    public static func review(_ raw: String) -> ReplyReview {
+        var notes: [String] = []
+        let afterFence = stripFences(raw)
+        if afterFence != raw {
+            notes.append("fence dropped")
+        }
+        let normalized = afterFence.replacingOccurrences(of: "\r\n", with: "\n")
+        let rawLines = normalized.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+        let stripped = rawLines.map { stripLine($0) }
+        if zip(rawLines, stripped).contains(where: { line, clean in
+            line.trimmingCharacters(in: .whitespaces) != clean
+        }) {
+            notes.append("markdown removed")
+        }
+        let collapsed = collapse(stripped.joined(separator: " "))
+        let renamed = renameBrand(collapsed)
+        if renamed != collapsed {
+            notes.append("brand renamed")
+        }
+        let sentenced = limitSentences(renamed, limit: sentenceLimit)
+        if sentenced != renamed {
+            notes.append("sentences cut")
+        }
+        let capped = limitCharacters(sentenced, limit: characterLimit)
+        if capped != sentenced {
+            notes.append("characters cut")
+        }
+        let text = capped.trimmingCharacters(in: .whitespacesAndNewlines)
+        if text.isEmpty {
+            notes.append("empty reply")
+        }
+        return ReplyReview(notes: notes, text: text)
     }
 
     private static func stripFences(_ raw: String) -> String {

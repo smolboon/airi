@@ -21,6 +21,7 @@ public enum ChatPhase: Equatable, Sendable {
 @MainActor
 public final class ChatViewModel {
     public private(set) var messages: [ChatMessage] = []
+    public private(set) var replyReview = ReplyReview(notes: [], text: "")
     public private(set) var draft = ""
     public private(set) var phase: ChatPhase = .idle
     public private(set) var statusText = ""
@@ -239,7 +240,7 @@ public final class ChatViewModel {
                     publish()
                 }
             }
-            assistant.content = SpokenReply.prepare(assistant.content)
+            assistant.content = applySpokenReply(assistant.content)
             messages[messages.count - 1] = assistant
             presentation.emotion = CompanionEmotion.infer(from: assistant.content)
             if assistant.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -252,7 +253,7 @@ public final class ChatViewModel {
             publish()
         } catch {
             if !messages.isEmpty, messages[messages.count - 1].role == .assistant {
-                assistant.content = SpokenReply.prepare(assistant.content)
+                assistant.content = applySpokenReply(assistant.content)
                 messages[messages.count - 1] = assistant
                 presentation.emotion = CompanionEmotion.infer(from: assistant.content)
             }
@@ -260,6 +261,12 @@ public final class ChatViewModel {
             statusText = String(describing: error)
             publish()
         }
+    }
+
+    private func applySpokenReply(_ content: String) -> String {
+        let review = SpokenReply.review(content)
+        replyReview = review
+        return review.text
     }
 
     private func requestMessages() -> [ChatMessage] {

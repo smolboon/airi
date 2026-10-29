@@ -39,4 +39,51 @@ final class SpokenReplyTests: XCTestCase {
     func testANumberKeepsItsDecimal() {
         XCTAssertEqual(SpokenReply.prepare("The value is 3.14 today."), "The value is 3.14 today.")
     }
+
+    func testReviewNotesNameTheEditsAndDoNotCopyTheSource() {
+        let plain = SpokenReply.review("Hello. I am here.")
+        XCTAssertEqual(plain.notes, [])
+        XCTAssertEqual(plain.text, SpokenReply.prepare("Hello. I am here."))
+
+        let fairing = SpokenReply.review("fairing")
+        XCTAssertEqual(fairing.notes, [])
+        XCTAssertEqual(fairing.text, "fairing")
+
+        let openFence = SpokenReply.review("Hello ``` tail")
+        XCTAssertEqual(openFence.notes, ["fence dropped"])
+        XCTAssertEqual(openFence.text, "Hello")
+        XCTAssertFalse(openFence.text.contains("tail"))
+
+        let fenced = SpokenReply.review("```\nairi\n```")
+        XCTAssertEqual(fenced.notes, ["fence dropped", "empty reply"])
+        XCTAssertEqual(fenced.text, "")
+        XCTAssertFalse(fenced.notes.joined(separator: " ").contains("airi"))
+
+        let branded = SpokenReply.review("Hello airi.")
+        XCTAssertEqual(branded.notes, ["brand renamed"])
+        XCTAssertEqual(branded.text, "Hello Aori.")
+
+        let cut = SpokenReply.review("One. Two. Three. Four stays out.")
+        XCTAssertEqual(cut.notes, ["sentences cut"])
+        XCTAssertEqual(cut.text, "One. Two. Three.")
+
+        let words = Array(repeating: "word", count: 200).joined(separator: " ")
+        let capped = SpokenReply.review(words)
+        XCTAssertEqual(capped.notes, ["characters cut"])
+        XCTAssertEqual(capped.text, SpokenReply.prepare(words))
+        XCTAssertLessThanOrEqual(capped.text.count, SpokenReply.characterLimit)
+
+        let mixed = """
+        # Title
+        ```
+        secret-looking
+        ```
+        **wow** see [note](https://example.test). Airi says hi.
+        """
+        let review = SpokenReply.review(mixed)
+        XCTAssertEqual(review.notes, ["fence dropped", "markdown removed", "brand renamed"])
+        XCTAssertEqual(review.text, SpokenReply.prepare(mixed))
+        XCTAssertFalse(review.notes.joined(separator: " ").contains("secret-looking"))
+        XCTAssertFalse(review.text.contains("secret-looking"))
+    }
 }
