@@ -22,10 +22,6 @@ These dimensions are not part of this product. The roadmap does not try to raise
 | Graph engineering | No graph store or graph query exists. |
 | RL and learning | The app does not train a model. |
 | A/B testing | No experiment service exists. This audit does not ship one. |
-| Hardness | Hardness is a judgment about work. It is not a product score. |
-| Steelman | Steelman is a review method in this file. |
-| Scrutiny | Scrutiny is a review method in this file. |
-| Creative brainstorm | Brainstorm is a review method in this file. |
 
 Pull request 18 dropped web search credential fields. This plan does not change that slice.
 
@@ -60,6 +56,10 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Sanity | 7 | Settings text must not contain `airi`. Loopback rejects a remote host. The architecture page matches `ChatRoute`. | A Mac launch of the new route is not in a completed job. |
 | Hygiene | 7 | Swift files use kebab-case. Product notes name Aori. The architecture route text matches the code. | Later commits still lack a new macOS job id. |
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
+| Steelman | 6 | The Steelman section defends the `AoriCore` split, draft integrations, and the 24-line cap. | The section does not compare a counter-design. It does not try a single-module app. |
+| Scrutiny | 6 | The Scrutiny section names draft lists, the exact host check, the fact gap in speech, and run 38377354859. | The section does not re-check every score after each merge. It has no test of its own. |
+| Hardness | 5 | Orders 5 and 6 are small and unblocked. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. The unblocked items are small. |
+| Creative brainstorm | 6 | The Brainstorm table lists six ideas. Four ideas are done, two remain, and parked work is named. | The list does not rank cost. It adds no new idea after the first four landed. |
 
 ## Findings
 
@@ -68,6 +68,8 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 `docs/AORI_ARCHITECTURE.md` now matches `ChatRoute`. The remaining soundness gap is the lack of a property test and a new macOS job.
 
 `SpokenReply` now strips markdown and keeps three sentences. It does not judge facts. Click-through still starts on.
+
+Steelman, scrutiny, hardness, and creative brainstorm have scores. They stay in this file as review methods. A score of 10 needs a counter-design, a full re-check, closed Mac work, or a new ranked list.
 
 ## Steelman
 
@@ -130,3 +132,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-28 | Architecture route text matches `ChatRoute`. | Architecture 7 to 8. Soundness 6 to 7. Sanity 6 to 7. Hygiene 6 to 7. |
 | 2026-10-28 | System prompt stops at 1600 characters. | Token cost 6 to 7. |
 | 2026-10-28 | Settings report says click-through starts on. | Default-on and opt-in 7 to 8. |
+| 2026-10-29 | Review methods have scores. No product code in this change. | Steelman 6. Scrutiny 6. Hardness 5. Creative brainstorm 6. Product scores stay at the round 1 end. |
