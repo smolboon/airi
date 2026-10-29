@@ -279,6 +279,8 @@ This slice stops the system prompt at 1600 characters. The name line stays. The 
 
 This slice states the click-through default in Settings. Click-through starts on. An opaque pixel keeps the click.
 
+This slice fails a test when resident memory passes 1024 MB. The number is a process budget. It is not a measured Mac app size.
+
 ## What this checkout did not run
 
 Run 38355635403 passed 70 Linux tests and 71 macOS tests. `cargo test -p aori-face` passed 18 tests. The macOS job launched the sandboxed app. This Linux machine did not launch the Mac app.

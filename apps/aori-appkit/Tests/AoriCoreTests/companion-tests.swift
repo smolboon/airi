@@ -614,6 +614,12 @@ final class CompanionBehaviorTests: XCTestCase {
         XCTAssertGreaterThan(RuntimeMetrics.memoryMegabytes(), 0)
     }
 
+    func testResidentMemoryStaysUnderTheBudget() {
+        let megabytes = RuntimeMetrics.memoryMegabytes()
+        XCTAssertGreaterThan(megabytes, 0)
+        XCTAssertLessThanOrEqual(megabytes, RuntimeMetrics.residentBudgetMegabytes)
+    }
+
     func testFrameLogIsJson() throws {
         let line = AoriLog.frame(milliseconds: 8.21)
         let data = Data(line.utf8)

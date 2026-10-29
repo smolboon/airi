@@ -43,7 +43,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Skills and tools | 5 | The sample command list grants the greeting. `aori.files.read` and `aori.speech.speak` return denied. Scaffolds do not run commands. | A second granted tool is absent. The host does not start speech. |
 | Mergeable and separate parts | 7 | `AoriCore` and `AoriProviders` stay free of AppKit. Scaffolds live in core. | A scaffold that grows a socket must move behind a boundary. None has a socket now. |
 | Ergonomics | 6 | Local providers fill a default URL. The key placeholder says a loopback key is optional. | The settings body is one long label. |
-| RAM usage | 5 | `RuntimeMetrics.memoryMegabytes` reads resident memory. | No test fails when memory passes a budget. This audit did not record a live megabyte value. |
+| RAM usage | 6 | `RuntimeMetrics.residentBudgetMegabytes` is 1024. The resident-memory test fails above that cap. | The cap is a process budget. It is not a measured Mac app size. |
 | Verify in the loop | 5 | `ChatViewModel.send` retries once before the first text delta. Embeddings fall back when the call fails. `SpokenReply.review` runs before the reply is stored. | The check does not judge facts. It records the edits and shapes speech text. |
 | Lightweightness | 6 | The native host is Swift and Rust. It does not embed Electron. Whisper weights stay out of git. | The Vue apps remain a large separate stack. The MiniLM file is bundled. |
 | Capabilities | 5 | Chat, speech, opt-in vision, memory, and one plugin run in code. Games accept a local hello only. | Live tools, live search, and Cubism are absent. |
@@ -58,8 +58,8 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
 | Steelman | 6 | The Steelman section defends the `AoriCore` split, draft integrations, and the 24-line cap. | The section does not compare a counter-design. It does not try a single-module app. |
 | Scrutiny | 6 | The Scrutiny section names draft lists, the exact host check, the fact gap in speech, and run 38377354859. | The section does not re-check every score after each merge. It has no test of its own. |
-| Hardness | 5 | Order 5 is small and unblocked. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. The memory budget test is still open. |
-| Creative brainstorm | 6 | The Brainstorm table lists six ideas. Five ideas are done, one remains, and parked work is named. | The list does not rank cost. It adds no new idea after the first four landed. |
+| Hardness | 6 | Orders 5 and 6 are done. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A local chat tool is still absent. |
+| Creative brainstorm | 7 | The Brainstorm table lists six ideas. All six are done, and parked work is named. | The list does not rank cost. It adds no new idea. |
 
 ## Findings
 
@@ -70,6 +70,8 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 `SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through still starts on.
 
 The sample plugin asks for a file read and for speech. Both calls are denied. The greeting still succeeds. The host does not start speech.
+
+A test fails when resident memory passes 1024 MB. That number is a process budget. It is not a measured Mac app size.
 
 Steelman, scrutiny, hardness, and creative brainstorm have scores. They stay in this file as review methods. A score of 10 needs a counter-design, a full re-check, closed Mac work, or a new ranked list.
 
@@ -101,7 +103,7 @@ These ideas stay inside the standing rules. They add no secret, no spend, no tra
 | Correct the architecture sentences | The page matches `ChatRoute`. |
 | Cap the system prompt | Drop the oldest memory lines first. Keep the persona lines. |
 | State the click-through default | The settings report says click-through starts on. |
-| Add a memory budget test | The test reads `RuntimeMetrics` and fails above a cap. |
+| Add a memory budget test | Done. The test reads `RuntimeMetrics` and fails above 1024 MB. |
 | Add one denied plugin tool | Done. The greeting still succeeds. `aori.files.read` and `aori.speech.speak` are denied. |
 
 Cloud catalogs, account sync, live search, a live MCP process, Cubism Core, sticker images, and a microphone beat detector stay parked.
@@ -116,7 +118,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 2 | Architecture route text | Soundness, sanity, hygiene | Done. The architecture page matches `ChatRoute` and the vision exception. |
 | 3 | System prompt budget | Token cost, memory | Done. A long note list is cut. The name line stays. |
 | 4 | Click-through sentence | Default-on and opt-in, UX | Done. The settings report says click-through starts on. |
-| 5 | Memory budget test | RAM usage | A test reads `RuntimeMetrics.memoryMegabytes` and fails above a stated cap. |
+| 5 | Memory budget test | RAM usage | Done. The test fails when resident memory passes 1024 MB. |
 | 6 | Second denied tool | Skills and tools, safety | Done. The greeting succeeds. `aori.files.read` and `aori.speech.speak` are denied. |
 | 7 | Mac launch proof | End-to-end testing, loop engineering, functionality | A macOS job launches the app and saves the log. |
 | 8 | Developer ID | Security, polish | The signed app has a Developer ID profile. |
@@ -138,3 +140,4 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-29 | Review methods have scores. No product code in this change. | Steelman 6. Scrutiny 6. Hardness 5. Creative brainstorm 6. Product scores stay at the round 1 end. |
 | 2026-10-29 | Reply review notes on `ChatViewModel.send`. | Agent self-reflection 3 to 4. |
 | 2026-10-29 | Second denied plugin call. The greeting still succeeds. | Skills and tools 4 to 5. Safety stays 8. |
+| 2026-10-29 | Resident memory budget of 1024 MB. | RAM usage 5 to 6. Hardness 5 to 6. Creative brainstorm 6 to 7. |
