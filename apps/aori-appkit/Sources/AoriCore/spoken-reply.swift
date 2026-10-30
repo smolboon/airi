@@ -62,7 +62,8 @@ public enum SpokenReply {
             if let close = after.range(of: "```") {
                 text.removeSubrange(open.lowerBound..<close.upperBound)
             } else {
-                text.removeSubrange(open.lowerBound..<text.endIndex)
+                // An unclosed marker is not a finished block. The marker leaves. The words stay.
+                text.removeSubrange(open)
             }
         }
         return text

@@ -56,7 +56,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - The provider list includes Ollama and LM Studio. Ollama uses port 11434. LM Studio uses port 1234. No key is stored for those choices.
 - An empty key calls the chat server only when the base URL host is localhost or 127.0.0.1. A remote URL stays on the device template. The request omits the authorization header. Vision stays on the template when the key is empty.
 - The chat server receives the latest 24 transcript lines. Older lines stay in companion.sqlite.
-- Speech keeps at most three sentences. Markdown leaves that text. The old brand name becomes Aori.
+- Speech keeps at most three sentences. Markdown leaves that text. The old brand name becomes Aori. An open code fence drops the marker. The words after that marker stay. A closed fence drops the code inside it.
 - The stored reply keeps notes for a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
 - The system prompt stops at 1600 characters. The newest memory notes stay. Older notes stay in companion.sqlite.
 - Click-through starts off. The menu turns it on. An opaque pixel keeps the click.
