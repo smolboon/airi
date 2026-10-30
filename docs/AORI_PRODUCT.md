@@ -28,7 +28,7 @@ Stickers list emotions only. No image is stored. A URL is refused.
 
 Beat sync names a style from a tempo. The microphone stays off. Screen capture stays off.
 
-MCP is unavailable. A server command is dropped. No token is stored.
+MCP answers `mcp call greeting` on this machine. File read and speech stay denied. A server command is dropped. No process starts. No token is stored.
 
 The app stores facts that you mark with "remember that". Launch shows a greeting. The character blinks and sways while idle. Voice and text share one chat. The mouth follows speech, and a few words change the face.
 

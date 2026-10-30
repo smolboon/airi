@@ -261,7 +261,7 @@ This slice lists sticker emotions only. No image is stored. A URL is refused.
 
 This slice names a beat-sync style from a tempo. The microphone stays off. Screen capture stays off.
 
-This slice drops an MCP server command. MCP stays unavailable. No token is stored. No command runs.
+This slice drops an MCP server command. No token is stored. No external command runs.
 
 This slice adds Ollama to the provider list. The default base URL is http://localhost:11434/v1/. An empty URL takes that default. A custom URL stays. No key is stored for that choice. Other catalogs stay absent.
 
@@ -286,6 +286,8 @@ This slice answers `tool greeting` from chat. The reply is `Plugin greeting.`. T
 This slice answers `discord <channel> <text>` from chat. The reply is a local draft. No token is stored. No message leaves the machine. A credential field and a URL are refused. The reply does not copy those values.
 
 This slice answers `chess <from> <to>` from chat. The move must be legal for the piece on a local board. The board continues across sends. Clear restores the start. No engine runs. Check, castling, en passant, and promotion are absent.
+
+This slice answers `mcp tools` and `mcp call greeting` from chat. File read and speech stay denied. A server command is dropped. No process starts. The command does not load a plugin directory.
 
 This slice draws SoloLVL MetaBalls behind the main window and Settings. There are 12 blobs. Each radius is 20 to 60 px. Drift is 0.25 px per frame and the speed cap is 0.75. The color is `#FFEA00`. The animation stops when the window is hidden or when Reduce Motion is on.
 

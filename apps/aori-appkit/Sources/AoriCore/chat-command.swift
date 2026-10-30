@@ -9,6 +9,9 @@ public enum ChatCommand {
         if let discord = DiscordCommand.reply(to: text) {
             return discord
         }
-        return ChessCommand.reply(to: text, board: &chess)
+        if let chessMove = ChessCommand.reply(to: text, board: &chess) {
+            return chessMove
+        }
+        return McpCommand.reply(to: text)
     }
 }
