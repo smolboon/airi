@@ -194,7 +194,7 @@ public final class ChatViewModel {
         }
 
         draft = ""
-        if let local = LocalTool.reply(to: text) {
+        if let local = ChatCommand.reply(to: text) {
             messages.append(ChatMessage(role: .user, content: text))
             var assistant = ChatMessage(role: .assistant, content: "")
             messages.append(assistant)

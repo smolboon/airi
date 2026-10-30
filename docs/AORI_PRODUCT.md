@@ -10,7 +10,7 @@ Settings stores a name, a nickname, a description, a personality, a scenario, an
 
 Settings lists Factorio and Minecraft. Factorio accepts a local hello. Minecraft accepts a local hello. A remote host is refused.
 
-Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. Telegram stores a preview only. Satori stores an event draft only.
+Settings lists Discord, Telegram, and Satori. Discord stores a message draft only. The chat command `discord <channel> <text>` stores that draft on this machine. No token is stored. No message leaves the machine. Telegram stores a preview only. Satori stores an event draft only.
 
 X is unavailable. Credential fields are dropped. No token is stored.
 
