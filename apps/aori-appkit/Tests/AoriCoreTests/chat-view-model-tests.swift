@@ -42,6 +42,44 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(after.last?.content, "remote")
     }
 
+    func testDiscordDraftDoesNotCallTheChatServer() async throws {
+        let client = ScriptedChatClient(events: [.delta("remote"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("  discord general Hello there  ")
+        await model.send()
+
+        let messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), [
+            "discord general Hello there",
+            "Discord draft for general: Hello there.",
+        ])
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+        XCTAssertEqual(client.recordedMessages().count, 0)
+        let review = await model.replyReview
+        XCTAssertEqual(review.text, "Discord draft for general: Hello there.")
+
+        await model.setDraft("discord general token=secret")
+        await model.send()
+        let denied = await model.messages
+        XCTAssertEqual(denied.last?.content, "Discord dropped a credential.")
+        XCTAssertFalse(denied.last?.content.contains("secret") == true)
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("discord general see https://example.test")
+        await model.send()
+        let refused = await model.messages
+        XCTAssertEqual(refused.last?.content, "Discord refused a URL.")
+        XCTAssertFalse(refused.last?.content.contains("https") == true)
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("Discord general Hello")
+        await model.send()
+        XCTAssertEqual(client.recordedMessages().count, 1)
+        let remote = await model.messages
+        XCTAssertEqual(remote.last?.content, "remote")
+    }
+
     func testUnclosedFenceKeepsTheTailOnSend() async throws {
         let client = ScriptedChatClient(events: [.delta("Hello ``` tail"), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

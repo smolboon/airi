@@ -283,6 +283,8 @@ This slice fails a test when resident memory passes 1024 MB. The number is a pro
 
 This slice answers `tool greeting` from chat. The reply is `Plugin greeting.`. The command does not call the chat server. It does not start speech. It does not load a plugin directory.
 
+This slice answers `discord <channel> <text>` from chat. The reply is a local draft. No token is stored. No message leaves the machine. A credential field and a URL are refused. The reply does not copy those values.
+
 This slice draws SoloLVL MetaBalls behind the main window and Settings. There are 12 blobs. Each radius is 20 to 60 px. Drift is 0.25 px per frame and the speed cap is 0.75. The color is `#FFEA00`. The animation stops when the window is hidden or when Reduce Motion is on.
 
 ## What this checkout did not run
