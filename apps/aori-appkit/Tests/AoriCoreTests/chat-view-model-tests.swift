@@ -42,6 +42,19 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(after.last?.content, "remote")
     }
 
+    func testUnclosedFenceKeepsTheTailOnSend() async throws {
+        let client = ScriptedChatClient(events: [.delta("Hello ``` tail"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("Hello")
+        await model.send()
+        let messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "Hello tail")
+        let review = await model.replyReview
+        XCTAssertEqual(review.notes, ["fence dropped"])
+        XCTAssertEqual(review.text, "Hello tail")
+        XCTAssertEqual(client.recordedMessages().count, 1)
+    }
+
     func testSendStoresTheSpokenForm() async throws {
         let client = ScriptedChatClient(events: [.delta("**Hi** there. Four words. Five. Six stay out."), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

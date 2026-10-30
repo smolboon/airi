@@ -271,7 +271,7 @@ This slice calls the chat server when the base URL is loopback and the key is em
 
 This slice sends the latest 24 transcript lines to the chat server. Older lines stay in companion.sqlite. The system prompt still comes first. Post-history text still follows the window. A shorter transcript is sent in full.
 
-This slice checks the reply before it stays in the transcript. Markdown leaves the text. At most three sentences remain. The old brand name becomes Aori. An open code fence drops the rest of that reply.
+This slice checks the reply before it stays in the transcript. Markdown leaves the text. At most three sentences remain. The old brand name becomes Aori. An open code fence drops the marker. The words after that marker stay. A closed fence drops the code inside it.
 
 This slice stores notes with that reply. The notes name a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
 

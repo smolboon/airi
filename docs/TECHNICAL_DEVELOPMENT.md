@@ -34,7 +34,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Memory | 7 | `UserMemory.remember` keeps 40 notes. `EmbeddingMemoryStore` uses cosine recall. Lorebook matches whole words. The chat server gets 24 lines. | Linux cannot run the Core ML file. There is no memory graph. |
 | Soundness | 7 | Focused Swift tests passed on Linux for chat, memory, loopback, the history window, and the spoken reply. `docs/AORI_ARCHITECTURE.md` matches `ChatRoute`. | There is no property test for the host check. |
 | Security | 7 | Keychain store, secret redaction, sandbox notes in `docs/AUDIT.md`. `LocalLoopback` allows only `localhost` and `127.0.0.1`. | A Developer ID profile is absent. CI still stages files in the app container. |
-| Safety | 9 | Plugin file reads and `aori.speech.speak` are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and code fences. Click-through starts off. | A fence still drops any text after it. |
+| Safety | 10 | Plugin file reads and `aori.speech.speak` are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and a closed code fence. An unclosed fence keeps the words after the marker. Click-through starts off. | None. |
 | UX | 6 | Settings title is Aori Settings. The page list has nine areas. Dark appearance is fixed in the settings controller. | This Linux host cannot open the Mac window. Full provider catalogs are absent. |
 | Token cost | 7 | `CompanionPrompt.providerHistoryLimit` is 24. Memory notes stop at 40. The system prompt stops at 1600 characters. | Lore inside the persona block can still fill the budget before notes. |
 | Peer capability and unique points | 7 | Transparent window, click-through, local loopback chat, on-device whisper, and a CC0 face file. | Cubism, MMD, and Spine are absent. Most integrations are drafts. |
@@ -58,7 +58,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
 | Steelman | 6 | The Steelman section defends the `AoriCore` split, draft integrations, and the 24-line cap. | The section does not compare a counter-design. It does not try a single-module app. |
 | Scrutiny | 6 | The Scrutiny section names draft lists, the exact host check, the fact gap in speech, and run 38377354859. | The section does not re-check every score after each merge. It has no test of its own. |
-| Hardness | 7 | Orders 1 to 6, 9, 11, and 12 are done. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A property test and a question router stay open. |
+| Hardness | 7 | Orders 1 to 6, 9, and 11 to 13 are done. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A property test and a question router stay open. |
 | Creative brainstorm | 7 | The Brainstorm table lists six ideas. All six are done, and parked work is named. | The list does not rank cost. It adds no new idea. |
 
 ## Findings
@@ -67,7 +67,7 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 
 `docs/AORI_ARCHITECTURE.md` now matches `ChatRoute`. The remaining soundness gap is the lack of a property test and a new macOS job.
 
-`SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through starts off. The menu turns it on. A fence still drops any text after it.
+`SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through starts off. The menu turns it on. An unclosed fence keeps the words after the marker. A closed fence drops the code inside it.
 
 The sample plugin asks for a file read and for speech. Both calls are denied. The greeting still succeeds. The host does not start speech.
 
@@ -128,6 +128,7 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 10 | Face proof | Polish, peer capability | A completed macOS job shows `aori-face.vrm` with eyes, a nose, and a mouth. |
 | 11 | Reply review notes | Agent self-reflection | Done. The send path stores fence, markdown, brand, sentence, character, and empty notes. |
 | 12 | Click-through default off | Safety, default-on and opt-in | Done. `CompanionWindowPolicy.standard.clickThrough` is false. The settings report says click-through starts off. |
+| 13 | Unclosed fence keeps the tail | Safety | Done. `SpokenReply.review` keeps the words after an unclosed marker. A closed fence still drops the code inside it. |
 
 Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot close them. The screenshot path turns click-through on before the click proof. This host did not run that path.
 
@@ -146,6 +147,7 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-29 | Resident memory budget of 1024 MB. | RAM usage 5 to 6. Hardness 5 to 6. Creative brainstorm 6 to 7. |
 | 2026-10-29 | `tool greeting` answers on this machine. | Wiring over allow 5 to 6. Capabilities 5 to 6. Hardness 6 to 7. |
 | 2026-10-30 | Click-through starts off. The menu turns it on. | Safety 8 to 9. Default-on and opt-in 8 to 9. |
+| 2026-10-30 | An unclosed fence keeps the words after the marker. | Safety 9 to 10. |
 
 ## TDD progress log
 
@@ -154,3 +156,4 @@ A row is a test that failed first, then passed after the code change. A fixture 
 | Date | Item | Red | Green | Score change |
 | --- | --- | --- | --- | --- |
 | 2026-10-30 | Click-through default off | `CharacterAndWindowTests.testStandardCompanionStyle` failed because `clickThrough` was true. `SettingsPagesTests.testReportNamesEachPageAndTheGaps` failed because the report said click-through starts on. | `swift test --filter CharacterAndWindowTests/testStandardCompanionStyle` passed. `swift test --filter SettingsPagesTests` passed. | Safety 8 to 9. Default-on and opt-in 8 to 9. The fence gap stays. |
+| 2026-10-30 | Unclosed fence keeps the tail | `SpokenReplyTests.testReviewNotesNameTheEditsAndDoNotCopyTheSource` failed. The reply `Hello` followed by an unclosed fence and `tail` became `Hello`. A later unclosed marker also dropped `three`. | `swift test --filter SpokenReplyTests` passed. `ChatViewModelTests.testUnclosedFenceKeepsTheTailOnSend` passed. A closed fence still drops the code inside it. | Safety 9 to 10. |

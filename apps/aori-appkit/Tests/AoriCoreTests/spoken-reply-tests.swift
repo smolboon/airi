@@ -51,8 +51,19 @@ final class SpokenReplyTests: XCTestCase {
 
         let openFence = SpokenReply.review("Hello ``` tail")
         XCTAssertEqual(openFence.notes, ["fence dropped"])
-        XCTAssertEqual(openFence.text, "Hello")
-        XCTAssertFalse(openFence.text.contains("tail"))
+        XCTAssertEqual(openFence.text, "Hello tail")
+        XCTAssertTrue(openFence.text.contains("tail"))
+        XCTAssertFalse(openFence.text.contains("```"))
+
+        let closedTail = SpokenReply.review("Hello ```\ncode\n``` tail")
+        XCTAssertEqual(closedTail.notes, ["fence dropped"])
+        XCTAssertEqual(closedTail.text, "Hello tail")
+        XCTAssertFalse(closedTail.text.contains("code"))
+
+        let mixedFence = SpokenReply.review("One ```\nhide\n``` two ``` three")
+        XCTAssertEqual(mixedFence.text, "One two three")
+        XCTAssertFalse(mixedFence.text.contains("hide"))
+        XCTAssertFalse(mixedFence.text.contains("```"))
 
         let fenced = SpokenReply.review("```\nairi\n```")
         XCTAssertEqual(fenced.notes, ["fence dropped", "empty reply"])

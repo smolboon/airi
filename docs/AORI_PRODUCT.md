@@ -52,7 +52,7 @@ Chat can call an OpenAI-compatible provider. Settings can select MLX-Serve, Tens
 
 When the API key is empty, a remote base URL uses a local reply on the device. That reply is a template. It is not a neural model. A loopback base URL calls the chat server with no key. The host must be localhost or 127.0.0.1. Vision stays on the template when the key is empty.
 
-Speech keeps at most three sentences. Markdown and the old brand name leave that text. The stored reply keeps notes for a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
+Speech keeps at most three sentences. Markdown and the old brand name leave that text. An open code fence drops the marker. The words after that marker stay. A closed fence drops the code inside it. The stored reply keeps notes for a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
 
 Speech output uses the macOS speech synthesizer. Speech input uses the Speech framework when permission is granted. When permission is missing, the app runs whisper.cpp on the recorded WAV. CI downloads `ggml-base.en.bin`. That file is not in git.
 
