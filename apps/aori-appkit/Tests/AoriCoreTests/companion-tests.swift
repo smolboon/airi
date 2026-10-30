@@ -288,8 +288,10 @@ final class CompanionBehaviorTests: XCTestCase {
 
     func testMcpDropsTheServerCommand() {
         let text = IntegrationScaffold.report()
-        XCTAssertTrue(text.contains("MCP is unavailable."))
+        XCTAssertTrue(text.contains("MCP answers greeting on this machine."))
         XCTAssertTrue(text.contains("A server command is dropped."))
+        XCTAssertTrue(text.contains("No process starts."))
+        XCTAssertFalse(text.contains("MCP is unavailable."))
         let kept = McpScaffold.kept([
             "server-cmd": "local-tool",
             "server-args": "local-tool",

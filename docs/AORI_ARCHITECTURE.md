@@ -22,6 +22,8 @@ Run 38377354859 saved a Butter image. Butter's texture paints the word BUTTER. T
 
 `ChatCommand` answers `chess <from> <to>` on a local board. The board keeps the position across sends. Clear puts the board back at the start. No engine runs. Check, castling, en passant, and promotion are absent.
 
+`ChatCommand` answers `mcp tools` and `mcp call greeting` on this machine. `aori.files.read` and `aori.speech.speak` stay denied. A server command is dropped. No process starts. The command does not load a plugin directory.
+
 A `.js` file runs in JavaScriptCore through `aori.call`. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
 `VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.

@@ -80,6 +80,35 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(remote.last?.content, "remote")
     }
 
+    func testMcpCallStaysOnThisMachine() async throws {
+        let client = ScriptedChatClient(events: [.delta("remote"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("mcp call greeting")
+        await model.send()
+        var messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["mcp call greeting", "Plugin greeting."])
+        XCTAssertEqual(client.recordedMessages().count, 0)
+        let phase = await model.phase
+        XCTAssertEqual(phase, .idle)
+
+        await model.setDraft("mcp server-cmd local-tool")
+        await model.send()
+        messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "MCP dropped the server command.")
+        XCTAssertFalse(messages.last?.content.contains("local-tool") == true)
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("mcp call aori.files.read")
+        await model.send()
+        messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "MCP denied aori.files.read.")
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("Mcp tools")
+        await model.send()
+        XCTAssertEqual(client.recordedMessages().count, 1)
+    }
+
     func testChessMoveStaysOnThisMachineAndContinues() async throws {
         let client = ScriptedChatClient(events: [.delta("remote"), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())
