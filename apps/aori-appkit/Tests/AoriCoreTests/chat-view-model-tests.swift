@@ -80,6 +80,38 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertEqual(remote.last?.content, "remote")
     }
 
+    func testChessMoveStaysOnThisMachineAndContinues() async throws {
+        let client = ScriptedChatClient(events: [.delta("remote"), .finished])
+        let model = await ChatViewModel(client: client, configuration: testConfiguration())
+        await model.setDraft("chess e2 e4")
+        await model.send()
+        var messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["chess e2 e4", "e2 to e4."])
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("chess e7 e5")
+        await model.send()
+        messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "e7 to e5.")
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.setDraft("chess e2 e5")
+        await model.send()
+        messages = await model.messages
+        XCTAssertEqual(messages.last?.content, "That move is illegal.")
+        XCTAssertEqual(client.recordedMessages().count, 0)
+
+        await model.clear()
+        await model.setDraft("chess e2 e4")
+        await model.send()
+        messages = await model.messages
+        XCTAssertEqual(messages.map(\.content), ["chess e2 e4", "e2 to e4."])
+
+        await model.setDraft("Chess e2 e4")
+        await model.send()
+        XCTAssertEqual(client.recordedMessages().count, 1)
+    }
+
     func testUnclosedFenceKeepsTheTailOnSend() async throws {
         let client = ScriptedChatClient(events: [.delta("Hello ``` tail"), .finished])
         let model = await ChatViewModel(client: client, configuration: testConfiguration())

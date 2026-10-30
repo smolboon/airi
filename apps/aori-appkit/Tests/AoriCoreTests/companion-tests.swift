@@ -236,7 +236,9 @@ final class CompanionBehaviorTests: XCTestCase {
 
     func testChessMoveDraftUsesSquaresOnly() {
         let text = IntegrationScaffold.report()
-        XCTAssertTrue(text.contains("Chess stores a move draft only."))
+        XCTAssertTrue(text.contains("Chess plays a legal move on a local board."))
+        XCTAssertTrue(text.contains("No engine runs."))
+        XCTAssertFalse(text.contains("Chess stores a move draft only."))
         let move = ChessScaffold.move(from: " E2 ", to: " e4 ")
         XCTAssertEqual(move, ChessScaffold.Move(from: "e2", to: "e4"))
         XCTAssertNil(ChessScaffold.move(from: "e2", to: "e2"))

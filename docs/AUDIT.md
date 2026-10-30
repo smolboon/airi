@@ -48,7 +48,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - VS Code is a context draft only. The draft has a folder and text. No token is stored. A URL is refused.
 - Home Assistant is an entity draft only. Credential fields are dropped. No token is stored. A URL is refused.
 - Web search is unavailable. Credential fields are dropped. No token is stored. No query is sent.
-- Chess stores a move draft only. The draft has two squares. No engine runs. No token is stored.
+- Chess plays a legal move on a local board. The chat command is `chess <from> <to>`. No engine runs. Check, castling, en passant, and promotion are absent. No token is stored.
 - The web extension is a page draft only. The draft has a title and text. A URL is refused. No token is stored.
 - Stickers list emotions only. No image is stored. A URL is refused.
 - Beat sync names a style from a tempo. The microphone stays off. Screen capture stays off.

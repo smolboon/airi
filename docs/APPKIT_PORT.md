@@ -285,6 +285,8 @@ This slice answers `tool greeting` from chat. The reply is `Plugin greeting.`. T
 
 This slice answers `discord <channel> <text>` from chat. The reply is a local draft. No token is stored. No message leaves the machine. A credential field and a URL are refused. The reply does not copy those values.
 
+This slice answers `chess <from> <to>` from chat. The move must be legal for the piece on a local board. The board continues across sends. Clear restores the start. No engine runs. Check, castling, en passant, and promotion are absent.
+
 This slice draws SoloLVL MetaBalls behind the main window and Settings. There are 12 blobs. Each radius is 20 to 60 px. Drift is 0.25 px per frame and the speed cap is 0.75. The color is `#FFEA00`. The animation stops when the window is hidden or when Reduce Motion is on.
 
 ## What this checkout did not run
