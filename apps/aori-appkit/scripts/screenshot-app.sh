@@ -199,6 +199,7 @@ need = [
     "aori_latency_ms=",
     "aori_memory_mb=",
     "aori_provider_error=500",
+    "aori_click_through_default=off",
     "aori_click_through=on",
     "aori_click_through=delivered",
     "aori_avatar=live2d",

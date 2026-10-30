@@ -315,7 +315,7 @@ final class CharacterAndWindowTests: XCTestCase {
         XCTAssertTrue(style.borderless)
         XCTAssertTrue(style.joinsAllSpaces)
         XCTAssertTrue(style.movableByBackground)
-        XCTAssertTrue(CompanionWindowPolicy.standard.clickThrough)
+        XCTAssertFalse(CompanionWindowPolicy.standard.clickThrough)
         XCTAssertTrue(ClickThrough.ignores(alpha: 0, enabled: true))
         XCTAssertFalse(ClickThrough.ignores(alpha: 255, enabled: true))
         XCTAssertFalse(ClickThrough.ignores(alpha: 1, enabled: true))

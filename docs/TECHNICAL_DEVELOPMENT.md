@@ -34,11 +34,11 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Memory | 7 | `UserMemory.remember` keeps 40 notes. `EmbeddingMemoryStore` uses cosine recall. Lorebook matches whole words. The chat server gets 24 lines. | Linux cannot run the Core ML file. There is no memory graph. |
 | Soundness | 7 | Focused Swift tests passed on Linux for chat, memory, loopback, the history window, and the spoken reply. `docs/AORI_ARCHITECTURE.md` matches `ChatRoute`. | There is no property test for the host check. |
 | Security | 7 | Keychain store, secret redaction, sandbox notes in `docs/AUDIT.md`. `LocalLoopback` allows only `localhost` and `127.0.0.1`. | A Developer ID profile is absent. CI still stages files in the app container. |
-| Safety | 8 | Plugin file reads and `aori.speech.speak` are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and code fences. | Click-through defaults to on. A fence still drops any text after it. |
+| Safety | 9 | Plugin file reads and `aori.speech.speak` are denied. Vision ticks stay off until `AORI_VISION_TICKER` is `1`. MCP commands are dropped. Remote game hosts are refused. `SpokenReply` drops markdown and code fences. Click-through starts off. | A fence still drops any text after it. |
 | UX | 6 | Settings title is Aori Settings. The page list has nine areas. Dark appearance is fixed in the settings controller. | This Linux host cannot open the Mac window. Full provider catalogs are absent. |
 | Token cost | 7 | `CompanionPrompt.providerHistoryLimit` is 24. Memory notes stop at 40. The system prompt stops at 1600 characters. | Lore inside the persona block can still fill the budget before notes. |
 | Peer capability and unique points | 7 | Transparent window, click-through, local loopback chat, on-device whisper, and a CC0 face file. | Cubism, MMD, and Spine are absent. Most integrations are drafts. |
-| Default-on and opt-in | 8 | Vision ticker is opt-in. Plugins need `AORI_PLUGINS`. The settings report says click-through starts on. | The user still cannot turn that default off from the report text alone. The menu item does that. |
+| Default-on and opt-in | 9 | Vision ticker is opt-in. Plugins need `AORI_PLUGINS`. Click-through starts off. The settings report says that. | The menu turns click-through on. The settings report is not a switch. |
 | Loop engineering | 5 | Linux `swift test` filters cover the core. `docs/AUDIT.md` cites macOS run 38377354859. | Commits after that run have no new macOS proof in this audit. |
 | Skills and tools | 5 | The sample command list grants the greeting. `aori.files.read` and `aori.speech.speak` return denied. Scaffolds do not run commands. | A second granted tool is absent. The host does not start speech. |
 | Mergeable and separate parts | 7 | `AoriCore` and `AoriProviders` stay free of AppKit. Scaffolds live in core. | A scaffold that grows a socket must move behind a boundary. None has a socket now. |
@@ -58,7 +58,7 @@ Pull request 18 dropped web search credential fields. This plan does not change 
 | Polish | 5 | The settings window is dark and titled Aori Settings. | The page body is a plain report. A macOS image of `aori-face.vrm` is not in a completed job. |
 | Steelman | 6 | The Steelman section defends the `AoriCore` split, draft integrations, and the 24-line cap. | The section does not compare a counter-design. It does not try a single-module app. |
 | Scrutiny | 6 | The Scrutiny section names draft lists, the exact host check, the fact gap in speech, and run 38377354859. | The section does not re-check every score after each merge. It has no test of its own. |
-| Hardness | 7 | The named code items through order 11 are done, except the Mac items. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A property test and a question router stay open. |
+| Hardness | 7 | Orders 1 to 6, 9, 11, and 12 are done. Orders 7, 8, and 10 need a Mac or a signing profile. | This host does not close the Mac proof, Developer ID, or the face image. A property test and a question router stay open. |
 | Creative brainstorm | 7 | The Brainstorm table lists six ideas. All six are done, and parked work is named. | The list does not rank cost. It adds no new idea. |
 
 ## Findings
@@ -67,7 +67,7 @@ The native core is real. Chat, the card, memory, and the loopback rule have test
 
 `docs/AORI_ARCHITECTURE.md` now matches `ChatRoute`. The remaining soundness gap is the lack of a property test and a new macOS job.
 
-`SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through still starts on.
+`SpokenReply` now strips markdown and keeps three sentences. The send path stores notes for those edits. The notes do not score facts. Click-through starts off. The menu turns it on. A fence still drops any text after it.
 
 The sample plugin asks for a file read and for speech. Both calls are denied. The greeting still succeeds. The host does not start speech.
 
@@ -104,7 +104,7 @@ These ideas stay inside the standing rules. They add no secret, no spend, no tra
 | Check the reply before speech | Strip markdown. Keep a few sentences. Store the checked text. |
 | Correct the architecture sentences | The page matches `ChatRoute`. |
 | Cap the system prompt | Drop the oldest memory lines first. Keep the persona lines. |
-| State the click-through default | The settings report says click-through starts on. |
+| State the click-through default | The settings report says click-through starts off. The menu turns it on. |
 | Add a memory budget test | Done. The test reads `RuntimeMetrics` and fails above 1024 MB. |
 | Add one denied plugin tool | Done. The greeting still succeeds. `aori.files.read` and `aori.speech.speak` are denied. |
 
@@ -127,8 +127,9 @@ Each item names the score it can move. A 10 still needs the Mac proof and the si
 | 9 | Wired tool on the send path | Wiring over allow, capabilities | Done. `tool greeting` returns on this machine and does not call the chat server. |
 | 10 | Face proof | Polish, peer capability | A completed macOS job shows `aori-face.vrm` with eyes, a nose, and a mouth. |
 | 11 | Reply review notes | Agent self-reflection | Done. The send path stores fence, markdown, brand, sentence, character, and empty notes. |
+| 12 | Click-through default off | Safety, default-on and opt-in | Done. `CompanionWindowPolicy.standard.clickThrough` is false. The settings report says click-through starts off. |
 
-Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot close them.
+Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot close them. The screenshot path turns click-through on before the click proof. This host did not run that path.
 
 ## Score history
 
@@ -144,3 +145,12 @@ Orders 7, 8, and 10 need a Mac or a signing profile. This Linux host cannot clos
 | 2026-10-29 | Second denied plugin call. The greeting still succeeds. | Skills and tools 4 to 5. Safety stays 8. |
 | 2026-10-29 | Resident memory budget of 1024 MB. | RAM usage 5 to 6. Hardness 5 to 6. Creative brainstorm 6 to 7. |
 | 2026-10-29 | `tool greeting` answers on this machine. | Wiring over allow 5 to 6. Capabilities 5 to 6. Hardness 6 to 7. |
+| 2026-10-30 | Click-through starts off. The menu turns it on. | Safety 8 to 9. Default-on and opt-in 8 to 9. |
+
+## TDD progress log
+
+A row is a test that failed first, then passed after the code change. A fixture or a report string alone is not a done item.
+
+| Date | Item | Red | Green | Score change |
+| --- | --- | --- | --- | --- |
+| 2026-10-30 | Click-through default off | `CharacterAndWindowTests.testStandardCompanionStyle` failed because `clickThrough` was true. `SettingsPagesTests.testReportNamesEachPageAndTheGaps` failed because the report said click-through starts on. | `swift test --filter CharacterAndWindowTests/testStandardCompanionStyle` passed. `swift test --filter SettingsPagesTests` passed. | Safety 8 to 9. Default-on and opt-in 8 to 9. The fence gap stays. |

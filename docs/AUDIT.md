@@ -59,7 +59,7 @@ A row is 4 only when the milestone behavior is strong. A central gap keeps the r
 - Speech keeps at most three sentences. Markdown leaves that text. The old brand name becomes Aori.
 - The stored reply keeps notes for a dropped fence, removed markdown, a renamed brand, cut sentences, cut characters, and an empty result. The notes do not score facts.
 - The system prompt stops at 1600 characters. The newest memory notes stay. Older notes stay in companion.sqlite.
-- Click-through starts on. An opaque pixel keeps the click.
+- Click-through starts off. The menu turns it on. An opaque pixel keeps the click.
 - A test fails when resident memory passes 1024 MB. That number is a process budget. It is not a measured Mac app size.
 - The chat command `tool greeting` returns `Plugin greeting.` on this machine. It does not call the chat server. It does not start speech.
 - The accent is `#FFEA00`. Text on that yellow is `#141414`.

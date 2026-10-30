@@ -30,7 +30,7 @@ public struct CompanionWindowPolicy: Equatable, Sendable {
         visibleOnAllSpaces: true,
         movableByBackground: true,
         hidesTitlebar: true,
-        clickThrough: true
+        clickThrough: false
     )
 }
 
