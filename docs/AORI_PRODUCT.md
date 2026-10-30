@@ -20,7 +20,7 @@ Home Assistant is an entity draft only. Credential fields are dropped. No token 
 
 Web search is unavailable. Credential fields are dropped. No token is stored.
 
-Chess stores a move draft only. The draft has two squares. No engine runs.
+Chess plays a legal move on a local board. The chat command is `chess <from> <to>`. No engine runs. Check, castling, en passant, and promotion are absent.
 
 The web extension is a page draft only. The draft has a title and text. A URL is refused. No token is stored.
 

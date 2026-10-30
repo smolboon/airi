@@ -20,6 +20,8 @@ Run 38377354859 saved a Butter image. Butter's texture paints the word BUTTER. T
 
 `ChatCommand` also answers `discord <channel> <text>`. The reply is a local draft. No token is stored. No message leaves the machine. A credential field and a URL are refused. The reply does not copy those values.
 
+`ChatCommand` answers `chess <from> <to>` on a local board. The board keeps the position across sends. Clear puts the board back at the start. No engine runs. Check, castling, en passant, and promotion are absent.
+
 A `.js` file runs in JavaScriptCore through `aori.call`. Run 38357544156 logged `aori_sandbox=on`, `aori_sandbox_exception=absent`, and `aori_plugin_js=greeting=Plugin greeting. files=denied`.
 
 `VisionRequest` builds one chat completion with a text prompt and a PNG data URL. `OpenAICompatibleClient` sends that body to the same chat endpoint. When screen recording permission is granted, `ScreenCaptureKit` supplies the PNG. A denied capture uses `AORI_VISION_PNG`. The screenshot path does not open the permission dialog.

@@ -46,6 +46,7 @@ public final class ChatViewModel {
     private let textEmbedding: (any TextEmbedding)?
     private var showsModelTitle = false
     private var recalledLines: [String] = []
+    private var chessBoard = ChessBoard.start
 
     public init(
         client: any ChatCompletionClient,
@@ -86,6 +87,7 @@ public final class ChatViewModel {
         statusText = ""
         isSpeaking = false
         presentation.emotion = .neutral
+        chessBoard = .start
         publishMessages()
     }
 
@@ -194,7 +196,7 @@ public final class ChatViewModel {
         }
 
         draft = ""
-        if let local = ChatCommand.reply(to: text) {
+        if let local = ChatCommand.reply(to: text, chess: &chessBoard) {
             messages.append(ChatMessage(role: .user, content: text))
             var assistant = ChatMessage(role: .assistant, content: "")
             messages.append(assistant)
