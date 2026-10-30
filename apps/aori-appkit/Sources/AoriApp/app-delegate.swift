@@ -201,6 +201,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         companionWindow?.window?.orderFrontRegardless()
         NSApp.activate()
         writeFramebuffer()
+        logLine("aori_click_through_default=\(companionPolicy.clickThrough ? "on" : "off")")
+        if !companionPolicy.clickThrough {
+            companionPolicy.clickThrough = true
+            clickThroughItem?.state = .on
+            companionWindow?.apply(policy: companionPolicy)
+        }
         logClickThrough()
         deliverClickThrough()
         logAccessibilityTree()

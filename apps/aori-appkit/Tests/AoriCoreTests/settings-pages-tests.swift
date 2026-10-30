@@ -24,7 +24,9 @@ final class SettingsPagesTests: XCTestCase {
             XCTAssertTrue(text.contains(name), name)
         }
         XCTAssertTrue(text.contains("Cubism, MMD, and Spine are absent."))
-        XCTAssertTrue(text.contains("Click-through starts on."))
+        XCTAssertTrue(text.contains("Click-through starts off."))
+        XCTAssertTrue(text.contains("The menu turns it on."))
+        XCTAssertFalse(text.contains("Click-through starts on."))
         XCTAssertTrue(text.contains("An opaque pixel keeps the click."))
         XCTAssertTrue(text.contains("Selected OpenAI-compatible."))
         XCTAssertTrue(text.contains("MLX-Serve"))

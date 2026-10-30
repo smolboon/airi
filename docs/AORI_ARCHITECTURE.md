@@ -48,6 +48,6 @@ A non-empty line becomes the user message. The device template answers when the 
 
 `scripts/build-app.sh` builds `aori-face`, then the Swift executable `AoriApp`. `AoriAppKit.xcodeproj` builds the same sources with `xcodebuild`. The product name there is `Aori`. `scripts/fetch-whisper.sh` clones whisper.cpp v1.7.6 and downloads `ggml-base.en.bin` into `build/`. That directory is gitignored.
 
-The companion window can pass clicks through clear pixels. The default is on. An opaque pixel keeps the click. The caption keeps the click. AppKit sets `ignoresMouseEvents` from the pointer position.
+The companion window can pass clicks through clear pixels. The default is off. The menu turns it on. An opaque pixel keeps the click. The caption keeps the click. AppKit sets `ignoresMouseEvents` from the pointer position. The screenshot path turns click-through on before the click proof.
 
 The screenshot path posts one click onto a window titled Aori Behind. The log says delivered only when that window receives the click. A short microphone capture logs `aori_mic_utterance` as no-device, silence, or speech.

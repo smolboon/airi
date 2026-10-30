@@ -277,7 +277,7 @@ This slice stores notes with that reply. The notes name a dropped fence, removed
 
 This slice stops the system prompt at 1600 characters. The name line stays. The newest memory notes stay. Older notes stay in companion.sqlite. Recalled text that does not fit is cut.
 
-This slice states the click-through default in Settings. Click-through starts on. An opaque pixel keeps the click.
+This slice states the click-through default in Settings. Click-through starts off. The menu turns it on. An opaque pixel keeps the click.
 
 This slice fails a test when resident memory passes 1024 MB. The number is a process budget. It is not a measured Mac app size.
 
